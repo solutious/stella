@@ -126,7 +126,7 @@ Each run directory contains all associated data, including the command and confi
 Email issues and bugs to stella@solutious.com
 
 
-== Even More Information
+== More Information
 
 http://www.youtube.com/watch?v=wmq-JDonTpc
 
