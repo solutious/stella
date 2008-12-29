@@ -1,0 +1,54 @@
+:info:
+    :language: en
+    :fullname: english
+    :updated: 2008-12-20
+    :enabled: true
+:text_available_languages: "Available languages: %s"
+
+
+:agents_option_full: Return complete user-agent strings.
+:agents_option_list: List available user-agent shortnames. 
+:agents_option_search: Return only user agents which match the search term.
+:agents_count_message: "There are %d user agent strings matching your query"
+
+:option_help_stdout: Print STDOUT output from load tool for each test run
+:option_help_stderr: Print STDERR output from load tool for each test run
+:option_help_verbose: Specify the output verbosity (level 1, 2 or 3)
+:option_help_testreps: Number of test repetitions to execute (testruns).
+:cli_print_version: "Stella version: %s"
+:option_help_quiet: Demand only the essential output for each run.
+:option_help_warmup: "Include a warmup run, a factor N of the test load. Default: %f"
+:option_help_usage: "Usage: stella [OPTIONS] COMMAND [COMMAND OPTIONS]"
+:option_help_options_title: "Options:"
+:option_help_overhead: Show the time used by Stella before and after the run.
+:option_help_datapath: "Directory path to store test data. Default: %s"
+:option_help_preamble: |
+  
+    Commands:
+      %s
+    
+    Examples:
+     
+      # Run Apache Bench with 50 users, 20 requests each. Repeat 5 times. 
+      $ stella -t 5 ab -n 1000 -c 50 http://stellaaahhhh.com/
+  
+      # Run Siege with 100 users, 10 requests each with a Linux FireFox 3 user agent
+      $ stella -a firefox-3-linux siege -c 100 -r 10 http://stellaaahhhh.com/
+  
+    User-Agent Examples (--agent): 
+      ff-3-linux, ie-7-win, opera-10, chrome-0.2-osx
+
+:option_help_message: A short note about the test (i.e. 'new cache enabled')
+:option_help_format: "Output file format. One of: csv [default], yaml, tsv, json"
+:option_help_version: Display the version, then exit
+:option_help_sleep: Number of seconds to sleep between runs
+:option_help_agent: Specify a User-Agent. Can be a short string or complete agent string. Defaults to 'random'. 
+:option_help_help: Displays this message
+:option_help_rampup: Execute multiple tests, incremented by R users every test, up to U users
+
+:error_unavailable_adapter: "The adapter %s is not available. Check your PATH."
+:error_class_must_override: "You must override the method: %s"
+:error_class_unknown_argument: "Ignoring unknown argument: %s"
+:error_adapter_command_not_ready: "Incomplete options or arguments for %s"
+:error_invalid_argument: "%s is not a valid argument"
+:error_unknown_value: "I don't know what to do with %s"

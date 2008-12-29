@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby 
+
+STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+$: << File.join(STELLA_HOME, 'lib')
+
+require 'stella'
+require 'stella/cli'
+
+## Create and run the application
+app = Stella::CLI.new(ARGV, STDIN)
+app.run
+
