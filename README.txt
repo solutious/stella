@@ -11,9 +11,9 @@ This is a PREVIEW release. Proceed in double verify mode!
 * Ruby 1.8.x or 1.9.x
 * Ruby Libraries
   * fastthread
-	* mongrel
-	* rspec
-	* rdoc
+    * mongrel
+    * rspec
+    * rdoc
 	
 * One of:
   * Apache Bench
