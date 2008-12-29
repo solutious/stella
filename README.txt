@@ -1,35 +1,37 @@
-Stella - Your Performance Testing Friend
+h1. Stella - Your Performance Testing Friend
 
 Release: 0.5.3-preview (2008-12-23)
 
 This is a PREVIEW release. Proceed in double verify mode!
 
 
-== Prerequisites
+h2. Prerequisites
 
 * Linux, *BSD, Solaris
 * Ruby 1.8.x or 1.9.x
 * Ruby Libraries
-  * fastthread
-    * mongrel
-    * rspec
-    * rdoc
+** fastthread
+** mongrel
+** rspec
+** rdoc
 	
 * One of:
-  * Apache Bench
-  * Siege
-  * Httperf
+** Apache Bench
+** Siege
+** Httperf
 
 
-== Installation
+h2. Installation
 
 Get it in one of the following ways:
+
 * RubyForge: http://stella.rubyforge.org/
+* GitHub: git clone git://github.com/solutious/stella.git
 * gem install stella 
   
 Use ab, siege, and httperf like you normally would with the addition of stella at the beginning (examples are below).
 
-=== Debian (and derivatives)
+h3. Debian (and derivatives)
 
 Debian and its derivative (Ubunutu) handling packing a bit differently (see: http://pkg-ruby-extras.alioth.debian.org/rubygems.html). There are a couple errors to watch out for during the installation. The solutions are below:
 
@@ -42,7 +44,7 @@ Debian and its derivative (Ubunutu) handling packing a bit differently (see: htt
 	apt-get install rdoc
 
 
-== Examples
+h2. Examples
 
 Run Apache Bench with a warmup and rampup from 100 to 300 virtual users in increments of 25
 
@@ -59,8 +61,9 @@ Run Httperf like you normally would (but all the test data will be collected for
   stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=3000 --timeout=5
 
 
-== Sample Output
+h3. Sample Output
 
+<pre><code>
   $ stella -f csv -x 5 -w 0.75 -r 25,125 -m "httpd 2.2.9-prefork" siege -c 75 -r 10 -b http://stella:5600/
 	Writing test data to: stella/testruns/2008-12-23/test-054
 
@@ -93,7 +96,7 @@ Run Httperf like you normally would (but all the test data will be collected for
 	 -------------------------------------------------------------------
 	   Total:      90000@98     100%    378.58/s    0.259s    0.035MB/s    8.250MB  236.030s
 	 Std Dev:                            18.09/s    0.042s    0.002MB/s               4.225s
-
+</pre></code>
 
 All test data is collected under ./stella (this can be changed with the parameter --datapath):
 
@@ -113,7 +116,7 @@ Each run directory contains all associated data, including the command and confi
     COMMAND.txt    STDOUT.txt    siege.log    STDERR.txt    SUMMARY.csv    siegerc
     
   
-== Known Issues
+h2. Known Issues
 
 * The output for the REQ@VU/s columns is a work in progress. It's not aligned across tools and it will likely change in the next release. 
 * The summary data has not been audited. Don't trust and double verify!
@@ -121,15 +124,16 @@ Each run directory contains all associated data, including the command and confi
 * The Ruby API has not been finalized. It's functional but there's no example because it is subject to change. 
 * There are no specs. 
 
-== Report an issue
+h2. Report an issue
 
 Email issues and bugs to stella@solutious.com
 
 
-== Even More Information
+h2. More Information
 
-http://www.youtube.com/watch?v=wmq-JDonTpc
+"Stellaaahhhh":http://www.youtube.com/watch?v=wmq-JDonTpc
 
-== License
+
+h2. License
 
 See LICENSE.txt
