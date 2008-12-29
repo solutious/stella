@@ -2,7 +2,7 @@ Stella - Your Performance Testing Friend
 
 Release: 0.5.3-preview (2008-12-23)
 
-This is a PREVIEW release. Don't trust and double verify!
+This is a PREVIEW release. Proceed in double verify mode!
 
 
 == Prerequisites
