@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+
+require 'rubygems'
+require 'term/visual'
+
+vt = Term::Visual.new
+window = vt.create_window(
+    'title'	=> "Window Title",
+    'status'	=> "Status bar"
+)
+
+window.print "foobar"
+
+loop do
+    if line = vt.getline
+        window.print line
+    end
+
+    sleep 0.0001
+end
