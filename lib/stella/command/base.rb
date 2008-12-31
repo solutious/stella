@@ -1,5 +1,5 @@
 
-
+      
 module Stella::Command
   class Base
     

@@ -1,4 +1,6 @@
 
+# http://www.ruby-doc.org/stdlib/libdoc/observer/rdoc/index.html
+
 require 'optparse'
 require 'ostruct'
 

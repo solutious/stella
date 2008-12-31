@@ -77,7 +77,7 @@ module Stella
         command = "#{@name} "
 
         instance_variables.each do |name|
-          canon = name.tr('@', '')        # instance_variables returns '@name'
+          canon = name.to_s.tr('@', '')        # instance_variables returns '@name'
           next if @private_variables.member?(canon)
 
           # It's important that we take the value from the getter method

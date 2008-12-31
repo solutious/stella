@@ -1,4 +1,4 @@
-require 'ftools'
+require 'fileutils'
 
 module FileUtil
   
@@ -54,6 +54,6 @@ module FileUtil
     return if File.directory?(dirpath)
     
     #STDERR.puts "Creating #{ dirpath }"
-    File.makedirs(dirpath)
+    FileUtils.makedirs(dirpath)
   end
 end
