@@ -158,14 +158,21 @@ module Stella
         # Ya, this is kinda wack. Ruby -> Java -> Kernel32. See:
         # http://www.oreillynet.com/ruby/blog/2008/01/jruby_meets_the_windows_api_1.html
         # http://msdn.microsoft.com/en-us/library/ms724408(VS.85).aspx
+        # Ruby 1.9.1: Win32API is now deprecated in favor of using the DL library.
         :java_windows => lambda {
           kernel32 = com.sun.jna.NativeLibrary.getInstance('kernel32')
           buf = java.nio.ByteBuffer.allocate(256)
           (kernel32.getFunction('GetTickCount').invokeInt([256, buf].to_java).to_f / 1000).to_f 
         },
-  
+        
+        :unix_osx => lambda {
+          # This is faster than who and could work on BSD also. 
+          (Time.now.to_f - Time.at(`sysctl -b kern.boottime 2>/dev/null`.unpack('L').first).to_f).to_f
+
+        },
         # This should work for most unix flavours. 
         :unix => lambda {
+          # who is sloooooow. Use File.read('/proc/uptime')
           (Time.now.to_f - Time.parse(`who -b 2>/dev/null`).to_f)
         }
       }
