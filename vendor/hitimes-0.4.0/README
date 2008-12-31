@@ -1,0 +1,80 @@
+== hitimes
+
+* Homepage[http://copiousfreetime.rubyforge.org/hitimes] 
+* {Rubyforge project}[http://rubyforge.org/projects/copiousfreetime/]
+* email jeremy at copiousfreetime dot org
+* git clone url git://github.com/copiousfreetime/hitimes.git
+
+== INSTALL
+
+* gem install hitimes
+
+== DESCRIPTION
+
+Hitimes is a fast, high resolution timer library for recording
+performance metrics.  It uses the appropriate C method calls for each
+system to get the highest granularity time increments possible.  
+
+It currently supports any system with the POSIX call clock_gettime(),
+Mac OS X and Windows.
+
+Using Hitimes can be faster than using a series of Time.new calls, and
+it will have a much higher granularity.   It is definitely faster than
+using Process.times. 
+
+== SYNOPSIS
+
+Use Hitimes::Interval to calculate only the duration of a block of code
+
+  duration = Hitimes::Interval.measure do
+               # some operation ...
+             end
+
+  puts duration   
+
+Use a Hitimes::Timer to calculate statistics about an iterative operation
+
+  timer = Hitimes::Timer.new
+  collection.each do |item|
+    timer.start
+    # .. do something with item
+    timer.stop
+  end
+
+  puts timer.mean
+  puts timer.median
+  puts timer.max
+  puts timer.min
+  puts timer.stddev
+  puts timer.rate
+
+
+== CHANGES
+
+Read the HISTORY file.
+
+== CREDITS
+
+* Bruce Williams for suggesting the idea
+
+== MIT LICENSE
+
+Copyright (c) 2008 Jeremy Hinegardner
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
