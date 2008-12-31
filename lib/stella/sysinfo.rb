@@ -180,7 +180,7 @@ module Stella
       hours = 0
 
       begin
-        key = "#{@os}_#{@implementation}".to_sym
+        key = platform
         method = (methods.has_key? key) ? methods[key] : methods[:unix]
         hours = (method.call) / 3600 # seconds to hours
       rescue => ex
@@ -219,6 +219,14 @@ module Stella
       ipaddr
     end
 
+    # platform
+    #
+    # returns a symbol in the form: os_implementation. This is used throughout Stella
+    # for platform specific support. 
+    def platform
+      "#{@os}_#{@implementation}".to_sym
+    end
+    
     # to_s
     # 
     # Print friendly system information. 

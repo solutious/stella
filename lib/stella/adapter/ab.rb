@@ -71,6 +71,7 @@ module Stella
         @g = File.expand_path(@g)
 
       end
+      
       def command
         raise CommandNotReady.new(self.class.to_s) unless ready?
 
