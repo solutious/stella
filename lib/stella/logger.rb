@@ -53,8 +53,9 @@ module Stella
       @debug_logger.flush
     end
     def error(ex, prefix="ERR: ")
-      @error_logger.puts "#{prefix}#{ex.message}"
-      return unless @debug
+      msg = (ex.kind_of? String) ? ex : ex.message
+      @error_logger.puts "#{prefix}#{msg}"
+      return unless @debug && ex.kind_of?(Exception)
       @error_logger.puts("#{prefix}------------------------------------------")
       @error_logger.puts("#{prefix}#{ex.backtrace.join("\n")}")
       @error_logger.puts("#{prefix}------------------------------------------")

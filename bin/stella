@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby 
 
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-$: << File.join(STELLA_HOME, 'lib')
+$:.unshift(File.join(STELLA_HOME, 'lib')) # Make sure our local lib is first in line
 
 require 'stella'
 require 'stella/cli'

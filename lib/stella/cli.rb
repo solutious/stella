@@ -287,10 +287,12 @@ end
 
 # Autoload CLI classes. These classes add themselves to the class variable @@commands. 
 begin
+  previous_path = ""
   cli_classes = Dir.glob(File.join(STELLA_HOME, 'lib', 'stella', 'cli', "*.rb"))
   cli_classes.each do |path|
+    previous_path = path
     require path
   end
 rescue LoadError => ex
-  Stella::LOGGER.info("Error loading #{path}: #{ex.message}")
+  Stella::LOGGER.info("Error loading #{previous_path}: #{ex.message}")
 end

@@ -36,10 +36,16 @@ module Stella::Adapter
     #
     # This method must be overridden by the implementing class. This is intended
     # for processing the command-specific command-line arguments
+    # TODO: Rename to process_arguments
     def process_options
       raise Stella::TEXT.msg(:error_class_must_override, 'process_options')
     end
     
+    # options=
+    #
+    # Takes a hash or OpenStruct and applies the values to the instance variables. 
+    # The keys should conincide with with the command line argument names. 
+    # i.e. The key for --help should be :help 
     def options=(options={})
       options = options.marshal_dump if options.is_a? OpenStruct
       unless options.nil? || options.empty?

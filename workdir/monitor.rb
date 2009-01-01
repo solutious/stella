@@ -25,16 +25,16 @@ dev = Pcap.lookupdev
 httpdump = Pcaplet.new('-s 1500 -i en1')
 
 
-HTTP_REQUEST  = Pcap::Filter.new('tcp and dst port 80', httpdump.capture)
-HTTP_RESPONSE = Pcap::Filter.new('tcp and src port 80', httpdump.capture)
+req  = Pcap::Filter.new('tcp and dst port 80', httpdump.capture)
+resp = Pcap::Filter.new('tcp and src port 80', httpdump.capture)
 counter = 0
-httpdump.add_filter(HTTP_REQUEST | HTTP_RESPONSE)
+httpdump.add_filter(req | resp)
 httpdump.each_packet {|pkt|
   data = pkt.tcp_data
   s= nil
   
   case pkt
-  when HTTP_REQUEST
+  when req
     if data and data =~ /^(GET.+?)$/
       path = $1
       host = pkt.dst.to_s
@@ -43,7 +43,7 @@ httpdump.each_packet {|pkt|
       counter += 1
       puts "#{counter} " << data
     end
-  when HTTP_RESPONSE
+  when res
     if data and data =~ /^([A-Z].+)$/
       status = $1
       s = data
