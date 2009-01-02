@@ -50,10 +50,25 @@ module FileUtil
     File.chmod(0600, path)
   end
   
-  def FileUtil.create_dir(dirpath)
+  def FileUtil.create_file(filepath, perm='w', file_perms=nil)
+    raise Exception.new("File #{filepath} already exists!") if File.exists? filepath
+    
+    newfile = File.new(filepath, perm)
+    if file_perms && File.exists?(file_perms)
+      File.chown(File.stat(file_perms).uid.to_i, File.stat(file_perms).gid.to_i, filepath)
+    end
+    newfile
+  end
+
+  def FileUtil.create_dir(dirpath, dir_perms=nil)
     return if File.directory?(dirpath)
     
     #STDERR.puts "Creating #{ dirpath }"
     FileUtils.makedirs(dirpath)
+    
+    if dir_perms && File.exists?(dir_perms)
+      File.chown(File.stat(dir_perms).uid.to_i, File.stat(dir_perms).gid.to_i, dirpath)
+    end
+    
   end
 end

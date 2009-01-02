@@ -227,11 +227,18 @@ module Stella
       "#{@os}_#{@implementation}".to_sym
     end
     
+    # ruby
+    #
+    # Returns Ruby version as an array
+    def ruby
+      RUBY_VERSION.split('.').map { |v| v.to_i }
+    end
+    
     # to_s
     # 
     # Print friendly system information. 
     def to_s
-      sprintf("Hostname: %s#{$/}IP Address: %s#{$/}System: %s#{$/}Uptime: %.2f (hours)", 
+      sprintf("Hostname: %s#{$/}IP Address: %s#{$/}System: %s#{$/}Uptime: %.2f (hours)#{$/}Ruby: #{ruby.join('.')}", 
         @hostname, @ipaddress, "#{@os}-#{@implementation}-#{@architecture}", @uptime)
     end
     

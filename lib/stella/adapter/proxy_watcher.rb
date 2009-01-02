@@ -1,5 +1,6 @@
 
 require 'webrick/httpproxy'
+require 'observer'
 
 #begin
 # #require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /win32/
@@ -17,6 +18,11 @@ module Stella
     # Starts up an HTTP proxy using WEBrick to record HTTP events. This is used
     # when PcapRecorder is not available. 
     class ProxyWatcher
+      include Observable
+      
+      def initialize(options={})
+
+      end
       
       
       def run
@@ -27,11 +33,20 @@ module Stella
          @pretty_colours = true
          
         
-        server = WEBrick::HTTPProxyServer.new(
+        @server = WEBrick::HTTPProxyServer.new(
             :Port => 3114,
             :AccessLog => [],
             :ProxyContentHandler => Proc.new do |req,res|
-                Stella::LOGGER.info(req.request_line.chomp)
+                
+                begin
+                  changed
+                  notify_observers('http', req, res)
+                rescue => ex
+                  # There are miscellaneous errors (mostly to do with
+                  # incorrect content-length) that we don't care about. 
+                end
+                
+                #Stella::LOGGER.info(req.class)
                 #puts "-"*75
                 #puts ">>> #{req.request_line.chomp}\n"
                 #req.header.keys.each do |k|
@@ -57,8 +72,13 @@ module Stella
                 #end
             end
         )
-        trap("INT") { server.shutdown }
-        server.start
+        
+        @server.start
+      end
+      
+      def after
+        delete_observers
+        @server.shutdown
       end
       
     end

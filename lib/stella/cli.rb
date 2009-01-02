@@ -158,6 +158,7 @@ module Stella
           opts.on('-h', '--help', Stella::TEXT.msg(:option_help_help)) { puts opts; exit 0 }
 
           opts.on('-v', '--verbose', Stella::TEXT.msg(:option_help_verbose)) do
+            
             @options.verbose ||= 0
             @options.verbose += 1 
           end
