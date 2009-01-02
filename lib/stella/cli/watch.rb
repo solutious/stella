@@ -1,50 +1,59 @@
 
-require 'stella/adapter/proxy_recorder'
 
 module Stella 
   class CLI
     class Watch < Stella::CLI::Base
 
-      require 'pp'
+
       def run
         @options = process_arguments(@arguments)
         
-        recorder = Stella::Adapter::ProxyRecorder.new
-        
         if can_pcap?(@options[:usepcap]) 
-          require 'stella/adapter/pcap_recorder'
-          recorder = Stella::Adapter::PcapRecorder.new
+          require 'stella/adapter/pcap_watcher'
+          @watcher = Stella::Adapter::PcapWatcher.new(@options)
         else
+          require 'stella/adapter/proxy_watcher'
+          @watcher = Stella::Adapter::ProxyWatcher.new(@options)
+          
           if @options[:usepcap]
-            Stella::LOGGER.error("Pcap is not available (#{pcap_problem?}). You'll need to use the proxy (-W).")
+            check_pcap
             exit 0
           end
         end
         
         
-        recorder.run
+        
+        @watcher.run
       end
       
       # can_pcap?
+      #
+      # Returns true is pcap is available 
+      def can_pcap?(usepcap=false)
+        return false unless usepcap
+        begin
+          check_pcap
+        rescue
+          return false
+        end
+        return true
+      end
+      
+      # check_pcap
       #
       # The Pcap gauntlet. A number of conditions must be met to run the Pcap recorder:
       # - The watch command must be called with -p
       # - The OS must be a form of Unix
       # - Cannot be running via JRuby or Java
       # - The user must be root (or running through sudo)
-      # - The Ruby-Pcap library must be installed. 
-      def can_pcap?(usepcap=false)
-        return false unless usepcap
-        !pcap_problem?
-      end
-      
-      def pcap_problem?(usepcap=false)
-        return "This ain't unix" unless Stella::SYSINFO.os === :unix # pcap not available on windows or java
-        return "You ain't the root user" unless ENV['USER'] === 'root' # Must run as root or sudo
+      # - The Ruby-Pcap library must be installed.
+      def check_pcap(usepcap=false)
+        raise MissingDependency.new('pcap', :error_sysinfo_notunix) unless Stella::SYSINFO.os === :unix # pcap not available on windows or java
+        raise MissingDependency.new('pcap', :error_sysinfo_notroot) unless ENV['USER'] === 'root' # Must run as root or sudo
         begin 
           require 'pcap'
         rescue => ex
-          return "Ruby-Pcap not installed"
+          raise MissingDependency.new('pcap', :errot_watch_norubypcap)
         end
         false
       end
@@ -57,7 +66,7 @@ module Stella
         opts.on('-W', '--useproxy', "Use an HTTP proxy to filter requests (default)") do |v| v end
           
         opts.on("#{$/}Pcap-specific options")
-        opts.on('-d', '--dns', "Filter DNS traffic (with --usepcap only)") do |v| v end
+        opts.on('-s=S', '--service=S', String, "Filter either http (default) or dns (with --usepcap only)") do |v| v end
         opts.on('-i=S', '--interface=S', String, "Network interface. eri0, en1, etc. (with --usepcap only)") do |v| v end
         
         

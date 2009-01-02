@@ -52,3 +52,11 @@
 :error_adapter_command_not_ready: "Incomplete options or arguments for %s"
 :error_invalid_argument: "%s is not a valid argument"
 :error_unknown_value: "I don't know what to do with %s"
+:error_missing_dependency: "%s is not available: %s"
+:error_generic: "Oops, there was an unidentified problem (consider reporting it as a bug)"
+
+:error_sysinfo_notunix: "Sorry, Unix only"
+:error_sysinfo_notwindows: "Sorry, Windows only"
+:error_sysinfo_notroot: "You need to be root to do that"
+
+:errot_watch_norubypcap: "Ruby-Pcap not installed"

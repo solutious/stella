@@ -12,11 +12,11 @@ require 'webrick/httpproxy'
 module Stella
   module Adapter
     
-    # Stella::Adapter::ProxyRecorder
+    # Stella::Adapter::ProxyWatcher
     #
     # Starts up an HTTP proxy using WEBrick to record HTTP events. This is used
     # when PcapRecorder is not available. 
-    class ProxyRecorder
+    class ProxyWatcher
       
       
       def run

@@ -33,6 +33,17 @@ module Stella
   class UnsupportedLanguage < RuntimeError
   end
   
+  class MissingDependency < RuntimeError
+    attr_accessor :dependency, :reason
+    def initialize(dependency, reason=:error_generic)
+      @dependency = dependency
+      @reason = Stella::TEXT.err(reason)
+    end
+    def message
+      Stella::TEXT.err(:error_missing_dependency, @dependency, @reason)
+    end
+  end
+  
   class Util
     
     # process_useragents
