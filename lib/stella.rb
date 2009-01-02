@@ -19,6 +19,7 @@ require 'stella/storable'
 
 # Common Stella objects
 require 'stella/text'
+
 require 'stella/logger'
 require 'stella/response'
 require 'stella/sysinfo'
@@ -63,7 +64,6 @@ module Stella
       self.to_s.to_f
     end
   end
-
 
 end
 

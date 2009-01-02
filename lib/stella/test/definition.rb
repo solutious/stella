@@ -45,7 +45,7 @@ module Stella
       attr_accessor :warmup
         # Contains an interval and maximum threshold to increase virtual users. 
         # Rampup object, [R,M] where R is the interval and M is the maximum. 
-      attr_accessor :rampup
+      attr_reader :rampup
         # An array of string appropriate for a User-Agent HTTP header
       attr_accessor :agents
         # A short reminder to yourself what you're testing 

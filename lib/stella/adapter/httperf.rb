@@ -21,11 +21,12 @@ module Stella
       
       
       attr_accessor :hog, :server, :uri, :num_conns, :num_calls, :rate, :timeout, :think_timeout, :port
-      attr_accessor :add_header, :burst_length, :client, :close_with_reset, :debug, :failure_status
+      attr_accessor :burst_length, :client, :close_with_reset, :debug, :failure_status
       attr_accessor :help, :http_version, :max_connections, :max_piped_calls, :method, :no_host_hdr
       attr_accessor :period, :print_reply, :print_request, :recv_buffer, :retry_on_failure, :send_buffer
-      attr_accessor :server_name, :session_cookies, :ssl, :ssl_ciphers, :ssl_no_reuse, :verbose
-      attr_accessor :version, :wlog, :wsess, :wsesslog, :wset
+      attr_accessor :server_name, :session_cookies, :ssl, :ssl_ciphers, :ssl_no_reuse, :verbose 
+      
+      attr_writer :version, :add_header, :wlog, :wsess, :wsesslog, :wset
       
       def initialize(options={}, arguments=[])
         super(options, arguments)

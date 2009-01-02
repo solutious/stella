@@ -81,8 +81,8 @@ module Stella
           if @stella_options.verbose == 1
             Stella::LOGGER.info(req.to_s, '') # with an extra line between request headers
           elsif @stella_options.verbose == 2
-            #Stella::LOGGER.info(req.to_s, '') 
-            Stella::LOGGER.info(resp.request_uri.host)
+            Stella::LOGGER.info(req.to_s, '') 
+            Stella::LOGGER.info(resp.to_s)
           elsif @stella_options.verbose > 2
             Stella::LOGGER.info('-'*50)
             Stella::LOGGER.info(req.request_uri)

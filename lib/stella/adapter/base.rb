@@ -10,7 +10,8 @@ module Stella::Adapter
   class Base
     
     
-    attr_accessor :arguments, :load_factor, :working_directory, :stats
+    attr_accessor :working_directory, :stats
+    attr_reader :load_factor, :arguments
     
     def initialize(options={}, arguments=[])
       self.arguments = arguments

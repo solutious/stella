@@ -74,6 +74,8 @@ module Stella
       @options.data_path = @config.working_directory
       @options.agents = []
       
+      @stella_arguments = []
+      @command_arguments = []
     end
     
     def commands
@@ -127,9 +129,9 @@ module Stella
               break
             end
           end
-
-          @command_arguments = [] if @command_arguments.nil? 
-          @stella_arguments = [] if @stella_arguments.nil?
+          
+          @stella_arguments = [] unless @stella_arguments
+          @command_arguments = [] unless @command_arguments 
 
           # If there's no command we'll assume all the options are for Stella
           unless @command_name

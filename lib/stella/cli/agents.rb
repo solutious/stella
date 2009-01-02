@@ -42,8 +42,8 @@ module Stella
           end
         end
  
-        puts (@list) ? agents.uniq.sort.join("\n") : Stella::TEXT.msg(:agents_count_message, agents.uniq.size)
-
+        msg = (@list) ? agents.uniq.sort.join("\n") : Stella::TEXT.msg(:agents_count_message, agents.uniq.size)
+        puts msg
       end
       
       def process_options(display=false)

@@ -32,9 +32,10 @@ module Stella
     #   -A, --user-agent="text" Sets User-Agent in request
     class Siege < Stella::Adapter::Base
       
-      
-      attr_accessor :version, :help, :config, :verbose, :get, :log, :mark, :delay, :header, :user_agent
-      attr_accessor :reps, :concurrent, :rc, :file, :time, :benchmark, :internet
+      attr_writer :reps, :concurrent, :version
+      attr_reader :user_agent
+      attr_accessor :help, :config, :verbose, :get, :log, :mark, :delay, :header
+      attr_accessor :rc, :file, :time, :benchmark, :internet
       
       def initialize(options={}, arguments=[])
         super(options, arguments)

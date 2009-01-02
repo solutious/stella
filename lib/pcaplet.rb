@@ -6,8 +6,9 @@ require 'pcap'
 # Adapted from Ruby portion of Ruby-Pcap:
 # http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html
 # The lib/pcaplet.rb and lib/pcap_misc.rb files are in merge into this file
-# and cleaned up. The Ruby-Pcap C extension is unchanged and still required 
-# to be installed.  
+# and cleaned up. The Ruby-Pcap C extension was modified to apply several fixes
+# so it would compile on OS X and to remove several warning messages. With 
+# help from: http://d.hatena.ne.jp/takuma104/20080210/1202638583  
 # We specifically removed the dependency on ARGV and OptParse. It was messy
 # and required ARGV to be specifically modified before requiring this package. 
 # Manual: http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap/doc/index.html

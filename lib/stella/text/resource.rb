@@ -7,7 +7,6 @@ module Stella
       require 'yaml'
       
       attr_reader :lang, :country, :encoding
-      attr_reader :messages, :path
       
       def initialize(path, lang)
         @path = path

@@ -30,10 +30,10 @@
     Examples:
      
       # Run Apache Bench with 50 users, 20 requests each. Repeat 5 times. 
-      $ stella -t 5 ab -n 1000 -c 50 http://stellaaahhhh.com/
+      $ stella -x 5 -w 0.5 ab -n 1000 -c 50 http://stellaaahhhh.com/
   
       # Run Siege with 100 users, 10 requests each with a Linux FireFox 3 user agent
-      $ stella -a firefox-3-linux siege -c 100 -r 10 http://stellaaahhhh.com/
+      $ stella --rampup=25,200 --agent=firefox-3-linux siege -c 100 -r 10 http://stellaaahhhh.com/
   
     User-Agent Examples (--agent): 
       ff-3-linux, ie-7-win, opera-10, chrome-0.2-osx

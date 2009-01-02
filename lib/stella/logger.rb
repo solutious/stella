@@ -2,7 +2,7 @@
 
 module Stella
   class Logger
-    attr_accessor :debug
+    attr_accessor :debug_level
     
     # +args+ is a hash of initialization arguments
     # * <tt>:info_logger</tt> The IO class for info level logging. Default: STDOUT
@@ -10,7 +10,7 @@ module Stella
     # * <tt>:debug_logger</tt> The IO class for error level logging. Default: STDERR
     # * <tt>:debug</tt> Log debugging output, true or false (default)
     def initialize(args={})
-      @debug        = args[:debug] || false
+      @debug_level        = args[:debug] || false
       @info_logger  = args[:info_logger] || STDOUT
       @error_logger = args[:error_logger] || STDERR
       @debug_logger = args[:debug_logger] || STDERR
@@ -46,7 +46,7 @@ module Stella
     end
     
     def debug(*msgs)
-      return unless @debug
+      return unless @debug_level
       msgs.each do |m|
         @debug_logger.puts "DEBUG: #{m}"
       end  
@@ -55,7 +55,7 @@ module Stella
     def error(ex, prefix="ERR: ")
       msg = (ex.kind_of? String) ? ex : ex.message
       @error_logger.puts "#{prefix}#{msg}"
-      return unless @debug && ex.kind_of?(Exception)
+      return unless @debug_level && ex.kind_of?(Exception)
       @error_logger.puts("#{prefix}------------------------------------------")
       @error_logger.puts("#{prefix}#{ex.backtrace.join("\n")}")
       @error_logger.puts("#{prefix}------------------------------------------")

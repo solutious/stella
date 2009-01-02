@@ -40,8 +40,8 @@ module Stella
     #    -f protocol     Specify SSL/TLS protocol (SSL2, SSL3, TLS1, or ALL)
     class ApacheBench < Stella::Adapter::Base
       
-      
-      attr_accessor :n, :c, :t, :b, :p, :T, :v, :w, :i, :x, :z, :y
+      attr_writer :n, :c
+      attr_accessor :t, :b, :p, :T, :v, :w, :i, :x, :z, :y
       attr_accessor :C, :H, :A, :P, :X, :V, :k, :d, :S, :e, :g, :r, :h, :Z, :f
       
       def initialize(options={}, arguments=[])
