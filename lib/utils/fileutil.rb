@@ -50,8 +50,8 @@ module FileUtil
     File.chmod(0600, path)
   end
   
-  def FileUtil.create_file(filepath, perm='w', file_perms=nil)
-    raise Exception.new("File #{filepath} already exists!") if File.exists? filepath
+  def FileUtil.create_file(filepath, perm='w', file_perms=nil, force=false)
+    raise Exception.new("File #{filepath} already exists!") if File.exists?(filepath) && !force
     
     newfile = File.new(filepath, perm)
     if file_perms && File.exists?(file_perms)

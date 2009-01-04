@@ -5,7 +5,7 @@ module Stella
   module Adapter
     # Make sure Stella's lib directory is before the system defined ones. 
     # We are using a modified version of pcaplet.rb. 
-    require 'pcaplet'
+    require 'pcap'
     require 'observer'
     
     # Stella::Adapter::PcapWatcher
@@ -45,10 +45,14 @@ module Stella
       
       def initialize(options={})
         # The proper service name for dns is "domain"
-        service = (options[:service] == 'dns') ? 'domain' : options[:service]
+        @service = options[:service] || 'http'
+        @service = 'domain' if options[:service] == 'dns'
         
-        @service = service || 'http'
-        @protocol = options[:protocol] || (@service == 'dns') ? 'udp' : 'tcp'
+        if @service == 'domain'
+          @protocol = 'udp'
+        else
+          @protocol = options[:protocol] || 'tcp'
+        end
         
         @dport = options[:port] || Socket::getservbyname(@service)
         @sport = options[:port] || @dport
@@ -56,6 +60,8 @@ module Stella
         @device = options[:device] || guess_device
         @snaplen = options[:snaplen] || 1500
         @maxpacks = options[:maxpacks] || 100000
+        
+        Stella::LOGGER.info("Watching interface #{@device} for #{@service} activity on #{@protocol} port #{@dport}")
       end
       
       def guess_device
@@ -74,15 +80,14 @@ module Stella
         
       end
       
-      def monitor_generic
-        
-        
-      end
       
       
       # monitor_dns
       #
       # Use Ruby-Pcap to sniff packets off the network interface. 
+      #
+      # DNS monitor based on: http://www.linuxjournal.com/article/9614
+      # Install http://rubyforge.org/projects/net-dns
       #
       # NOTE: Is there a better way to match up a request packet with a
       # response packet?
@@ -99,12 +104,15 @@ module Stella
         req_counter = 0
         packet_counter = 0
         
-        at_exit { puts "#{$/}Requests: #{req_counter}"; puts "Packets: #{packet_counter} of #{@maxpacks}" }
+        at_exit { 
+          puts "#{$/}Requests: #{req_counter}"; 
+          puts "Packets: #{packet_counter} of #{@maxpacks}" 
+          
+        }
         
-        
-        req_filter  = Pcap::Filter.new('udp port 53', @pcaplet.capture)
+        req_filter  = Pcap::Filter.new("udp port #{@dport}", @pcaplet.capture)
         @pcaplet.add_filter(req_filter)
-        @pcaplet.capture.loop(@maxpacks) do |packet|
+        @pcaplet.each_packet do |packet|
           
           dns_data = Net::DNS::Packet.parse( packet.udp_data )
           dns_header = dns_data.header
@@ -153,7 +161,6 @@ module Stella
             notify_observers('domain', lookup) 
           end
           
-          STDOUT.flush
         end
 
         @pcaplet.capture.close
@@ -161,10 +168,12 @@ module Stella
       
       def after
         delete_observers
-        @pcaplet.capture.close
       rescue
+        
         # Ignore errors
       end
+      
+
       
       def monitor_http
         require 'webrick'  
@@ -178,8 +187,11 @@ module Stella
         resp_counter = 0
         req = {}
         
-        at_exit { puts "#{$/}Requests: #{req_counter}"; puts "Packets: #{packet_counter} of #{@maxpacks}" }
-        require 'pp'
+        at_exit { 
+          puts "#{$/}Requests: #{req_counter}"; 
+          puts "Packets: #{packet_counter} of #{@maxpacks}" 
+        }
+        
         begin
           req_filter  = Pcap::Filter.new('tcp and dst port 80', @pcaplet.capture)
           resp_filter = Pcap::Filter.new('tcp and src port 80', @pcaplet.capture)
@@ -195,8 +207,11 @@ module Stella
             # made. We'll parse the response in later versions. 
             # NOTE: We don't parse the body of POST and PUT requests because the data can
             # be (and likely is), split across numerous packets. We also only grab 1500
-            # bytes from each packet. If you're interested in this feature, let us know
-            # stella@solutious.com. 
+            # bytes from each packet. 
+            # NOTE: The hostname is taken from the Host header. Requests made without 
+            # this header (including HTTP 1.0) will contain the local hostname instead. 
+            # The workaround is to resolve the hostname from the IP address.   
+            # If you're interested these feature, let us know - stella@solutious.com.
             case packet
             when req_filter
               
@@ -233,6 +248,8 @@ module Stella
             end
           
           end
+        rescue Interrupt
+          puts "Interrupt"
         rescue => ex
           Stella::LOGGER.error(ex)
         end

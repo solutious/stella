@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-$: << File.join(STELLA_HOME, 'lib')
+$:.unshift File.join(STELLA_HOME, 'lib')
 
-require "stella"
+#require "stella"
 #require "stella/command/monitor"
 
 
@@ -17,8 +17,41 @@ require "stella"
 #monitor = Stella::Monitor.new()
 require 'pcaplet'
 
+require 'net/dns/packet'
+
+puts ARGV
 
 
+dev = Pcap.lookupdev
+capture = Pcap::Capture.open_live( "en1", 1500 )
+capture.setfilter( 'udp port 53' )
+num = 50
+puts "#{Time.now} - BEGIN run."
+capture.loop( num ) do |packet|
+  dns_data = Net::DNS::Packet.parse( packet.udp_data )
+  # Iterate over additional RRs
+  
+  dns_header = dns_data.header
+  if dns_header.query? then
+    print "Device #{packet.ip_src} (to #{packet.ip_dst}) looking for "
+    question = dns_data.question
+    question.inspect =~ /^\[(.+)\s+IN/
+    puts $1
+    puts dns_data.header.inspect
+    puts dns_data.question.inspect
+    STDOUT.flush
+  else
+    puts "ANSWER: #{dns_data.answer.inspect}"
+  end
+  
+  STDOUT.flush
+end
+
+capture.close
+puts "#{Time.now} - END run."
+
+
+__END__
 # Finds the ethernet device
 dev = Pcap.lookupdev
 
@@ -59,8 +92,7 @@ at_exit {
   puts "#{counter} GET requests"
 }
 __END__
-# DNS monitor from: http://www.linuxjournal.com/article/9614
-# Install http://rubyforge.org/projects/net-dns
+
 require 'net/dns/packet'
 
 dev = Pcap.lookupdev

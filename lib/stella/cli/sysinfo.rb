@@ -1,6 +1,4 @@
 
-
-
 module Stella 
   class CLI
     class SystemInfo < Stella::CLI::Base
@@ -8,6 +6,7 @@ module Stella
       
       def run
         puts Stella::SYSINFO
+        #puts "HI"
       end
       
     end

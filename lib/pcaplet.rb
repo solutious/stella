@@ -26,12 +26,12 @@ class Pcaplet
     @device = args[:device] || guess_device
     @rfile = args[:rfile]
     @convert = args[:convert] || false
-    @count   = args[:count].to_i
+    @count   = args[:count].to_i || 1000
     @snaplen = args[:snaplen].to_i > 0 ? args[:snaplen] : 1500
     @filter = args[:filter] || ''
   
     Pcap.convert = @convert
-  
+    
     # check option consistency
     usage(1) if @device && @rfile
     if !@device and !@rfile
@@ -50,7 +50,7 @@ class Pcaplet
           @capture = Capture.open_offline('-')
         end
       end
-      @capture.setfilter(@filter)
+      @capture.setfilter(@filter) if @filter
       rescue Pcap::PcapError, ArgumentError
         $stdout.flush
         $stderr.puts $!
@@ -63,15 +63,19 @@ class Pcaplet
 
   def add_filter(f)
     if @filter == nil || @filter =~ /^\s*$/  # if empty
+      #puts "filter is nil or empty"
       @filter = f
     else
+      #puts "filter is #{@filter}"
       f = f.source if f.is_a? Filter
       @filter = "( #{@filter} ) and ( #{f} )"
     end
-      @capture.setfilter(@filter)
+    #puts "filter being set #{@filter}"
+    @capture.setfilter(@filter)
   end
 
   def each_packet(&block)
+    
     begin
       duplicated = (RUBY_PLATFORM =~ /linux/ && @device == "lo")
       unless duplicated

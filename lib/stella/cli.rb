@@ -83,6 +83,7 @@ module Stella
     end
     
     def run
+      
       process_arguments
       process_options
       
@@ -91,19 +92,19 @@ module Stella
         exit 0
       end
           
+          puts @command_name
       # Pull the requested command object out of the list
       # and tell it what shortname that was used to call it.
       command = @@commands[@command_name].new(@command_name)
       
+      
       # Give the command object access to the config and runtime options
-      #command.global_config = @config 
       command.stella_options = @options
       command.arguments = @command_arguments
       command.working_directory = @options.data_path
       
       command.run
       
-
     rescue => ex
       Stella::LOGGER.error(ex)
     end
@@ -158,6 +159,7 @@ module Stella
             exit 0
           end
           opts.on('-h', '--help', Stella::TEXT.msg(:option_help_help)) { puts opts; exit 0 }
+          opts.on('-F', '--force', Stella::TEXT.msg(:option_help_force)) { |v| @options.force = true }
 
           opts.on('-v', '--verbose', Stella::TEXT.msg(:option_help_verbose)) do
             
@@ -299,3 +301,5 @@ begin
 rescue LoadError => ex
   Stella::LOGGER.info("Error loading #{previous_path}: #{ex.message}")
 end
+
+

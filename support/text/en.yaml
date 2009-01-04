@@ -40,6 +40,7 @@
 
 :option_help_message: A short note about the test (i.e. 'new cache enabled')
 :option_help_format: "Output file format. One of: csv [default], yaml, tsv, json"
+:option_help_force: "Force the command to ignore non-fatal errors. CAREFUL!"
 :option_help_version: Display the version, then exit
 :option_help_sleep: Number of seconds to sleep between runs
 :option_help_agent: Specify a User-Agent. Can be a short string or complete agent string. Defaults to 'random'. 
