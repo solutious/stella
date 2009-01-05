@@ -49,10 +49,12 @@ spec = Gem::Specification.new do |s|
 	s.homepage = "http://stella.solutious.com/"
 	s.executables = [ "stella" ]
 	s.rubyforge_project = "stella"
-  s.extra_rdoc_files  = ['README.txt']
-
-	s.add_dependency 'mongrel'
+  s.extra_rdoc_files  = ['README.textile']
+  
+  # NOTE: how to make optional dependencies?
+	#s.add_dependency 'mongrel'
 	s.add_dependency 'rspec'
+	#s.add_dependency 'net-dns'
 	#s.add_dependency 'session'
 
 	s.platform = Gem::Platform::RUBY

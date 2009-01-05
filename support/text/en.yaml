@@ -34,7 +34,18 @@
   
       # Run Siege with 100 users, 10 requests each with a Linux FireFox 3 user agent
       $ stella --rampup=25,200 --agent=firefox-3-linux siege -c 100 -r 10 http://stellaaahhhh.com/
-  
+      
+      # Display available user agent strings
+      $ stella agents -l
+    
+      # Launch a proxy to monitor HTTP traffic. Record requests to a flatfile.
+      $ stella -vv watch -W -p 3114 -r uri.txt
+      
+      # Monitor network traffic with packet sniffer (requires unix and root access)
+      $ stella watch -P dns 
+      $ stella watch -P -p 9000 http
+        
+        
     User-Agent Examples (--agent): 
       ff-3-linux, ie-7-win, opera-10, chrome-0.2-osx
 
