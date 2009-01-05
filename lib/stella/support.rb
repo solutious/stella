@@ -37,7 +37,7 @@ module Stella
     attr_accessor :dependency, :reason
     def initialize(dependency, reason=:error_generic)
       @dependency = dependency
-      @reason = Stella::TEXT.err(reason)
+      @reason = Stella::TEXT.err(reason) if reason.kind_of? Symbol
     end
     def message
       Stella::TEXT.err(:error_missing_dependency, @dependency, @reason)

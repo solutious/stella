@@ -88,19 +88,6 @@ class Pcaplet
           block.call pkt
         end
       end
-    rescue Interrupt
-      $stdout.flush
-      $stderr.puts("Interrupted.")
-      $stderr.puts $@.join("\n\t") if $DEBUG
-    ensure
-      # print statistics if live
-      if @device
-        stat = @capture.stats
-        if stat
-          $stderr.print("#{stat.recv} packets received by filter\n");
-          $stderr.print("#{stat.drop} packets dropped by kernel\n");
-        end
-      end
     end
   end
 

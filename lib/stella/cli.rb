@@ -92,11 +92,9 @@ module Stella
         exit 0
       end
           
-          puts @command_name
       # Pull the requested command object out of the list
       # and tell it what shortname that was used to call it.
       command = @@commands[@command_name].new(@command_name)
-      
       
       # Give the command object access to the config and runtime options
       command.stella_options = @options

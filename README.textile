@@ -8,13 +8,16 @@ This is a PREVIEW release. Proceed in double verify mode!
 h2. Prerequisites
 
 * Linux, *BSD, Solaris
+** Pcap 0.6 (optional, for packet sniffing)
 * Ruby 1.8.x or 1.9.x
 * Ruby Libraries
 ** fastthread
 ** mongrel
 ** rspec
 ** rdoc
-	
+** Ruby-Pcap (optional, for packet sniffing)
+** net-dns (ditto)
+
 * One of:
 ** Apache Bench
 ** Siege
@@ -25,10 +28,12 @@ h2. Installation
 
 Get it in one of the following ways:
 
-* RubyForge: http://stella.rubyforge.org/
-* GitHub: git clone git://github.com/solutious/stella.git
+* Download from RubyForge: http://stella.rubyforge.org/
 * gem install stella 
-  
+* git clone git://github.com/solutious/stella.git
+** git submodule init
+** git submodule update
+ 
 Use ab, siege, and httperf like you normally would with the addition of stella at the beginning (examples are below).
 
 h3. Debian (and derivatives)

@@ -1,4 +1,7 @@
 
+require 'webrick'  
+require 'stringio'
+require 'net/dns/packet'
 
 
 module Stella
@@ -96,19 +99,10 @@ module Stella
       # at the same time and the responses could be mixed up. This will affect
       # the exact response time but probably not by much.
       def monitor_dns
-        require 'net/dns/packet'
 
-        @pcaplet = Pcaplet.new(:device => @device)
+        @pcaplet = Pcaplet.new(:device => @device, :count => @count)
         
         lookup = {}
-        req_counter = 0
-        packet_counter = 0
-        
-        at_exit { 
-          puts "#{$/}Requests: #{req_counter}"; 
-          puts "Packets: #{packet_counter} of #{@maxpacks}" 
-          
-        }
         
         req_filter  = Pcap::Filter.new("udp port #{@dport}", @pcaplet.capture)
         @pcaplet.add_filter(req_filter)
@@ -118,11 +112,9 @@ module Stella
           dns_header = dns_data.header
           domain_name = dns_data.question[0].qName
           
-          packet_counter += 1
           
           # This is an outgoing DNS request
-          if dns_header.query? then
-            req_counter += 1
+          if dns_header.query? 
             lookup[domain_name] ||= {}
             
             lookup[domain_name][:counter] ||= 0
@@ -130,15 +122,18 @@ module Stella
             lookup[domain_name][:ip_src] = packet.ip_src.to_s
             lookup[domain_name][:ip_dsr] = packet.ip_dst.to_s
             lookup[domain_name][:target] = domain_name
-            lookup[domain_name][:request_time] = packet.time.to_f
+            lookup[domain_name][:request_time] = packet.time
+            lookup[domain_name][:req_packet] = dns_data
           
           # This is an incoming DNS response
-          else
+          elsif (!dns_data.answer.nil? && !dns_data.answer.empty?)
+            
             domain_name = dns_data.answer[0].name
-            lookup[domain_name] ||= {}
+            lookup[domain_name] ||= {}  
             lookup[domain_name][:counter] ||= 0
             lookup[domain_name][:counter] += 1
-            lookup[domain_name][:response_time] = packet.time.to_f
+            lookup[domain_name][:response_time] = packet.time
+            lookup[domain_name][:resp_packet] = dns_data
             
             # Empty the lists if they are already populated
             lookup[domain_name][:address] = []
@@ -154,51 +149,32 @@ module Stella
               lookup[domain_name][:address] << ip.to_s
             end
             
+            if defined?(lookup[domain_name][:request_time]) && defined?(lookup[domain_name][:response_time])
+              changed
+              notify_observers('domain', lookup[domain_name]) 
+            end
           end
           
-          if defined?(lookup[domain_name][:request_time]) && defined?(lookup[domain_name][:response_time])
-            changed
-            notify_observers('domain', lookup) 
-          end
           
         end
 
-        @pcaplet.capture.close
+      rescue Interrupt
+        after
+        exit
       end
       
-      def after
-        delete_observers
-      rescue
-        
-        # Ignore errors
-      end
-      
-
       
       def monitor_http
-        require 'webrick'  
-        require 'stringio'
-        require 'pp'
         
-        @pcaplet = Pcaplet.new(:device => @device)
+        @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
         
-        req_counter = 0
-        packet_counter = 0
-        resp_counter = 0
-        req = {}
-        
-        at_exit { 
-          puts "#{$/}Requests: #{req_counter}"; 
-          puts "Packets: #{packet_counter} of #{@maxpacks}" 
-        }
-        
+        req = {}        
         begin
-          req_filter  = Pcap::Filter.new('tcp and dst port 80', @pcaplet.capture)
-          resp_filter = Pcap::Filter.new('tcp and src port 80', @pcaplet.capture)
+          req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
+          resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@sport}", @pcaplet.capture)
           @pcaplet.add_filter(req_filter | resp_filter)
-          @pcaplet.capture.loop(@maxpacks) do |packet|
+          @pcaplet.each_packet do |packet|
             data = packet.tcp_data
-            packet_counter += 1
           
           
             # NOTE: With HTTP 1.1 keep alive connections, multiple requests can be passed
@@ -214,28 +190,18 @@ module Stella
             # If you're interested these feature, let us know - stella@solutious.com.
             case packet
             when req_filter
-              
               if data and data =~ /^(GET|POST|HEAD|DELETE|PUT)\s+(.+?)\s+(HTTP.+?)$/
-                req_counter += 1
-                req = {}
-                req[:packet_time] = packet.time.to_f
-                req[:address] = packet.dst.to_s
-                
-                server_parsed = WEBrick::HTTPRequest.new(WEBrick::Config::HTTP)
                 begin
-                  server_parsed.parse(StringIO.new(data.to_s))
-                  %w{query header request_time request_method cookies}.each do |key|
-                    req[key.to_sym] = server_parsed.send(key.to_s)
-                  end
-                  req[:header].delete("cookie") # we store cookie in req[:cookie]
-                  
+                  req = WEBrick::HTTPRequest.new(WEBrick::Config::HTTP)
+                  req.parse(StringIO.new(data.to_s))
+                  #next unless req
+                  changed
+                  notify_observers('http', req)
+                rescue Interrupt
+                  after
                 rescue => ex
                   Stella::LOGGER.debug(ex.message)
-                ensure
-                  changed
-                  notify_observers('http', server_parsed)
                 end
-
               end
             #when resp_filter
             #  if data and data =~ /^([HTTP].+)$/
@@ -249,14 +215,31 @@ module Stella
           
           end
         rescue Interrupt
-          puts "Interrupt"
+          after
+          exit
         rescue => ex
           Stella::LOGGER.error(ex)
         end
         
         
-        
       end
+      
+      def after
+      STDOUT.flush
+        stat = @pcaplet.capture.stats
+        if stat
+          Stella::LOGGER.info("#{$/}#{stat.recv} packets received by filter");
+          Stella::LOGGER.info("#{stat.drop} packets dropped by kernel", ''); # with an extra line
+        end
+        STDOUT.flush
+        @pcaplet.capture.close
+        delete_observers
+      rescue
+        
+        # Ignore errors
+      end
+      
+      
     end
   end
 end
