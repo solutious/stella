@@ -21,6 +21,7 @@ module Stella
         # prevents Pcap from reporting on UDP/DNS packets (TCP/HTTP is unaffected).
         # I left this here as an example of how not to it. Incidentally, 
         # "rescue Interrupt" seems to be working fine now. 
+        # See also: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/220937
         #@killer = Thread.new do
         #  puts "#{$/}Exiting...#{$/}"
         #  Thread.stop

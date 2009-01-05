@@ -27,7 +27,7 @@ module Stella
       #   see: http://www.rubyinside.com/ruby-1-9-1-preview-released-why-its-a-big-deal-1280.html#comment-37223
       # TRAP_BEG and TRAP_END are also fucked. But the fix is not clear. 
       # Basically Ruby::PCap is not ready for 1.9
-      
+      # See: http://d.hatena.ne.jp/takuma104/20080210/1202638583
       
         # Network interface device ID. eri0, en0, lo0, etc... /sbin/ifconfig -a will tell you. 
       attr_accessor :device
