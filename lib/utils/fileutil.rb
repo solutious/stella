@@ -54,9 +54,13 @@ module FileUtil
     raise Exception.new("File #{filepath} already exists!") if File.exists?(filepath) && !force
     
     newfile = File.new(filepath, perm)
+    begin
     if file_perms && File.exists?(file_perms)
       File.chown(File.stat(file_perms).uid.to_i, File.stat(file_perms).gid.to_i, filepath)
     end
+rescue NotImplementedError => ex
+end
+
     newfile
   end
 

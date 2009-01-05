@@ -58,15 +58,20 @@ module Stella
       def update(service, req, resp=nil)
         
         if @options[:record] && !@file_created_already
+        
           if File.exists?(@record_filepath) 
             if @stella_options.force
-              @record_file = FileUtil.create_file(@record_filepath, 'w', ".", :force)
+		    
+		    @record_file = FileUtil.create_file(@record_filepath, 'w', '.', :force)
             else
               exit 1
             end
           else
-            @record_file = FileUtil.create_file(@record_filepath, 'w', ".")
+		  @record_file = FileUtil.create_file(@record_filepath, 'w', '.')
           end
+	  raise StellaError.new("Cannot open: #{@record_filepath}") unless @record_file
+
+
           Stella::LOGGER.info("Writing to #{@record_filepath}")
           @file_created_already = true
         end

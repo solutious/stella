@@ -72,8 +72,16 @@ module Stella
                 #end
             end
         )
-        
+        trap('INT') do
+		after
+	end
         @server.start
+	after
+      rescue Interrupt
+	after
+rescue => ex
+	puts "Exception: #{ex.message}"
+	after
       end
       
       def after
