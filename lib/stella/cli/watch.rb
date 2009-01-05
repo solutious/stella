@@ -180,41 +180,47 @@ module Stella
         
           if @stella_options.verbose == 1
             Stella::LOGGER.info(req.to_s) # with an extra line between request headers
-            Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}", '')
+            Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}", '') if resp
             
           elsif @stella_options.verbose == 2
             Stella::LOGGER.info(req.to_s, '') # with an extra line between request headers
-              
-            # Recreate the HTTP/1.1 200 line and then print the headers.
-            # WEBrick returns a hash so we need to format it. 
-            Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
-            resp.header.each_pair do |n,v|
-              Stella::LOGGER.info("#{n.capitalize}: #{v}")
-            end
-
-          elsif @stella_options.verbose > 2
-            Stella::LOGGER.info('-'*50)
-            Stella::LOGGER.info(req.request_uri)
-            Stella::LOGGER.info(req.inspect)
             
-            # We don't want to print binary data (images, gzip, etc...). So we only print 
-            # the full response when it's text and not encoded. Unless the body is empty
-            # (which happens for HEAD requests and 3XX responses)
-            if (resp.content_type && resp.content_type.match(/text/) && resp.header['content-encoding'] != 'gzip') || resp.body.nil?
-              Stella::LOGGER.info(resp.inspect) 
-            else
+            if (resp)
               # Recreate the HTTP/1.1 200 line and then print the headers.
               # WEBrick returns a hash so we need to format it. 
               Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
               resp.header.each_pair do |n,v|
                 Stella::LOGGER.info("#{n.capitalize}: #{v}")
               end
-              Stella::LOGGER.info("[binary content removed]", '') 
+            end
+            
+          elsif @stella_options.verbose > 2
+            Stella::LOGGER.info('-'*50)
+            Stella::LOGGER.info(req.request_uri)
+            Stella::LOGGER.info(req.inspect)
+            
+            if resp
+              # We don't want to print binary data (images, gzip, etc...). So we only print 
+              # the full response when it's text and not encoded. Unless the body is empty
+              # (which happens for HEAD requests and 3XX responses)
+              if (resp.content_type && resp.content_type.match(/text/) && resp.header['content-encoding'] != 'gzip') || resp.body.nil?
+                Stella::LOGGER.info(resp.inspect) 
+              else
+                # Recreate the HTTP/1.1 200 line and then print the headers.
+                # WEBrick returns a hash so we need to format it. 
+                Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
+                resp.header.each_pair do |n,v|
+                  Stella::LOGGER.info("#{n.capitalize}: #{v}")
+                end
+                Stella::LOGGER.info("[binary content removed]", '') 
+              end
             end
             Stella::LOGGER.info("#{$/}")
           else
-            
-            #Stella::LOGGER.info("#{req.request_time.strftime("%Y-%m-%d@%H:%M:%S")}: #{resp.status} #{req.request_uri}")
+            line = req.request_time.strftime("%Y-%m-%d@%H:%M:%S: ")
+            line << " #{resp.status}" if resp
+            line << " #{req.request_uri}"
+            Stella::LOGGER.info(line)
           end
         rescue => ex
           # Is it just me or is WEBrick kind of annoying. In any case, it can raise

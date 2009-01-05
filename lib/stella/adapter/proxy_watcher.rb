@@ -13,14 +13,16 @@ module Stella
     class ProxyWatcher
       include Observable
       
+      attr_accessor :port
+      
       def initialize(options={})
-
+        @port = options[:port]
       end
       
       def run
 
         @server = WEBrick::HTTPProxyServer.new(
-            :Port => 3114,
+            :Port => @port || 3114,
             :AccessLog => [],
             :ProxyContentHandler => Proc.new do |req,res|
                 
