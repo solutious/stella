@@ -1,9 +1,11 @@
 
+# TODO: Record cookies. 
 
 module Stella 
   class CLI
     class Watch < Stella::CLI::Base
-
+      
+      
 
       def run
         @options = process_arguments(@arguments)
@@ -93,6 +95,8 @@ module Stella
         else
           raise StellaException.new("Unknown service type (#{service})")
         end
+        
+        Stella::LOGGER.flush
       end
       
       def update_domain(req)

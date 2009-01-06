@@ -111,6 +111,7 @@ module Stella
       def process_options(arguments)
         options = OpenStruct.new
         opts = OptionParser.new 
+        
         opts.on('-v') do |v| options.v = true end
         opts.on('-w') do |v| options.w = true end # TODO: Print a note that we don't parse the HTML results
         opts.on('-i') do |v| options.i = true end
@@ -133,6 +134,7 @@ module Stella
         opts.on('-c N', Integer) do |v| options.c = v end
         opts.on('-n N', Integer) do |v| options.n = v end
         opts.on('-t N', Integer) do |v| options.t = v end
+        opts.on('-A S', String) do |v| options.A = v end
         opts.on('-b N', Integer) do |v| options.b = v end
         opts.on('-H S', String) do |v| options.H ||= []; options.H << v; end
         opts.on('-C S', String) do |v| options.C ||= []; options.C << v; end

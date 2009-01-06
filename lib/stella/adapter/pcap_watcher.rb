@@ -164,7 +164,7 @@ module Stella
       end
       
       HTTPVersion = WEBrick::HTTPVersion.new('1.0') # Used to create response object. But it's ignored. 
-      
+      require 'pp'
       def monitor_http
         
         @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
@@ -195,9 +195,9 @@ module Stella
                 begin
                   req = WEBrick::HTTPRequest.new(WEBrick::Config::HTTP)
                   req.parse(StringIO.new(data.to_s))
-                  #next unless req
-                  #changed
-                  #notify_observers('http', req)
+                  next unless req
+                  changed
+                  notify_observers('http', req)
                 rescue Interrupt
                   after
                 rescue => ex
@@ -209,7 +209,8 @@ module Stella
               resp = WEBrick::HTTPResponse.new(WEBrick::Config::HTTP)
               
               if data and data =~ /^([HTTP].+)$/
-                puts req
+                pp data
+                notify_observers('http-resp', data)
               end  
             end
           

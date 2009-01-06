@@ -31,6 +31,12 @@ module Stella
       @info_logger.flush
     end
     
+    def flush
+      @info_logger.flush
+      @error_logger.flush
+      @debug_logger.flush
+    end
+    
     # Print all messages on a single line. 
     def info_print(*msgs)
       msgs.each do |m|
