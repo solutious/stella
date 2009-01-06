@@ -25,15 +25,21 @@ module Stella::Test::Run
     end
     
     def availability
-      return 0 if @successful == 0
-      (@transactions / @successful).to_f * 100
+      begin
+        (@transactions / @successful).to_f * 100
+      rescue Errno::EDOM
+        return 0.0
+      end
     end
     
     # We calculate the throughput because Apache Bench does not provide this
     # value in the output. 
     def throughput
-      return 0 if !@elapsed_time || @elapsed_time == 0
-      (@data_transferred / @elapsed_time).to_f
+      begin
+        return (@data_transferred / @elapsed_time).to_f
+      rescue Errno::EDOM
+        return 0.0
+      end
     end
     
     def field_names
