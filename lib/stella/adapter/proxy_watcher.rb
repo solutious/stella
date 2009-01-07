@@ -18,7 +18,7 @@ module Stella
       def initialize(options={})
         @port = options[:port]
       end
-      
+      require 'pp'
       def run
 
         @server = WEBrick::HTTPProxyServer.new(
@@ -26,9 +26,13 @@ module Stella
             :AccessLog => [],
             :ProxyContentHandler => Proc.new do |req,res|
                 
+                puts "-----------------------------"
+                puts req.to_s
+                puts res.to_s
+                
                 begin
-                  changed
-                  notify_observers('http', req, res)
+                  #changed
+                  #notify_observers('http', req, res)
                 rescue => ex
                   # There are miscellaneous errors (mostly to do with
                   # incorrect content-length) that we don't care about. 

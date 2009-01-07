@@ -4,7 +4,7 @@
 module Stella 
   class CLI
     class Watch < Stella::CLI::Base
-      
+      TIME_FORMAT = "%Y-%m-%d@%H:%M:%S".freeze unless defined? TIME_FORMAT
       
 
       def run
@@ -30,8 +30,6 @@ module Stella
         # when they have new data. They call the update method below. 
         @watcher.add_observer(self)
         
-        
-        
         if @options[:record]
           
           @record_filepath = generate_record_filepath 
@@ -51,10 +49,15 @@ module Stella
         Stella::LOGGER.info("Filter: #{@options[:filter]}") if @options[:filter]
         Stella::LOGGER.info("Domain: #{@options[:domain]}") if @options[:domain]
         
-        @think_time = 0 if @options[:format] == "session"
+        # Turn wildcards into regular expressions
+        @options[:filter].gsub!('*', '.*') if @options[:filter] 
+        @options[:domain].gsub!('*', '.*') if @options[:domain]
+        
+        # Used to calculated user think times for session output
+        @think_time = 0
         
         @watcher.run
-      
+        
       end
       
 
@@ -62,10 +65,9 @@ module Stella
       # update
       #
       # This method is called from the watcher class when data is updated. 
-      # +service+ is one of: domain, http
-      # +req+ is a WEBrick::HTTPRequest object when service is http. Otherwise a hash. 
-      # +resp+ is a WEBrick::HTTPResponse object when service is http. Otherwise it's nil.  
-      def update(service, req, resp=nil)
+      # +service+ is one of: domain, http_request, http_response
+      # +data+ is a string of TCP packet data. The format depends on the value of +service+.
+      def update(service, raw_data, time, ip_src, ip_dst)
         
         begin
           if @options[:record] && !@file_created_already
@@ -88,150 +90,89 @@ module Stella
           raise StellaError.new("Error creating file: #{ex.message}")
         end
         
-        if (service == "http")
-          update_http(req, resp)
-        elsif (service == "domain")
-          update_domain(req)
+        return if @options[:filter] && !(data.to_s =~ /#{@options[:filter]}/i)
+        return if @options[:domain] && !(data.to_s =~ /(www.)?#{@options[:domain]}/i)
+        
+        if (respond_to? "process_#{service}")
+          self.send("process_#{service}", raw_data, time, ip_src, ip_dst)
         else
-          raise StellaException.new("Unknown service type (#{service})")
+          raise "Unknown service type (#{service})"
         end
         
-        Stella::LOGGER.flush
+      rescue Exception => ex
+        Stella::LOGGER.error(ex)
+        exit 1
       end
       
-      def update_domain(req)
+
+      
+      def process_http_request(raw_data, time, ip_src, ip_dst)
+        method, path, http_version, header, body = HTTPUtil::parse_http_request(raw_data)
+        time_str = time.strftime(TIME_FORMAT)
         
-        return if @options[:filter] && !(req[:target].to_s =~ /#{@options[:filter]}/i)
-        return if @options[:domain] && !(req[:target].to_s =~ /(www.)?#{@options[:domain]}/i)
+        pp method, path, http_version, header, body
+      end
+      
+      def process_http_response(raw_data, time, ip_src, ip_dst)
+        http_version, status, message, header, body = HTTPUtil::parse_http_response(raw_data)
+        time_str = time.strftime(TIME_FORMAT)
         
-        if @stella_options.verbose > 0
-          Stella::LOGGER.info('-'*50)
-          Stella::LOGGER.info(req[:resp_packet].inspect, '')
+        pp http_version, status, message, header
+      end
+      
+      require 'pp'
+      def process_domain_request(raw_data, time, ip_src, ip_dst)
+        domain_name, dns_data, header = DomainUtil::parse_domain_request(raw_data)
+        time_str = time.strftime(TIME_FORMAT)
+        
+        return unless dns_data
+        
+        if @stella_options.verbose > 1
+          Stella::LOGGER.info('', ";; REQUEST         #{time_str}")
+          Stella::LOGGER.info(";; %s %s> %s" % [ip_src, '-'*30, ip_dst], ';;')
+          Stella::LOGGER.info(dns_data.inspect)
+        elsif @stella_options.verbose == 1
+          info = {
+            :domain => domain_name,
+            :name_server => ip_dst.to_s,
+            :source => ip_src.to_s,
+            :time => time
+          }
+          Stella::LOGGER.info("#{$/}#{$/}", "# REQUEST")
+          Stella::LOGGER.info(info.to_yaml)
         else
-          Stella::LOGGER.info("#{req[:request_time].strftime("%Y-%m-%d@%H:%M:%S")}: #{req[:target]} -> #{req[:address].join(', ')}")
+          Stella::LOGGER.info("%s: %s -> %s (%s)" % [time_str, ip_src, ip_dst, domain_name])
         end
       end
       
-      
-      # pageload?
-      #
-      # Used while writing the session log file. Returns true when we
-      # suspect a new page has loaded. Otherwise the resource is considered 
-      # to be a dependency. 
-      def pageload?(now, think_time, host, referer, content_type)
-        time_difference = (now.to_i - @think_time.to_i)
-        time_passed = (@think_time == 0 || time_difference > 4) 
-        non_html = (content_type !~ /text\/html/i) if content_type
-        #puts "POOO: #{content_type} #{referer}"
+      def process_domain_response(raw_data, time, ip_src, ip_dst)
+        domain_name, dns_data, addresses, cnames = DomainUtil::parse_domain_response(raw_data)
+        time_str = time.strftime(TIME_FORMAT)
         
-        case [time_passed, non_html]
-        when [true,false]
-          return true
-        when [true,true]
-          return false
-        when [true,nil]
-          return true
-        when [false,false]
-          return false
+        return unless dns_data
+        
+        if @stella_options.verbose > 1
+          Stella::LOGGER.info('', ";; RESPONSE        #{time_str}")
+          Stella::LOGGER.info(";; %s <%s %s" % [ip_dst, '-'*30, ip_src], ';;')
+          Stella::LOGGER.info(dns_data.inspect, '') 
+        elsif @stella_options.verbose == 1
+          info = {
+            :domain => domain_name,
+            :addresses => addresses,
+            :cnames => cnames,
+            :name_server => ip_src.to_s,
+            :source => ip_dst.to_s,
+            :time => time
+          }
+          Stella::LOGGER.info('', "# RESPONSE")
+          Stella::LOGGER.info(info.to_yaml)
         else
-          return false
+          Stella::LOGGER.info("%s: %s <- %s (%s) %s" % [time_str, ip_dst, ip_src, domain_name, (addresses || []).join(',')])
         end
+        
       end
       
-      def update_http(req, resp)
-        
-        return if req.request_time.nil? # Incomplete packets return unpredictable results
-        return if @options[:filter] && req.request_uri.to_s !~ /#{@options[:filter]}/i
-        
-        if @options[:domain] 
-          # expand the wildcard
-          domain = @options[:domain].gsub('*', '.*')
-          return unless req.host.to_s =~ /(www.)?#{domain}/i
-        end
-        
-        begin
-          if (@options[:record])
-            @sess_number ||= 0
-            
-            if (@options[:format] == 'session')
-              now = Time.now
-              
-              if pageload?(now, @think_time, req.request_uri.host, req.header['referer'][0], resp.content_type)
-                delay = (@think_time == 0) ? 0 : now.to_f - @think_time.to_f
-                
-                if delay == 0 || delay >= 10 
-                  @sess_number += 1
-                  @record_file.puts('', "# SESSION NUMBER #{@sess_number}")
-                end
-                line = req.path 
-                line << "?" << req.query_string if req.query_string 
-                line << sprintf(" think=%.2f", delay)
-                @record_file.puts line
-                @think_time = now
-              else
-                delay = sprintf("%.2f", now.to_f - @think_time.to_f)
-                line = "\t#{req.path}" 
-                line << "?" << req.query_string if req.query_string 
-                @record_file.puts line
-              end
-              
-            else
-              @record_file.puts req.request_uri
-            end
-            
-            @record_file.flush
-          end
-        
-          if @stella_options.verbose == 1
-            Stella::LOGGER.info(req.to_s) # with an extra line between request headers
-            Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}", '') if resp
-            
-          elsif @stella_options.verbose == 2
-            Stella::LOGGER.info(req.to_s, '') # with an extra line between request headers
-            
-            if (resp)
-              # Recreate the HTTP/1.1 200 line and then print the headers.
-              # WEBrick returns a hash so we need to format it. 
-              Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
-              resp.header.each_pair do |n,v|
-                Stella::LOGGER.info("#{n.capitalize}: #{v}")
-              end
-            end
-            
-          elsif @stella_options.verbose > 2
-            Stella::LOGGER.info('-'*50)
-            Stella::LOGGER.info(req.request_uri)
-            Stella::LOGGER.info(req.inspect)
-            
-            if resp
-              # We don't want to print binary data (images, gzip, etc...). So we only print 
-              # the full response when it's text and not encoded. Unless the body is empty
-              # (which happens for HEAD requests and 3XX responses)
-              if (resp.content_type && resp.content_type.match(/text/) && resp.header['content-encoding'] != 'gzip') || resp.body.nil?
-                Stella::LOGGER.info(resp.inspect) 
-              else
-                # Recreate the HTTP/1.1 200 line and then print the headers.
-                # WEBrick returns a hash so we need to format it. 
-                Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
-                resp.header.each_pair do |n,v|
-                  Stella::LOGGER.info("#{n.capitalize}: #{v}")
-                end
-                Stella::LOGGER.info("[binary content removed]", '') 
-              end
-            end
-            Stella::LOGGER.info("#{$/}")
-          else
-            line = req.request_time.strftime("%Y-%m-%d@%H:%M:%S: ")
-            line << " #{resp.status}" if resp
-            line << " #{req.request_uri}"
-            Stella::LOGGER.info(line)
-          end
-        rescue => ex
-          # Is it just me or is WEBrick kind of annoying. In any case, it can raise
-          # WEBrick::HTTPStatus::LengthRequired exceptions that we don't care about
-          Stella::LOGGER.error(ex)
-        end
-      end
+      
       # can_pcap?
       #
       # Returns true is pcap is available 
@@ -345,3 +286,126 @@ module Stella
   end
 end
 
+
+__END__
+
+# pageload?
+#
+# Used while writing the session log file. Returns true when we
+# suspect a new page has loaded. Otherwise the resource is considered 
+# to be a dependency. 
+def pageload?(now, think_time, host, referer, content_type)
+  time_difference = (now.to_i - @think_time.to_i)
+  time_passed = (@think_time == 0 || time_difference > 4) 
+  non_html = (content_type !~ /text\/html/i) if content_type
+  #puts "POOO: #{content_type} #{referer}"
+  
+  case [time_passed, non_html]
+  when [true,false]
+    return true
+  when [true,true]
+    return false
+  when [true,nil]
+    return true
+  when [false,false]
+    return false
+  else
+    return false
+  end
+end
+
+
+def update_http(req, resp)
+  
+  return if req.request_time.nil? # Incomplete packets return unpredictable results
+  return if @options[:filter] && req.request_uri.to_s !~ /#{@options[:filter]}/i
+  
+  if @options[:domain] 
+    # expand the wildcard
+    domain = @options[:domain].gsub('*', '.*')
+    return unless req.host.to_s =~ /(www.)?#{domain}/i
+  end
+  
+  begin
+    if (@options[:record])
+      @sess_number ||= 0
+      
+      if (@options[:format] == 'session')
+        now = Time.now
+        
+        if pageload?(now, @think_time, req.request_uri.host, req.header['referer'][0], resp.content_type)
+          delay = (@think_time == 0) ? 0 : now.to_f - @think_time.to_f
+          
+          if delay == 0 || delay >= 10 
+            @sess_number += 1
+            @record_file.puts('', "# SESSION NUMBER #{@sess_number}")
+          end
+          line = req.path 
+          line << "?" << req.query_string if req.query_string 
+          line << sprintf(" think=%.2f", delay)
+          @record_file.puts line
+          @think_time = now
+        else
+          delay = sprintf("%.2f", now.to_f - @think_time.to_f)
+          line = "\t#{req.path}" 
+          line << "?" << req.query_string if req.query_string 
+          @record_file.puts line
+        end
+        
+      else
+        @record_file.puts req.request_uri
+      end
+      
+      @record_file.flush
+    end
+  
+    if @stella_options.verbose == 1
+      Stella::LOGGER.info(req.to_s) # with an extra line between request headers
+      Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}", '') if resp
+      
+    elsif @stella_options.verbose == 2
+      Stella::LOGGER.info(req.to_s, '') # with an extra line between request headers
+      
+      if (resp)
+        # Recreate the HTTP/1.1 200 line and then print the headers.
+        # WEBrick returns a hash so we need to format it. 
+        Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
+        resp.header.each_pair do |n,v|
+          Stella::LOGGER.info("#{n.capitalize}: #{v}")
+        end
+      end
+      
+    elsif @stella_options.verbose > 2
+      Stella::LOGGER.info('-'*50)
+      Stella::LOGGER.info(req.request_uri)
+      Stella::LOGGER.info(req.inspect)
+      
+      if resp
+        # We don't want to print binary data (images, gzip, etc...). So we only print 
+        # the full response when it's text and not encoded. Unless the body is empty
+        # (which happens for HEAD requests and 3XX responses)
+        if (resp.content_type && resp.content_type.match(/text/) && resp.header['content-encoding'] != 'gzip') || resp.body.nil?
+          Stella::LOGGER.info(resp.inspect) 
+        else
+          # Recreate the HTTP/1.1 200 line and then print the headers.
+          # WEBrick returns a hash so we need to format it. 
+          Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
+          resp.header.each_pair do |n,v|
+            Stella::LOGGER.info("#{n.capitalize}: #{v}")
+          end
+          Stella::LOGGER.info("[binary content removed]", '') 
+        end
+      end
+      Stella::LOGGER.info("#{$/}")
+    else
+      line = req.request_time.strftime("%Y-%m-%d@%H:%M:%S: ")
+      line << " #{resp.status}" if resp
+      line << " #{req.request_uri}"
+      Stella::LOGGER.info(line)
+    end
+  rescue => ex
+    # Is it just me or is WEBrick kind of annoying. In any case, it can raise
+    # WEBrick::HTTPStatus::LengthRequired exceptions that we don't care about
+    Stella::LOGGER.error(ex)
+  end
+end

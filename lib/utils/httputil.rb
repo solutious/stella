@@ -1,170 +1,130 @@
-require 'net/http'
+
 require 'uri'
 require 'timeout'
+require 'net/http'
+require 'webrick/httputils'
 
   module HTTPUtil
     VALID_METHODS = %w{GET HEAD POST PUT DELETE}
     @@timeout = 20
     
-    def HTTPUtil.hostname(tmp_uri)
-      return if tmp_uri.empty?
-      uri = URI.parse(tmp_uri) if tmp_uri.is_a? String
-      
-      #STDERR.puts "Hostname for #{ uri.port }"
-      uri.host
+    # Takes a string. See WEBrick::parse_header(string).
+    def HTTPUtil.parse_header(string)
+      return WEBrick::HTTPUtils::parse_header(string)
     end
     
-    # Normalize all URIs before they are used for anything else
-    def HTTPUtil.normalize(uri_str, scheme = true) 
+    # Takes a string or array. See parse_header_body for further info.
+    # Returns +method+, +path+, +http_version+, +header+, +body+
+    def HTTPUtil.parse_http_request(data=[])
+      return unless data && !data.empty?
+      data = data.split(/\r?\n/) unless data.kind_of? Array
+      data.shift while (data[0].empty? || data[0].nil?)   # Remove leading empties
+      request_line = data.shift                           # i.e. GET /path HTTP/1.1
+      method, path, http_version = nil
       
-      
-      #STDERR.puts "  BEFORE: " << uri_str
-      if (!uri_str.index(/^https?:\/\//))
-        uri_str = 'http://' << uri_str
-      end
-      #STDERR.puts "   AFTER: " << uri_str
-      
-      uri_str.gsub!(/\s/, '%20')
-      
-      uri = URI.parse(uri_str)
-      
-      uri_clean = ""
-      
-      # TODO: use URI.to_s instead of manually creating the string
-      
-      if (scheme)
-        uri_clean << uri.scheme.to_s + '://'  
-      end
-      
+      if request_line =~ /^(\S+)\s+(\S+)(?:\s+HTTP\/(\d+\.\d+))?/mo
+        method = $1
+        path   = $2
+        http_version   = $3 || '0.9'
         
-      if (!uri.userinfo.nil?)
-        uri_clean << uri.userinfo.to_s
-        uri_clean << '@'
+        # We only process the header and body data when we know we're
+        # starting from the beginning of a request string. We don't
+        # want no partials. 
+        header, body = HTTPUtil.parse_header_body(data)
+      else
+        rl = request_line.sub(/\x0d?\x0a\z/o, '')
+        raise "Bad Request-Line `#{rl}'."
       end
       
-      #uri.host.gsub!(/^www\./, '')
-      
-      uri_clean << uri.host.to_s
-      
-      if (!uri.port.nil? && uri.port != 80 && uri.port != 443)
-        uri_clean << ':' + uri.port.to_s
-      end
-      
-      
-      
-      if (!uri.path.nil? && !uri.path.empty?)
-        uri_clean << uri.path
-      elsif
-        uri_clean << '/'
-      end
-      
-      
-      if (!uri.query.nil? && !uri.path.empty?)
-        uri_clean << "?" << uri.query
-      end
-      
-      #STDERR.puts "IN: " << uri_str
-      #STDERR.puts "OUT: " << uri_clean
-      
-      uri_clean
+      return method, path, http_version, header, body
     end
     
-    def HTTPUtil.fetch_content(uri, limit = 10)
-      res = self.fetch(uri,limit)
-      return (res) ? res.body : ""
+    
+    # Takes a string or array. See parse_header_body for further info. 
+    # Returns +http_version+, +status+, +message+, +header+, +body+
+    def HTTPUtil.parse_http_response(data=[])
+      return unless data && !data.empty?
+      data = data.split(/\r?\n/) unless data.kind_of? Array
+      data.shift while (data[0].empty? || data[0].nil?)   # Remove leading empties
+      status_line = data.shift                            # ie. HTTP/1.1 200 OK
+      http_version, status, message = nil
+      
+      if status_line =~ /^HTTP\/(\d.+?)\s+(\d\d\d)\s+(.+)$/mo
+        http_version = $1
+        status   = $2
+        message   = $3 || '0.9'
+        
+        header, body = HTTPUtil.parse_header_body(data)
+        
+      else  
+        raise "Bad Response-Line `#{status_line}'."
+      end
+      
+      return http_version, status, message, header, body
     end
     
-    def HTTPUtil.fetch(uri, limit = 10)
-       
-      # You should choose better exception.
-      raise ArgumentError, 'HTTP redirect too deep' if limit == 0
-      STDERR.puts "URL: #{uri.to_s}"
-      uri = URI.parse(uri) if uri.is_a? String
+    # Process everything after the first line of an HTTP request or response:
+    # GET / HTTP/1.1
+    # HTTP/1.1 200 OK
+    # etc...
+    # Used by parse_http_request and parse_http_response but can be used separately. 
+    # Takes a string or array of strings. A string should be formatted like an HTTP 
+    # request or response. If a body is present it should be separated by two newlines.
+    # An array of string should contain an empty or nil element between the header 
+    # and body content. This will happen naturally if the raw lines were split by 
+    # a single line terminator. (i.e. /\n/ rather than /\n\n/)
+    # Returns header (hash), body (string)
+    def HTTPUtil.parse_header_body(data=[])
+      header, body = {}, nil
+      data = data.split(/\r?\n/) unless data.kind_of? Array
+      data.shift while (data[0].empty? || data[0].nil?)   # Remove leading empties
+      return header, body unless data && !data.empty?
+      
+      #puts data.to_yaml
+      
+      # Skip that first line if it exists
+      data.shift if data[0].match(/\AHTTP|GET|POST|DELETE|PUT|HEAD/mo)
       
       begin
-        timeout(@@timeout) do
-          response = Net::HTTP.get_response(uri)
+        header_lines = []
+        header_lines << data.shift while (!data[0].nil? && !data[0].empty?)
+        header = HTTPUtil::parse_header(header_lines.join($/))
         
         
-          case response
-          when Net::HTTPSuccess     then response
-          when Net::HTTPRedirection then fetch(response['location'], limit - 1)
-          else
-            STDERR.puts "Not found: " << uri.to_s
-          end
-        end
-      rescue TimeoutError
-        STDERR.puts "Net::HTTP timed out for " << uri.to_s
-        return
+        # We omit the blank line that delimits the header from the body
+        body = data[1..-1].join($/) unless data.empty? 
+        
       rescue => ex
-        STDERR.puts "Error: #{ex.message}"
+        raise ex.message
       end
-    
+      
+      return header, body
     end
     
-    def HTTPUtil.post(uri, params = {}, limit = 10)
-       
-      # You should choose better exception.
-      raise ArgumentError, 'HTTP redirect too deep' if limit == 0
-      
-      uri = URI.parse(uri) if uri.is_a? String
-      
+    def HTTPUtil.parse_query(request_method, query_string, body)
+      query = Hash.new([].freeze)
       begin
-        timeout(@@timeout) do
-           response = Net::HTTP.post_form(uri, params)
-        
-          case response
-          when Net::HTTPSuccess     then response
-          when Net::HTTPRedirection then fetch(response['location'], limit - 1)
-          else
-            STDERR.puts "Error for " << uri.to_s
-            STDERR.puts response.body
-          end
-        end
-      rescue TimeoutError
-        STDERR.puts "Net::HTTP timed out for " << uri.to_s
-        return
-      end
-      
-      
-      
-    end
-    
-    def HTTPUtil.exists(uri)
-      
-      begin
-        response = fetch(uri)
-        case response
-        when Net::HTTPSuccess     then true
-        when Net::HTTPRedirection then fetch(response['location'], limit - 1)
+        if request_method == "GET" || request_method == "HEAD"
+          query = WEBrick::HTTPUtils::parse_query(query_string)
+        elsif self['content-type'] =~ /^application\/x-www-form-urlencoded/
+          query = WEBrick::HTTPUtils::parse_query(body)
+        elsif self['content-type'] =~ /^multipart\/form-data; boundary=(.+)/
+          boundary = HTTPUtils::dequote($1)
+          query = WEBrick::HTTPUtils::parse_form_data(body, boundary)
         else
-          false
+          query
         end
-        
-      rescue Exception => e
-        STDERR.puts "Problem: " + e.message
-        false
+      rescue => ex
+        raise WEBrick::HTTPStatus::BadRequest, ex.message
       end
-      
-    end
-    
-    def HTTPUtil.parse_query(query)
-      params = Hash.new([].freeze)
-
-      query.split(/[&;]/n).each do |pairs|
-        key, value = pairs.split('=',2).collect{|v| URI.unescape(v) }
-        if params.has_key?(key)
-          params[key].push(value)
-        else
-          params[key] = [value]
-        end
-      end
-
-      params
     end
     
     def HTTPUtil.validate_method(meth='GET')
-      meth = (VALID_METHODS.member? meth.upcase) ? meth : VALID_METHODS[0]
+      (VALID_METHODS.member? meth.upcase) ? meth : VALID_METHODS[0]
+    end
+    
+    def HTTPUtil.parse_query_from_string(query)
+      WEBrick::HTTPUtils::parse_query(query)
     end
     
     # Extend the basic query string parser provided by the cgi module.
@@ -178,7 +138,6 @@ require 'timeout'
     # hash of parameters, contains arrays for multivalued parameters
     # (multiselect, checkboxes , etc)
     # If no query string is provided (nil or "") returns an empty hash.
-
     def HTTPUtil.query_to_hash(query_string)
       return {} unless query_string
 

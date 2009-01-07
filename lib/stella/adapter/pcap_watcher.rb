@@ -79,13 +79,17 @@ module Stella
       
       def run
         
-        @service == 'domain' ? monitor_dns : monitor_http
+        if (respond_to? "monitor_#{@service}")
+          self.send("monitor_#{@service}")
+        else
+          raise "Unknown service type (#{@service})"
+        end
         
       end
       
       
       
-      # monitor_dns
+      # monitor_domain
       #
       # Use Ruby-Pcap to sniff packets off the network interface. 
       #
@@ -98,63 +102,25 @@ module Stella
       # It's possible that two (or more) requests to be made for the same domain 
       # at the same time and the responses could be mixed up. This will affect
       # the exact response time but probably not by much.
-      def monitor_dns
+      def monitor_domain
 
         @pcaplet = Pcaplet.new(:device => @device, :count => @count)
         
-        lookup = {}
-        
-        req_filter  = Pcap::Filter.new("udp port #{@dport}", @pcaplet.capture)
-        @pcaplet.add_filter(req_filter)
+        req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
+        resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@dport}", @pcaplet.capture)
+        @pcaplet.add_filter(req_filter | resp_filter)
         @pcaplet.each_packet do |packet|
-          
-          dns_data = Net::DNS::Packet.parse( packet.udp_data )
-          dns_header = dns_data.header
-          domain_name = dns_data.question[0].qName
-          
-          
-          # This is an outgoing DNS request
-          if dns_header.query? 
-            lookup[domain_name] ||= {}
+          data = packet.udp_data
+          case packet
+          when req_filter
             
-            lookup[domain_name][:counter] ||= 0
-            lookup[domain_name][:counter] += 1
-            lookup[domain_name][:ip_src] = packet.ip_src.to_s
-            lookup[domain_name][:ip_dsr] = packet.ip_dst.to_s
-            lookup[domain_name][:target] = domain_name
-            lookup[domain_name][:request_time] = packet.time
-            lookup[domain_name][:req_packet] = dns_data
-          
-          # This is an incoming DNS response
-          elsif (!dns_data.answer.nil? && !dns_data.answer.empty?)
+            changed
+            notify_observers(:domain_request, data, packet.time, packet.ip_src, packet.ip_dst)
             
-            domain_name = dns_data.answer[0].name
-            lookup[domain_name] ||= {}  
-            lookup[domain_name][:counter] ||= 0
-            lookup[domain_name][:counter] += 1
-            lookup[domain_name][:response_time] = packet.time
-            lookup[domain_name][:resp_packet] = dns_data
-            
-            # Empty the lists if they are already populated
-            lookup[domain_name][:address] = []
-            lookup[domain_name][:cname] = []
-            
-            # Store the CNAMEs associated to this domain. Can be empty. 
-            dns_data.each_cname do |cname|
-              lookup[domain_name][:cname] << cname.to_s
-            end
-            
-            # Store the IP address for this domain. If empty, the lookup was unsuccessful. 
-            dns_data.each_address do |ip|
-              lookup[domain_name][:address] << ip.to_s
-            end
-            
-            if defined?(lookup[domain_name][:request_time]) && defined?(lookup[domain_name][:response_time])
-              changed
-              notify_observers('domain', lookup[domain_name]) 
-            end
+          when resp_filter
+            changed
+            notify_observers(:domain_response, data, packet.time, packet.ip_src, packet.ip_dst)
           end
-          
           
         end
 
@@ -163,13 +129,11 @@ module Stella
         exit
       end
       
-      HTTPVersion = WEBrick::HTTPVersion.new('1.0') # Used to create response object. But it's ignored. 
-      require 'pp'
+
       def monitor_http
         
         @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
-        
-        req = {}        
+            
         begin
           req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
           resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@sport}", @pcaplet.capture)
@@ -180,38 +144,28 @@ module Stella
           
             # NOTE: With HTTP 1.1 keep alive connections, multiple requests can be passed
             # through single connection. This makes it difficult to match responses with
-            # requests. For now, we're just recording the requests in the order they're
-            # made. We'll parse the response in later versions. 
+            # requests. 
             # NOTE: We don't parse the body of POST and PUT requests because the data can
             # be (and likely is), split across numerous packets. We also only grab 1500
             # bytes from each packet. 
             # NOTE: The hostname is taken from the Host header. Requests made without 
             # this header (including HTTP 1.0) will contain the local hostname instead. 
-            # The workaround is to resolve the hostname from the IP address.   
-            # If you're interested these feature, let us know - stella@solutious.com.
+            # TODO: resolve the hostname from the IP address.   
+            # There are some helpful methods for doing some of this stuff:
+            # http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap/doc/TCPPacket.html
             case packet
             when req_filter
-              if data and data =~ /^(GET|POST|HEAD|DELETE|PUT)\s+(.+?)\s+(HTTP.+?)$/
-                begin
-                  req = WEBrick::HTTPRequest.new(WEBrick::Config::HTTP)
-                  req.parse(StringIO.new(data.to_s))
-                  next unless req
-                  changed
-                  notify_observers('http', req)
-                rescue Interrupt
-                  after
-                rescue => ex
-                  Stella::LOGGER.debug(ex.message)
-                end
-              end
+              next unless data and data =~ /^(GET|POST|HEAD|DELETE|PUT)\s+(.+?)\s+(HTTP.+?)$/
+              
+              changed
+              notify_observers(:http_request, data.gsub(/\r?\n/, $/), packet.time, packet.ip_src, packet.ip_dst)  # Use the system's line terminators
+              
             when resp_filter
+              next unless data and data =~ /^(HTTP.+)$/
               
-              resp = WEBrick::HTTPResponse.new(WEBrick::Config::HTTP)
-              
-              if data and data =~ /^([HTTP].+)$/
-                pp data
-                notify_observers('http-resp', data)
-              end  
+              changed
+              notify_observers(:http_response, data.gsub(/\r?\n/, $/), packet.time, packet.ip_src, packet.ip_dst)
+                
             end
           
           end
@@ -244,3 +198,4 @@ module Stella
     end
   end
 end
+

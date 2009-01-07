@@ -6,6 +6,7 @@ require 'tempfile'
 require 'socket'
 
 # Common utilities
+require 'utils/domainutil'
 require 'utils/httputil'
 require 'utils/fileutil'
 require 'utils/mathutil'
@@ -51,7 +52,7 @@ module Stella
     # including OS (unix), implementation (freebsd), and architecture (x64)
   SYSINFO = Stella::SystemInfo.new unless defined? SYSINFO
     # A global logger for info, error, and debug messages. 
-    LOGGER = Stella::Logger.new(:debug=>true) unless defined? LOGGER
+  LOGGER = Stella::Logger.new(:debug=>true) unless defined? LOGGER
     # A global resource for all interface text. 
   TEXT = Stella::Text.new('en') unless defined? TEXT
   
