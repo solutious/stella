@@ -22,6 +22,7 @@ require 'stella/storable'
 
 # Common Stella Data Objects
 require 'stella/data/http'
+require 'stella/data/domain'
 
 # Common Stella objects
 require 'stella/text'

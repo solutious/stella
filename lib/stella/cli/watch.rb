@@ -140,52 +140,33 @@ module Stella
       end
       
       def process_domain_request(raw_data, time, ip_src, ip_dst)
-        dns_data, domain_name, header = DomainUtil::parse_domain_request(raw_data)
         time_str = time.strftime(TIME_FORMAT)
         
-        return unless dns_data
+        dobj = Stella::Data::DomainRequest.new(raw_data)
+        dobj.time = time_str
+        dobj.client_ip = ip_src.to_s
+        dobj.server_ip = ip_dst.to_s
         
         if @stella_options.verbose > 1
-          Stella::LOGGER.info('', ";; REQUEST         #{time_str}")
-          Stella::LOGGER.info(";; %s %s> %s" % [ip_src, '-'*30, ip_dst], ';;')
-          Stella::LOGGER.info(dns_data.inspect)
+          Stella::LOGGER.info(dobj.inspect)
         elsif @stella_options.verbose == 1
-          info = {
-            :domain => domain_name,
-            :name_server => ip_dst.to_s,
-            :source => ip_src.to_s,
-            :time => time
-          }
-          Stella::LOGGER.info("#{$/}#{$/}", "# REQUEST")
-          Stella::LOGGER.info(info.to_yaml)
-        else
-          Stella::LOGGER.info("%s: %s -> %s (%s)" % [time_str, ip_src, ip_dst, domain_name])
+          Stella::LOGGER.info(dobj.to_s)
         end
       end
       
       def process_domain_response(raw_data, time, ip_src, ip_dst)
-        dns_data, domain_name, addresses, cnames = DomainUtil::parse_domain_response(raw_data)
+        
         time_str = time.strftime(TIME_FORMAT)
         
-        return unless dns_data
+        dobj = Stella::Data::DomainResponse.new(raw_data)
+        dobj.time = time_str
+        dobj.client_ip = ip_src.to_s
+        dobj.server_ip = ip_dst.to_s
         
         if @stella_options.verbose > 1
-          Stella::LOGGER.info('', ";; RESPONSE        #{time_str}")
-          Stella::LOGGER.info(";; %s <%s %s" % [ip_dst, '-'*30, ip_src], ';;')
-          Stella::LOGGER.info(dns_data.inspect, '') 
+          Stella::LOGGER.info(dobj.inspect)
         elsif @stella_options.verbose == 1
-          info = {
-            :domain => domain_name,
-            :addresses => addresses,
-            :cnames => cnames,
-            :name_server => ip_src.to_s,
-            :source => ip_dst.to_s,
-            :time => time
-          }
-          Stella::LOGGER.info('', "# RESPONSE")
-          Stella::LOGGER.info(info.to_yaml)
-        else
-          Stella::LOGGER.info("%s: %s <- %s (%s) %s" % [time_str, ip_dst, ip_src, domain_name, (addresses || []).join(',')])
+          Stella::LOGGER.info(dobj.to_s)
         end
         
       end

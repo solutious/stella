@@ -128,6 +128,8 @@ h2. Known Issues
 * httperf is functional but needs a lot more testing (most dev was done with ab and siege).
 * The Ruby API has not been finalized. It's functional but there's no example because it is subject to change. 
 * There are no specs. 
+* There is an issue with parsing ipv6 ip addresses with Ruby-Pcap or Net-DNS. This affects only dns sniffing with pcap. Reproduce by running "stella watch -P dns" and requesting "apple.com"
+
 
 h2. Report an issue
 

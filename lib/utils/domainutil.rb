@@ -41,7 +41,7 @@ module DomainUtil
       addresses << ip.to_s
     end
     
-    return dns_data, domain_name, addresses, cnames
+    return dns_data, domain_name, dns_data.header, addresses, cnames
   end
 
 end
