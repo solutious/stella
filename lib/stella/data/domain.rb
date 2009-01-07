@@ -19,7 +19,7 @@ module Stella::Data
     end
     
     def inspect
-      str = "#{$/};; REQUEST         #{@time}"
+      str = "#{$/};; REQUEST         #{@time.to_s}"
       str << "#{$/};; %s %s> %s" % [@client_ip, '-'*30, @server_ip]
       str << "#{$/};;#{$/}"
       str << @dns_data.inspect
@@ -46,7 +46,7 @@ module Stella::Data
     end
     
     def inspect
-      str =  "#{$/};; RESPONSE        #{@time}"
+      str =  "#{$/};; RESPONSE        #{@time.to_s}"
       str << "#{$/};; %s <%s %s" % [@client_ip, '-'*30, @server_ip]
       str << "#{$/};;#{$/}"
       str << @dns_data.inspect

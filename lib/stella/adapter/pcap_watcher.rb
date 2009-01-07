@@ -113,13 +113,22 @@ module Stella
           data = packet.udp_data
           case packet
           when req_filter
+            dobj = Stella::Data::DomainRequest.new(data)
+            dobj.time = packet.time
+            dobj.client_ip = packet.ip_src
+            dobj.server_ip = packet.ip_dst
             
             changed
-            notify_observers(:domain_request, data, packet.time, packet.ip_src, packet.ip_dst)
+            notify_observers(:domain_request, dobj)
             
           when resp_filter
+            dobj = Stella::Data::DomainResponse.new(data)
+            dobj.time = packet.time
+            dobj.client_ip = packet.ip_dst
+            dobj.server_ip = packet.ip_src
+            
             changed
-            notify_observers(:domain_response, data, packet.time, packet.ip_src, packet.ip_dst)
+            notify_observers(:domain_response, dobj)
           end
           
         end
@@ -157,16 +166,25 @@ module Stella
             case packet
             when req_filter
               next unless data and data =~ /^(GET|POST|HEAD|DELETE|PUT)\s+(.+?)\s+(HTTP.+?)$/
+              dobj = Stella::Data::HTTPRequest.new(data.gsub(/\r?\n/, $/)) # Use the system's line terminators
+              dobj.time = packet.time
+              dobj.client_ip = packet.ip_src
+              dobj.server_ip = packet.ip_dst
               
               changed
-              notify_observers(:http_request, data.gsub(/\r?\n/, $/), packet.time, packet.ip_src, packet.ip_dst)  # Use the system's line terminators
+              notify_observers(:http_request, dobj)  
               
             when resp_filter
-              
+              # NOTE: Some responses do not contain a body in the first packet.
+              # TODO: investigate further. Try: http://www.ruby-doc.org/core/classes/Enumerable.html
               next unless data and data =~ /^(HTTP.+)$/
+              dobj = Stella::Data::HTTPResponse.new(data.gsub(/\r?\n/, $/))
+              dobj.time = packet.time
+              dobj.client_ip = packet.ip_dst
+              dobj.server_ip = packet.ip_src
               
               changed
-              notify_observers(:http_response, data.gsub(/\r?\n/, $/), packet.time, packet.ip_src, packet.ip_dst)
+              notify_observers(:http_response, dobj)
                 
             end
           

@@ -67,7 +67,7 @@ module Stella
       # This method is called from the watcher class when data is updated. 
       # +service+ is one of: domain, http_request, http_response
       # +data+ is a string of TCP packet data. The format depends on the value of +service+.
-      def update(service, raw_data, time, ip_src, ip_dst)
+      def update(service, data_object)
         
         begin
           if @options[:record] && !@file_created_already
@@ -93,10 +93,12 @@ module Stella
         return if @options[:filter] && !(data.to_s =~ /#{@options[:filter]}/i)
         return if @options[:domain] && !(data.to_s =~ /(www.)?#{@options[:domain]}/i)
         
-        if (respond_to? "process_#{service}")
-          self.send("process_#{service}", raw_data, time, ip_src, ip_dst)
-        else
-          raise "Unknown service type (#{service})"
+        if @stella_options.verbose > 1
+          Stella::LOGGER.info(data_object.inspect, '', '')
+          
+        elsif @stella_options.verbose == 1
+          Stella::LOGGER.info(data_object.to_s, '', '')
+          
         end
         
       rescue Exception => ex
@@ -104,72 +106,6 @@ module Stella
         exit 1
       end
       
-
-      
-      def process_http_request(raw_data, time, ip_src, ip_dst)
-        time_str = time.strftime(TIME_FORMAT)
-        
-        dobj = Stella::Data::HTTPRequest.new(raw_data)
-        dobj.time = time_str
-        dobj.client_ip = ip_src.to_s
-        dobj.server_ip = ip_dst.to_s
-        
-        if @stella_options.verbose > 1
-          Stella::LOGGER.info(dobj.raw_data)
-        else 
-          
-          Stella::LOGGER.info(dobj.to_s)
-          
-        end        
-      end
-      
-      def process_http_response(raw_data, time, ip_src, ip_dst)
-        time_str = time.strftime(TIME_FORMAT)
-        
-        dobj = Stella::Data::HTTPResponse.new(raw_data)
-        dobj.time = time_str
-        dobj.client_ip = ip_src.to_s
-        dobj.server_ip = ip_dst.to_s
-        
-        if @stella_options.verbose > 0
-          Stella::LOGGER.info(dobj.raw_data)
-        else
-          Stella::LOGGER.info(dobj.to_s)
-        end
-        
-      end
-      
-      def process_domain_request(raw_data, time, ip_src, ip_dst)
-        time_str = time.strftime(TIME_FORMAT)
-        
-        dobj = Stella::Data::DomainRequest.new(raw_data)
-        dobj.time = time_str
-        dobj.client_ip = ip_src.to_s
-        dobj.server_ip = ip_dst.to_s
-        
-        if @stella_options.verbose > 1
-          Stella::LOGGER.info(dobj.inspect)
-        elsif @stella_options.verbose == 1
-          Stella::LOGGER.info(dobj.to_s)
-        end
-      end
-      
-      def process_domain_response(raw_data, time, ip_src, ip_dst)
-        
-        time_str = time.strftime(TIME_FORMAT)
-        
-        dobj = Stella::Data::DomainResponse.new(raw_data)
-        dobj.time = time_str
-        dobj.client_ip = ip_src.to_s
-        dobj.server_ip = ip_dst.to_s
-        
-        if @stella_options.verbose > 1
-          Stella::LOGGER.info(dobj.inspect)
-        elsif @stella_options.verbose == 1
-          Stella::LOGGER.info(dobj.to_s)
-        end
-        
-      end
       
       
       # can_pcap?
