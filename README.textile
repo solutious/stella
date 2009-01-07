@@ -15,8 +15,9 @@ h2. Prerequisites
 ** mongrel
 ** rspec
 ** rdoc
+** net-dns 
 ** Ruby-Pcap (optional, for packet sniffing)
-** net-dns (ditto)
+
 
 * One of:
 ** Apache Bench
