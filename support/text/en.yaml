@@ -71,4 +71,4 @@
 :error_sysinfo_notwindows: "Sorry, Windows only"
 :error_sysinfo_notroot: "You need to be root to do that"
 
-:errot_watch_norubypcap: "Ruby-Pcap not installed"
+:error_watch_norubypcap: "Ruby-Pcap not installed (http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html)"

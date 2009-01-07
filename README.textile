@@ -1,6 +1,6 @@
 h1. Stella - Your Performance Testing Friend
 
-Release: 0.5.3-preview (2008-12-23)
+Release: 0.5.4-preview (2009-09-07)
 
 This is a PREVIEW release. Proceed in double verify mode!
 
@@ -64,6 +64,10 @@ Run Siege, repeat the test 5 times. Automatically creates a summary averages and
 Run Httperf like you normally would (but all the test data will be collected for you)
 
   stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=3000 --timeout=5
+
+Monitor HTTP traffic using Pcap packet filter
+
+  stella watch -P http
 
 
 h3. Sample Output

@@ -139,8 +139,8 @@ module Stella
         raise MissingDependency.new('pcap', :error_sysinfo_notroot) unless ENV['USER'] === 'root' # Must run as root or sudo
         begin 
           require 'pcap'
-        rescue => ex
-          raise MissingDependency.new('pcap', :errot_watch_norubypcap)
+        rescue Exception, LoadError => ex
+          raise MissingDependency.new('pcap', :error_watch_norubypcap)
         end
         false
       end
@@ -185,7 +185,7 @@ module Stella
         opts = OptionParser.new
         
         opts.banner = "Usage: #{File.basename($0)} [global options] watch [command options] [http|dns]"
-        opts.on("#{$/}Example: #{File.basename($0)} -v watch -p dns#{$/}")
+        opts.on("#{$/}Example: #{File.basename($0)} -v watch -P http#{$/}")
         opts.on('-h', '--help', "Display this message") do
           Stella::LOGGER.info opts
           exit 0
@@ -198,14 +198,14 @@ module Stella
         opts.on("#{$/}Pcap-specific options")
         opts.on('-i=S', '--interface=S', String, "Network device. eri0, en1, etc. (with --usepcap only)") do |v| v end
         opts.on('-m=N', '--maxpacks=N', Integer, "Maximum number of packets to sniff (with --usepcap only)") do |v| v end
-        opts.on('', '--protocol=S', String, "Communication protocol to sniff. udp or tcp (with --usepcap only)") do |v| v end
+        opts.on('-R=S', '--protocol=S', String, "Communication protocol to sniff. udp or tcp (with --usepcap only)") do |v| v end
         
         opts.on("#{$/}Common options")
         opts.on('-p=N', '--port=N', Integer, "With --useproxy this is the Proxy port. With --usecap this is the TCP port to filter. ") do |v| v end
         opts.on('-f=S', '--filter=S', String, "Filter out requests which do not contain this string") do |v| v end
         opts.on('-d=S', '--domain=S', String, "Only display requests to the given domain") do |v| v end
-        opts.on('-r=S', '--record=S', String, "Record requests to file with an optional filename") do |v| v || true end
-        opts.on('-F=S', '--format=S', "Format of recorded file. One of: simple (for Siege), session (for Httperf)") do |v| v end
+        #opts.on('-r=S', '--record=S', String, "Record requests to file with an optional filename") do |v| v || true end
+        #opts.on('-F=S', '--format=S', "Format of recorded file. One of: simple (for Siege), session (for Httperf)") do |v| v end
             
         options = opts.getopts(@arguments)  
         options = options.keys.inject({}) do |hash, key|
@@ -251,101 +251,5 @@ def pageload?(now, think_time, host, referer, content_type)
     return false
   else
     return false
-  end
-end
-
-
-def update_http(req, resp)
-  
-  return if req.request_time.nil? # Incomplete packets return unpredictable results
-  return if @options[:filter] && req.request_uri.to_s !~ /#{@options[:filter]}/i
-  
-  if @options[:domain] 
-    # expand the wildcard
-    domain = @options[:domain].gsub('*', '.*')
-    return unless req.host.to_s =~ /(www.)?#{domain}/i
-  end
-  
-  begin
-    if (@options[:record])
-      @sess_number ||= 0
-      
-      if (@options[:format] == 'session')
-        now = Time.now
-        
-        if pageload?(now, @think_time, req.request_uri.host, req.header['referer'][0], resp.content_type)
-          delay = (@think_time == 0) ? 0 : now.to_f - @think_time.to_f
-          
-          if delay == 0 || delay >= 10 
-            @sess_number += 1
-            @record_file.puts('', "# SESSION NUMBER #{@sess_number}")
-          end
-          line = req.path 
-          line << "?" << req.query_string if req.query_string 
-          line << sprintf(" think=%.2f", delay)
-          @record_file.puts line
-          @think_time = now
-        else
-          delay = sprintf("%.2f", now.to_f - @think_time.to_f)
-          line = "\t#{req.path}" 
-          line << "?" << req.query_string if req.query_string 
-          @record_file.puts line
-        end
-        
-      else
-        @record_file.puts req.request_uri
-      end
-      
-      @record_file.flush
-    end
-  
-    if @stella_options.verbose == 1
-      Stella::LOGGER.info(req.to_s) # with an extra line between request headers
-      Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}", '') if resp
-      
-    elsif @stella_options.verbose == 2
-      Stella::LOGGER.info(req.to_s, '') # with an extra line between request headers
-      
-      if (resp)
-        # Recreate the HTTP/1.1 200 line and then print the headers.
-        # WEBrick returns a hash so we need to format it. 
-        Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
-        resp.header.each_pair do |n,v|
-          Stella::LOGGER.info("#{n.capitalize}: #{v}")
-        end
-      end
-      
-    elsif @stella_options.verbose > 2
-      Stella::LOGGER.info('-'*50)
-      Stella::LOGGER.info(req.request_uri)
-      Stella::LOGGER.info(req.inspect)
-      
-      if resp
-        # We don't want to print binary data (images, gzip, etc...). So we only print 
-        # the full response when it's text and not encoded. Unless the body is empty
-        # (which happens for HEAD requests and 3XX responses)
-        if (resp.content_type && resp.content_type.match(/text/) && resp.header['content-encoding'] != 'gzip') || resp.body.nil?
-          Stella::LOGGER.info(resp.inspect) 
-        else
-          # Recreate the HTTP/1.1 200 line and then print the headers.
-          # WEBrick returns a hash so we need to format it. 
-          Stella::LOGGER.info("HTTP/#{resp.http_version} #{resp.status}")
-          resp.header.each_pair do |n,v|
-            Stella::LOGGER.info("#{n.capitalize}: #{v}")
-          end
-          Stella::LOGGER.info("[binary content removed]", '') 
-        end
-      end
-      Stella::LOGGER.info("#{$/}")
-    else
-      line = req.request_time.strftime("%Y-%m-%d@%H:%M:%S: ")
-      line << " #{resp.status}" if resp
-      line << " #{req.request_uri}"
-      Stella::LOGGER.info(line)
-    end
-  rescue => ex
-    # Is it just me or is WEBrick kind of annoying. In any case, it can raise
-    # WEBrick::HTTPStatus::LengthRequired exceptions that we don't care about
-    Stella::LOGGER.error(ex)
   end
 end

@@ -54,7 +54,7 @@ spec = Gem::Specification.new do |s|
   # NOTE: how to make optional dependencies?
 	#s.add_dependency 'mongrel'
 	s.add_dependency 'rspec'
-	#s.add_dependency 'net-dns'
+	s.add_dependency 'net-dns'
 	#s.add_dependency 'session'
 
 	s.platform = Gem::Platform::RUBY
