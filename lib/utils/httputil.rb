@@ -72,10 +72,10 @@ require 'net/http'
       status_line = data.shift                            # ie. HTTP/1.1 200 OK
       http_version, status, message = nil
       
-      if status_line =~ /^HTTP\/(\d.+?)\s+(\d\d\d)\s+(.+)$/mo
+      if status_line =~ /^HTTP\/(\d.+?)(\s+(\d\d\d)\s+(.+))?$/mo
         http_version = $1
         status   = $2
-        message   = $3
+        message   = $4
         
         header, body, query = HTTPUtil.parse_header_body(data)
         
@@ -100,7 +100,7 @@ require 'net/http'
     def HTTPUtil.parse_header_body(data=[])
       header, body = {}, nil
       data = data.split(/\r?\n/) unless data.kind_of? Array
-      data.shift while (data[0].empty? || data[0].nil?)   # Remove leading empties
+      data.shift while (data[0].nil? || data[0].empty?)   # Remove leading empties
       
       return header, body unless data && !data.empty?
       
@@ -109,12 +109,12 @@ require 'net/http'
       # Skip that first line if it exists
       data.shift if data[0].match(/\AHTTP|GET|POST|DELETE|PUT|HEAD/mo)
       
-        header_lines = []
-        header_lines << data.shift while (!data[0].nil? && !data[0].empty?)
-        header = HTTPUtil::parse_header(header_lines.join($/))
-        
-        # We omit the blank line that delimits the header from the body
-        body = data[1..-1].join($/) unless data.empty? 
+      header_lines = []
+      header_lines << data.shift while (!data[0].nil? && !data[0].empty?)
+      header = HTTPUtil::parse_header(header_lines.join($/))
+      
+      # We omit the blank line that delimits the header from the body
+      body = data[1..-1].join($/) unless data.empty? 
       
       return header, body
     end
@@ -140,29 +140,30 @@ require 'net/http'
       (VALID_METHODS.member? meth.upcase) ? meth : VALID_METHODS[0]
     end
     
-      # Parses a query string by breaking it up at the '&'
-      # and ';' characters.  You can also use this to parse
-      # cookies by changing the characters used in the second
-      # parameter (which defaults to '&;'.
-      # Stolen from Mongrel
-      def HTTPUtil.parse_query_from_string(qs, d = '&;')
-        params = {}
-        (qs||'').split(/[#{d}] */n).inject(params) { |h,p|
-          k, v=unescape(p).split('=',2)
-          k = k.tr('-', '_').to_sym
-          if cur = params[k]
-            if cur.class == Array
-              params[k] << v
-            else
-              params[k] = [cur, v]
-            end
+    # Parses a query string by breaking it up at the '&'
+    # and ';' characters.  You can also use this to parse
+    # cookies by changing the characters used in the second
+    # parameter (which defaults to '&;'.
+    # Stolen from Mongrel
+    def HTTPUtil.parse_query_from_string(qs, d = '&;')
+      params = {}
+      (qs||'').split(/[#{d}] */n).inject(params) { |h,p|
+        k, v=unescape(p).split('=',2)
+        next unless k
+        k = k.tr('-', '_').to_sym
+        if cur = params[k]
+          if cur.class == Array
+            params[k] << v
           else
-            params[k] = v
+            params[k] = [cur, v]
           end
-        }
+        else
+          params[k] = v
+        end
+      }
 
-        return params
-      end
+      return params
+    end
 
     
     

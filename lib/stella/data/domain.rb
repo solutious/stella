@@ -46,7 +46,7 @@ module Stella::Data
     end
     
     def inspect
-      str =  "#{$/};; RESPONSE        #{@time.to_s}"
+      str =  "#{$/};; RESPONSE        #{@time.strftime(NICE_TIME_FORMAT)}"
       str << "#{$/};; %s <%s %s" % [@client_ip, '-'*30, @server_ip]
       str << "#{$/};;#{$/}"
       str << @dns_data.inspect

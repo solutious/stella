@@ -27,7 +27,7 @@ module Stella::Test::Run
     def availability
       begin
         (@transactions / @successful).to_f * 100
-      rescue Errno::EDOM
+      rescue => ex
         return 0.0
       end
     end
@@ -37,7 +37,7 @@ module Stella::Test::Run
     def throughput
       begin
         return (@data_transferred / @elapsed_time).to_f
-      rescue Errno::EDOM
+      rescue => ex
         return 0.0
       end
     end

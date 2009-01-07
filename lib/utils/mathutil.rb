@@ -6,6 +6,7 @@ module MathUtil
     n = 0
     mean = 0.0
     s = 0.0
+    
     population.each { |x|
       n = n + 1
       delta = (x - mean).to_f
@@ -13,7 +14,9 @@ module MathUtil
       s = (s + delta * (x - mean)).to_f
     }
     
-    return s / n
+    s / n
+  rescue => ex
+    0.0
   end
 
   # calculate the standard deviation of a population
@@ -55,6 +58,8 @@ module Enumerable
     def average
       return 0 unless self
       self.sum / self.length.to_f
+    rescue => ex
+      0.0
     end
 
     ##
@@ -63,10 +68,12 @@ module Enumerable
     # The Enumerable must respond to #length
 
     def sample_variance
-        return 0 unless self
-        avg = self.average
-        sum = self.sum
-        return (1 / self.length.to_f * sum)
+      return 0 unless self
+      avg = self.average
+      sum = self.sum
+      (1 / self.length.to_f * sum)
+    rescue => ex
+      0.0
     end
 
     ##
@@ -76,7 +83,9 @@ module Enumerable
 
     def standard_deviation
       return 0 unless self
-        return Math.sqrt(self.sample_variance)
+      Math.sqrt(self.sample_variance)
+    rescue => ex
+      0.0
     end
 
 end

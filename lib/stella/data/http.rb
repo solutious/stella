@@ -3,6 +3,19 @@ require 'utils/httputil'
 require 'base64'
 
 module Stella::Data
+  
+  # TODO: Implement HTTPHeaders. We should be printing untouched headers. 
+  # HTTPUtil should split the HTTP event lines and that's it. Replace 
+  # parse_header_body with split_header_body
+  class HTTPHeaders < Stella::Storable
+    attr_reader :raw_data
+    
+    def to_s
+      @raw_data
+    end
+    
+  end
+  
   class HTTPRequest < Stella::Storable
     attr_accessor :time, :client_ip, :server_ip, :header, :body, :method, :http_version 
     attr_reader :raw_data
@@ -22,7 +35,8 @@ module Stella::Data
     
     def body
       return nil unless @body
-      (!header || header[:Content_Type] || header[:Content_Type] !~ /text/) ? Base64.encode64(@body) : @body
+      @body
+      #(!header || header[:Content_Type] || header[:Content_Type] !~ /text/) ? Base64.encode64(@body) : @body
     end
     
     def field_names
@@ -32,7 +46,7 @@ module Stella::Data
     def inspect
       headers = []
       header.each_pair do |n,v|
-        headers << "#{n}: #{v[0]}"
+        headers << "#{n.to_s.gsub('_', '-')}: #{v[0]}"
       end
       str = "%s %s HTTP/%s" % [method, uri.to_s, http_version]
       str << $/ + headers.join($/)
@@ -41,8 +55,7 @@ module Stella::Data
     end
     
     def to_s
-      str = "%s: %s %s HTTP/%s" % [time, method, uri.to_s, http_version]
-      str << $/ + $/ + body if body && @method =~ /POST|PUT|DELETE/
+      str = "%s: %s %s HTTP/%s" % [time.strftime(NICE_TIME_FORMAT), method, uri.to_s, http_version]
       str
     end
     
@@ -62,7 +75,8 @@ module Stella::Data
     
     def body
       return nil unless @body
-      (!header || header[:Content_Type] || header[:Content_Type] !~ /text/) ? Base64.encode64(@body) : @body
+      #Base64.encode64(@body)
+      (!header || !header[:Content_Type] || header[:Content_Type] !~ /text/) ? '' : @body
     end
     
     def field_names
@@ -72,7 +86,7 @@ module Stella::Data
     def inspect
       headers = []
       header.each_pair do |n,v|
-        headers << "#{n}: #{v[0]}"
+        headers << "#{n.to_s.gsub('_', '-')}: #{v[0]}"
       end
       str = "HTTP/%s %s (%s)" % [@http_version, @status, @message]
       str << $/ + headers.join($/)
@@ -81,8 +95,7 @@ module Stella::Data
     end
     
     def to_s
-      str = "%s: HTTP/%s %s (%s)" % [@time, @http_version, @status, @message]
-      str << $/ + $/ + body if body
+      str = "%s: HTTP/%s %s (%s)" % [time.strftime(NICE_TIME_FORMAT), @http_version, @status, @message]
       str 
     end
   end

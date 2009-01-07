@@ -8,6 +8,10 @@ module Stella
     def initialize(name)
       @name = name
     end
+    def message
+      Stella::TEXT.err(:error_invalid_argument, @name)
+    end
+    
   end
   
   class UnavailableAdapter < RuntimeError

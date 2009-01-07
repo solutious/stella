@@ -4,7 +4,6 @@
 module Stella 
   class CLI
     class Watch < Stella::CLI::Base
-      TIME_FORMAT = "%Y-%m-%d@%H:%M:%S".freeze unless defined? TIME_FORMAT
       
 
       def run
@@ -93,14 +92,20 @@ module Stella
         return if @options[:filter] && !(data.to_s =~ /#{@options[:filter]}/i)
         return if @options[:domain] && !(data.to_s =~ /(www.)?#{@options[:domain]}/i)
         
-        if @stella_options.verbose > 1
-          Stella::LOGGER.info(data_object.inspect, '', '')
+        if @stella_options.format && data_object.respond_to?("to_#{@stella_options.format}")
+          Stella::LOGGER.info(data_object.send("to_#{@stella_options.format}"))
+        else 
+          if @stella_options.verbose > 1
+            Stella::LOGGER.info(data_object.inspect, '', '')
           
-        elsif @stella_options.verbose == 1
-          Stella::LOGGER.info(data_object.to_s, '', '')
-          
+          elsif @stella_options.verbose > 0 
+            Stella::LOGGER.info(data_object.to_s)
+            Stella::LOGGER.info(data_object.body) if data_object.body
+          else
+            Stella::LOGGER.info(data_object.to_s)
+          end
         end
-        
+                
       rescue Exception => ex
         Stella::LOGGER.error(ex)
         exit 1

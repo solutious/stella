@@ -1,8 +1,10 @@
 
+# TODO: Handle nested hashes and arrays. 
 
 module Stella
   class Storable
-    
+    NICE_TIME_FORMAT = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
+      
     SupportedFormats= {
       'yaml'  => 'yml',     # format name => file extension
       'yml'   => 'yml',

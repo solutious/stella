@@ -112,30 +112,19 @@ module Stella
         options = OpenStruct.new
         opts = OptionParser.new 
         
-        opts.on('-v') do |v| options.v = true end
-        opts.on('-w') do |v| options.w = true end # TODO: Print a note that we don't parse the HTML results
-        opts.on('-i') do |v| options.i = true end
-        opts.on('-V') do |v| options.V = true end
-        opts.on('-k') do |v| options.k = true end
-        opts.on('-d') do |v| options.d = true end
-        opts.on('-S') do |v| options.S = true end
-        opts.on('-r') do |v| options.r = true end
-        opts.on('-h') do |v| options.h = true end
-        opts.on('-e S', String) do |v| options.e = v end
-        opts.on('-g S', String) do |v| options.g = v end
-        opts.on('-p S', String) do |v| options.p = v end
-        opts.on('-T S', String) do |v| options.t = v end
-        opts.on('-x S', String) do |v| options.x = v end
-        opts.on('-y S', String) do |v| options.y = v end
-        opts.on('-z S', String) do |v| options.z = v end
-        opts.on('-P S', String) do |v| options.P = v end
-        opts.on('-Z S', String) do |v| options.Z = v end
-        opts.on('-f S', String) do |v| options.f = v end
-        opts.on('-c N', Integer) do |v| options.c = v end
-        opts.on('-n N', Integer) do |v| options.n = v end
-        opts.on('-t N', Integer) do |v| options.t = v end
-        opts.on('-A S', String) do |v| options.A = v end
-        opts.on('-b N', Integer) do |v| options.b = v end
+        # TODO: Print a note for w that we don't parse the HTML results
+        %w{v w i V k d S r h}.each do |n|
+          opts.on("-#{n}") do |v| options.send("#{n}=", true) end
+        end
+        
+        %w{e g p T x y z P Z f A}.each do |n|
+          opts.on("-#{n} S", String) do |v| options.send("#{n}=", v)  end
+        end
+        
+        %w{c n t b}.each do |n|
+          opts.on("-#{n} S", Integer) do |v| options.send("#{n}=", v) end
+        end
+        
         opts.on('-H S', String) do |v| options.H ||= []; options.H << v; end
         opts.on('-C S', String) do |v| options.C ||= []; options.C << v; end
         

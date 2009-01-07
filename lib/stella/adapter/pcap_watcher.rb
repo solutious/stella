@@ -104,7 +104,7 @@ module Stella
       # the exact response time but probably not by much.
       def monitor_domain
 
-        @pcaplet = Pcaplet.new(:device => @device, :count => @count)
+        @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
         
         req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
         resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@dport}", @pcaplet.capture)

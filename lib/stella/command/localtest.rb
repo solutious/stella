@@ -274,7 +274,7 @@ module Stella
       def print_summary(stats)
         Stella::LOGGER.info(' ' << "-"*67) unless @quiet
 
-        Stella::LOGGER.info_printf("%8s: %10d@%-6d% 3.0f%% %9.2f/s ", "Total", stats.transactions_total || 0, stats.vusers_avg || 0, stats.availability || 0, stats.transaction_rate_avg || 0)
+        Stella::LOGGER.info_printf("%8s: %10d@%-6d %3.0f%% %9.2f/s ", "Total", stats.transactions_total || 0, stats.vusers_avg || 0, stats.availability || 0, stats.transaction_rate_avg || 0)
         Stella::LOGGER.info_printf("%8.3fs %8.3fMB/s %8.3fMB %8.3fs", stats.response_time_avg || 0, stats.throughput_avg || 0, stats.data_transferred_total || 0, stats.elapsed_time_total || 0)
         Stella::LOGGER.info('') # New line
         Stella::LOGGER.info_printf("%8s: %22s %9.2f/s %8.3fs %8.3fMB/s %10s %8.3fs", "Std Dev", '', stats.transaction_rate_sdev || 0, stats.response_time_sdev || 0, stats.throughput_sdev || 0, '', stats.elapsed_time_sdev || 0)
