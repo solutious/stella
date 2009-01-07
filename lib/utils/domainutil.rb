@@ -11,7 +11,7 @@ module DomainUtil
     dns_data = Net::DNS::Packet.parse( data.join($/) )
     return unless dns_data.header.query? 
     domain_name = dns_data.question[0].qName
-    return domain_name, dns_data, dns_data.header
+    return dns_data, domain_name, dns_data.header
   end
   
   def DomainUtil.parse_domain_response(data=[])
@@ -41,7 +41,7 @@ module DomainUtil
       addresses << ip.to_s
     end
     
-    return domain_name, dns_data, addresses, cnames
+    return dns_data, domain_name, addresses, cnames
   end
 
 end

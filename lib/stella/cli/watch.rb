@@ -107,22 +107,40 @@ module Stella
 
       
       def process_http_request(raw_data, time, ip_src, ip_dst)
-        method, path, http_version, header, body = HTTPUtil::parse_http_request(raw_data)
         time_str = time.strftime(TIME_FORMAT)
         
-        pp method, path, http_version, header, body
+        dobj = Stella::Data::HTTPRequest.new(raw_data)
+        dobj.time = time_str
+        dobj.client_ip = ip_src.to_s
+        dobj.server_ip = ip_dst.to_s
+        
+        if @stella_options.verbose > 1
+          Stella::LOGGER.info(dobj.raw_data)
+        else 
+          
+          Stella::LOGGER.info(dobj.to_s)
+          
+        end        
       end
       
       def process_http_response(raw_data, time, ip_src, ip_dst)
-        http_version, status, message, header, body = HTTPUtil::parse_http_response(raw_data)
         time_str = time.strftime(TIME_FORMAT)
         
-        pp http_version, status, message, header
+        dobj = Stella::Data::HTTPResponse.new(raw_data)
+        dobj.time = time_str
+        dobj.client_ip = ip_src.to_s
+        dobj.server_ip = ip_dst.to_s
+        
+        if @stella_options.verbose > 0
+          Stella::LOGGER.info(dobj.raw_data)
+        else
+          Stella::LOGGER.info(dobj.to_s)
+        end
+        
       end
       
-      require 'pp'
       def process_domain_request(raw_data, time, ip_src, ip_dst)
-        domain_name, dns_data, header = DomainUtil::parse_domain_request(raw_data)
+        dns_data, domain_name, header = DomainUtil::parse_domain_request(raw_data)
         time_str = time.strftime(TIME_FORMAT)
         
         return unless dns_data
@@ -146,7 +164,7 @@ module Stella
       end
       
       def process_domain_response(raw_data, time, ip_src, ip_dst)
-        domain_name, dns_data, addresses, cnames = DomainUtil::parse_domain_response(raw_data)
+        dns_data, domain_name, addresses, cnames = DomainUtil::parse_domain_response(raw_data)
         time_str = time.strftime(TIME_FORMAT)
         
         return unless dns_data

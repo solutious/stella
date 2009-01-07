@@ -61,8 +61,8 @@ module Stella
         @sport = options[:port] || @dport
         
         @device = options[:device] || guess_device
-        @snaplen = options[:snaplen] || 1500
-        @maxpacks = options[:maxpacks] || 100000
+        @snaplen = options[:snaplen] || 1500         # 10KB
+        @maxpacks = options[:maxpacks] || 100_000
         
         Stella::LOGGER.info("Watching interface #{@device} for #{@service} activity on #{@protocol} port #{@dport}")
       end
@@ -140,8 +140,9 @@ module Stella
           @pcaplet.add_filter(req_filter | resp_filter)
           @pcaplet.each_packet do |packet|
             data = packet.tcp_data
-          
-          
+            next if data.nil?
+            
+            
             # NOTE: With HTTP 1.1 keep alive connections, multiple requests can be passed
             # through single connection. This makes it difficult to match responses with
             # requests. 
@@ -161,6 +162,7 @@ module Stella
               notify_observers(:http_request, data.gsub(/\r?\n/, $/), packet.time, packet.ip_src, packet.ip_dst)  # Use the system's line terminators
               
             when resp_filter
+              
               next unless data and data =~ /^(HTTP.+)$/
               
               changed

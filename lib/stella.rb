@@ -20,6 +20,9 @@ require 'user_agent'
 require 'stella/support'
 require 'stella/storable'
 
+# Common Stella Data Objects
+require 'stella/data/http'
+
 # Common Stella objects
 require 'stella/text'
 
