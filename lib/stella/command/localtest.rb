@@ -253,11 +253,13 @@ module Stella
             # Call the load tool
             # $? contains the error status
             succeeded = system(command)  
+          
+          # TODO: Catch interrupts for system calls. Currently it will simply and and continue with the next command
+          # i.e. these don't work:
           rescue Interrupt
-            puts "HIHIHI"
             exit
           rescue SystemExit
-            puts "WOWOWO"
+            exit
           end
           
           unless succeeded
