@@ -53,6 +53,12 @@ module Stella
         @load_factor = 1
       end
       
+      def error
+        emsg = FileUtil.read_file_to_array(stderr_path).first
+        emsg ||= "Undefined error"
+        emsg.gsub!('ab: ', '')
+        emsg
+      end
       
       def version
         vsn = 0
@@ -127,6 +133,10 @@ module Stella
         
         opts.on('-H S', String) do |v| options.H ||= []; options.H << v; end
         opts.on('-C S', String) do |v| options.C ||= []; options.C << v; end
+        
+        opts.on('-b') do |v| 
+          Stella::LOGGER.warn("-b is not an ab option. I'll pretend it's not there.")
+        end
         
         # NOTE: parse! removes the options it finds in @arguments. It will leave
         # all unnamed arguments and throw a fit about unknown ones. 
@@ -224,7 +234,7 @@ module Stella
       
       # Apache bench writes the summary to STDOUT
       def stats_file
-        File.new(stdout_path)
+        File.new(stdout_path) if File.exists?(stdout_path)
       end
 
       def stats

@@ -45,7 +45,6 @@ module Stella
         @driver.working_directory = @working_directory
         
         @driver.run
-        
       end
 
 

@@ -156,6 +156,11 @@ module Stella
         save_summary(File.join(test_path, "SUMMARY-RAMPUP.#{@format}"), test_stats)
         print_summary(test_stats) if (@testdef.repetitions > 1)
       end
+    rescue Interrupt
+      puts "HIHIHI2222"
+      exit
+    rescue AdapterError => ex
+      Stella::LOGGER.error(ex.message)
     end
     
     def latest_test_symlink_path
@@ -243,23 +248,33 @@ module Stella
           # Execute the command, send STDOUT and STDERR to separate files. 
           command = "#{@adapter.command} 1> \"#{@adapter.stdout_path}\" 2> \"#{@adapter.stderr_path}\""
           Stella::LOGGER.info(" COMMAND: #{command}") if @verbose >= 2
-        
-          # Call the load tool
-          # for Windows, see: http://blog.crankybit.com/redirecting-output-to-a-file-in-windows-batch-scripts/
-          #                   http://weblogs.asp.net/lorenh/archive/2006/03/24/441004.aspx
-          system(command)
-        
+          
+          begin
+            # Call the load tool
+            # $? contains the error status
+            succeeded = system(command)  
+          rescue Interrupt
+            puts "HIHIHI"
+            exit
+          rescue SystemExit
+            puts "WOWOWO"
+          end
+          
+          unless succeeded
+            Stella::LOGGER.info('', '') # We used print so we need a new line for the error message.
+            raise AdapterError.new(@adapter.name, @adapter.error) 
+          end
+          
           stats = @adapter.stats
       
           save_summary(@adapter.summary_path(@format), stats)
       
 
-          if !@quiet && stats.available?
+          if !@quiet && stats && stats.available?
             Stella::LOGGER.info_print(sprintf("%3.0f%% %9.2f/s %8.3fs ", stats.availability || 0, stats.transaction_rate || 0, stats.response_time || 0))
             Stella::LOGGER.info_print(sprintf("%8.3fMB/s %8.3fMB %8.3fs  ", stats.throughput || 0, stats.data_transferred || 0, stats.elapsed_time || 0))
             # NOTE: We don't print a line terminator here
           end
-          
         end
       end
     
@@ -303,16 +318,19 @@ module Stella
       # filepath:: the complete path for the file (string)
       # stats:: Any object that extends Stella::Test::Base object
       def save_summary(filepath, stats)
-        FileUtil.write_file(filepath, stats.dump(@format, :with_titles), true)
+        FileUtil.write_file(filepath, stats.dump(@format, :with_titles), true) if stats
       end
       
       # Load SUMMARY file for each run and create a summary with
       # totals, averages, and standard deviations. 
       def process_test_stats(paths)
+        return unless paths && !paths.empty?
         test_stats = Stella::Test::Summary.new(@message)
+        return unless test_stats
         all_stats_obj = []
         paths.each do |path|
           file_contents = FileUtil.read_file_to_array("#{path}/SUMMARY.#{@format}")
+          next if !file_contents || file_contents.empty?
           stats = Stella::Test::Run::Summary.undump(@format, file_contents)
           stats_obj = Stella::Test::Run::Summary.from_hash(stats)
           test_stats.add_run(stats_obj)

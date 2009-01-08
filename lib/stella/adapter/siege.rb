@@ -53,6 +53,16 @@ module Stella
         Stella::Util.capture_output("#{@name}.config") do 'nothing' end unless File.exists? @rc
       end
       
+      
+      
+      def error
+        #emsg = FileUtil.read_file_to_array(stderr_path).first
+        #emsg ||= "Undefined error"
+        #emsg.gsub!('ab: ', '')
+        #emsg
+        :unknown
+      end
+      
       def version
         vsn = 0
         Stella::Util.capture_output("#{@name} --version") do |stdout, stderr|
@@ -141,8 +151,15 @@ module Stella
         opts.on('-i', '--internet') do |v| @internet = true; end
         opts.on('-A S', '--user-agent=S', String) do |v| @user_agent ||= []; @user_agent << v end
 
-        raise "You cannot select both --internet and --benchmark" if options.internet && options.benchmark
-
+        unless options.benchmark
+          Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
+        end
+        
+        opts.on('-n N',Integer) do |v| 
+          Stella::LOGGER.error("-n is not a Siege parameter. You probably want -r.")
+          exit 1
+        end
+        
         # parse! removes the options it finds.
         # It also fails when it finds unknown switches (i.e. -X)
         # Which should leave only the remaining arguments (URIs in this case)
@@ -261,7 +278,7 @@ module Stella
 
       # Siege writes the summary to STDERR
       def stats_file
-        File.new(stderr_path)
+        File.new(stderr_path) if File.exists?(stderr_path)
       end
       
       def rc_file
