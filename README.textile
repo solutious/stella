@@ -4,6 +4,10 @@ Release: 0.5.4-alpha (2009-01-07)
 
 This is a BETA release. Proceed in double verify mode!
 
+h2. Overview
+
+Stella is a command-line tool for running, reporting, and analyzing performance tests.
+
 
 h2. Prerequisites
 
