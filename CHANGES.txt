@@ -1,0 +1,19 @@
+STELLA, CHANGES
+
+#### 0.5.4 (2009-01-07) ###############################
+
+http://github.com/solutious/stella/tree/0.5.4
+
+* New command: watch. Monitor HTTP traffic with Ruby-Pcap (unix only) or proxy. Pcap also supports DNS sniffing.
+* Improved error handling for stats output
+* Now runs on Ruby 1.9.1, JRuby
+* Added Windows support for most features
+* Added patch for Ruby-Pcap
+
+
+#### 0.5.3-preview (2008-12-23) #######################
+
+http://github.com/solutious/stella/tree/e4d2bd8db3d1323fbc3b8bbb7f703ce7b8c88551
+
+* Initial public release
+

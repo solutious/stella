@@ -62,6 +62,9 @@
 :error_class_must_override: "You must override the method: %s"
 :error_class_unknown_argument: "Ignoring unknown argument: %s"
 :error_adapter_command_not_ready: "Incomplete options or arguments for %s"
+:error_adapter_runtime: "%s had a problem: %s"
+:error_watch_proxy: "The proxy has a problem: %s"
+
 :error_invalid_argument: "%s is not a valid argument"
 :error_unknown_value: "I don't know what to do with %s"
 :error_missing_dependency: "%s is not available: %s"

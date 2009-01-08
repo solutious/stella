@@ -1,15 +1,16 @@
 h1. Stella - Your Performance Testing Friend
 
-Release: 0.5.4-preview (2009-09-07)
+Release: 0.5.4 (2009-01-07)
 
-This is a PREVIEW release. Proceed in double verify mode!
+This is a BETA release. Proceed in double verify mode!
 
 
 h2. Prerequisites
 
-* Linux, *BSD, Solaris
-** Pcap 0.6 (optional, for packet sniffing)
-* Ruby 1.8.x or 1.9.x
+* Linux, BSD, Solaris
+* Ruby 1.8.x, 1.9.x, or JRuby 1.1
+* Native Libraries (c or c++) 
+** Pcap (optional, for packet sniffing)
 * Ruby Libraries
 ** fastthread
 ** mongrel
@@ -18,19 +19,18 @@ h2. Prerequisites
 ** net-dns 
 ** Ruby-Pcap (optional, for packet sniffing)
 
-
 * One of:
-** Apache Bench
-** Siege
-** Httperf
+** "Apache Bench":http://httpd.apache.org/docs/2.0/programs/ab.html
+** "Siege":http://www.joedog.org/index/siege-home
+** "Httperf":http://www.hpl.hp.com/research/linux/httperf/
 
 
 h2. Installation
 
 Get it in one of the following ways:
 
-* Download from RubyForge: http://stella.rubyforge.org/
-* gem install stella 
+* RubyForge: http://stella.rubyforge.org/
+** gem install stella 
 * git clone git://github.com/solutious/stella.git
 ** git submodule init
 ** git submodule update
@@ -41,34 +41,44 @@ h3. Debian (and derivatives)
 
 Debian and its derivative (Ubunutu) handling packing a bit differently (see: http://pkg-ruby-extras.alioth.debian.org/rubygems.html). There are a couple errors to watch out for during the installation. The solutions are below:
 
-"no such file to load -- mkmf (LoadError)"
+  "no such file to load -- mkmf (LoadError)"
+	$ apt-get install ruby1.8-dev
+
+  "ERROR: RDoc documentation generator not installed!"
+	$ apt-get install rdoc
+
+
+h3. Installing libpcap and Ruby-Pcap
+
+*Stella currently supports packet filtering with Native Ruby (no JRuby) on Linux/Unix/OS X only.* 
+*Ruby-Pcap does not compile with Ruby 1.9.1-RC1*
+
+libpcap and Ruby-Pcap are used to by Stella's watch command to filter packets off the network. This allows you to view HTTP requests and response (including headers and content) without having to configure a proxy. Both need to be compiled and installed separately:
+* "libpcap":http://www.tcpdump.org/release/
+* "Ruby-Pcap":http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html
+
+On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime: "pcap.bundle: warning: do not use Fixnums as Symbols". See: support/ruby-pcap-takuma-notes.txt. 
   
-	apt-get install ruby1.8-dev
 
-"ERROR: RDoc documentation generator not installed!"
-  
-	apt-get install rdoc
+h2. Usage Examples
 
-
-h2. Examples
-
-Run Apache Bench with a warmup and rampup from 100 to 300 virtual users in increments of 25
-
-  stella --warmup=0.5 --rampup=25,300 ab -c 100 -n 10000 http://stellaaahhhh.com/search?term=trooper
+  Run Apache Bench with a warmup and rampup from 100 to 300 virtual users in increments of 25
+  $ stella --warmup=0.5 --rampup=25,300 ab -c 100 -n 10000 http://stellaaahhhh.com/search?term=trooper
     
-
-Run Siege, repeat the test 5 times. Automatically creates a summary averages and standard deviations. 
-
-  stella --agent=ff-3-osx --testruns=5  siege -c 100 -r 100 -b http://stellaaahhhh.com/search?term=flock+of+seagulls
+  Run Siege, repeat the test 5 times. Automatically creates a summary averages and standard deviations. 
+  $ stella --agent=ff-3-osx --testruns=5  siege -c 100 -r 100 -b http://stellaaahhhh.com/search?term=flock+of+seagulls
     
+  Run Httperf like you normally would (but all the test data will be collected for you)
+  $ stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=3000 --timeout=5
 
-Run Httperf like you normally would (but all the test data will be collected for you)
-
-  stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=3000 --timeout=5
-
-Monitor HTTP traffic using Pcap packet filter
-
-  stella watch -P http
+  Monitor DNS traffic using Pcap
+  $ stella watch -C dns
+	
+  Monitor HTTP traffic using Pcap
+  $ stella watch -C http
+	
+  Monitor HTTP traffic using a proxy (don't forget to configure your browser)
+  $ stella watch -P
 
 
 h3. Sample Output

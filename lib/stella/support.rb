@@ -41,10 +41,20 @@ module Stella
     attr_accessor :dependency, :reason
     def initialize(dependency, reason=:error_generic)
       @dependency = dependency
-      @reason = Stella::TEXT.err(reason) if reason.kind_of? Symbol
+      @reason = (reason.kind_of? Symbol) ? Stella::TEXT.err(reason) : reason
     end
     def message
       Stella::TEXT.err(:error_missing_dependency, @dependency, @reason)
+    end
+  end
+  
+  class AdapterError < MissingDependency
+    def initialize(adapter, reason=:error_generic)
+      @adapter = adapter
+      @reason = (reason.kind_of? Symbol) ? Stella::TEXT.err(reason) : reason
+    end
+    def message
+      Stella::TEXT.err(:error_adapter_runtime, @adapter, @reason)
     end
   end
   

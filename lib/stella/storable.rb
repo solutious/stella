@@ -98,7 +98,7 @@ module Stella
     end
     
     def self.from_hash(from={})
-      return if from.empty?
+      return if !from || from.empty?
       me = self.new
       fnames = me.to_hash.keys
       fnames.each do |key|

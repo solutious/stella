@@ -25,17 +25,28 @@ module Stella
             :Port => @port || 3114,
             :AccessLog => [],
             :ProxyContentHandler => Proc.new do |req,res|
-                
-                puts "-----------------------------"
-                puts req.to_s
-                puts res.to_s
-                
+              
                 begin
-                  #changed
-                  #notify_observers('http', req, res)
-                rescue => ex
+                  res_obj = Stella::Data::HTTPResponse.new(res.to_s)
+                  res_obj.time = Time.now
+                  
+                  req_obj = Stella::Data::HTTPRequest.new(req.to_s)
+                  req_obj.time = Time.now
+                  req_obj.client_ip = '0.0.0.0'
+                  req_obj.server_ip = '0.0.0.0'
+
+                  req_obj.response = res_obj
+
+                  changed
+                  notify_observers(:http_request, req_obj)
+                  
+                rescue SystemExit => ex
+                  after
+                  
+                rescue Exception => ex
                   # There are miscellaneous errors (mostly to do with
                   # incorrect content-length) that we don't care about. 
+                  Stella::LOGGER.error(ex.message)
                 end
                 
             end
@@ -51,8 +62,6 @@ module Stella
         @server.start
 	      after
 	      
-      rescue Interrupt  
-	      after
       rescue => ex  
 	      after
       end

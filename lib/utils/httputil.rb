@@ -33,6 +33,14 @@ require 'net/http'
       request_line = data.shift                           # i.e. GET /path HTTP/1.1
       method, path, http_version = nil
       
+      # With WEBrick and other proxies, the entire URI is included in HTTP requests. 
+      # i.e. GET http://stellaaahhhh.com/streetcar.png HTTP/1.1
+      # The parser is expecting just the absolute path. 
+      if request_line =~ /^(\S+)\s+(http:\/\/.+)\s+(HTTP.+)?/mo
+        uri = URI.parse($2)
+        request_line = "#{$1} #{uri.request_uri} #{$3}"
+        host = uri.host
+      end
       
       if request_line =~ /^(\S+)\s+(\S+)(?:\s+HTTP\/(\d+\.\d+))?/mo
         method = $1
@@ -44,6 +52,7 @@ require 'net/http'
         # want no partials. 
         header, body = HTTPUtil.parse_header_body(data)
         query = HTTPUtil.parse_query(method, query_string)
+        
         
         # TODO: Parse username/password
         uri = URI::HTTP.build({

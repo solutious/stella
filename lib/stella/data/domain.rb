@@ -10,6 +10,16 @@ module Stella::Data
       @dns_data, @domain_name, @header = DomainUtil::parse_domain_request(@raw_data)
     end
     
+    def has_request?
+      false
+    end
+    def has_response?
+      false
+    end
+    def has_body?
+      false
+    end
+    
     def field_names
       [ :time, :client_ip, :server_ip, :domain_name, :header ]
     end
@@ -35,6 +45,16 @@ module Stella::Data
     def initialize(raw_data)
       @raw_data = raw_data
       @dns_data, @domain_name, @header, @addresses, @cnames = DomainUtil::parse_domain_response(@raw_data)
+    end
+    
+    def has_request?
+      false
+    end
+    def has_response?
+      false
+    end
+    def has_body?
+      false
     end
     
     def field_names

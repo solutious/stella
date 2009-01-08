@@ -37,7 +37,15 @@ module Stella
       end
       
       
-
+      
+      def error
+        #emsg = FileUtil.read_file_to_array(stderr_path).first
+        #emsg ||= "Undefined error"
+        #emsg.gsub!('ab: ', '')
+        #emsg
+        :unknown
+      end
+      
       # Before calling run
       def before
 
@@ -221,11 +229,11 @@ module Stella
 
       # Siege writes the summary to STDERR
       def stats_file
-        File.new(stdout_path)
+        File.new(stdout_path) if File.exists?(stdout_path)
       end
       
       def rc_file
-        File.join(@working_directory, "siegerc")
+        File.join(@working_directory, "siegerc") 
       end
       
       def log_file

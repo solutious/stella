@@ -1,5 +1,7 @@
 
 # TODO: Record cookies. 
+# TODO: Investigate packetfu: http://code.google.com/p/packetfu/
+# TODO: Investigate Winpcap (http://www.winpcap.org/) and libpcap on Windows 
 
 module Stella 
   class CLI
@@ -89,26 +91,46 @@ module Stella
           raise StellaError.new("Error creating file: #{ex.message}")
         end
         
-        return if @options[:filter] && !(data.to_s =~ /#{@options[:filter]}/i)
-        return if @options[:domain] && !(data.to_s =~ /(www.)?#{@options[:domain]}/i)
+        # TODO: combine requests and responses
+        # Disabled until we have a way to combine request and response objects (otherwise
+        # the requests are filters out but the responses are not).
+        #return if @options[:filter] && !(data_object.raw_data.to_s =~ /#{@options[:filter]}/i)
+        #return if @options[:domain] && !(data_object.uri.to_s =~ /(www.)?#{@options[:domain]}/i)
         
         if @stella_options.format && data_object.respond_to?("to_#{@stella_options.format}")
           Stella::LOGGER.info(data_object.send("to_#{@stella_options.format}"))
+          
+          if data_object.has_response?
+            Stella::LOGGER.info(data_object.response.send("to_#{@stella_options.format}"))
+          end
+          
         else 
           if @stella_options.verbose > 1
-            Stella::LOGGER.info(data_object.inspect, '', '')
-          
+            Stella::LOGGER.info(data_object.inspect, '')
+            
+            if data_object.has_response?
+              Stella::LOGGER.info(data_object.response.inspect, '', '')
+            end
+            
           elsif @stella_options.verbose > 0 
             Stella::LOGGER.info(data_object.to_s)
-            Stella::LOGGER.info(data_object.body) if data_object.body
+            Stella::LOGGER.info(data_object.body) if data_object.has_body?
+            
+            if data_object.has_response?
+              Stella::LOGGER.info(data_object.response.to_s) 
+              Stella::LOGGER.info(data_object.response.body) if data_object.response.has_body?
+            end
+            
           else
             Stella::LOGGER.info(data_object.to_s)
+            Stella::LOGGER.info(data_object.response.to_s) if data_object.has_response?
+            
           end
         end
                 
       rescue Exception => ex
         Stella::LOGGER.error(ex)
-        exit 1
+        #exit 1
       end
       
       
@@ -185,15 +207,16 @@ module Stella
         opts = OptionParser.new
         
         opts.banner = "Usage: #{File.basename($0)} [global options] watch [command options] [http|dns]"
-        opts.on("#{$/}Example: #{File.basename($0)} -v watch -P http#{$/}")
+        opts.on("#{$/}Example: #{File.basename($0)} -v watch -C http#{$/}")
         opts.on('-h', '--help', "Display this message") do
           Stella::LOGGER.info opts
           exit 0
         end
         
         opts.on("#{$/}Operating mode")
-        opts.on('-W', '--useproxy', "Use an HTTP proxy to filter requests (default)") do |v| v end
-        opts.on('-P', '--usepcap', "Use Pcap to filter TCP packets") do |v| v end
+        opts.on('-P', '--useproxy', "Use an HTTP proxy to filter requests (default)") do |v| v end
+        opts.on('-C', '--usepcap', "Use Pcap to filter TCP packets") do |v| v end
+        #opts.on('-F', '--usepacketfu', "Use Packetfu to filter TCP packets") do |v| v end
           
         opts.on("#{$/}Pcap-specific options")
         opts.on('-i=S', '--interface=S', String, "Network device. eri0, en1, etc. (with --usepcap only)") do |v| v end
@@ -202,8 +225,8 @@ module Stella
         
         opts.on("#{$/}Common options")
         opts.on('-p=N', '--port=N', Integer, "With --useproxy this is the Proxy port. With --usecap this is the TCP port to filter. ") do |v| v end
-        opts.on('-f=S', '--filter=S', String, "Filter out requests which do not contain this string") do |v| v end
-        opts.on('-d=S', '--domain=S', String, "Only display requests to the given domain") do |v| v end
+        #opts.on('-f=S', '--filter=S', String, "Filter out requests which do not contain this string") do |v| v end
+        #opts.on('-d=S', '--domain=S', String, "Only display requests to the given domain") do |v| v end
         #opts.on('-r=S', '--record=S', String, "Record requests to file with an optional filename") do |v| v || true end
         #opts.on('-F=S', '--format=S', "Format of recorded file. One of: simple (for Siege), session (for Httperf)") do |v| v end
             

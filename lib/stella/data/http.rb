@@ -20,12 +20,24 @@ module Stella::Data
     attr_accessor :time, :client_ip, :server_ip, :header, :body, :method, :http_version 
     attr_reader :raw_data
     attr_writer :uri, :body
+    attr_accessor :response
+    
+    def has_body?
+      @body && !@body.nil & !@body.empty?
+    end
+    def has_request?
+      false
+    end
+    def has_response?
+      (@response && @response.status && !@response.status.nil?)
+    end
     
     def initialize(raw_data=nil)
       @raw_data = raw_data
       if @raw_data
         @method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw_data) 
       end
+      @response = Stella::Data::HTTPResponse.new
     end
     
     def uri
@@ -71,6 +83,16 @@ module Stella::Data
       if @raw_data
         @status, @http_version, @message, @header, @body = HTTPUtil::parse_http_response(@raw_data)
       end
+    end
+    
+    def has_body?
+      @body && !@body.nil & !@body.empty?
+    end
+    def has_request?
+      false
+    end
+    def has_response?
+      false
     end
     
     def body

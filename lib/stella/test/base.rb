@@ -11,7 +11,11 @@ module Stella::Test
     
     def availability
       return 0 if @successful_total == 0
-      (@transactions_total / @successful_total).to_f * 100
+      begin
+        (@transactions_total / @successful_total).to_f * 100
+      rescue => ex
+        0.0
+      end
     end
     
     

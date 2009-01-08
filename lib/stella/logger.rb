@@ -58,6 +58,10 @@ module Stella
       end  
       @debug_logger.flush
     end
+    def warn(ex, prefix="WARN: ")
+      error(ex, prefix)
+    end
+    
     def error(ex, prefix="ERR: ")
       msg = (ex.kind_of? String) ? ex : ex.message
       @error_logger.puts "#{prefix}#{msg}"
