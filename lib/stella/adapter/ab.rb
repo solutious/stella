@@ -54,10 +54,7 @@ module Stella
       end
       
       def error
-        emsg = FileUtil.read_file_to_array(stderr_path).first
-        emsg ||= "Undefined error"
-        emsg.gsub!('ab: ', '')
-        emsg
+        (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
       end
       
       def version
@@ -138,9 +135,36 @@ module Stella
           Stella::LOGGER.warn("-b is not an ab option. I'll pretend it's not there.")
         end
         
+        opts.on('-r N',Integer) do |v| 
+          Stella::LOGGER.error("-r is not an ab parameter. You probably want -n.")
+          exit 1
+        end
+        
         # NOTE: parse! removes the options it finds in @arguments. It will leave
         # all unnamed arguments and throw a fit about unknown ones. 
         opts.parse!(arguments)
+        
+        if arguments.empty?
+          Stella::LOGGER.error("You need to provide a URI")
+          exit 1
+        elsif arguments.size > 1
+          Stella::LOGGER.warn("ab can handle only one URI. The others will be ignored.")
+          arguments = arguments.first
+        else
+          # Let's make sure the URI has a path (at least a trailing slash). Otherwise
+          # ab gives a cryptic error. 
+          begin
+            uri = URI.parse(arguments.first)
+            if !uri || uri.path.empty?
+              Stella::LOGGER.error("ab requires a trailing slash for #{uri.to_s}") 
+              exit 1
+            end
+          rescue => ex
+            Stella::LOGGER.error("Bad URI: #{arguments.first}") 
+            exit 1
+          end
+        end
+        
         
         options
       rescue OptionParser::InvalidOption => ex

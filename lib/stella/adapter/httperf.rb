@@ -39,11 +39,7 @@ module Stella
       
       
       def error
-        #emsg = FileUtil.read_file_to_array(stderr_path).first
-        #emsg ||= "Undefined error"
-        #emsg.gsub!('ab: ', '')
-        #emsg
-        :unknown
+        (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
       end
       
       # Before calling run
