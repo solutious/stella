@@ -1,6 +1,6 @@
 STELLA, CHANGES
 
-#### 0.5.4 (2009-01-07) ###############################
+#### 0.5.4-alpha (2009-01-07) ###############################
 
 http://github.com/solutious/stella/tree/0.5.4
 
@@ -9,6 +9,7 @@ http://github.com/solutious/stella/tree/0.5.4
 * Now runs on Ruby 1.9.1, JRuby
 * Added Windows support for most features
 * Added patch for Ruby-Pcap
+* Added friendly error handling for Apache Bench, Siege, and Httperf
 
 
 #### 0.5.3-preview (2008-12-23) #######################

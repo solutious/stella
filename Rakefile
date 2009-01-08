@@ -42,12 +42,12 @@ name = "stella"
 spec = Gem::Specification.new do |s|
 	s.name = name
 	s.version = version
-	s.summary = "A friend in performance testing."
+	s.summary = "Your friend in performance testing."
 	s.description = "Run Apache Bench, Siege, or httperf tests in batches and aggregate results."
 	s.author = "Delano Mandelbaum"
 	s.email = "delano@solutious.com"
 	s.homepage = "http://stella.solutious.com/"
-	s.executables = [ "stella" ]
+	s.executables = [ "stella", "stella.bat" ]
 	s.rubyforge_project = "stella"
   s.extra_rdoc_files  = ['README.textile']
   
@@ -69,6 +69,9 @@ end
 Rake::GemPackageTask.new(spec) do |p|
 	p.need_tar = true if RUBY_PLATFORM !~ /mswin/
 end
+
+
+task :package => [ :zip ]
 
 
 task :install => [ :rdoc, :package ] do

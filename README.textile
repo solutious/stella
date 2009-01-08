@@ -1,6 +1,6 @@
 h1. Stella - Your Performance Testing Friend
 
-Release: 0.5.4 (2009-01-07)
+Release: 0.5.4-alpha (2009-01-07)
 
 This is a BETA release. Proceed in double verify mode!
 
@@ -12,10 +12,7 @@ h2. Prerequisites
 * Native Libraries (c or c++) 
 ** Pcap (optional, for packet sniffing)
 * Ruby Libraries
-** fastthread
-** mongrel
 ** rspec
-** rdoc
 ** net-dns 
 ** Ruby-Pcap (optional, for packet sniffing)
 
