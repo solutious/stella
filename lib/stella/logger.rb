@@ -11,9 +11,9 @@ module Stella
     # * <tt>:debug</tt> Log debugging output, true or false (default)
     def initialize(args={})
       @debug_level        = args[:debug] || false
-      @info_logger  = args[:info_logger] || STDOUT
-      @error_logger = args[:error_logger] || STDERR
-      @debug_logger = args[:debug_logger] || STDERR
+      @info_logger  = args[:info_logger]
+      @error_logger = args[:error_logger]
+      @debug_logger = args[:debug_logger]
     end
     
     # +msgs+ is an array which can contain a list of messages or a symbol and a list of values
@@ -22,41 +22,51 @@ module Stella
       return if !msgs || msgs.empty?
       if msgs[0].is_a? Symbol
         txtsym = msgs.shift
-        @info_logger.puts Stella::TEXT.msg(txtsym, msgs)
+        info_logger.puts Stella::TEXT.msg(txtsym, msgs)
       else
         msgs.each do |m|
-          @info_logger.puts m
+          info_logger.puts m
         end  
       end
-      @info_logger.flush
+      info_logger.flush
+    end
+    
+    def info_logger
+      @info_logger || $stdout
+    end
+    def debug_logger
+      @debug_logger || $stderr
+    end
+    def error_logger
+      @error_logger || $stderr
     end
     
     def flush
-      @info_logger.flush
-      @error_logger.flush
-      @debug_logger.flush
+      info_logger.flush
+      error_logger.flush
+      debug_logger.flush
     end
     
     # Print all messages on a single line. 
     def info_print(*msgs)
       msgs.each do |m|
-        @info_logger.print m
+        info_logger.print m
       end
-      @info_logger.flush
+      info_logger.flush
     end
     
     # Print all messages on a single line. 
     def info_printf(pattern, *vals)
-      @info_logger.printf(pattern, *vals)
-      @info_logger.flush
+      info_logger.printf(pattern, *vals)
+      info_logger.flush
     end
     
     def debug(*msgs)
       return unless @debug_level
       msgs.each do |m|
-        @debug_logger.puts "DEBUG: #{m}"
+        debug_logger.puts "DEBUG: #{m}"
       end  
-      @debug_logger.flush
+      debug_logger.flush
     end
     def warn(ex, prefix="WARN: ")
       error(ex, prefix)
@@ -64,11 +74,11 @@ module Stella
     
     def error(ex, prefix="ERR: ")
       msg = (ex.kind_of? String) ? ex : ex.message
-      @error_logger.puts "#{prefix}#{msg}"
+      error_logger.puts "#{prefix}#{msg}"
       return unless @debug_level && ex.kind_of?(Exception)
-      @error_logger.puts("#{prefix}------------------------------------------")
-      @error_logger.puts("#{prefix}#{ex.backtrace.join("\n")}")
-      @error_logger.puts("#{prefix}------------------------------------------")
+      error_logger.puts("#{prefix}------------------------------------------")
+      error_logger.puts("#{prefix}#{ex.backtrace.join("\n")}")
+      error_logger.puts("#{prefix}------------------------------------------")
     end
   end
 end

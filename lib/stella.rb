@@ -4,6 +4,8 @@ require 'date'
 require 'time'
 require 'tempfile'
 require 'socket'
+require 'ostruct'
+require 'optparse'
 
 # Common utilities
 require 'utils/domainutil'
@@ -71,6 +73,26 @@ module Stella
       self.to_s.to_f
     end
   end
-
+  
+  def self.debug=(enable=false)
+    Stella::LOGGER.debug_level = enable
+  end
+  
+  def self.text(*args)
+    TEXT.msg(*args)
+  end
+  
+  def self.sysinfo
+    SYSINFO
+  end
+  
+  def self.info(*args)
+    LOGGER.info(*args)
+  end
+  
+  def self.error(*args)
+    LOGGER.error(*args)
+  end
+  
 end
 

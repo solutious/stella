@@ -1,8 +1,18 @@
 STELLA, CHANGES
 
-#### 0.5.4-alpha (2009-01-07) ###############################
+
+#### 0.5.4 (2009-01-10) ###############################
 
 http://github.com/solutious/stella/tree/0.5.4
+
+* Added tests/*_test.rb
+* New dependency: test-spec (development copy only)
+* Added delano/drydock (was delano/frylock)
+
+
+#### 0.5.4-alpha (2009-01-07) #########################
+
+http://github.com/solutious/stella/tree/0.5.4-alpha
 
 * New command: watch. Monitor HTTP traffic with Ruby-Pcap (unix only) or proxy. Pcap also supports DNS sniffing.
 * Improved error handling for stats output

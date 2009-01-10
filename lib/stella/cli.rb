@@ -1,8 +1,6 @@
 
 # http://www.ruby-doc.org/stdlib/libdoc/observer/rdoc/index.html
 
-require 'optparse'
-require 'ostruct'
 
 require 'stella/cli/base'
 
@@ -59,9 +57,11 @@ module Stella
     # Auto populated with 'command' => Stella::CLI::[class] by each cli class on 'require'.
     @@commands = {}
     
+    attr_reader :command_name
     attr_reader :options
     attr_reader :logger
-    
+    attr_reader :stella_arguments
+    attr_reader :command_arguments
 
     
     def initialize(arguments=[], stdin=nil)
@@ -76,6 +76,10 @@ module Stella
       
       @stella_arguments = []
       @command_arguments = []
+      
+      process_arguments
+      process_options
+      
     end
     
     def commands
@@ -83,9 +87,6 @@ module Stella
     end
     
     def run
-      
-      process_arguments
-      process_options
       
       unless (@command_name)
         process_options(:display)

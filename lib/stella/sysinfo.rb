@@ -7,6 +7,7 @@ module Stella
   # Portions of this code is from Amazon's EC2 AMI tools, lib/platform.rb. 
   class SystemInfo < Stella::Storable
     IMPLEMENTATIONS = [
+      
       # These are for JRuby, System.getproperty('os.name'). 
       # For a list of all values, see: http://lopica.sourceforge.net/os.html
       [/mac\s*os\s*x/i,     :unix,    :osx     ],  
@@ -14,7 +15,9 @@ module Stella
       [/windows\s*ce/i,     :win32,   :windows ],
       [/windows/i,          :win32,   :windows ],  
       [/osx/i,              :unix,    :osx     ],
-
+      
+      # TODO: implement other windows matches: # /djgpp|(cyg|ms|bcc)win|mingw/ (from mongrel)
+      
       # These are for RUBY_PLATFORM and JRuby
       [/java/i,    :java,    :java             ],
       [/darwin/i,  :unix,    :osx              ],
@@ -31,6 +34,7 @@ module Stella
       [/vms/i,     :vms,     :vms              ],
       [/os2/i,     :os2,     :os2              ],
       [nil,        :unknown, :unknown          ],
+      
     ]
 
     ARCHITECTURES = [
@@ -52,6 +56,9 @@ module Stella
     attr_reader :hostname
     attr_reader :ipaddress
     attr_reader :uptime
+    
+    alias :impl :implementation
+    alias :arch :architecture
     
     def field_names
       [
@@ -88,7 +95,7 @@ module Stella
       
       #
       if os == :win32
-        require 'Win32API'
+        #require 'Win32API'
   
       # If we're running in java, we'll need to look elsewhere
       # for the implementation and architecture. 
@@ -127,7 +134,7 @@ module Stella
       uptime = :unknown
 
       begin
-        hostname = Socket.gethostname
+        hostname = local_hostname
         ipaddr = local_ip_address
         uptime = local_uptime       
       rescue => ex
@@ -136,10 +143,15 @@ module Stella
       [hostname, ipaddr, uptime]
     end
 
-
+    # local_hostname
+    #
+    # Return the hostname for the local machine
+    def local_hostname
+      Socket.gethostname
+    end
+    
     # local_uptime
     #
-    # 
     # Returns the local uptime in hours. Use Win32API in Windows, 
     # 'sysctl -b kern.boottime' os osx, and 'who -b' on unix.
     # Based on Ruby Quiz solutions by: Matthias Reitinger 

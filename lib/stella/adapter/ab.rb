@@ -165,8 +165,9 @@ module Stella
           end
         end
         
+        self.arguments = arguments
+        self.options = options
         
-        options
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument
         badarg = ex.message.gsub('invalid option: ', '')

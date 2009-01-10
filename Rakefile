@@ -1,3 +1,19 @@
+
+require 'rubygems'
+require 'rake/clean'
+require 'fileutils'
+ 
+task :default => :test
+ 
+# SPECS ===============================================================
+ 
+desc 'Run specs with unit test style output'
+task :test do |t|
+  sh "specrb -s test/*_test.rb"
+end
+ 
+__END__
+
 require 'rake'
 require 'spec/rake/spectask'
 
@@ -102,4 +118,5 @@ Rake::RDocTask.new do |t|
 end
 
 CLEAN.include [ 'pkg', '*.gem', '.config', 'doc' ]
+
 

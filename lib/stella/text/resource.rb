@@ -21,7 +21,7 @@ module Stella
       
       def load_resource
         return @messages unless @messages.empty?
-        Stella::LOGGER.debug("LOADING #{path}")
+        #Stella::LOGGER.debug("LOADING #{path}")
         raise UnsupportedLanguage unless File.exists?(path)
         @messages = YAML.load_file(path)
       end

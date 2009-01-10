@@ -40,20 +40,21 @@ module Stella
       @paths = []
       @format = 'yaml'
       @agents = []
+      @verbose = 0
       
-      @available_agents = index_available_agents(File.join(STELLA_HOME, 'support', 'useragents.txt'))
+      ua_path = File.join(STELLA_HOME, 'support', 'useragents.txt')
+      Stella::LOGGER.debug("LOADING #{ua_path}")
+      
+      @available_agents = Stella::Util.process_useragents(ua_path)
     end
     
-    def index_available_agents(path)
-      Stella::LOGGER.debug("LOADING #{path}")
-      return [] unless File.exists?(path)
-      Stella::Util.process_useragents(FileUtil.read_file_to_array(path))
-    end
-    
+
     def translate_requested_agents(possible_agents=[])
       agents = []
+      return agents if !possible_agents || possible_agents.empty?
+      
       possible_agents.each do |a|
-        agents << find_agent(*a)
+        agents << Stella::Util.find_agent(*a)
       end
       agents
     end
