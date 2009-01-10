@@ -3,55 +3,154 @@ $: << File.dirname(__FILE__)
 require 'spec-helper'
 require 'stella'
 require 'mongrel'
+require 'uri'
+require 'net/http'
 
+class TestHandler < Mongrel::HttpHandler
+  attr_reader :ran_test
+  attr_accessor :server
+  def process(request, response)
+    @ran_test = true
+    response.start do |head,out|
+      head["Content-Type"] = "text/plain"
+      results = "Stellaaahhhh!"
+      out << results
+    end
+    
+  end
+end
+
+def get(uri)
+  uri = URI.parse(uri) unless uri.kind_of? URI
+  Net::HTTP.get(uri)
+end
 
 describe "Stella::Command::LoadTest" do
   WORKDIR = File.join(STELLA_HOME, 'test-spec-tmp')
+  HOST = '127.0.0.1'
+  PORT = 3114 + $$ % 1000
+  TVUSERS = 2
+  TCOUNT = 42 # This needs to be divisible evenly by TVUSERS
+  TREPS = 3
+  TMSG = "This is a build test"
   
+  
+  def execute_load_test(adapter, files)
+    testdef = Stella::Test::Definition.new
+    testdef.message = TMSG
+    testdef.repetitions = TREPS
+    
+    lt = Stella::LocalTest.new
+    lt.working_directory = WORKDIR
+    lt.adapter = adapter
+    lt.testdef = testdef
+    
+    files ||= []
+    files.push(%w{COMMAND.txt STDERR.txt STDOUT.txt SUMMARY.yaml}).flatten!
+    
+    begin
+      
+      lt.run
+      lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
+
+      # The test directory was created
+      File.exists?(lt.test_path).should.equal true
+
+      # The message was recorded
+      msg_path = File.join(lt.test_path, "MESSAGE.txt")
+      File.exists?(msg_path).should.equal true
+      File.read(msg_path).chomp.should.equal TMSG
+
+      # And all run output files were created
+      runnum = "00"
+      TREPS.times do
+        runnum = runnum.succ
+        files.each do |file|
+          file_short = File.join("run#{runnum}", file)
+          file_path = File.join(lt.test_path, file_short)
+          File.exists?(file_path).should.blaming("Cannot find: #{file_short}").equal true
+        end
+      end
+      
+    rescue Interrupt
+      @server.stop(true) if @server
+    end
+    
+    
+    
+  end
+    
   before(:all) do
     Stella.debug = false  
   end
   
   after(:all) do
+    @server.stop(true) if @server
   end
   
   after(:each) do
     FileUtils.remove_dir(WORKDIR) if File.exists? WORKDIR
   end
   
-  xit "should start a local test server" do
-    server = Mongrel::HttpServer.new("127.0.0.1", @port)
-    handler = TestHandler.new
-    server.register("/test", handler)
-    server.run
-    sleep 12
-    server.stop(true)
+  it "start a local test server" do
+    begin
+      capture(:stdout) do
+        @server = Mongrel::HttpServer.new("127.0.0.1", PORT)
+        @handler = TestHandler.new
+        @server.register("/test", @handler)
+        @server.run
+        res = get("http://#{HOST}:#{PORT}/test")
+        res.should.be.kind_of String
+        res.should.equal "Stellaaahhhh!"
+      end
+    rescue Interrupt
+      @server.stop(true) if @server
+      exit 1
+    end
+    
   end
   
-  xit "should run a local performance test with Apache Bench" do
-    
-    arguments = %w{-c 1 -n 1 http://127.0.0.1:5600/}
+  it "run a local performance test with Apache Bench" do
+    puts 
+    arguments = ["-c", "#{TVUSERS}", "-n", "#{TCOUNT}", "http://#{HOST}:#{PORT}/test"]
     adapter = Stella::Adapter::ApacheBench.new
     adapter.process_options(arguments)
-    
-    testdef = Stella::Test::Definition.new
-    testdef.message = "This is a build test"
-    
-    lt = Stella::LocalTest.new
-    lt.working_directory = WORKDIR
-    lt.format = 'yaml'
-    lt.adapter = adapter
-    lt.testdef = testdef
-    stdout = capture(:stdout) do
-      lt.run
-    end
+    files = %w{ab-percentiles.log ab-requests.log}
+    execute_load_test(adapter, files)
   end
   
-  xit "should run in quiet mode"
-  xit "should run with specified agents"
-  xit "should run with a warmup"
-  xit "should run with a specific number of test repetitions"
-  xit "should accept a sleep period between test runs"
+  
+  it "run a local performance test with Siege" do
+    puts 
+    arguments = ["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"]
+    adapter = Stella::Adapter::Siege.new
+    adapter.process_options(arguments)
+    files = %w{siege.log siegerc}
+    execute_load_test(adapter, files)
+  end
+  
+  
+  it "run a local performance test with Httperf" do
+    puts 
+    arguments = ["--num-conns", "#{TCOUNT}", "--rate", "0", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"]
+    adapter = Stella::Adapter::Httperf.new
+    adapter.process_options(arguments)
+    files = %w{}
+    execute_load_test(adapter, files)
+  end
+  
+  xit "create a latest symlink (unix only)" do
+  
+  end
+  
+  xit "run in quiet mode"
+  xit "run with specified agents"
+  xit "run with a warmup"
+  xit "run with a specific number of test repetitions"
+  xit "accept a sleep period between test runs"
+  xit "create summaries in yaml"
+  xit "create summaries in csv"
+  xit "create summaries in json"
   
 end
 

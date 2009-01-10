@@ -147,9 +147,6 @@ module Stella
         opts.on('-i', '--internet') do |v| @internet = true; end
         opts.on('-A S', '--user-agent=S', String) do |v| @user_agent ||= []; @user_agent << v end
 
-        unless options.benchmark
-          Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
-        end
         
         opts.on('-n N',Integer) do |v| 
           Stella::LOGGER.error("-n is not a Siege parameter. You probably want -r.")
@@ -160,7 +157,14 @@ module Stella
         # It also fails when it finds unknown switches (i.e. -X)
         # Which should leave only the remaining arguments (URIs in this case)
         opts.parse!(arguments)
-        options
+
+        unless @benchmark
+          Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
+        end
+                
+        self.arguments = arguments
+        self.options = options
+        
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument
         badarg = ex.message.gsub('invalid option: ', '')

@@ -26,6 +26,8 @@ module Stella
     
     attr_accessor :working_directory
     attr_reader :available_agents
+    attr_reader :test_stats
+    attr_reader :rampup_test_stats
     
     def initialize(testdef=nil, adapter=nil)
       @testdef = testdef if testdef
@@ -72,9 +74,9 @@ module Stella
             
       @agents = translate_requested_agents(@testdef.agents)
       
-      test_path = _generate_test_path
+      @test_path = _generate_test_path
       
-      prepare_test(test_path)       
+      prepare_test(@test_path)       
       
         threshold = (@testdef.rampup) ? @testdef.rampup.ceiling : @adapter.vusers
         
@@ -139,9 +141,9 @@ module Stella
         
           # Read the run summaries for this batch and produce totals, averages, 
           # and standard deviations.
-          test_stats = process_test_stats(@test_runpaths)
+          @test_stats = process_test_stats(@test_runpaths)
           print_summary(test_stats) if (@testdef.repetitions > 1)
-          save_summary(File.join(test_path, "#{summary_name}.#{@format}"), test_stats)
+          save_summary(File.join(test_path, "#{summary_name}.#{@format}"), @test_stats)
           
           
           # Non-rampup tests only need to run through the loop once. 
@@ -153,12 +155,11 @@ module Stella
         # Notice the difference between these test stats and the ones above?
         # These stats are based on the entire rampup test, across all levels
         # of virtual users.
-        test_stats = process_test_stats(@all_runpaths)
-        save_summary(File.join(test_path, "SUMMARY-RAMPUP.#{@format}"), test_stats)
+        @rampup_test_stats = process_test_stats(@all_runpaths)
+        save_summary(File.join(test_path, "SUMMARY-RAMPUP.#{@format}"), @rampup_test_stats)
         print_summary(test_stats) if (@testdef.repetitions > 1)
       end
     rescue Interrupt
-      puts "HIHIHI2222"
       exit
     rescue AdapterError => ex
       Stella::LOGGER.error(ex.message)
@@ -186,8 +187,10 @@ module Stella
         # Make sure the test storage directory is created along with the
         # latest symlink
         FileUtil.create_dir(test_path)
-        #File.unlink(latest_test_symlink_path) if File.exists?(latest_test_symlink_path)
-        #File.symlink(File.expand_path(test_path), latest_test_symlink_path)
+        if Stella.sysinfo.os == :unix
+          File.unlink(latest_test_symlink_path) if File.exists?(latest_test_symlink_path)
+          File.symlink(File.expand_path(test_path), latest_test_symlink_path)
+        end
         
         # Write the test ID to the storage directory
         # NOTE: Disabled until we resolve the issue with JRuby on OSX (won't load openssl)

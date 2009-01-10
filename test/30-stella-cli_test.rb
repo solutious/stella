@@ -13,15 +13,15 @@ describe "Stella::CLI" do
     ARGV.clear
   end
 
-  it "should auto-require CLI classes" do
+  it "auto-require CLI classes" do
     cli_count = Dir.glob(File.join(STELLA_HOME, 'lib', 'stella', 'cli', "*.rb")).size - 1 # Minus base class 
     app = Stella::CLI.new(ARGV, STDIN)
     app.commands.size.should.be >= cli_count  # There can be multiple command aliases per class
   end
   
-  xit "should process STDIN"
+  xit "process STDIN"
   
-  it "should process global options, command name, and command-specific arguments" do
+  it "split ARGV into global options, command name, and command-specific arguments" do
     ARGV.push *%w{ -vv sysinfo -h --list localhost}
     app = Stella::CLI.new(ARGV, STDIN)
     app.should.be.kind_of Stella::CLI
@@ -30,7 +30,7 @@ describe "Stella::CLI" do
     app.command_arguments.size.should.equal 3
   end
   
-  it "should run command and write to STDOUT" do
+  it "run command and write to STDOUT" do
     ARGV << "lang"
     words = capture(:stdout) do
       app = Stella::CLI.new(ARGV, STDIN)
