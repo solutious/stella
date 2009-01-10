@@ -1,6 +1,6 @@
-[submodule "vendor/frylock"]
-	path = vendor/frylock
-	url = git://github.com/delano/frylock.git
 [submodule "vendor/useragent"]
 	path = vendor/useragent
 	url = git://github.com/delano/useragent.git
+[submodule "drydock"]
+	path = drydock
+	url = git@github.com:delano/drydock.git
