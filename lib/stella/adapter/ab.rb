@@ -45,12 +45,14 @@ module Stella
       attr_accessor :C, :H, :A, :P, :X, :V, :k, :d, :S, :e, :g, :r, :h, :Z, :f
       
       def initialize(options={}, arguments=[])
-        super(options, arguments)
         @private_variables = ['private_variables', 'name', 'arguments', 'load_factor', 'working_directory']
         @c = 1
         @n = 1
         @name = 'ab'
         @load_factor = 1
+        
+        super(options, arguments)
+        
       end
       
       def error
@@ -83,12 +85,12 @@ module Stella
         instance_variables.each do |name|
           canon = name.to_s.tr('@', '')        # instance_variables returns '@name'
           next if @private_variables.member?(canon)
-
+          
           # It's important that we take the value from the getter method
           # because it applies the load factor. 
           value = self.send(canon)
           if (value.is_a? Array)
-            value.each { |el| command << "-#{canon} #{EscapeUtil.shell_single_word(el.to_s)} " }
+            value.each { |el| command << "-#{canon} #{EscapeUtil.shell_single_word(value.to_s)} " }
           else
             command << "-#{canon} #{EscapeUtil.shell_single_word(value.to_s)} "
           end
@@ -96,6 +98,7 @@ module Stella
         end
 
         command << (@arguments.map { |uri| "#{uri}" }).join(' ') unless @arguments.empty?
+        
         command
       end
       # loadtest
@@ -111,32 +114,34 @@ module Stella
       end
       
       
-      def process_options(arguments)
-        options = OpenStruct.new
+      def process_arguments(arguments)
         opts = OptionParser.new 
+        
+        # TODO: there's no need to use an OpenStruct here. It's confusing b/c we can 
+        # use the instance var methods here instead of in Base::options=.
         
         # TODO: Print a note for w that we don't parse the HTML results
         %w{v w i V k d S r h}.each do |n|
-          opts.on("-#{n}") do |v| options.send("#{n}=", true) end
+          opts.on("-#{n}") do |v| instance_variable_set("@#{n}", true) end
         end
         
         %w{e g p T x y z P Z f A}.each do |n|
-          opts.on("-#{n} S", String) do |v| options.send("#{n}=", v)  end
+          opts.on("-#{n} S", String) do |v| instance_variable_set("@#{n}", v)  end
         end
         
         %w{c n t b}.each do |n|
-          opts.on("-#{n} S", Integer) do |v| options.send("#{n}=", v) end
+          opts.on("-#{n} S", Integer) do |v| instance_variable_set("@#{n}", v) end
         end
         
-        opts.on('-H S', String) do |v| options.H ||= []; options.H << v; end
-        opts.on('-C S', String) do |v| options.C ||= []; options.C << v; end
+        opts.on('-H S', String) do |v| @H ||= []; @H << v; end
+        opts.on('-C S', String) do |v| @C ||= []; @C << v; end
         
         opts.on('-b') do |v| 
-          Stella::LOGGER.warn("-b is not an ab option. I'll pretend it's not there.")
+          Stella.warn("-b is not an ab option. I'll pretend it's not there.")
         end
         
         opts.on('-r N',Integer) do |v| 
-          Stella::LOGGER.error("-r is not an ab parameter. You probably want -n.")
+          Stella.error("-r is not an ab parameter. You probably want -n.")
           exit 1
         end
         
@@ -145,10 +150,10 @@ module Stella
         opts.parse!(arguments)
         
         if arguments.empty?
-          Stella::LOGGER.error("You need to provide a URI")
+          Stella.error("You need to provide a URI")
           exit 1
         elsif arguments.size > 1
-          Stella::LOGGER.warn("ab can handle only one URI. The others will be ignored.")
+          Stella.warn("ab can handle only one URI. The others will be ignored.")
           arguments = arguments.first
         else
           # Let's make sure the URI has a path (at least a trailing slash). Otherwise
@@ -156,17 +161,16 @@ module Stella
           begin
             uri = URI.parse(arguments.first)
             if !uri || uri.path.empty?
-              Stella::LOGGER.error("ab requires a trailing slash for #{uri.to_s}") 
+              Stella.error("ab requires a trailing slash for #{uri.to_s}") 
               exit 1
             end
           rescue => ex
-            Stella::LOGGER.error("Bad URI: #{arguments.first}") 
+            Stella.error("Bad URI: #{arguments.first}") 
             exit 1
           end
         end
         
-        self.arguments = arguments
-        self.options = options
+        arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

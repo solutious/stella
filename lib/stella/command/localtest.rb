@@ -165,7 +165,7 @@ module Stella
       Stella::LOGGER.error(ex.message)
     end
     
-    def latest_test_symlink_path
+    def test_path_symlink
       return unless @working_directory
       File.join(@working_directory, 'latest') 
     end
@@ -188,8 +188,8 @@ module Stella
         # latest symlink
         FileUtil.create_dir(test_path)
         if Stella.sysinfo.os == :unix
-          File.unlink(latest_test_symlink_path) if File.exists?(latest_test_symlink_path)
-          File.symlink(File.expand_path(test_path), latest_test_symlink_path)
+          File.unlink(test_path_symlink) if File.exists?(test_path_symlink)
+          File.symlink(File.expand_path(test_path), test_path_symlink)
         end
         
         # Write the test ID to the storage directory

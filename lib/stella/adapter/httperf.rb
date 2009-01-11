@@ -29,11 +29,13 @@ module Stella
       attr_writer :version, :add_header, :wlog, :wsess, :wsesslog, :wset
       
       def initialize(options={}, arguments=[])
-        super(options, arguments)
+        
         @name = 'httperf'
         
         @private_variables = ['private_variables', 'name', 'arguments', 'load_factor', 'working_directory']
         @load_factor = 1
+        
+        super(options, arguments)
       end
       
       
@@ -78,10 +80,8 @@ module Stella
         save_stats
       end
 
-      #httperf --hog --server=queen --uri=/0k.html --num-conns=10000 --rate=0 --timeout=30 --think-timeout=0
-      def process_options(arguments)
+      def process_arguments(arguments)
         
-        options = OpenStruct.new
         opts = OptionParser.new 
         opts.on('--hog') do @hog = true end
         opts.on('--server=S', String) do |v| @server = v end
@@ -135,8 +135,7 @@ module Stella
         # Which should leave only the remaining arguments (URIs in this case)
         opts.parse!(arguments)
 
-        self.arguments = arguments
-        self.options = options
+        arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

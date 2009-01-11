@@ -30,9 +30,84 @@ describe "Stella::Command::LoadTest" do
   HOST = '127.0.0.1'
   PORT = 3114 + $$ % 1000
   TVUSERS = 2
-  TCOUNT = 42 # This needs to be divisible evenly by TVUSERS
+  TCOUNT = 142 # This needs to be divisible evenly by TVUSERS
   TREPS = 3
   TMSG = "This is a build test"
+  
+  
+  before(:all) do
+    Stella.debug = false  
+  end
+  
+  after(:all) do
+    @server.stop(true) if @server
+  end
+  
+  after(:each) do
+	  # remove_dir does not seem to work on Windows
+    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
+  end
+  
+  it "start a local test server" do
+    begin
+      capture(:stdout) do
+        @server = Mongrel::HttpServer.new("127.0.0.1", PORT)
+        @handler = TestHandler.new
+        @server.register("/test", @handler)
+        @server.run
+        res = get("http://#{HOST}:#{PORT}/test")
+        res.should.be.kind_of String
+        res.should.equal "Stellaaahhhh!"
+      end
+    rescue Interrupt
+      @server.stop(true) if @server
+      exit 1
+    end
+    
+  end
+  
+  it "run a local performance test with Apache Bench" do
+    puts 
+    adapter = Stella::Adapter::ApacheBench.new(["-c", "#{TVUSERS}", "-n", "#{TCOUNT}", "http://#{HOST}:#{PORT}/test"])
+    files = %w{ab-percentiles.log ab-requests.log}
+    execute_load_test(adapter, files)
+  end
+  
+  
+  it "run a local performance test with Siege (unix only)" do
+    return if Stella.sysinfo.impl == :windows
+    puts 
+    adapter = Stella::Adapter::Siege.new(["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"])
+    files = %w{siege.log siegerc}
+    execute_load_test(adapter, files)
+  end
+  
+  
+  it "run a local performance test with Httperf (unix only)" do
+    return if Stella.sysinfo.impl == :windows
+    puts 
+    adapter = Stella::Adapter::Httperf.new(["--num-conns", "#{TCOUNT}", "--rate", "0", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"])
+    files = %w{}
+    execute_load_test(adapter, files)
+  end
+  
+  xit "create a symlink to the latest test directory (unix only)" do
+    return if Stella.sysinfo.impl == :windows
+    puts 
+    adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+    lt = execute_load_test(adapter)
+    File.symlink?(lt.test_path_symlink)
+  end
+  
+  xit "run in quiet mode"
+  xit "run with specified agents"
+  xit "run with a warmup"
+  xit "run with a specific number of test repetitions"
+  xit "accept a sleep period between test runs"
+  xit "create summaries in yaml"
+  xit "create summaries in csv"
+  xit "create summaries in json"
+  
   
   
   def execute_load_test(adapter, files)
@@ -76,86 +151,7 @@ describe "Stella::Command::LoadTest" do
       @server.stop(true) if @server
     end
     
-    
-    
+    lt
   end
-    
-  before(:all) do
-    Stella.debug = false  
-  end
-  
-  after(:all) do
-    @server.stop(true) if @server
-  end
-  
-  after(:each) do
-	  # remove_dir does not seem to work on Windows
-    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
-  end
-  
-  it "start a local test server" do
-    begin
-      capture(:stdout) do
-        @server = Mongrel::HttpServer.new("127.0.0.1", PORT)
-        @handler = TestHandler.new
-        @server.register("/test", @handler)
-        @server.run
-        res = get("http://#{HOST}:#{PORT}/test")
-        res.should.be.kind_of String
-        res.should.equal "Stellaaahhhh!"
-      end
-    rescue Interrupt
-      @server.stop(true) if @server
-      exit 1
-    end
-    
-  end
-  
-  it "run a local performance test with Apache Bench" do
-    puts 
-    arguments = ["-c", "#{TVUSERS}", "-n", "#{TCOUNT}", "http://#{HOST}:#{PORT}/test"]
-    adapter = Stella::Adapter::ApacheBench.new
-    adapter.process_options(arguments)
-    files = %w{ab-percentiles.log ab-requests.log}
-    execute_load_test(adapter, files)
-  end
-  
-  
-  it "run a local performance test with Siege" do
-    puts 
-    unless Stella.sysinfo.impl == :windows
-    arguments = ["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"]
-    adapter = Stella::Adapter::Siege.new
-    adapter.process_options(arguments)
-    files = %w{siege.log siegerc}
-    execute_load_test(adapter, files)
-    end
-  end
-  
-  
-  it "run a local performance test with Httperf" do
-    puts 
-    unless Stella.sysinfo.impl == :windows
-    arguments = ["--num-conns", "#{TCOUNT}", "--rate", "0", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"]
-    adapter = Stella::Adapter::Httperf.new
-    adapter.process_options(arguments)
-    files = %w{}
-    execute_load_test(adapter, files)
-    end
-  end
-  
-  xit "create a latest symlink (unix only)" do
-  
-  end
-  
-  xit "run in quiet mode"
-  xit "run with specified agents"
-  xit "run with a warmup"
-  xit "run with a specific number of test repetitions"
-  xit "accept a sleep period between test runs"
-  xit "create summaries in yaml"
-  xit "create summaries in csv"
-  xit "create summaries in json"
-  
 end
 

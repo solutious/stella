@@ -38,7 +38,7 @@ module Stella
       attr_accessor :rc, :file, :time, :benchmark, :internet
       
       def initialize(options={}, arguments=[])
-        super(options, arguments)
+        
         @name = 'siege'
         @reps = 1
         @concurrent = 1
@@ -46,6 +46,8 @@ module Stella
         @load_factor = 1
         
         @rc = File.join(ENV['HOME'] || ENV['USERPROFILE'], '.siegerc')
+        
+        super(options, arguments)
         
         # Siege won't run unless there's a siegerc file. If the default one doesn't exist
         # we need to call siege.config to create it. This should only happen once. 
@@ -125,8 +127,7 @@ module Stella
       end
 
 
-      def process_options(arguments)
-        options = OpenStruct.new
+      def process_arguments(arguments)
         opts = OptionParser.new 
         opts.on('-V', '--version') do |v| @version = v end
         opts.on('-h', '--help') do |v| @help = v end
@@ -162,8 +163,7 @@ module Stella
           Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
         end
                 
-        self.arguments = arguments
-        self.options = options
+        arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

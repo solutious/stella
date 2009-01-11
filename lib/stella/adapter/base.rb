@@ -14,8 +14,12 @@ module Stella::Adapter
     attr_reader :load_factor, :arguments
     
     def initialize(options={}, arguments=[])
-      self.arguments = arguments
-      self.options = options
+      if options.is_a? Array
+        self.arguments = self.process_arguments(options) 
+      else
+        self.options = options
+        self.arguments = arguments 
+      end
     end
     
     def load_factor=(load_factor)
@@ -33,22 +37,23 @@ module Stella::Adapter
       File.join(@working_directory, "SUMMARY.#{ext}")
     end
     
-    # process_options
+    # process_arguments
     #
     # This method must be overridden by the implementing class. This is intended
     # for processing the command-specific command-line arguments
-    # TODO: Rename to process_arguments
-    def process_options
+    def process_arguments
       raise Stella::TEXT.msg(:error_class_must_override, 'process_options')
     end
     
     # options=
     #
-    # Takes a hash or OpenStruct and applies the values to the instance variables. 
+    # Takes a hash, OpenStruct and applies the values to the instance variables. 
     # The keys should conincide with with the command line argument names. 
+    # by process_options first and 
     # i.e. The key for --help should be :help 
     def options=(options={})
       options = options.marshal_dump if options.is_a? OpenStruct
+      
       unless options.nil? || options.empty?
         options.each_pair do |name,value|
           next if @private_variables.member?(name)
