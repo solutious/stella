@@ -3,4 +3,4 @@
 	url = git://github.com/delano/useragent.git
 [submodule "vendor/drydock"]
 	path = vendor/drydock
-	url = git@github.com:delano/drydock.git
+	url = git://github.com/delano/drydock.git
