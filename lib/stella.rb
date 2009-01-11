@@ -6,6 +6,8 @@ require 'tempfile'
 require 'socket'
 require 'ostruct'
 require 'optparse'
+require 'rubygems'
+
 
 # Common utilities
 require 'utils/domainutil'
