@@ -61,7 +61,7 @@ module Stella
         @sport = options[:port] || @dport
         
         @device = options[:device] || guess_device
-        @snaplen = options[:snaplen] || 1500         # 10KB
+        @snaplen = options[:snaplen] || 10000         # 10KB
         @maxpacks = options[:maxpacks] || 100_000
         
         Stella::LOGGER.info("Watching interface #{@device} for #{@service} activity on #{@protocol} port #{@dport}")

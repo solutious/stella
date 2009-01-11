@@ -68,7 +68,6 @@ describe "Stella::Command::LoadTest" do
         files.each do |file|
           file_short = File.join("run#{runnum}", file)
           file_path = File.join(lt.test_path, file_short)
-	  puts file_path
           File.exists?(file_path).should.blaming("Cannot find: #{file_short}").equal true
         end
       end
