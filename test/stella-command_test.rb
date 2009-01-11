@@ -68,6 +68,7 @@ describe "Stella::Command::LoadTest" do
         files.each do |file|
           file_short = File.join("run#{runnum}", file)
           file_path = File.join(lt.test_path, file_short)
+	  puts file_path
           File.exists?(file_path).should.blaming("Cannot find: #{file_short}").equal true
         end
       end
@@ -89,7 +90,8 @@ describe "Stella::Command::LoadTest" do
   end
   
   after(:each) do
-    FileUtils.remove_dir(WORKDIR) if File.exists? WORKDIR
+	  # remove_dir does not seem to work on Windows
+    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
   end
   
   it "start a local test server" do
@@ -122,21 +124,25 @@ describe "Stella::Command::LoadTest" do
   
   it "run a local performance test with Siege" do
     puts 
+    unless Stella.sysinfo.impl == :windows
     arguments = ["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"]
     adapter = Stella::Adapter::Siege.new
     adapter.process_options(arguments)
     files = %w{siege.log siegerc}
     execute_load_test(adapter, files)
+    end
   end
   
   
   it "run a local performance test with Httperf" do
     puts 
+    unless Stella.sysinfo.impl == :windows
     arguments = ["--num-conns", "#{TCOUNT}", "--rate", "0", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"]
     adapter = Stella::Adapter::Httperf.new
     adapter.process_options(arguments)
     files = %w{}
     execute_load_test(adapter, files)
+    end
   end
   
   xit "create a latest symlink (unix only)" do
