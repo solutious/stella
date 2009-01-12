@@ -170,7 +170,7 @@ module Stella
           end
         end
         
-        arguments
+        self.arguments = arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

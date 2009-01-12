@@ -134,8 +134,8 @@ module Stella
         # It also fails when it finds unknown switches (i.e. -X)
         # Which should leave only the remaining arguments (URIs in this case)
         opts.parse!(arguments)
-
-        arguments
+        
+        self.arguments = arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

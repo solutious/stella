@@ -163,7 +163,7 @@ module Stella
           Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
         end
                 
-        arguments
+        self.arguments = arguments
         
       rescue OptionParser::InvalidOption => ex
         # We want to replace this text so we grab just the name of the argument

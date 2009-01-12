@@ -15,7 +15,7 @@ module Stella::Adapter
     
     def initialize(options={}, arguments=[])
       if options.is_a? Array
-        self.arguments = self.process_arguments(options) 
+        self.process_arguments(options) 
       else
         self.options = options
         self.arguments = arguments 
