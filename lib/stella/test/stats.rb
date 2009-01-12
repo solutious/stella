@@ -3,7 +3,7 @@ require 'stella/test/base'
 
 module Stella::Test
   
-  # Stella::Test::Summary
+  # Stella::Test::Stats
   class Summary < Stella::Storable
     include Base
     
@@ -32,14 +32,14 @@ module Stella::Test
       @failed_total = 0
       
       # We keep a list of the values for averaging and std dev
-      elapsed_times = []
-      transaction_rates = []
-      vusers_list = []
-      response_times = []
-      response_time = []
-      transaction_rate = []
-      throughput = []
-      vusers = []
+      elapsed_times = Stats.new
+      transaction_rates = Stats.new
+      vusers_list = Stats.new
+      response_times = Stats.new
+      response_time = Stats.new
+      transaction_rate = Stats.new
+      throughput = Stats.new
+      vusers = Stats.new
       
       # Each run is the summary of a single run (i.e. run01/SUMMARY.csv)
       runs.each do |run|
@@ -52,29 +52,29 @@ module Stella::Test
         @elapsed_time_total += run.elapsed_time || 0
         
         # These are used for standard deviation
-        elapsed_times << run.elapsed_time
-        transaction_rates << run.transaction_rate
-        vusers_list << run.vusers
-        response_times << run.response_time
-        throughput << run.throughput
-        response_time << run.response_time
-        transaction_rate << run.transaction_rate
-        vusers << run.vusers
+        elapsed_times.sample(run.elapsed_time)
+        transaction_rates.sample(run.transaction_rate)
+        vusers_list.sample(run.vusers)
+        response_times.sample(run.response_time)
+        throughput.sample(run.throughput)
+        response_time.sample(run.response_time)
+        transaction_rate.sample(run.transaction_rate)
+        vusers.sample(run.vusers)
       end
       
       # Calculate Averages
-      @elapsed_time_avg = elapsed_times.average
-      @throughput_avg = throughput.average
-      @response_time_avg = response_time.average
-      @transaction_rate_avg = transaction_rate.average
-      @vusers_avg = vusers.average 
+      @elapsed_time_avg = elapsed_times.mean
+      @throughput_avg = throughput.mean
+      @response_time_avg = response_time.mean
+      @transaction_rate_avg = transaction_rate.mean
+      @vusers_avg = vusers.mean 
       
       # Calculate Standard Deviations
-      @elapsed_time_sdev = elapsed_times.standard_deviation
-      @throughput_sdev= throughput.standard_deviation
-      @transaction_rate_sdev = transaction_rates.standard_deviation
-      @vusers_sdev = vusers_list.standard_deviation
-      @response_time_sdev = response_times.standard_deviation
+      @elapsed_time_sdev = elapsed_times.sd
+      @throughput_sdev= throughput.sd
+      @transaction_rate_sdev = transaction_rates.sd
+      @vusers_sdev = vusers_list.sd
+      @response_time_sdev = response_times.sd
       
     end
   end

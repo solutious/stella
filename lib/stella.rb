@@ -15,6 +15,7 @@ require 'utils/httputil'
 require 'utils/fileutil'
 require 'utils/mathutil'
 require 'utils/escape'
+require 'utils/stats'
 
 # Common dependencies
 $: << File.join(STELLA_HOME, 'vendor', 'useragent', 'lib')
@@ -36,7 +37,7 @@ require 'stella/response'
 require 'stella/sysinfo'
 require 'stella/test/definition'
 require 'stella/test/run/summary'
-require 'stella/test/summary'
+require 'stella/test/stats'
 
 # Commands
 require 'stella/command/base'

@@ -2,30 +2,6 @@
 
 module MathUtil
   
-  def self.variance(population)
-    n = 0
-    mean = 0.0
-    s = 0.0
-    
-    population.each { |x|
-      n = n + 1
-      delta = (x - mean).to_f
-      mean = (mean + (delta / n)).to_f
-      s = (s + delta * (x - mean)).to_f
-    }
-    
-    s / n
-  rescue => ex
-    0.0
-  end
-
-  # calculate the standard deviation of a population
-  # accepts: an array, the population
-  # returns: the standard deviation
-  def self.standard_deviation(population)
-    Math.sqrt(variance(population))
-  end
-  
   # enforce_limit
   #
   # Enforce a minimum and maximum value 
@@ -37,55 +13,3 @@ module MathUtil
   
 end
 
-
-
-
-module Enumerable
-
-    ##
-    # Sum of all the elements of the Enumerable
-
-    def sum
-        return 0 if !self || self.empty?
-        self.inject(0) { |acc, i| acc.to_f + i.to_f }
-    end
-
-    ##
-    # Average of all the elements of the Enumerable
-    #
-    # The Enumerable must respond to #length
-
-    def average
-      return 0 unless self
-      self.sum / self.length.to_f
-    rescue => ex
-      0.0
-    end
-
-    ##
-    # Sample variance of all the elements of the Enumerable
-    #
-    # The Enumerable must respond to #length
-
-    def sample_variance
-      return 0 unless self
-      avg = self.average
-      sum = self.sum
-      (1 / self.length.to_f * sum)
-    rescue => ex
-      0.0
-    end
-
-    ##
-    # Standard deviation of all the elements of the Enumerable
-    #
-    # The Enumerable must respond to #length
-
-    def standard_deviation
-      return 0 unless self
-      Math.sqrt(self.sample_variance)
-    rescue => ex
-      0.0
-    end
-
-end

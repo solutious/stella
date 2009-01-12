@@ -33,9 +33,9 @@ describe "Stella::Command::LoadTest" do
   WORKDIR = File.join(STELLA_HOME, 'test-spec-tmp')
   HOST = '127.0.0.1'
   PORT = 3114 + $$ % 1000
-  TVUSERS = 2
-  TCOUNT = 2 # This needs to be divisible evenly by TVUSERS
-  TREPS = 2
+  TVUSERS = 10
+  TCOUNT = 140 # This needs to be divisible evenly by TVUSERS
+  TREPS = 7
   TMSG = "This is a build test"
   
   
@@ -46,7 +46,7 @@ describe "Stella::Command::LoadTest" do
   
   after(:each) do
 	  # remove_dir does not seem to work on Windows
-    #FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
+    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
   end
   
   it "start a local test server" do
@@ -73,13 +73,14 @@ describe "Stella::Command::LoadTest" do
     lt = Stella::LocalTest.new
     files = %w{ab-percentiles.log ab-requests.log}
     execute_load_test(lt, adapter, files)
+    lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
   end
   
   
   it "run a local performance test with Siege (unix only)" do
     return if Stella.sysinfo.impl == :windows
     puts 
-    adapter = Stella::Adapter::Siege.new(["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"])
+    adapter = Stella::Adapter::Siege.new(["-c", "#{TVUSERS}", "-r", "#{TCOUNT / TVUSERS}", "--benchmark", "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
     files = %w{siege.log siegerc}
     execute_load_test(lt, adapter, files)
@@ -104,7 +105,7 @@ describe "Stella::Command::LoadTest" do
     lt = Stella::LocalTest.new
     execute_load_test(lt, adapter)
     File.symlink?(lt.test_path_symlink).should.equal true
-    lt.test_stats.transactions_total.should.equal 2
+    lt.test_stats.transactions_total.should.equal TREPS
   end
   
   it "run in quiet mode" do
@@ -116,7 +117,7 @@ describe "Stella::Command::LoadTest" do
       execute_load_test(lt, adapter)
     end
     output.split($/).size.should.equal 2
-    lt.test_stats.transactions_total.should.equal 2
+    lt.test_stats.transactions_total.should.equal TREPS
   end
   
   Stella::Storable::SUPPORTED_FORMATS.each do |format|
@@ -127,7 +128,7 @@ describe "Stella::Command::LoadTest" do
       lt.format = format
       execute_load_test(lt, adapter)
       File.exists?(File.join(lt.test_path, "SUMMARY.#{format}")).should.equal true
-      lt.test_stats.transactions_total.should.equal 2
+      lt.test_stats.transactions_total.should.equal TREPS
     end
   end
   
@@ -137,7 +138,7 @@ describe "Stella::Command::LoadTest" do
     lt.warmup = 0.5
     execute_load_test(lt, adapter)
     File.exists?(File.join(lt.test_path, "SUMMARY.#{format}")).should.equal true
-    lt.test_stats.transactions_total.should.equal 2
+    lt.test_stats.transactions_total.should.equal TREPS
   end
   
   xit "accept a sleep period between test runs"

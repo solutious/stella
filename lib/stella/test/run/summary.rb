@@ -50,7 +50,10 @@ module Stella::Test::Run
       ]
     end
     def field_types
-      [ Float, Integer, Float, Float,  Float,  Float,  Float,  Float, Integer, Integer, Integer, String
+      [ 
+        Float, Integer, Float, Float,
+        Float,  Float,  Float, Float, 
+        Integer, Integer, Integer, String
       ]
     end
     

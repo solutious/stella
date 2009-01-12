@@ -34,5 +34,16 @@ module Stella::Test
       ]
     end
     
+    def field_types
+      # Dave, this is silly! 
+      [
+        String,
+        Float, Float, Float, Float, 
+        Float, Float, Float, Float, 
+        Float, Float, Float, 
+        Float, Float, 
+        Float, Float, Float, Float
+      ]
+    end
   end
 end
