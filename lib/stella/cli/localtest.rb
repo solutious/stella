@@ -31,9 +31,8 @@ module Stella
       def run
         process_stella_options
         
-        options = @adapter.process_options(@arguments)
-        
-        @adapter.options = options
+        @adapter.process_arguments(@arguments)
+
         @adapter.arguments = @arguments
         
         @testdef.vusers = @adapter.vusers

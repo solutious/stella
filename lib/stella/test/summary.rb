@@ -44,12 +44,12 @@ module Stella::Test
       # Each run is the summary of a single run (i.e. run01/SUMMARY.csv)
       runs.each do |run|
         # These are totaled
-        @transactions_total += run.transactions
-        @headers_transferred_total += run.headers_transferred
-        @data_transferred_total += run.data_transferred
-        @successful_total += run.successful
-        @failed_total += run.failed
-        @elapsed_time_total += run.elapsed_time
+        @transactions_total += run.transactions || 0
+        @headers_transferred_total += run.headers_transferred || 0
+        @data_transferred_total += run.data_transferred || 0
+        @successful_total += run.successful || 0
+        @failed_total += run.failed || 0
+        @elapsed_time_total += run.elapsed_time || 0
         
         # These are used for standard deviation
         elapsed_times << run.elapsed_time

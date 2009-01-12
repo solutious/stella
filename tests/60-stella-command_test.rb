@@ -25,13 +25,17 @@ def get(uri)
   Net::HTTP.get(uri)
 end
 
+at_exit do
+  @server.stop(true) if @server
+end
+
 describe "Stella::Command::LoadTest" do
   WORKDIR = File.join(STELLA_HOME, 'test-spec-tmp')
   HOST = '127.0.0.1'
   PORT = 3114 + $$ % 1000
   TVUSERS = 2
-  TCOUNT = 142 # This needs to be divisible evenly by TVUSERS
-  TREPS = 3
+  TCOUNT = 2 # This needs to be divisible evenly by TVUSERS
+  TREPS = 2
   TMSG = "This is a build test"
   
   
@@ -39,19 +43,16 @@ describe "Stella::Command::LoadTest" do
     Stella.debug = false  
   end
   
-  after(:all) do
-    @server.stop(true) if @server
-  end
   
   after(:each) do
 	  # remove_dir does not seem to work on Windows
-    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
+    #FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
   end
   
   it "start a local test server" do
     begin
       capture(:stdout) do
-        @server = Mongrel::HttpServer.new("127.0.0.1", PORT)
+        @server = Mongrel::HttpServer.new(HOST, PORT)
         @handler = TestHandler.new
         @server.register("/test", @handler)
         @server.run
@@ -69,8 +70,9 @@ describe "Stella::Command::LoadTest" do
   it "run a local performance test with Apache Bench" do
     puts 
     adapter = Stella::Adapter::ApacheBench.new(["-c", "#{TVUSERS}", "-n", "#{TCOUNT}", "http://#{HOST}:#{PORT}/test"])
+    lt = Stella::LocalTest.new
     files = %w{ab-percentiles.log ab-requests.log}
-    execute_load_test(adapter, files)
+    execute_load_test(lt, adapter, files)
   end
   
   
@@ -78,8 +80,10 @@ describe "Stella::Command::LoadTest" do
     return if Stella.sysinfo.impl == :windows
     puts 
     adapter = Stella::Adapter::Siege.new(["-c", "#{TVUSERS}", "-r", "#{TCOUNT / 2}", "--benchmark", "http://#{HOST}:#{PORT}/test"])
+    lt = Stella::LocalTest.new
     files = %w{siege.log siegerc}
-    execute_load_test(adapter, files)
+    execute_load_test(lt, adapter, files)
+    lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
   end
   
   
@@ -87,46 +91,76 @@ describe "Stella::Command::LoadTest" do
     return if Stella.sysinfo.impl == :windows
     puts 
     adapter = Stella::Adapter::Httperf.new(["--num-conns", "#{TCOUNT}", "--rate", "0", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"])
+    lt = Stella::LocalTest.new
     files = %w{}
-    execute_load_test(adapter, files)
+    execute_load_test(lt, adapter, files)
+    lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
   end
   
-  xit "create a symlink to the latest test directory (unix only)" do
+  it "create a symlink to the latest test directory (unix only)" do
     return if Stella.sysinfo.impl == :windows
     puts 
     adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
-    lt = execute_load_test(adapter)
-    File.symlink?(lt.test_path_symlink)
+    lt = Stella::LocalTest.new
+    execute_load_test(lt, adapter)
+    File.symlink?(lt.test_path_symlink).should.equal true
+    lt.test_stats.transactions_total.should.equal 2
   end
   
-  xit "run in quiet mode"
-  xit "run with specified agents"
+  it "run in quiet mode" do
+    puts 
+    adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+    lt = Stella::LocalTest.new
+    lt.quiet = true
+    output = capture(:stdout) do
+      execute_load_test(lt, adapter)
+    end
+    output.split($/).size.should.equal 2
+    lt.test_stats.transactions_total.should.equal 2
+  end
+  
+  %w{yaml csv json tsv}.each do |format|
+    it "create summaries in #{format}" do
+      puts 
+      adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+      lt = Stella::LocalTest.new
+      lt.format = format
+      execute_load_test(lt, adapter)
+      File.exists?(File.join(lt.test_path, "SUMMARY.#{format}")).should.equal true
+      lt.test_stats.transactions_total.should.equal 2
+    end
+  end
+  
+  
   xit "run with a warmup"
-  xit "run with a specific number of test repetitions"
   xit "accept a sleep period between test runs"
-  xit "create summaries in yaml"
-  xit "create summaries in csv"
-  xit "create summaries in json"
+  xit "run with specified agents"   
   
   
-  
-  def execute_load_test(adapter, files)
+  # +lt+ is an instance of Stella::Command::LoadTest
+  # +adapter+ is a Stella::Adapter object
+  # +files+ (optional) is a list of filenames that should exist in the 
+  # testrun/2009-01-01/run01 directory after a test. When files is empty
+  # we return without running any tests. Note that when adding file names
+  # you don't need to include the standard files (STDOUT.txt, etc...).
+  # Return value is the Stella::Command::LoadTest instance
+  def execute_load_test(lt, adapter, files=nil)
     testdef = Stella::Test::Definition.new
     testdef.message = TMSG
     testdef.repetitions = TREPS
     
-    lt = Stella::LocalTest.new
     lt.working_directory = WORKDIR
     lt.adapter = adapter
     lt.testdef = testdef
     
-    files ||= []
-    files.push(%w{COMMAND.txt STDERR.txt STDOUT.txt SUMMARY.yaml}).flatten!
+    files.push(%w{COMMAND.txt STDERR.txt STDOUT.txt}).flatten! unless files.nil?
     
     begin
       
       lt.run
-      lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
+      
+      return lt if files.nil? 
+      
 
       # The test directory was created
       File.exists?(lt.test_path).should.equal true

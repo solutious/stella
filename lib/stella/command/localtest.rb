@@ -324,7 +324,9 @@ module Stella
       # filepath:: the complete path for the file (string)
       # stats:: Any object that extends Stella::Test::Base object
       def save_summary(filepath, stats)
-        FileUtil.write_file(filepath, stats.dump(@format, :with_titles), true) if stats
+        return unless stats
+        #stats.format(@format)
+        stats.to_file(filepath)
       end
       
       # Load SUMMARY file for each run and create a summary with
@@ -333,13 +335,10 @@ module Stella
         return unless paths && !paths.empty?
         test_stats = Stella::Test::Summary.new(@message)
         return unless test_stats
-        all_stats_obj = []
         paths.each do |path|
-          file_contents = FileUtil.read_file_to_array("#{path}/SUMMARY.#{@format}")
-          next if !file_contents || file_contents.empty?
-          stats = Stella::Test::Run::Summary.undump(@format, file_contents)
-          stats_obj = Stella::Test::Run::Summary.from_hash(stats)
-          test_stats.add_run(stats_obj)
+          next unless File.exists?("#{path}/SUMMARY.#{@format}")
+          test_run = Stella::Test::Run::Summary.from_file("#{path}/SUMMARY.#{@format}")
+          test_stats.add_run(test_run)
         end
 
         test_stats
