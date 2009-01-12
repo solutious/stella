@@ -8,12 +8,12 @@ module Stella
   class Storable
     NICE_TIME_FORMAT = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
       
-    SupportedFormats = %w{tsv csv yaml json}.freeze unless defined? SupportedFormats
+    SUPPORTED_FORMATS = %w{tsv csv yaml json}.freeze unless defined? SUPPORTED_FORMATS
     
     attr_accessor :format
     
     def format=(v)
-      raise "Unsupported format: #{v}" unless SupportedFormats.member?(v)
+      raise "Unsupported format: #{v}" unless SUPPORTED_FORMATS.member?(v)
       @format = v
     end
     
@@ -21,9 +21,13 @@ module Stella
       raise "You need to override field_names (#{self.class})"
     end
     
+    def field_types
+      []
+    end
+    
     def dump(format=nil, with_titles=true)
       format ||= @format
-      raise "Format not defined (#{format})" unless SupportedFormats.member?(format)
+      raise "Format not defined (#{format})" unless SUPPORTED_FORMATS.member?(format)
       send("to_#{format}", with_titles) 
     end
     
@@ -45,10 +49,26 @@ module Stella
     def self.from_hash(from={})
       return if !from || from.empty?
       me = self.new
-      fnames = me.to_hash.keys
-      fnames.each do |key|
-        # NOTE: this will skip generated values b/c they don't have a setter method
-        me.send("#{key}=", from[key]) if self.method_defined?("#{key}=")  
+      fnames = me.field_names
+      fnames.each_with_index do |key,index|
+        
+        value = from[key]
+        
+        # TODO: Correct this horrible implementation (sorry, me. It's just one of those days.)
+        
+        if me.field_types[index] == Time
+          value = Time.parse(from[key].to_s)
+        elsif me.field_types[index] == DateTime
+          value = DateTime.parse(from[key].to_s)
+        elsif me.field_types[index] == TrueClass
+          value = (from[key].to_s == "true")
+        elsif me.field_types[index] == Float
+          value = from[key].to_f
+        elsif me.field_types[index] == Integer
+          value = from[key].to_i
+        end
+        
+        me.send("#{key}=", value) if self.method_defined?("#{key}=")  
       end
       me
     end
@@ -122,14 +142,13 @@ module Stella
         fnames = from[0].chomp.split(delim)
         values = from[1].chomp.split(delim)
       else
-        fnames = self.new.field_names
+        fnames = self.field_names
         values = from[0].chomp.split(delim)
       end
       
       fnames.each_with_index do |key,index|
         next unless values[index]
-        number_or_string = (values[index].match(/[\d\.]+/)) ? values[index].to_f : values[index]
-        hash[key.to_sym] = number_or_string
+        hash[key.to_sym] = values[index]
       end
       hash = from_hash(hash) if hash.is_a? Hash 
       hash

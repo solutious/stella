@@ -119,7 +119,7 @@ describe "Stella::Command::LoadTest" do
     lt.test_stats.transactions_total.should.equal 2
   end
   
-  %w{yaml csv json tsv}.each do |format|
+  Stella::Storable::SUPPORTED_FORMATS.each do |format|
     it "create summaries in #{format}" do
       puts 
       adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
@@ -131,8 +131,15 @@ describe "Stella::Command::LoadTest" do
     end
   end
   
+  it "run with a warmup" do
+    adapter = Stella::Adapter::ApacheBench.new(["-n", "100", "http://#{HOST}:#{PORT}/test"])
+    lt = Stella::LocalTest.new
+    lt.warmup = 0.5
+    execute_load_test(lt, adapter)
+    File.exists?(File.join(lt.test_path, "SUMMARY.#{format}")).should.equal true
+    lt.test_stats.transactions_total.should.equal 2
+  end
   
-  xit "run with a warmup"
   xit "accept a sleep period between test runs"
   xit "run with specified agents"   
   

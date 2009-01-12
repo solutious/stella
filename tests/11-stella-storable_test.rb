@@ -1,13 +1,17 @@
 $: << File.dirname(__FILE__)
 require 'spec-helper'
 
+require 'time'
 require 'date'
 require 'stella/storable'
 
 class TeaCup < Stella::Storable
-  attr_accessor :owner, :volume, :washed, :dates_used
+  attr_accessor :owner, :volume, :washed, :last_used
   def field_names
-    [ :owner, :volume, :washed, :dates_used ]
+    [ :owner, :volume, :washed, :last_used ]
+  end
+  def field_types
+    [ String, Float, TrueClass, Time ]
   end
 end
 
@@ -17,7 +21,7 @@ describe 'Stella::Storable' do
     :owner => "stella", 
     :volume => 97.01, 
     :washed => true, 
-    :dates_used => [DateTime.now, DateTime.now-10, DateTime.now-100]
+    :last_used => (Time.now-100).utc
   }
   
   before(:all) do
@@ -37,7 +41,7 @@ describe 'Stella::Storable' do
     end
   end
   
-  Stella::Storable::SupportedFormats.each do |format|
+  Stella::Storable::SUPPORTED_FORMATS.each do |format|
     it "creates object from hash and saves in #{format} format" do
       teacup = TeaCup.from_hash(RECORD)
       path = "#{FILE_PATH}.#{format}"
@@ -47,10 +51,15 @@ describe 'Stella::Storable' do
     end
   end
   
-  Stella::Storable::SupportedFormats.each do |format|
+  Stella::Storable::SUPPORTED_FORMATS.each do |format|
     it "loads object from #{format} file" do
       teacup = TeaCup.from_file("#{FILE_PATH}.#{format}")
-      (teacup.to_hash.keys == RECORD.to_hash.keys).should.equal true
+      tchash = teacup.to_hash
+      tchash.should.be.instance_of Hash
+      tchash.keys.should.equal RECORD.keys
+      tchash[:volume].should.equal RECORD[:volume]
+      tchash[:last_used].to_i.should.equal RECORD[:last_used].to_i
+      tchash[:washed].should.equal RECORD[:washed]
     end
   end
   
