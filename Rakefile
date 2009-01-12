@@ -9,8 +9,7 @@ task :default => :test
  
 desc 'Run specs with unit test style output'
 task :test do |t|
-#  sh "specrb -s tests/*_test.rb"
-  sh "specrb -s tests/1*_test.rb"
+  sh "specrb -s tests/*_test.rb"
 end
  
 __END__

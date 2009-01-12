@@ -49,6 +49,10 @@ module Stella::Test::Run
         :vusers, :successful, :failed, :note
       ]
     end
+    def field_types
+      [ Float, Integer, Float, Float,  Float,  Float,  Float,  Float, Integer, Integer, Integer, String
+      ]
+    end
     
     def available?
       @successful && @transactions && @elapsed_time && @vusers && @response_time

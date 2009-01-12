@@ -131,7 +131,7 @@ describe "Stella::Command::LoadTest" do
     end
   end
   
-  it "run with a warmup" do
+  xit "run with a warmup" do
     adapter = Stella::Adapter::ApacheBench.new(["-n", "100", "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
     lt.warmup = 0.5
