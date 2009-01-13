@@ -108,43 +108,44 @@ describe "Stella::Command::LoadTest" do
     return if Stella.sysinfo.impl == :windows
     puts 
     testdef = Stella::Test::Definition.new
-    adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+    adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
     execute_load_test(lt, testdef, adapter)
     File.symlink?(lt.test_path_symlink).should.equal true
-    lt.test_stats.transactions_total.should.equal TREPS
+    lt.test_stats.transactions_total.should.equal TREPS * TCOUNT
   end
   
   it "run in quiet mode" do
     puts 
     testdef = Stella::Test::Definition.new
-    adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+    adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
     lt.quiet = true
     output = capture(:stdout) do
       execute_load_test(lt, testdef, adapter)
     end
     output.split($/).size.should.equal 2
-    lt.test_stats.transactions_total.should.equal TREPS
+    lt.test_stats.transactions_total.should.equal TREPS * TCOUNT
   end
   
   Stella::Storable::SUPPORTED_FORMATS.each do |format|
+	  next if format == 'json' && !HAS_JSON
     it "create summaries in #{format}" do
       puts 
       testdef = Stella::Test::Definition.new
-      adapter = Stella::Adapter::ApacheBench.new(["http://#{HOST}:#{PORT}/test"])
+      adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
       lt = Stella::LocalTest.new
       lt.format = format
       execute_load_test(lt, testdef, adapter)
       File.exists?(File.join(lt.test_path, "STATS.#{format}")).should.equal true
-      lt.test_stats.transactions_total.should.equal TREPS
+      lt.test_stats.transactions_total.should.equal TREPS * TCOUNT
     end
   end
   
   it "run with a warmup with a 50% load factor" do
     puts
     testdef = Stella::Test::Definition.new
-    adapter = Stella::Adapter::ApacheBench.new(["-c", "10", "-n", "100", "http://#{HOST}:#{PORT}/test"])
+    adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
     testdef.warmup = 0.5  # this means half of the number of requests
     execute_load_test(lt, testdef, adapter)
@@ -153,19 +154,19 @@ describe "Stella::Command::LoadTest" do
     summary_file = File.join(lt.test_path, "warmup", "SUMMARY.yaml")
     File.exists?(summary_file).should.blaming("Summary file").equal true
     summary = Stella::Test::Run::Summary.from_file(summary_file)
-    summary.transactions.should.blaming("Warmup transaction count").equal 50
-    lt.test_stats.transactions_total.should.equal TREPS * 100
+    summary.transactions.should.blaming("Warmup transaction count").equal(TCOUNT * 0.5)
+    lt.test_stats.transactions_total.should.equal TREPS * TCOUNT
   end
   
   it "run with a rampup" do  
     puts
     testdef = Stella::Test::Definition.new
-    adapter = Stella::Adapter::ApacheBench.new(["-c", "10", "-n", "100", "http://#{HOST}:#{PORT}/test"])
+    adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
     lt = Stella::LocalTest.new
-    testdef.rampup = [10,20]
+    testdef.rampup = [TVUSERS,TVUSERS*2]
     execute_load_test(lt, testdef, adapter)
     File.exists?(File.join(lt.test_path, "STATS.yaml")).should.equal true
-    lt.rampup_test_stats.transactions_total.should.equal TREPS * 100 + TREPS * 200
+    lt.rampup_test_stats.transactions_total.should.equal TREPS * (TCOUNT) + (TREPS * TCOUNT*2)
   end
   
   xit "accept a sleep period between test runs"
@@ -192,6 +193,8 @@ describe "Stella::Command::LoadTest" do
     begin
       
       lt.run
+      
+      lt.test_stats.should.be.instance_of Stella::Test::Stats
       
       %w{
         elapsed_time_avg throughput_avg response_time_avg 

@@ -42,6 +42,7 @@ describe 'Stella::Storable' do
   end
   
   Stella::Storable::SUPPORTED_FORMATS.each do |format|
+	  next if format == 'json' && !::HAS_JSON
     it "creates object from hash and saves in #{format} format" do
       teacup = TeaCup.from_hash(RECORD)
       path = "#{FILE_PATH}.#{format}"
@@ -52,6 +53,7 @@ describe 'Stella::Storable' do
   end
   
   Stella::Storable::SUPPORTED_FORMATS.each do |format|
+	  next if format == 'json' && !::HAS_JSON
     it "loads object from #{format} file" do
       teacup = TeaCup.from_file("#{FILE_PATH}.#{format}")
       tchash = teacup.to_hash

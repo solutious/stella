@@ -21,3 +21,11 @@ def capture(stream)
 
   result
 end
+
+begin
+	require 'json'
+rescue LoadError
+	::HAS_JSON = false
+else
+	::HAS_JSON = true
+end
