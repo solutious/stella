@@ -1,22 +1,22 @@
-diff -ur pcap-0.6/Pcap.c pcap-working/Pcap.c
---- pcap-0.6/Pcap.c     2008-02-10 19:10:30.000000000 +0900
-+++ pcap-working/Pcap.c 2008-02-10 18:58:49.000000000 +0900
+diff -ur pcap/Pcap.c pcap-modified/Pcap.c
+--- pcap/Pcap.c	2000-08-13 01:56:31.000000000 -0400
++++ pcap-modified/Pcap.c	2009-01-02 10:55:49.000000000 -0500
 @@ -782,9 +782,9 @@
      /* define class PcapStat */
      cPcapStat = rb_funcall(rb_cStruct, rb_intern("new"), 4,
-                           Qnil,
--                          INT2NUM(rb_intern("recv")),
--                          INT2NUM(rb_intern("drop")),
--                          INT2NUM(rb_intern("ifdrop")));
-+                          ID2SYM(rb_intern("recv")),
-+                          ID2SYM(rb_intern("drop")),
-+                          ID2SYM(rb_intern("ifdrop")));
+ 			   Qnil,
+-			   INT2NUM(rb_intern("recv")),
+-			   INT2NUM(rb_intern("drop")),
+-			   INT2NUM(rb_intern("ifdrop")));
++			   ID2SYM(rb_intern("recv")),
++			   ID2SYM(rb_intern("drop")),
++			   ID2SYM(rb_intern("ifdrop")));
      rb_define_const(mPcap, "Stat", cPcapStat);
  
      /* define exception classes */
-diff -ur pcap-0.6/packet.c pcap-working/packet.c
---- pcap-0.6/packet.c   2008-02-10 19:10:30.000000000 +0900
-+++ pcap-working/packet.c       2008-02-10 18:55:13.000000000 +0900
+diff -ur pcap/packet.c pcap-modified/packet.c
+--- pcap/packet.c	2000-08-13 02:56:15.000000000 -0400
++++ pcap-modified/packet.c	2009-01-02 10:56:07.000000000 -0500
 @@ -17,8 +17,8 @@
  
  VALUE cPacket;
