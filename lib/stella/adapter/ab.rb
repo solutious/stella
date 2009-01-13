@@ -187,8 +187,7 @@ module Stella
         # to the location specified by the user.
         # NOTE: For tests with more than one test run, the specified files will be 
         # overwritten after each run. Should we force append the run number? 
-        [[@e, 'csv'], [@g, 'tsv']].each do |tuple|
-          puts "TEST: #{File.expand_path(File.dirname(tuple[0]))} :::: #{File.expand_path(@working_directory)}"
+        [[@e, 'percentiles'], [@g, 'requests']].each do |tuple|
           if File.expand_path(File.dirname(tuple[0])) != File.expand_path(@working_directory)
             from = tuple[0]
             to = @working_directory + "/ab-#{tuple[1]}.log"

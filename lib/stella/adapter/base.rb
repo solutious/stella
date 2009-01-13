@@ -76,7 +76,7 @@ module Stella::Adapter
     end
     
     def rate
-      1
+      @rate || 0
     end
     def vuser_rate
       "#{vusers}/#{rate}"

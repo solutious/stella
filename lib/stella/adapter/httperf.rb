@@ -31,7 +31,6 @@ module Stella
       def initialize(options={}, arguments=[])
         
         @name = 'httperf'
-        
         @private_variables = ['private_variables', 'name', 'arguments', 'load_factor', 'working_directory']
         @load_factor = 1
         
@@ -125,10 +124,14 @@ module Stella
         
         
         opts.on('--wlog=S', String) do |v| @wlog = Stella::Util::expand_str(v) end
-        opts.on('--wsess=S', String) do |v| @wsess = Stella::Util::expand_str(v) end
+        opts.on('--wsess=S', String) do |v| @wsess = Stella::Util::expand_str(v, Integer) end
         opts.on('--wsesslog=S', String) do |v| @wsesslog = Stella::Util::expand_str(v) end
         opts.on('--wset=S', String) do |v| @wset = Stella::Util::expand_str(v) end
+        
+        if @wsess
           
+        end
+        
         # parse! removes the options it finds.
         # It also fails when it finds unknown switches (i.e. -X)
         # Which should leave only the remaining arguments (URIs in this case)
@@ -180,13 +183,17 @@ module Stella
         end
       end
       def vusers
-         @rate
+         @wsess[1]
       end
+      def vuser_rate
+        "#{vusers}/#{rate}"
+      end
+      
       def vusers=(v)
         0
       end
       def requests
-        @num_conns # TODO: also check wsess and wlog params
+        @num_conns || (@wsess[0] * @wsess[1])
       end
       def requests=(v)
         0
@@ -282,11 +289,11 @@ module Stella
           stats.transactions = conn.to_i
         end
         
-        raw.scan(/Reply size [B]: header (\d+\.\d+?) content (\d+\.\d+?) footer (\d+\.\d+?) .total (\d+\.\d+?)./) do |h,c,f,t|
-          stats.data_transferred = ((t.to_f || 0 ) / 1_048_576).to_f # TODO: convert from bytes to MB
+        raw.scan(/header (\d+\.\d+?)\s+.+?\s+.total (\d+\.\d+?)./) do |h,t|
+          stats.data_transferred = ((t.to_f || 0 ) / 1_048_576).to_f
+          stats.headers_transferred = ((h.to_f || 0 ) / 1_048_576).to_f
         end
         stats.vusers = self.vusers
-        
         
         stats
       end

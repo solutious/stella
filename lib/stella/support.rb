@@ -185,9 +185,12 @@ module Stella
     # expand_str
     # 
     # Turns a string like ff-4-freebsd into ["ff","4","freebsd"]
-    # We use this for command-line values liek agent and rampup
-    def self.expand_str(str)
-      str.split(/\s*[,\-]\s*/) # remove extra spaces at the same time. 
+    # We use this for command-line values liek agent and rampup.
+    # +str+ is a comma or dash separated string.
+    # +type+ is a class type to cast to (optional, default: String)
+    def self.expand_str(str, type=String)
+      # this removes extra spaces along with the comma
+      str.split(/\s*[,\-]\s*/).inject([]) do |list,value| list << eval("#{type}('#{value}')") end
     end
     
     

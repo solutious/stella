@@ -5,7 +5,6 @@ module Stella::Test
   
   # Stella::Test::Stats
   class Stats < Stella::Storable
-    field :message => String
 
     field :elapsed_time_avg => Float
     field :transaction_rate_avg => Float

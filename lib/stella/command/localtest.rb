@@ -123,7 +123,7 @@ module Stella
           
           # Rampup tests produce multiple summary files which include the batch
           # number. Regular runs have just one file we set here as the default. 
-          summary_name = "SUMMARY"
+          summary_name = "STATS"
         
           # It's possible for the interval to not divide evenly into the ceiling
           # If we have room between the current number of virtual users and the
@@ -136,7 +136,7 @@ module Stella
               @adapter.vusers += @testdef.rampup.interval
             end
             padded_users = @adapter.vusers.to_s.rjust(4, '0')
-            summary_name = "SUMMARY-#{padded_users}"
+            summary_name << "-#{padded_users}"
           end
         
           # Read the run summaries for this batch and produce totals, averages, 
@@ -156,7 +156,7 @@ module Stella
         # These stats are based on the entire rampup test, across all levels
         # of virtual users.
         @rampup_test_stats = process_test_stats(@all_runpaths)
-        save_summary(File.join(test_path, "SUMMARY-RAMPUP.#{@format}"), @rampup_test_stats)
+        save_summary(File.join(test_path, "STATS.#{@format}"), @rampup_test_stats)
         print_summary(test_stats) if (@testdef.repetitions > 1)
       end
     rescue Interrupt
@@ -169,6 +169,7 @@ module Stella
       return unless @working_directory
       File.join(@working_directory, 'latest') 
     end
+    
     
     private
       
@@ -358,6 +359,7 @@ module Stella
         "#{testpath}#{testnum}"
       end
 
+      
       
   end
 end

@@ -44,7 +44,7 @@ module Stella
         # A warmup factor of 0.5 means run a test run at 50% strength. 
       attr_accessor :warmup
         # Contains an interval and maximum threshold to increase virtual users. 
-        # Rampup object, [R,M] where R is the interval and M is the maximum. 
+        # Rampup object, or Array like [R,M] where R is the interval and M is the maximum. 
       attr_reader :rampup
         # An array of string appropriate for a User-Agent HTTP header
       attr_accessor :agents
