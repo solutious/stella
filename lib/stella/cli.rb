@@ -6,45 +6,6 @@ require 'stella/cli/base'
 
 module Stella
   
-  # Stella::Config
-  #
-  # This Config class manages the content of ENV['HOME]/.stella. The functionality 
-  # is currently disabled so stella is stateless. 
-  # RUBY_PLATFORM = 'java' in jruby and i386-mswin32 for windows
-  class Config < Storable
-    USER_HOME = ENV['USERPROFILE'] || ENV['HOME']
-    STELLA_DIR = '.stella'
-    DEFAULT_HOME = File.join(USER_HOME, STELLA_DIR).freeze unless defined? DEFAULT_HOME
-    DEFAULT_DATA_HOME = File.join(Dir.getwd, 'stella').freeze unless defined? DEFAULT_DATA_HOME
-    
-    attr_accessor :conf_path, :data_path
-    attr_accessor :agents
-    
-    def initialize(args={:conf_path => DEFAULT_HOME})
-      
-    end
-    
-    def working_directory
-      'stella'
-    end
-    
-    # Copy the default useragents file to the config directory. 
-    #unless File.exists? uafile_path
-    #  default_uafile = File.join(STELLA_HOME, 'support', 'useragents.txt')
-    #  STDERR.puts "There's no useragents.txt file. Supplied agents will be ignored" unless File.exists?(default_uafile)
-    #  File.copy(default_uafile, @config.uafile_path, true)
-    #end
-    
-    #def load
-    #    puts self.methods
-    #  loaded_config = Config.undump('yaml', FileUtil.read_file_to_array(@config_filepath))
-    #  current_config = @config.marshal_dump
-    #  current_config.merge! loaded_config if loaded_config.is_a? Hash
-    #
-    #  @config = OpenStruct.new(current_config)
-    #end
-      
-  end
     
   # Stella::CLI
   #
@@ -68,10 +29,9 @@ module Stella
       @arguments = arguments
       @stdin = stdin
       
-      @config = Stella::Config.new
       @options = OpenStruct.new
       @options.verbose = 0
-      @options.data_path = @config.working_directory
+      @options.data_path = 'stella'
       @options.agents = []
       
       @stella_arguments = []
@@ -97,7 +57,7 @@ module Stella
       # and tell it what shortname that was used to call it.
       command = @@commands[@command_name].new(@command_name)
       
-      # Give the command object access to the config and runtime options
+      # Give the command object access to the runtime options and arguments
       command.stella_options = @options
       command.arguments = @command_arguments
       command.working_directory = @options.data_path
@@ -211,9 +171,7 @@ module Stella
             agent_ary = Stella::Util::expand_str(v || 'random')
             @options.agents.push(agent_ary)
           end
-
-          # The following options are considered "repeatable" so they're stored in 
-          # the config file and used as defaults for the next run. 
+ 
           opts.on('-d', '--datapath=S', String, Stella::TEXT.msg(:option_help_datapath, ".#{File::SEPARATOR}stella")) do |v| 
             @options.data_path = v.to_s 
           end
@@ -272,10 +230,6 @@ module Stella
 
           Stella::LOGGER.debug("Commands (#{@command_name}): #{@@commands.keys.join(',')}")
 
-          #Stella::LOGGER.debug("Configs: ")
-          #@config.to_hash.each_pair do |n,v|
-          #  Stella::LOGGER.debug("  #{n}=#{v}")
-          #end
           
           Stella::LOGGER.debug("Options: ")
           @options.marshal_dump.each_pair do |n,v|
