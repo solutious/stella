@@ -34,8 +34,8 @@ describe "Stella::Command::LoadTest" do
   HOST = '127.0.0.1'
   PORT = 3114 + $$ % 1000
   TVUSERS = 10
-  TCOUNT = 140 # This needs to be divisible evenly by TVUSERS
-  TREPS = 7
+  TCOUNT = 20 # This needs to be divisible evenly by TVUSERS
+  TREPS = 2
   TMSG = "This is a build test"
   
   

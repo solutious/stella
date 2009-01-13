@@ -4,8 +4,42 @@ require 'stella/test/base'
 module Stella::Test
   
   # Stella::Test::Stats
-  class Summary < Stella::Storable
-    include Base
+  class Stats < Stella::Storable
+    field :message => String
+
+    field :elapsed_time_avg => Float
+    field :transaction_rate_avg => Float
+    field :vusers_avg => Float
+    field :response_time_avg => Float
+
+    field :elapsed_time_sdev => Float
+    field :transaction_rate_sdev => Float
+    field :vusers_sdev => Float
+    field :response_time_sdev => Float
+
+
+    field :transactions_total => Float
+    field :successful_total => Float
+    field :failed_total => Float
+
+    field :data_transferred_total => Float
+    field :headers_transferred_total => Float
+
+
+    field :elapsed_time_total => Float
+    field :availability => Float
+    field :throughput_avg => Float
+    field :throughput_sdev => Float
+    
+    def availability
+      return 0 if @successful_total == 0
+      begin
+        (@transactions_total / @successful_total).to_f * 100
+      rescue => ex
+        0.0
+      end
+    end
+    
     
     attr_reader :runs
     
@@ -32,14 +66,14 @@ module Stella::Test
       @failed_total = 0
       
       # We keep a list of the values for averaging and std dev
-      elapsed_times = Stats.new
-      transaction_rates = Stats.new
-      vusers_list = Stats.new
-      response_times = Stats.new
-      response_time = Stats.new
-      transaction_rate = Stats.new
-      throughput = Stats.new
-      vusers = Stats.new
+      elapsed_times = ::Stats.new
+      transaction_rates = ::Stats.new
+      vusers_list = ::Stats.new
+      response_times = ::Stats.new
+      response_time = ::Stats.new
+      transaction_rate = ::Stats.new
+      throughput = ::Stats.new
+      vusers = ::Stats.new
       
       # Each run is the summary of a single run (i.e. run01/SUMMARY.csv)
       runs.each do |run|

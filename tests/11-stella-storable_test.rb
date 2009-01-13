@@ -6,14 +6,14 @@ require 'date'
 require 'stella/storable'
 
 class TeaCup < Stella::Storable
-  attr_accessor :owner, :volume, :washed, :last_used
-  def field_names
-    [ :owner, :volume, :washed, :last_used ]
-  end
-  def field_types
-    [ String, Float, TrueClass, Time ]
-  end
+
+  field :owner => String
+  field :volume => Float
+  field :washed => TrueClass
+  field :last_used => Time
+  
 end
+
 
 describe 'Stella::Storable' do
   FILE_PATH = File.join(STELLA_HOME, "test-spec-tmp", "tc")

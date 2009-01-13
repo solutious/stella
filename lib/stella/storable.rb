@@ -6,24 +6,59 @@ require 'utils/fileutil'
 
 module Stella
   class Storable
-    NICE_TIME_FORMAT = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
-      
+    NICE_TIME_FORMAT  = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
     SUPPORTED_FORMATS = %w{tsv csv yaml json}.freeze unless defined? SUPPORTED_FORMATS
     
     attr_accessor :format
+    
+    def init
+      self.class.send(:class_variable_set, :@@field_names, []) unless class_variable_defined?(:@@field_names)
+      self.class.send(:class_variable_set, :@@field_types, []) unless class_variable_defined?(:@@field_types)
+    end
+      
+    def self.field(args={})
+      args.each_pair do |m,t|
+        
+        [[:@@field_names, m], [:@@field_types, t]].each do |tuple|
+          class_variable_set(tuple[0], []) unless class_variable_defined?(tuple[0])
+          class_variable_set(tuple[0], class_variable_get(tuple[0]) << tuple[1])
+        end
+        
+        next if method_defined?(m)
+        
+        # NOTE: I need a way to put these in the caller's namespace... Here's they're shared by all
+        # the subclasses which is not helpful. It will likely involve Kernel#caller and binding. 
+        # Maybe class_eval, wraped around def field. 
+
+        
+        define_method(m) do instance_variable_get("@#{m}") end
+        
+        define_method("#{m}=") do |val| 
+          instance_variable_set("@#{m}",val)
+        end
+      end
+    end
+    
+    def self.field_names
+      class_variable_get(:@@field_names)
+    end
+    def self.field_types
+      class_variable_get(:@@field_types)
+    end
+    
+    def field_names
+      self.class.send(:class_variable_get, :@@field_names)
+    end
+    
+    def field_types
+      self.class.send(:class_variable_get, :@@field_types)
+    end
     
     def format=(v)
       raise "Unsupported format: #{v}" unless SUPPORTED_FORMATS.member?(v)
       @format = v
     end
-    
-    def field_names
-      raise "You need to override field_names (#{self.class})"
-    end
-    
-    def field_types
-      []
-    end
+
     
     def dump(format=nil, with_titles=true)
       format ||= @format
@@ -34,7 +69,7 @@ module Stella
     def self.from_file(file_path=nil, format=nil)
       raise "Cannot read file (#{file_path})" unless File.exists?(file_path)
       format = format || File.extname(file_path).tr('.', '')
-      me = self.send("from_#{format}", FileUtil.read_file_to_array(file_path))
+      me = send("from_#{format}", FileUtil.read_file_to_array(file_path))
       me.format = format
       me
     end
@@ -47,24 +82,26 @@ module Stella
   
 
     def self.from_hash(from={})
-      return if !from || from.empty?
       me = self.new
-      fnames = me.field_names
+    
+      return me if !from || from.empty?
+      
+      fnames = field_names
       fnames.each_with_index do |key,index|
         
         value = from[key]
         
         # TODO: Correct this horrible implementation (sorry, me. It's just one of those days.)
         
-        if me.field_types[index] == Time
+        if field_types[index] == Time
           value = Time.parse(from[key].to_s)
-        elsif me.field_types[index] == DateTime
+        elsif field_types[index] == DateTime
           value = DateTime.parse(from[key].to_s)
-        elsif me.field_types[index] == TrueClass
+        elsif field_types[index] == TrueClass
           value = (from[key].to_s == "true")
-        elsif me.field_types[index] == Float
+        elsif field_types[index] == Float
           value = from[key].to_f
-        elsif me.field_types[index] == Integer
+        elsif field_types[index] == Integer
           value = from[key].to_i
         end
         
@@ -75,7 +112,7 @@ module Stella
     def to_hash(with_titles=true)
       tmp = {}
       field_names.each do |fname|
-        tmp[fname] = self.send(fname.to_s)
+        tmp[fname] = self.send(fname)
       end
       tmp
     end

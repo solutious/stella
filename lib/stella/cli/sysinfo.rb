@@ -6,7 +6,6 @@ module Stella
       
       def run
         puts Stella::SYSINFO
-        #puts "HI"
       end
       
     end

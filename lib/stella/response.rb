@@ -6,8 +6,11 @@ module Stella
   # An object for HTTP response content
   #
   class Response < Storable
-    attr_accessor :errors, :content, :messages
-    attr_writer :success
+    
+    field :errors => Array
+    field :content => Hash
+    field :messages => Array
+    field :success => TrueClass
     
     def initialize
       @success = false

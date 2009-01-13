@@ -325,7 +325,7 @@ module Stella
       # stats:: Any object that extends Stella::Test::Base object
       def save_summary(filepath, stats)
         return unless stats
-        #stats.format(@format)
+        stats.format = @format
         stats.to_file(filepath)
       end
       
@@ -333,8 +333,8 @@ module Stella
       # totals, averages, and standard deviations. 
       def process_test_stats(paths)
         return unless paths && !paths.empty?
-        test_stats = Stella::Test::Summary.new(@message)
-        return unless test_stats
+        test_stats = Stella::Test::Stats.new(@message)
+        
         paths.each do |path|
           next unless File.exists?("#{path}/SUMMARY.#{@format}")
           test_run = Stella::Test::Run::Summary.from_file("#{path}/SUMMARY.#{@format}")

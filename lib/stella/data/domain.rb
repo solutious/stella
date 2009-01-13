@@ -2,9 +2,15 @@
 
 module Stella::Data
   class DomainRequest < Stella::Storable
-    attr_accessor :time, :client_ip, :server_ip, :dns_data, :domain_name, :header
+    attr_accessor :dns_data
     attr_reader :raw_data
- 
+    
+    field :time => DateTime
+    field :client_ip => String
+    field :server_ip => String
+    field :domain_name => String
+    field :header => String
+    
     def initialize(raw_data)
       @raw_data = raw_data
       @dns_data, @domain_name, @header = DomainUtil::parse_domain_request(@raw_data)
@@ -18,10 +24,6 @@ module Stella::Data
     end
     def has_body?
       false
-    end
-    
-    def field_names
-      [ :time, :client_ip, :server_ip, :domain_name, :header ]
     end
     
     def to_s
@@ -39,8 +41,17 @@ module Stella::Data
   end
   
   class DomainResponse < Stella::Storable
-    attr_accessor :time, :client_ip, :server_ip, :dns_data, :domain_name, :header, :addresses, :cnames
+    attr_accessor :dns_data
     attr_reader :raw_data
+    
+    field :time => DateTime
+    field :client_ip => String
+    field :server_ip => String
+    field :domain_name => String
+    field :header => String
+    field :addresses => Array
+    field :cnames => Array
+ 
  
     def initialize(raw_data)
       @raw_data = raw_data
@@ -55,10 +66,6 @@ module Stella::Data
     end
     def has_body?
       false
-    end
-    
-    def field_names
-      [ :time, :client_ip, :server_ip, :dns_data, :domain_name, :header, :addresses, :cnames ]
     end
     
     def to_s

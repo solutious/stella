@@ -50,21 +50,19 @@ module Stella
       [nil,         :unknown          ],
     ]
     
-    attr_reader :os
-    attr_reader :implementation
-    attr_reader :architecture
-    attr_reader :hostname
-    attr_reader :ipaddress
-    attr_reader :uptime
+
+  
+    field :os => String
+    field :implementation => String
+    field :architecture => String
+    field :hostname => String
+    field :ipaddress => String
+    field :uptime => Float
+    
     
     alias :impl :implementation
     alias :arch :architecture
-    
-    def field_names
-      [
-        :os, :implementation, :architecture, :hostname, :ipaddress, :uptime
-      ]
-    end
+
     
     def initialize
       @os, @implementation, @architecture = guess

@@ -4,15 +4,31 @@
 module Stella::Test::Run
 
   class Summary < Stella::Storable
+    attr_accessor :format
     
-    attr_accessor :note
-    attr_accessor :tool, :version
-    attr_accessor :test, :transactions, :headers_transferred
-    attr_accessor :elapsed_time, :data_transferred, :response_time
-    attr_accessor :successful, :failed, :transaction_rate, :vusers, :raw
-    
+    field :availability => Float
+    field :transactions => Integer
+    field :elapsed_time => Float
+    field :data_transferred => Float
+    field :headers_transferred => Float 
+    field :response_time => Float
+    field :transaction_rate => Float
+    field :throughput => Float
+    field :vusers => Integer
+    field :successful => Integer
+    field :failed => Integer
+    field :note => String
+    field :raw => String
+    field :tool => String
+    field :version => String
+
     def initialize(note="")
+      #init
       @note = note
+      reset
+    end
+    
+    def reset
       @transactions = 0
       @headers_transferred = 0
       @elapsed_time = 0
@@ -42,20 +58,7 @@ module Stella::Test::Run
       end
     end
     
-    def field_names
-      [
-        :availability, :transactions, :elapsed_time, :data_transferred,
-        :headers_transferred, :response_time, :transaction_rate, :throughput,
-        :vusers, :successful, :failed, :note
-      ]
-    end
-    def field_types
-      [ 
-        Float, Integer, Float, Float,
-        Float,  Float,  Float, Float, 
-        Integer, Integer, Integer, String
-      ]
-    end
+
     
     def available?
       @successful && @transactions && @elapsed_time && @vusers && @response_time

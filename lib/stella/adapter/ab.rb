@@ -297,8 +297,8 @@ module Stella
         # Transfer rate:          84.90 [Kbytes/sec] received
 
         stats = Stella::Test::Run::Summary.new
-
-        unless raw.empty? || !raw.has_key?(:time_taken_for_tests)
+        
+        if !raw.empty? && raw.has_key?(:time_taken_for_tests)
 
           stats.elapsed_time = raw[:time_taken_for_tests]
 
@@ -317,10 +317,10 @@ module Stella
           stats.failed = raw[:failed_requests].to_i
 
           stats.transactions = stats.successful + stats.failed
-
+          
           #stats.raw = raw  if @global_options.debug
         end
-
+        
         stats
       end
 

@@ -17,10 +17,16 @@ module Stella::Data
   end
   
   class HTTPRequest < Stella::Storable
-    attr_accessor :time, :client_ip, :server_ip, :header, :body, :method, :http_version 
     attr_reader :raw_data
-    attr_writer :uri, :body
-    attr_accessor :response
+    
+    field :time => DateTime
+    field :client_ip => String
+    field :server_ip => String
+    field :header => String
+    field :uri => String
+    field :body => String
+    field :method => String
+    field :http_version => String
     
     def has_body?
       @body && !@body.nil & !@body.empty?
@@ -51,9 +57,7 @@ module Stella::Data
       #(!header || header[:Content_Type] || header[:Content_Type] !~ /text/) ? Base64.encode64(@body) : @body
     end
     
-    def field_names
-      [ :time, :client_ip, :server_ip, :header, :uri, :body, :method, :http_version ]
-    end
+
     
     def inspect
       headers = []
@@ -74,9 +78,16 @@ module Stella::Data
   end
   
   class HTTPResponse < Stella::Storable
-    attr_accessor :time, :client_ip, :server_ip, :header, :status, :message, :http_version
     attr_reader :raw_data
-    attr_writer :body
+    
+    field :time => DateTime
+    field :client_ip => String
+    field :server_ip => String
+    field :header => String
+    field :body => String
+    field :status => String
+    field :message => String
+    field :http_version => String
     
     def initialize(raw_data=nil)
       @raw_data = raw_data
@@ -99,10 +110,6 @@ module Stella::Data
       return nil unless @body
       #Base64.encode64(@body)
       (!header || !header[:Content_Type] || header[:Content_Type] !~ /text/) ? '' : @body
-    end
-    
-    def field_names
-      [ :time, :client_ip, :server_ip, :header, :body, :status, :message, :http_version ]
     end
     
     def inspect
