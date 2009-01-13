@@ -123,7 +123,6 @@ module Stella
 
         update_orig_logfile if @orig_logfile
 
-        save_stats
       end
 
 
@@ -277,7 +276,7 @@ module Stella
       end
 
       # Siege writes the summary to STDERR
-      def stats_file
+      def summary_file
         File.new(stderr_path) if File.exists?(stderr_path)
       end
       
@@ -293,10 +292,10 @@ module Stella
         File.join(@working_directory, File.basename(@file))
       end
           
-      def stats
-        return unless stats_file
+      def summary
+        return unless summary_file
         raw = {}
-        stats_file.each_line { |l|
+        summary_file.each_line { |l|
           l.chomp!
           nvpair = l.split(':')
           next unless nvpair && nvpair.size == 2

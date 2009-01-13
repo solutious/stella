@@ -44,9 +44,9 @@ describe "Stella::Command::LoadTest" do
   end
   
   
-  after(:each) do
+  after(:all) do
 	  # remove_dir does not seem to work on Windows
-    FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
+    #FileUtils.remove_entry(WORKDIR, true) if File.exists? WORKDIR
   end
   
   it "start a local test server" do

@@ -271,7 +271,9 @@ module Stella
             raise AdapterError.new(@adapter.name, @adapter.error) 
           end
           
-          stats = @adapter.stats
+          @adapter.after
+          
+          stats = @adapter.summary
       
           save_summary(@adapter.summary_path(@format), stats)
       

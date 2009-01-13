@@ -10,7 +10,7 @@ module Stella::Adapter
   class Base
     
     
-    attr_accessor :working_directory, :stats
+    attr_accessor :working_directory
     attr_reader :load_factor, :arguments
     
     def initialize(options={}, arguments=[])
@@ -84,6 +84,10 @@ module Stella::Adapter
     
     def command
       raise Stella::TEXT.msg(:error_class_must_override, 'command')
+    end
+    
+    def summary
+      raise Stella::TEXT.msg(:error_class_must_override, 'summary')
     end
     
     def add_header

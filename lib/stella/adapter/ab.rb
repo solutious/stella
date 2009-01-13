@@ -1,5 +1,5 @@
 
-
+require 'fileutils'
 
 module Stella
   module Adapter
@@ -67,14 +67,17 @@ module Stella
         vsn
       end
       
+      def percentiles_file
+        @working_directory + "/ab-percentiles.log" 
+      end
+      
+      def requests_file
+        @working_directory + "/ab-requests.log" 
+      end
+      
       def before
-        
-        @e = @working_directory + "/ab-percentiles.log" 
-        @e = File.expand_path(@e)
-
-        @g = @working_directory + "/ab-requests.log" 
-        @g = File.expand_path(@g)
-
+        @e = percentiles_file if @e.nil?
+        @g = requests_file if @g.nil?
       end
       
       def command
@@ -181,17 +184,20 @@ module Stella
       def after
         # We want to maintain copies of all test output, even when the user has 
         # supplied other path names so we'll copy the files from the testrun directory
-        # to the location specified by the user
-        [[@options.e, 'csv'], [@options.g, 'tsv']].each do |tuple|
-          if File.expand_path(File.dirname(tuple[0])) != File.expand_path(@runpath)
+        # to the location specified by the user.
+        # NOTE: For tests with more than one test run, the specified files will be 
+        # overwritten after each run. Should we force append the run number? 
+        [[@e, 'csv'], [@g, 'tsv']].each do |tuple|
+          puts "TEST: #{File.expand_path(File.dirname(tuple[0]))} :::: #{File.expand_path(@working_directory)}"
+          if File.expand_path(File.dirname(tuple[0])) != File.expand_path(@working_directory)
             from = tuple[0]
-            to = @runpath + "/ab-#{tuple[1]}.log"
+            to = @working_directory + "/ab-#{tuple[1]}.log"
             next unless File.exists?(from)
-            File.copy(from, to)
+            FileUtils.cp(from, to)
           end
         end
 
-        save_stats
+        
       end
 
 
@@ -262,14 +268,14 @@ module Stella
 
       
       # Apache bench writes the summary to STDOUT
-      def stats_file
+      def summary_file
         File.new(stdout_path) if File.exists?(stdout_path)
       end
 
-      def stats
-        return unless stats_file
+      def summary
+        return unless summary_file
         raw = {}
-        stats_file.each_line { |l|
+        summary_file.each_line { |l|
           l.chomp!
           nvpair = l.split(':')
           next unless nvpair && nvpair.size == 2

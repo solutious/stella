@@ -9,7 +9,12 @@ module Stella
     NICE_TIME_FORMAT  = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
     SUPPORTED_FORMATS = %w{tsv csv yaml json}.freeze unless defined? SUPPORTED_FORMATS
     
-    attr_accessor :format
+    attr_reader :format
+    
+    def format=(v)
+      raise "Unsupported format: #{v}" unless SUPPORTED_FORMATS.member?(v)
+      @format = v
+    end
     
     def init
       self.class.send(:class_variable_set, :@@field_names, []) unless class_variable_defined?(:@@field_names)

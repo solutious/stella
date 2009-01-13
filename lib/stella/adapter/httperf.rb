@@ -77,7 +77,6 @@ module Stella
       def after
 
 
-        save_stats
       end
 
       def process_arguments(arguments)
@@ -224,7 +223,7 @@ module Stella
       
 
       # Siege writes the summary to STDERR
-      def stats_file
+      def summary_file
         File.new(stdout_path) if File.exists?(stdout_path)
       end
       
@@ -265,10 +264,10 @@ module Stella
       # Errors: total 0 client-timo 0 socket-timo 0 connrefused 0 connreset 0
       # Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0
       
-      def stats
-        return unless stats_file
+      def summary
+        return unless summary_file
         
-        raw = stats_file.readlines.join
+        raw = summary_file.readlines.join
         stats = Stella::Test::Run::Summary.new
         
         raw.scan(/Request rate: (\d+?\.\d+?) req.s .(\d+?\.\d+?) ms.req./) do |rate,time|
