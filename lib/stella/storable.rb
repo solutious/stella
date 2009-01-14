@@ -22,6 +22,9 @@ module Stella
     end
       
     def self.field(args={})
+      
+        args = {args => nil} unless args.is_a? Hash
+
       args.each_pair do |m,t|
         
         [[:@@field_names, m], [:@@field_types, t]].each do |tuple|

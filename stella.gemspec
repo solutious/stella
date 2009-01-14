@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/solutious/stella"
  
   # = MANIFEST =
-  # find {bin,lib,support,vendor} -type f | grep -v git
+  # find {bin,lib,tests,support,vendor} -type f | grep -v git
   s.files = %w(
   README.textile
   CHANGES.txt
@@ -69,6 +69,13 @@ Gem::Specification.new do |s|
   support/text/en.yaml
   support/text/nl.yaml
   support/useragents.txt
+  tests/01-util_test.rb
+  tests/02-stella-util_test.rb
+  tests/10-stella_test.rb
+  tests/11-stella-storable_test.rb
+  tests/60-stella-command_test.rb
+  tests/80-stella-cli_test.rb
+  tests/spec-helper.rb
   vendor/drydock/bin/example
   vendor/drydock/drydock.gemspec
   vendor/drydock/lib/drydock/exceptions.rb
@@ -98,15 +105,7 @@ Gem::Specification.new do |s|
   vendor/useragent/useragent.gemspec
   )
   
-  s.test_files = %w(
-  tests/01-util_test.rb
-  tests/02-stella-util_test.rb
-  tests/10-stella_test.rb
-  tests/11-stella-storable_test.rb
-  tests/60-stella-command_test.rb
-  tests/80-stella-cli_test.rb
-  tests/spec-helper.rb
-  )
+  s.test_files = s.files.select {|path| path =~ /^tests\/.*_test.rb/}
 
   s.extra_rdoc_files = %w[README.textile CHANGES.txt LICENSE.txt]
 	s.add_dependency 'net-dns'
@@ -117,7 +116,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.textile"]
   s.bindir = "bin"
   s.executables = [ "stella", "stella.bat" ]
-  s.require_paths = %w[lib]
+  s.require_paths = %w[lib vendor]
   s.rubyforge_project = 'stella'
   s.rubygems_version = '1.1.1'
   

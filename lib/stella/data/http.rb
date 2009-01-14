@@ -20,13 +20,13 @@ module Stella::Data
     attr_reader :raw_data
     
     field :time => DateTime
-    field :client_ip => String
-    field :server_ip => String
-    field :header => String
-    field :uri => String
-    field :body => String
-    field :method => String
-    field :http_version => String
+    field :client_ip 
+    field :server_ip 
+    field :header 
+    field :uri
+    field :body 
+    field :http_method
+    field :http_version
     
     def has_body?
       @body && !@body.nil & !@body.empty?
@@ -64,14 +64,14 @@ module Stella::Data
       header.each_pair do |n,v|
         headers << "#{n.to_s.gsub('_', '-')}: #{v[0]}"
       end
-      str = "%s %s HTTP/%s" % [method, uri.to_s, http_version]
+      str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
       str << $/ + headers.join($/)
       str << $/ + $/ + body if body
       str
     end
     
     def to_s
-      str = "%s: %s %s HTTP/%s" % [time.strftime(NICE_TIME_FORMAT), method, uri.to_s, http_version]
+      str = "%s: %s %s HTTP/%s" % [time.strftime(NICE_TIME_FORMAT), http_method, uri.to_s, http_version]
       str
     end
     
@@ -97,7 +97,7 @@ module Stella::Data
     end
     
     def has_body?
-      @body && !@body.nil & !@body.empty?
+      @body && !@body.nil? & !@body.empty?
     end
     def has_request?
       false
