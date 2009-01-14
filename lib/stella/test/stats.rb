@@ -1,5 +1,4 @@
 
-require 'stella/test/base'
 
 module Stella::Test
   

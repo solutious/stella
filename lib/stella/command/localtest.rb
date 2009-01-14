@@ -50,16 +50,7 @@ module Stella
       @available_agents = Stella::Util.process_useragents(ua_path)
     end
     
-
-    def translate_requested_agents(possible_agents=[])
-      agents = []
-      return agents if !possible_agents || possible_agents.empty?
-      
-      possible_agents.each do |a|
-        agents << Stella::Util.find_agent(*a)
-      end
-      agents
-    end
+    
     
     def run
       
@@ -72,7 +63,7 @@ module Stella
         return
       end
             
-      @agents = translate_requested_agents(@testdef.agents)
+      @agents = Stella::Util.find_agents(@available_agents, @testdef.agents)
       
       @test_path = _generate_test_path
       
@@ -296,6 +287,7 @@ module Stella
       # INPUT:
       # stats:: Any object that extends Stella::Test::Base object
       def print_summary(stats)
+        return if stats.nil?
         Stella::LOGGER.info(' ' << "-"*67) unless @quiet
 
         Stella::LOGGER.info_printf("%8s: %10d@%-6d %3.0f%% %9.2f/s ", "Total", stats.transactions_total || 0, stats.vusers_avg || 0, stats.availability || 0, stats.transaction_rate_avg || 0)

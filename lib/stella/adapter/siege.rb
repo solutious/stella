@@ -159,7 +159,7 @@ module Stella
         opts.parse!(arguments)
 
         unless @benchmark
-          Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think-time" for all requests.') 
+          Stella::LOGGER.warn('--benchmark (or -b) is not selected. Siege will include "think time" for all requests.') 
         end
                 
         self.arguments = arguments

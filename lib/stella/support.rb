@@ -131,6 +131,17 @@ module Stella
       agents_index
     end
     
+    def self.find_agents(agent_list, possible_agents=[])
+      return [] if agent_list.nil? || agent_list.empty?
+      return [] if possible_agents.nil? || possible_agents.empty?
+      
+      agents = []
+      possible_agents.each do |a|
+        agents << Stella::Util.find_agent(agent_list, *a)
+      end
+      
+      agents
+    end
     
     # find_agent
     #
@@ -144,6 +155,7 @@ module Stella
     # If browser doesn't match a known browser, it assumes the string is a 
     # complete user agent and simply returns that value. 
     def self.find_agent(agent_list, name,second=nil,third=nil)
+      return '' if agent_list.nil? || agent_list.empty?
       name = (BrowserNicks.has_key?(name.to_s.to_sym)) ? BrowserNicks[name.to_s.to_sym] : name
       return name unless agent_list.has_key?(name) || name == "random"
 
