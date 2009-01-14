@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/solutious/stella"
  
   # = MANIFEST =
-  # find {bin,lib,tests,support,vendor} -type f | grep -v git
+  # find {bin,lib,support,vendor} -type f | grep -v git
   s.files = %w(
   README.textile
   CHANGES.txt
