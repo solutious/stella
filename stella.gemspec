@@ -117,7 +117,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.textile"]
   s.bindir = "bin"
   s.executables = [ "stella", "stella.bat" ]
-  s.require_paths = %w[lib vendor]
+  s.require_paths = %w[lib]
   s.rubyforge_project = 'stella'
   s.rubygems_version = '1.1.1'
   
