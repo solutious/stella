@@ -1,3 +1,10 @@
+STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__)))
+$: << File.join(STELLA_HOME, 'lib')
+
+require 'stella'
+version = Stella::VERSION.to_s
+name = "stella"
+
 Gem::Specification.new do |s|
 	s.name = name
 	s.version = version

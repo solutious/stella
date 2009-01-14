@@ -24,7 +24,6 @@ $: << File.join(STELLA_HOME, 'lib')
 
 require 'stella'
 version = Stella::VERSION.to_s
-
 name = "stella"
 
 spec = Gem::Specification.new do |s|
