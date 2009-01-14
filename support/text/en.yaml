@@ -32,21 +32,21 @@
     
     Examples:
      
-      # Run Apache Bench with 50 users, 20 requests each. Repeat 5 times. 
-      $ stella -x 5 -w 0.5 ab -n 1000 -c 50 http://stellaaahhhh.com/
+      # Run Apache Bench with 5 users, 20 requests each. Repeat 5 times. 
+      $ stella -x 5 -w 0.5 ab -n 100 -c 5 http://stellaaahhhh.com/
   
-      # Run Siege with 100 users, 10 requests each with a Linux FireFox 3 user agent
-      $ stella --rampup=25,200 --agent=firefox-3-linux siege -c 100 -r 10 http://stellaaahhhh.com/
+      # Run Siege with 10 users ramping up to 25, 1 requests each with a Linux FireFox 3 user agent
+      $ stella --rampup=5,25 --agent=firefox-3-linux siege -c 10 -r 1 http://stellaaahhhh.com/
       
       # Display available user agent strings
       $ stella agents -l
     
       # Launch a proxy to monitor HTTP traffic. Record requests to a flatfile.
-      $ stella -vv watch -W -p 3114 -r uri.txt
+      $ stella -vv watch -P -p 3114 -r uri.txt
       
       # Monitor network traffic with packet sniffer (requires unix and root access)
-      $ stella watch -P dns 
-      $ stella watch -P -p 9000 http
+      $ stella watch -C dns 
+      $ stella watch -C -p 3456 http
         
         
     User-Agent Examples (--agent): 

@@ -1,6 +1,6 @@
 h1. Stella - Your Performance Testing Friend
 
-Release: 0.5.4-alpha (2009-01-07)
+Release: 0.5.5 (2009-01-14)
 
 This is a BETA release. Proceed in double verify mode!
 
@@ -21,9 +21,10 @@ h2. Prerequisites
 ** Ruby-Pcap (optional, for packet sniffing)
 
 * One of:
-** "Apache Bench":http://httpd.apache.org/docs/2.0/programs/ab.html
+** "Apache Bench":http://httpd.apache.org/docs/2.2/programs/ab.html
 ** "Siege":http://www.joedog.org/index/siege-home
 ** "Httperf":http://www.hpl.hp.com/research/linux/httperf/
+*** _Note: Argument handling for Httperf is incomplete_
 
 
 h2. Installation
