@@ -2,31 +2,37 @@ STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__)))
 $: << File.join(STELLA_HOME, 'lib')
 
 require 'stella'
-version = Stella::VERSION.to_s
-name = "stella"
+
 
 Gem::Specification.new do |s|
-	s.name = name
-	s.version = version
-	s.summary = "Your friend in performance testing."
-	s.description = "Run Apache Bench, Siege, or httperf tests in batches and aggregate results."
-	s.author = "Delano Mandelbaum"
-	s.email = "delano@solutious.com"
-	s.homepage = "http://stella.solutious.com/"
-	s.executables = [ "stella", "stella.bat" ]
-	s.rubyforge_project = "stella"
-  s.extra_rdoc_files  = ['README.textile']
+  s.specification_version = 2 if s.respond_to? :specification_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+ 
+  s.name = 'stella'
+  s.version = Stella::VERSION.to_s
+  s.date = '2009-01-14'
+ 
+  s.description = "Your friend in performance testing."
+  s.summary = "Run Apache Bench, Siege, or httperf tests in batches and aggregate results."
+  s.authors = ["Delano Mandelbaum"]
+  s.homepage = "http://github.com/solutious/stella"
+ 
+  # = MANIFEST =
+  s.files = %w(Rakefile) + Dir.glob("{bin,doc,lib,test,support,vendor}/**/**/*")
   
-  # NOTE: how to make optional dependencies?
-	s.add_dependency 'rspec'
+  s.test_files = s.files.select {|path| path =~ /^test\/.*_test.rb/}
+
+  s.extra_rdoc_files = %w[README.textile LICENSE]
 	s.add_dependency 'net-dns'
 	s.add_dependency 'mongrel'
-
-	s.platform = Gem::Platform::RUBY
-	s.has_rdoc = true
 	
-	s.files = %w(Rakefile) + Dir.glob("{bin,doc,lib,test,support,vendor}/**/**/*")
-	
-	s.require_path = "lib"
-	s.bindir = "bin"
+  s.has_rdoc = true
+  
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.textile"]
+  s.bindir = "bin"
+  s.executables = [ "stella", "stella.bat" ]
+  s.require_paths = %w[lib vendor]
+  s.rubyforge_project = 'stella'
+  s.rubygems_version = '1.1.1'
+  
 end
