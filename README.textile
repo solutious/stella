@@ -64,14 +64,14 @@ On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime: "pcap.bund
 
 h2. Usage Examples
 
-  Run Apache Bench with a warmup and rampup from 100 to 300 virtual users in increments of 25
-  $ stella --warmup=0.5 --rampup=25,300 ab -c 100 -n 10000 http://stellaaahhhh.com/search?term=trooper
+  Run Apache Bench with a warmup and rampup from 10 to 20 virtual users in increments of 5
+  $ stella --warmup=0.5 --rampup=5,20 ab -c 10 -n 50 http://stellaaahhhh.com/search?term=trooper
     
   Run Siege, repeat the test 5 times. Automatically creates a summary averages and standard deviations. 
-  $ stella --agent=ff-3-osx --testruns=5  siege -c 100 -r 100 -b http://stellaaahhhh.com/search?term=flock+of+seagulls
+  $ stella --agent=ff-3-osx --testruns=5  siege -c 10 -r 5 -b http://stellaaahhhh.com/search?term=flock+of+seagulls
     
   Run Httperf like you normally would (but all the test data will be collected for you)
-  $ stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=3000 --timeout=5
+  $ stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --rate=50  --num-conns=100 --timeout=5
 
   Monitor DNS traffic using Pcap
   $ stella watch -C dns
@@ -86,7 +86,7 @@ h2. Usage Examples
 h3. Sample Output
 
 <pre><code>
-  $ stella -f csv -x 5 -w 0.75 -r 25,125 -m "httpd 2.2.9-prefork" siege -c 75 -r 10 -b http://stella:5600/
+  $ stella -f csv -x 5 -w 0.75 -r 25,125 -m "httpd 2.2.9-prefork" siege -c 75 -r 10 -b http://testapp:5600/
 	Writing test data to: stella/testruns/2008-12-23/test-054
 
 	  Warmup:       3750@37/1   100%    264.29/s    0.140s    0.024MB/s    0.340MB   14.000s .
@@ -142,10 +142,9 @@ h2. Known Issues
 
 * The output for the REQ@VU/s columns is a work in progress. It's not aligned across tools and it will likely change in the next release. 
 * The summary data has not been audited. Don't trust and double verify!
-* httperf is functional but needs a lot more testing (most dev was done with ab and siege).
+* httperf is functional but not all parameters are supported. 
 * The Ruby API has not been finalized. It's functional but there's no example because it is subject to change. 
-* There are no specs. 
-* There is an issue with parsing ipv6 ip addresses with Ruby-Pcap or Net-DNS. This affects only dns sniffing with pcap. Reproduce by running "stella watch -P dns" and requesting "apple.com"
+* There is an issue with parsing ipv6 ip addresses with Ruby-Pcap or Net-DNS. This affects only dns sniffing with pcap. Reproduce by running "stella watch -C dns" and requesting "apple.com"
 
 
 h2. Report an issue

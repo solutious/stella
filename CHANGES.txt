@@ -13,6 +13,7 @@ http://github.com/solutious/stella/tree/0.5.5
 * Test::Stats, Test::Run::Summary cleanup
 * Fixed RubyGems require error
 * Fixed stddev bug by removing weak math, adding stats class from Mongrel
+* Fixed --agent error
 
 
 #### 0.5.4-alpha (2009-01-07) #########################
