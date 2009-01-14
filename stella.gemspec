@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.description = "Your friend in performance testing."
   s.summary = "Run Apache Bench, Siege, or httperf tests in batches and aggregate results."
   s.authors = ["Delano Mandelbaum"]
+  s.email = ["delano@solutious.com"]
   s.homepage = "http://github.com/solutious/stella"
  
   # = MANIFEST =
@@ -17,7 +18,7 @@ Gem::Specification.new do |s|
   s.files = %w(
   README.textile
   CHANGES.txt
-  LICENCE.txt
+  LICENSE.txt
   Rakefile
   bin/stella
   bin/stella.bat
@@ -62,13 +63,6 @@ Gem::Specification.new do |s|
   lib/utils/timerutil.rb
   lib/win32/Console/ANSI.rb
   lib/win32/Console.rb
-  tests/01-util_test.rb
-  tests/02-stella-util_test.rb
-  tests/10-stella_test.rb
-  tests/11-stella-storable_test.rb
-  tests/60-stella-command_test.rb
-  tests/80-stella-cli_test.rb
-  tests/spec-helper.rb
   support/kvm.h
   support/ruby-pcap-takuma-notes.txt
   support/ruby-pcap-takuma-patch.txt
@@ -102,12 +96,19 @@ Gem::Specification.new do |s|
   vendor/useragent/spec/spec_helper.rb
   vendor/useragent/spec/user_agent_spec.rb
   vendor/useragent/useragent.gemspec
-  
   )
   
-  s.test_files = s.files.select {|path| path =~ /^test\/.*_test.rb/}
+  s.test_files = %w(
+  tests/01-util_test.rb
+  tests/02-stella-util_test.rb
+  tests/10-stella_test.rb
+  tests/11-stella-storable_test.rb
+  tests/60-stella-command_test.rb
+  tests/80-stella-cli_test.rb
+  tests/spec-helper.rb
+  )
 
-  s.extra_rdoc_files = %w[README.textile LICENSE]
+  s.extra_rdoc_files = %w[README.textile CHANGES.txt LICENSE.txt]
 	s.add_dependency 'net-dns'
 	s.add_dependency 'mongrel'
 	
