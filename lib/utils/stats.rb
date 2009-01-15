@@ -4,6 +4,9 @@
 # Additional work donated by contributors.  See http://mongrel.rubyforge.org/attributions.html 
 # for more information.
 
+# Stolen from:
+# http://mongrel.rubyforge.org/browser/trunk/lib/mongrel/stats.rb
+#
 # A very simple little class for doing some basic fast statistics sampling.
 # You feed it either samples of numeric data you want measured or you call
 # Stats.tick to get it to add a time delta between the last time you called it.
@@ -12,7 +15,6 @@
 #
 # It does all of this very fast and doesn't take up any memory since the samples
 # are not stored but instead all the values are calculated on the fly.
-
 class Stats
   attr_reader :sum, :sumsq, :n, :min, :max
 

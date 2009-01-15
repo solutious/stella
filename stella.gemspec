@@ -87,7 +87,7 @@ Gem::Specification.new do |s|
 	
   s.has_rdoc = true
   
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.rdoc"]
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella: Your friend in performance testing", "--main", "README.rdoc"]
   s.bindir = "bin"
   s.executables = [ "stella", "stella.bat" ]
   s.require_paths = %w[lib]

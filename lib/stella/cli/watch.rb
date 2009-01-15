@@ -1,7 +1,9 @@
 
+#--
 # TODO: Record cookies. 
 # TODO: Investigate packetfu: http://code.google.com/p/packetfu/
 # TODO: Investigate Winpcap (http://www.winpcap.org/) and libpcap on Windows 
+#++
 
 module Stella 
   class CLI

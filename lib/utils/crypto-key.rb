@@ -1,40 +1,40 @@
-# based on: http://blog.leetsoft.com/2006/03/14/simple-encryption
-
 
 require 'base64'  # Added, to fix called to Base64
 
-# IF NOT JRUBY
-require 'openssl'
-# ELSE
-#module JRuby
-#   module OpenSSL
-#     GEM_ONLY = false unless defined?(GEM_ONLY)
-#   end
-# end
-#
-# if JRuby::OpenSSL::GEM_ONLY
-#   require 'jruby/openssl/gem'
-# else
-#   module OpenSSL
-#     class OpenSSLError < StandardError; end
-#     # These require the gem
-#     %w[
-#     ASN1
-#     BN
-#     Cipher
-#     Config
-#     Netscape
-#     PKCS7
-#     PKey
-#     Random
-#     SSL
-#     X509
-#     ].each {|c| autoload c, "jruby/openssl/gem"}
-#   end
-#   require "jruby/openssl/builtin"
-# end
-#end
- 
+if RUBY_PLATFORM !~ /java/
+  require 'openssl'
+else
+  module JRuby #:nodoc:
+     module OpenSSL #:nodoc:
+       GEM_ONLY = false unless defined?(GEM_ONLY)
+     end
+   end
+
+   if JRuby::OpenSSL::GEM_ONLY
+     require 'jruby/openssl/gem'
+   else
+     module OpenSSL #:nodoc:all
+       class OpenSSLError < StandardError; end
+       # These require the gem
+       %w[
+       ASN1
+       BN
+       Cipher
+       Config
+       Netscape
+       PKCS7
+       PKey
+       Random
+       SSL
+       X509
+       ].each {|c| autoload c, "jruby/openssl/gem"}
+     end
+     require "jruby/openssl/builtin"
+   end
+  end
+end
+
+# A small collection of helper methods for dealing with RSA keys. 
 module Crypto
   VERSION = 1.0
   
@@ -51,31 +51,36 @@ module Crypto
     Base64.encode64(self.sign(secret, string)).strip
   end
   
+  # A class which represents an RSA or DSA key. 
   class Key
     attr_reader :data, :key
     
+    # Create an instance of Crypto::Key with the provided rsa or dsa 
+    # public or private key data. 
     def initialize(data)
       @data = data 
       @public = (data =~ /^-----BEGIN (RSA|DSA) PRIVATE KEY-----$/).nil?
       @key = OpenSSL::PKey::RSA.new(@data)
     end  
     
-    
+    # Create an instance of Crypto::Key using a key file. 
+    #   key = Crypto::Key.from_file('path/2/id_rsa')
     def self.from_file(filename)    
       self.new File.read( filename )
     end
-  
+    
+    # Encrypt and base64 encode the given text.
     def encrypt(text)
       Base64.encode64(@key.send("#{type}_encrypt", text))
     end
     
+    # Decrypt the given base64 encoded text. 
     def decrypt(text)
       @key.send("#{type}_decrypt", Base64.decode64(text))
     end
   
-    def private?()  !@public; end # Added () and ;
-  
-    def public?()   @public;  end # Added () and ;
+    def private?();  !@public; end
+    def public?();  @public;  end 
     
     def type
       @public ? :public : :private

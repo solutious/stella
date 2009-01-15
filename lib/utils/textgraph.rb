@@ -41,7 +41,7 @@
 #  
 # Author: Martin DeMello <martindeme...@gmail.com>
 
-module Enumerable
+module Enumerable #:nodoc: all
   def minmax
     min = 1.0/0
     max = -1.0/0
@@ -59,7 +59,7 @@ module Enumerable
   end
 end
 
-class TextGraph
+class TextGraph #:nodoc: all
   include Math
 
   def initialize(data, params = {})

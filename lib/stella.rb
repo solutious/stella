@@ -1,4 +1,6 @@
-
+#--
+# http://rdoc.sourceforge.net/doc/files/README.html
+# ++
 
 require 'date'
 require 'time'

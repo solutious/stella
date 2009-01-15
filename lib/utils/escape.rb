@@ -31,7 +31,7 @@
 module EscapeUtil
   module_function
 
-  class StringWrapper
+  class StringWrapper #:nodoc:all
     class << self
       alias new_no_dup new
       def new(str)
@@ -61,7 +61,7 @@ module EscapeUtil
     end
   end
 
-  class ShellEscaped < StringWrapper
+  class ShellEscaped < StringWrapper  #:nodoc:all
   end
 
   # Escape.shell_command composes
@@ -116,7 +116,7 @@ module EscapeUtil
     end
   end
 
-  class PercentEncoded < StringWrapper
+  class PercentEncoded < StringWrapper #:nodoc:all
   end
 
   # Escape.uri_segment escapes URI segment using percent-encoding.
@@ -240,7 +240,7 @@ module EscapeUtil
     PercentEncoded.new_no_dup(r)
   end
 
-  class HTMLEscaped < StringWrapper
+  class HTMLEscaped < StringWrapper #:nodoc:all
   end
 
   # :stopdoc:
@@ -278,7 +278,7 @@ module EscapeUtil
   }
   # :startdoc:
 
-  class HTMLAttrValue < StringWrapper
+  class HTMLAttrValue < StringWrapper #:nodoc:all
   end
 
   # Escape.html_attr_value encodes a string as a double-quoted HTML attribute using character references.

@@ -1,16 +1,25 @@
-
+#--
 # TODO: Handle nested hashes and arrays. 
+#++
 
 require 'yaml'
 require 'utils/fileutil'
 
 module Stella
+
+  # Storable makes data available in multiple formats and can
+  # re-create objects from files. Fields are defined using the 
+  # Storable.field method which tells Storable the order and 
+  # name.
   class Storable
     NICE_TIME_FORMAT  = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
     SUPPORTED_FORMATS = %w{tsv csv yaml json}.freeze unless defined? SUPPORTED_FORMATS
     
+    # This value will be used as a default unless provided on-the-fly.
+    # See SUPPORTED_FORMATS for available values.
     attr_reader :format
     
+    # See SUPPORTED_FORMATS for available values
     def format=(v)
       raise "Unsupported format: #{v}" unless SUPPORTED_FORMATS.member?(v)
       @format = v
@@ -20,7 +29,16 @@ module Stella
       self.class.send(:class_variable_set, :@@field_names, []) unless class_variable_defined?(:@@field_names)
       self.class.send(:class_variable_set, :@@field_types, []) unless class_variable_defined?(:@@field_types)
     end
-      
+    
+    # Accepts field definitions in the one of the follow formats:
+    #
+    #     field :product
+    #     field :product => Integer
+    #
+    # The order they're defined determines the order the will be output. The fields
+    # data is available by the standard accessors, class.product and class.product= etc...
+    # The value of the field will be cast to the type (if provided) when read from a file. 
+    # The value is not touched when the type is not provided. 
     def self.field(args={})
       
         args = {args => nil} unless args.is_a? Hash
@@ -34,46 +52,39 @@ module Stella
         
         next if method_defined?(m)
         
-        # NOTE: I need a way to put these in the caller's namespace... Here's they're shared by all
-        # the subclasses which is not helpful. It will likely involve Kernel#caller and binding. 
-        # Maybe class_eval, wraped around def field. 
-
-        
         define_method(m) do instance_variable_get("@#{m}") end
-        
         define_method("#{m}=") do |val| 
           instance_variable_set("@#{m}",val)
         end
       end
     end
     
+    # Returns an array of field names defined by self.field
     def self.field_names
       class_variable_get(:@@field_names)
     end
-    def self.field_types
-      class_variable_get(:@@field_types)
-    end
-    
+    # Ditto.
     def field_names
       self.class.send(:class_variable_get, :@@field_names)
     end
-    
+    # Returns an array of field types defined by self.field. Fields that did 
+    # not receive a type are set to nil. 
+    def self.field_types
+      class_variable_get(:@@field_types)
+    end
+    # Ditto.
     def field_types
       self.class.send(:class_variable_get, :@@field_types)
     end
-    
-    def format=(v)
-      raise "Unsupported format: #{v}" unless SUPPORTED_FORMATS.member?(v)
-      @format = v
-    end
-
-    
+  
+    # Dump the object data to the given format. 
     def dump(format=nil, with_titles=true)
       format ||= @format
       raise "Format not defined (#{format})" unless SUPPORTED_FORMATS.member?(format)
       send("to_#{format}", with_titles) 
     end
     
+    # Create a new instance of the object using data from file. 
     def self.from_file(file_path=nil, format=nil)
       raise "Cannot read file (#{file_path})" unless File.exists?(file_path)
       format = format || File.extname(file_path).tr('.', '')
@@ -81,6 +92,7 @@ module Stella
       me.format = format
       me
     end
+    # Write the object data to the given file. 
     def to_file(file_path=nil, with_titles=true)
       raise "Cannot store to nil path" if file_path.nil?
       format = File.extname(file_path).tr('.', '')
@@ -88,7 +100,7 @@ module Stella
       FileUtil.write_file(file_path, dump(format, with_titles))
     end
   
-
+    # Create a new instance of the object from a hash.
     def self.from_hash(from={})
       me = self.new
     
@@ -117,6 +129,8 @@ module Stella
       end
       me
     end
+    # Return the object data as a hash
+    # +with_titles+ is ignored. 
     def to_hash(with_titles=true)
       tmp = {}
       field_names.each do |fname|
@@ -125,7 +139,8 @@ module Stella
       tmp
     end
     
-
+    # Create a new instance of the object from YAML. 
+    # +from+ a YAML string split into an array by line. 
     def self.from_yaml(from=[])
       # from is an array of strings
       from_str = from.join('')
@@ -137,7 +152,8 @@ module Stella
       to_hash.to_yaml
     end
     
-
+    # Create a new instance of the object from a JSON string. 
+    # +from+ a JSON string split into an array by line.
     def self.from_json(from=[])
       require 'json'
       # from is an array of strings
@@ -155,6 +171,9 @@ module Stella
       to_hash.to_json
     end
     
+    # Return the object data as a delimited string. 
+    # +with_titles+ specifiy whether to include field names (default: false)
+    # +delim+ is the field delimiter.
     def to_delimited(with_titles=false, delim=',')
       values = []
       field_names.each do |fname|
@@ -164,19 +183,30 @@ module Stella
       output = field_names.join(delim) << $/ << output if with_titles
       output
     end
+    # Return the object data as a tab delimited string. 
+    # +with_titles+ specifiy whether to include field names (default: false)
     def to_tsv(with_titles=false)
       to_delimited(with_titles, "\t")
     end
+    # Return the object data as a comma delimited string. 
+    # +with_titles+ specifiy whether to include field names (default: false)
     def to_csv(with_titles=false)
       to_delimited(with_titles, ',')
     end
+    # Create a new instance from tab-delimited data.  
+    # +from+ a JSON string split into an array by line.
     def self.from_tsv(from=[])
       self.from_delimited(from, "\t")
     end
+    # Create a new instance of the object from comma-delimited data.
+    # +from+ a JSON string split into an array by line.
     def self.from_csv(from=[])
       self.from_delimited(from, ',')
     end
     
+    # Create a new instance of the object from a delimited string.
+    # +from+ a JSON string split into an array by line.
+    # +delim+ is the field delimiter.
     def self.from_delimited(from=[],delim=',')
       return if from.empty?
       # We grab an instance of the class so we can 
