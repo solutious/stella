@@ -1,15 +1,15 @@
-h1. Stella - Your Performance Testing Friend
+= Stella - Your Performance Testing Friend
 
 Release: 0.5.5 (2009-01-14)
 
 This is a BETA release. Proceed in double verify mode!
 
-h2. Overview
+== Overview
 
 Stella is a command-line tool for running, reporting, and analyzing performance tests.
 
 
-h2. Prerequisites
+== Prerequisites
 
 * Linux, BSD, Solaris
 * Ruby 1.8.x, 1.9.x, or JRuby 1.1
@@ -27,7 +27,7 @@ h2. Prerequisites
 *** _Note: Argument handling for Httperf is incomplete_
 
 
-h2. Installation
+== Installation
 
 Get it in one of the following ways:
 
@@ -39,7 +39,7 @@ Get it in one of the following ways:
  
 Use ab, siege, and httperf like you normally would with the addition of stella at the beginning (examples are below).
 
-h3. Debian (and derivatives)
+=== Debian (and derivatives)
 
 Debian and its derivative (Ubunutu) handling packing a bit differently (see: http://pkg-ruby-extras.alioth.debian.org/rubygems.html). There are a couple errors to watch out for during the installation. The solutions are below:
 
@@ -50,7 +50,7 @@ Debian and its derivative (Ubunutu) handling packing a bit differently (see: htt
 	$ apt-get install rdoc
 
 
-h3. Installing libpcap and Ruby-Pcap
+=== Installing libpcap and Ruby-Pcap
 
 *Stella currently supports packet filtering with Native Ruby (no JRuby) on Linux/Unix/OS X only.* 
 *Ruby-Pcap does not compile with Ruby 1.9.1-RC1*
@@ -62,7 +62,7 @@ libpcap and Ruby-Pcap are used to by Stella's watch command to filter packets of
 On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime: "pcap.bundle: warning: do not use Fixnums as Symbols". See: support/ruby-pcap-takuma-notes.txt. 
   
 
-h2. Usage Examples
+== Usage Examples
 
   Run Apache Bench with a warmup and rampup from 10 to 20 virtual users in increments of 5
   $ stella --warmup=0.5 --rampup=5,20 ab -c 10 -n 50 http://stellaaahhhh.com/search?term=trooper
@@ -83,7 +83,7 @@ h2. Usage Examples
   $ stella watch -P
 
 
-h3. Sample Output
+=== Sample Output
 
 <pre><code>
   $ stella -f csv -x 5 -w 0.75 -r 25,125 -m "httpd 2.2.9-prefork" siege -c 75 -r 10 -b http://testapp:5600/
@@ -138,7 +138,7 @@ Each run directory contains all associated data, including the command and confi
     COMMAND.txt    STDOUT.txt    siege.log    STDERR.txt    SUMMARY.csv    siegerc
     
   
-h2. Known Issues
+== Known Issues
 
 * The output for the REQ@VU/s columns is a work in progress. It's not aligned across tools and it will likely change in the next release. 
 * The summary data has not been audited. Don't trust and double verify!
@@ -147,16 +147,16 @@ h2. Known Issues
 * There is an issue with parsing ipv6 ip addresses with Ruby-Pcap or Net-DNS. This affects only dns sniffing with pcap. Reproduce by running "stella watch -C dns" and requesting "apple.com"
 
 
-h2. Report an issue
+== Report an issue
 
 Email issues and bugs to stella@solutious.com
 
 
-h2. More Information
+== More Information
 
 "Stellaaahhhh":http://www.youtube.com/watch?v=wmq-JDonTpc
 
 
-h2. License
+== License
 
 See LICENSE.txt

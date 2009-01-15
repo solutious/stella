@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'rake/clean'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'hanna/rdoctask'
 require 'fileutils'
 include FileUtils
  
@@ -36,7 +36,7 @@ spec = Gem::Specification.new do |s|
 	s.homepage = "http://stella.solutious.com/"
 	s.executables = [ "stella", "stella.bat" ]
 	s.rubyforge_project = "stella"
-  s.extra_rdoc_files  = ['README.textile']
+  s.extra_rdoc_files  = ['README.rdoc']
   
   # NOTE: how to make optional dependencies?
 	s.add_dependency 'mongrel'
@@ -74,11 +74,10 @@ Rake::RDocTask.new do |t|
 	t.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
 	t.options << '--charset' << 'utf-8'
 	t.rdoc_files.include('LICENSE.txt')
-	t.rdoc_files.include('README.textile')
+	t.rdoc_files.include('README.rdoc')
 	t.rdoc_files.include('CHANGES.txt')
 	t.rdoc_files.include('lib/utils/*.rb')
 	t.rdoc_files.include('lib/stella.rb')
-	t.rdoc_files.include('lib/stella/*.rb')
 	t.rdoc_files.include('lib/stella/**/*.rb')
 end
 

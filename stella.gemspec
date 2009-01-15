@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   # find {bin,lib,tests,support,vendor} -type f | grep -v git
   s.files = %w(
-  README.textile
+  README.rdoc
   CHANGES.txt
   LICENSE.txt
   Rakefile
@@ -79,7 +79,7 @@ Gem::Specification.new do |s|
   
   s.test_files = s.files.select {|path| path =~ /^tests\/.*_test.rb/}
 
-  s.extra_rdoc_files = %w[README.textile CHANGES.txt LICENSE.txt]
+  s.extra_rdoc_files = %w[README.rdoc CHANGES.txt LICENSE.txt]
 	s.add_dependency 'net-dns'
 	s.add_dependency 'mongrel'
 	s.add_dependency 'delano-useragent'
@@ -87,10 +87,10 @@ Gem::Specification.new do |s|
 	
   s.has_rdoc = true
   
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.textile"]
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Stella", "--main", "README.rdoc"]
   s.bindir = "bin"
   s.executables = [ "stella", "stella.bat" ]
-  s.require_paths = %w[lib vendor]
+  s.require_paths = %w[lib]
   s.rubyforge_project = 'stella'
   s.rubygems_version = '1.1.1'
   
