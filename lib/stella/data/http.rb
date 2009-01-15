@@ -41,7 +41,7 @@ module Stella::Data
     def initialize(raw_data=nil)
       @raw_data = raw_data
       if @raw_data
-        @method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw_data) 
+        @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw_data) 
       end
       @response = Stella::Data::HTTPResponse.new
     end
