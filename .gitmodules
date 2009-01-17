@@ -1,6 +1,0 @@
-[submodule "vendor/useragent"]
-	path = vendor/useragent
-	url = git://github.com/delano/useragent.git
-[submodule "vendor/drydock"]
-	path = vendor/drydock
-	url = git://github.com/delano/drydock.git
