@@ -10,23 +10,27 @@
 	<style type="text/css">
 		body {
   		margin-top: 1.0em;
-  		background-color: #66cccc;
+  		background-color: #222;
 		  font-family: "helvetica"; 
   		color: #000000;
     }
     #container {
       margin: 0 auto;
+			padding: 10px 100px;
       width: 700px;
+			background-color: #fff;
     }
-		h1 { font-size: 3.8em; color: #993333; margin-bottom: 3px; }
+		#content {
+		}
+		h1 { font-size: 3.8em; color: #000; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #993333; }
-    h3 { text-align: center; color: #993333; }
-    a { color: #993333; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+		h1 a { text-decoration: none; color: #000; }
+		h2 { font-size: 1.5em; color: #000; }
+    h3 { text-align: center; color: #000; }
+    a { color: #66cccc; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic; }
     .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
+		pre { background: #333; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style>
@@ -48,82 +52,266 @@
     <h1><a href="http://github.com/solutious/stella">stella</a> 
       <span class="small">by <a href="http://github.com/solutious">solutious</a></small></h1>
 
-    <div class="description">
-      A command-line tool for designing, running, and analyzing performance tests. 
-    </div>
+				<div id="content">
+				            <p>
 
-    <h2>Dependencies</h2>
-<p>* Linux, BSD, Solaris
-* Ruby 1.8.x, 1.9.x, or JRuby[http://jruby.codehaus.org/] 1.1
-* Native Libraries (c or c++) 
-  * Pcap (optional, for packet sniffing)
-* Ruby Libraries
-  * rspec
-  * net-dns 
-  * Ruby-Pcap (optional, for packet sniffing)
+				            Release: 0.5.5 (2009-01-14)
+				            </p>
+				            <p>
+				            This is a BETA release. Proceed in double verify mode!
+				            </p>
+				            <h2>Overview</h2>
+				            <p>
+				            <a href="http://stella.rubyforge.org/classes/Stella.html">Stella</a> is a command-line tool for
+				            running, reporting, and analyzing performance tests.
+				            </p>
 
-* One of:
-  * Apache-Bench[http://httpd.apache.org/docs/2.2/programs/ab.html]
-  * Siege[http://www.joedog.org/index/siege-home]
-  * Httperf[http://www.hpl.hp.com/research/linux/httperf/]
-    * <em>Note: Argument handling for Httperf is incomplete</em>
-</p>
-<h2>Install</h2>
-<p>Get it in one of the following ways:
+				            <h2>Prerequisites</h2>
+				            <ul>
+				            <li>Linux, BSD, Solaris
 
-* RubyForge: http://stella.rubyforge.org/
-  * gem install stella 
-* git clone git://github.com/solutious/stella.git
-  * git submodule init
-  * git submodule update
- 
-Use ab, siege, and httperf like you normally would with the addition of stella at the beginning (examples are below).
+				            </li>
+				            <li>Ruby 1.8.x, 1.9.x, or <a href="http://jruby.codehaus.org/">JRuby</a> 1.1
 
-=== Debian (and derivatives)
+				            </li>
+				            <li>Native Libraries (c or c++)
 
-Debian and its derivative (Ubunutu) handling packing a bit differently[http://pkg-ruby-extras.alioth.debian.org/rubygems.html]. There are a couple errors to watch out for during the installation. The solutions are below:
+				            <ul>
 
-  "no such file to load -- mkmf (LoadError)"
-  $ apt-get install ruby1.8-dev
+				            <li>Pcap (optional, for packet sniffing)
 
-  "ERROR: RDoc documentation generator not installed!"
-  $ apt-get install rdoc
+				            </li>
+				            </ul>
+				            </li>
+				            <li>Ruby Libraries
+
+				            <ul>
+				            <li>rspec
+
+				            </li>
+				            <li>net-dns
+
+				            </li>
+				            <li>Ruby-Pcap (optional, for packet sniffing)
+
+				            </li>
+
+				            </ul>
+				            </li>
+				            <li>One of:
+
+				            <ul>
+				            <li><a
+				            href="http://httpd.apache.org/docs/2.2/programs/ab.html">Apache-Bench</a>
+
+				            </li>
+				            <li><a href="http://www.joedog.org/index/siege-home">Siege</a>
+
+				            </li>
+
+				            <li><a href="http://www.hpl.hp.com/research/linux/httperf/">Httperf</a>
+
+				            <ul>
+				            <li><em>Note: Argument handling for Httperf is incomplete</em>
+
+				            </li>
+				            </ul>
+				            </li>
+				            </ul>
+				            </li>
+
+				            </ul>
+				            <h2>Installation</h2>
+				            <p>
+				            Get it in one of the following ways:
+				            </p>
+				            <ul>
+				            <li>RubyForge: <a href="http://stella.rubyforge.org/">stella.rubyforge.org/</a>
+
+				            <ul>
+
+				            <li>gem install stella
+
+				            </li>
+				            </ul>
+				            </li>
+				            <li>git clone git://github.com/solutious/stella.git
+
+				            <ul>
+				            <li>git submodule init
+
+				            </li>
+				            <li>git submodule update
+
+				            </li>
+				            </ul>
+
+				            </li>
+				            </ul>
+				            <p>
+				            Use ab, siege, and httperf like you normally would with the addition of
+				            stella at the beginning (examples are below).
+				            </p>
+				            <h3>Debian (and derivatives)</h3>
+				            <p>
+				            Debian and its derivative (Ubunutu) handling packing a bit <a
+				            href="http://pkg-ruby-extras.alioth.debian.org/rubygems.html">differently</a>.
+				            There are a couple errors to watch out for during the installation. The
+				            solutions are below:
+				            </p>
+
+				            <pre>&quot;no such file to load -- mkmf (LoadError)&quot;&#x000A;$ apt-get install ruby1.8-dev&#x000A;&#x000A;&quot;ERROR: RDoc documentation generator not installed!&quot;&#x000A;$ apt-get install rdoc</pre>
+				            <h3>Installing libpcap and Ruby-Pcap</h3>
+				            <ul>
+				            <li><b><a href="http://stella.rubyforge.org/classes/Stella.html">Stella</a> currently supports packet
+				            filtering with Native Ruby (no JRuby) on Linux/Unix/OS X only.</b>
+
+				            </li>
+
+				            <li><b>Ruby-Pcap does not compile with Ruby 1.9.1-RC1</b>
+
+				            </li>
+				            </ul>
+				            <p>
+				            libpcap and Ruby-Pcap are used to by Stella&#8217;s watch command to filter
+				            packets off the network. This allows you to view HTTP requests and response
+				            (including headers and content) without having to configure a proxy. Both
+				            need to be compiled and installed separately:
+				            </p>
+				            <ul>
+				            <li><a href="http://www.tcpdump.org/release/">libpcap</a>
 
 
-=== Installing libpcap and Ruby-Pcap
+				            </li>
+				            <li><a
+				            href="http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html">Ruby-Pcap</a>
 
-* <b>Stella currently supports packet filtering with Native Ruby (no JRuby) on Linux/Unix/OS X only.</b>
-* <b>Ruby-Pcap does not compile with Ruby 1.9.1-RC1</b>
+				            </li>
+				            </ul>
+				            <p>
+				            On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime:
+				            &#8220;pcap.bundle: warning: do not use Fixnums as Symbols&#8221;. See:
+				            support/ruby-pcap-takuma-notes.txt.
+				            </p>
+				            <h2>Usage Examples</h2>
 
-libpcap and Ruby-Pcap are used to by Stella's watch command to filter packets off the network. This allows you to view HTTP requests and response (including headers and content) without having to configure a proxy. Both need to be compiled and installed separately:
-* libpcap[http://www.tcpdump.org/release/]
-* Ruby-Pcap[http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html]
+				            <ul>
+				            <li>Run Apache Bench with a warmup and rampup from 10 to 20 virtual users in
+				            increments of 5
 
-On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime: "pcap.bundle: warning: do not use Fixnums as Symbols". See: support/ruby-pcap-takuma-notes.txt. </p>
-<h2>License</h2>
-<p>Copyright (c) 2008 Delano Mandelbaum
+				            </li>
+				            </ul>
+				            <p>
+				            <tt>$ stella --warmup=0.5 --rampup=5,20 ab -c 10 -n 50 <a
+				            href="http://stellaaahhhh.com/search?term=trooper">stellaaahhhh.com/search?term=trooper</a></tt>
+				            </p>
+				            <ul>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+				            <li>Run Siege, repeat the test 5 times. Automatically creates a summary
+				            averages and standard deviations.
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+				            </li>
+				            </ul>
+				            <p>
+				            <tt>$ stella --agent=ff-3-osx --testruns=5 siege -c 10 -r 5 -b <a
+				            href="http://stellaaahhhh.com/search?term=flock+of+seagulls">stellaaahhhh.com/search?term=flock+of+seagulls</a></tt>
+				            </p>
+				            <ul>
+				            <li>Run Httperf like you normally would (but all the test data will be
+				            collected for you)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
-<h2>Authors</h2>
-<p>Delano Mandelbaum (delano@solutious.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Solutious Inc. (info@solutious.com)<br/>      </p>
+				            </li>
+
+				            </ul>
+				            <p>
+				            <tt>$ stella httperf --hog --client=0/1 --server=127.0.0.1 --port=5600
+				            --uri=/ --rate=50 --num-conns=100 --timeout=5</tt>
+				            </p>
+				            <ul>
+				            <li>Monitor DNS traffic using Pcap
+
+				            </li>
+				            </ul>
+				            <p>
+
+				            <tt>$ stella watch -C dns</tt>
+				            </p>
+				            <ul>
+				            <li>Monitor HTTP traffic using Pcap
+
+				            </li>
+				            </ul>
+				            <p>
+				            <tt>$ stella watch -C http</tt>
+
+				            </p>
+				            <ul>
+				            <li>Monitor HTTP traffic using a proxy (don&#8217;t forget to configure your
+				            browser)
+
+				            </li>
+				            </ul>
+				            <p>
+				            <tt>$ stella watch -P</tt>
+				            </p>
+
+				            <h3>Sample Output</h3>
+				            <pre>$ stella -f csv -x 5 -w 0.75 -r 25,125 -m &quot;with prefork&quot; siege -c 75 -r 10 -b http://testapp/&#x000A;Writing test data to: stella/testruns/2008-12-23/test-054&#x000A;&#x000A;  Warmup:       3750@37/1   100%    264.29/s    0.140s    0.024MB/s    0.340MB   14.000s .&#x000A;&#x000A; -------------------------------------------------------------------&#x000A;                 REQ@VU/s  AVAIL       REQ/s     RTIME       DATA/s       DATA      TIME&#x000A;&#x000A;  Run 01:       7500@75/1   100%    345.30/s    0.210s    0.032MB/s    0.690MB   21.720s&#x000A;  Run 02:       7500@75/1   100%    360.58/s    0.200s    0.033MB/s    0.690MB   20.800s&#x000A;  Run 03:       7500@75/1   100%    359.02/s    0.210s    0.033MB/s    0.690MB   20.890s&#x000A; -------------------------------------------------------------------&#x000A;   Total:      22500@73     100%    354.97/s    0.207s    0.033MB/s    2.070MB   63.410s&#x000A; Std Dev:                             6.86/s    0.005s    0.001MB/s               0.414s&#x000A;&#x000A;  Run 04:      10000@100/1  100%    384.47/s    0.260s    0.035MB/s    0.920MB   26.010s&#x000A;  Run 05:      10000@100/1  100%    385.06/s    0.260s    0.035MB/s    0.920MB   25.970s&#x000A;  Run 06:      10000@100/1  100%    380.95/s    0.260s    0.035MB/s    0.920MB   26.250s&#x000A; -------------------------------------------------------------------&#x000A;   Total:      30000@98     100%    383.49/s    0.260s    0.035MB/s    2.760MB   78.230s&#x000A; Std Dev:                             1.81/s    0.000s    0.000MB/s               0.124s&#x000A;&#x000A;  Run 07:      12500@125/1  100%    397.20/s    0.310s    0.036MB/s    1.140MB   31.470s&#x000A;  Run 08:      12500@125/1  100%    397.08/s    0.310s    0.036MB/s    1.140MB   31.480s&#x000A;  Run 09:      12500@125/1  100%    397.58/s    0.310s    0.036MB/s    1.140MB   31.440s&#x000A; -------------------------------------------------------------------&#x000A;   Total:      37500@123    100%    397.29/s    0.310s    0.036MB/s    3.420MB   94.390s&#x000A; Std Dev:                             0.21/s    0.000s    0.000MB/s               0.017s&#x000A;&#x000A; -------------------------------------------------------------------&#x000A;   Total:      90000@98     100%    378.58/s    0.259s    0.035MB/s    8.250MB  236.030s&#x000A; Std Dev:                            18.09/s    0.042s    0.002MB/s               4.225s</pre>
+
+				            <p>
+				            All test data is collected under ./stella (this can be changed with the
+				            parameter &#8212;datapath):
+				            </p>
+				            <pre>$ ls -l ./stella/testruns/2008-12-23/&#x000A;test-001   test-002   test-003   test-004   test-005   test-006  ...  test-054</pre>
+				            <p>
+				            A symbolic link points to the most recent test:
+				            </p>
+				            <pre>$ ls -l ./stella/latest/&#x000A;ID.txt    MESSAGE.txt  SUMMARY.csv  run01    run02    run03    run04    run05    warmup</pre>
+
+				            <p>
+				            Each run directory contains all associated data, including the command and
+				            configuration
+				            </p>
+				            <pre>$ ls -l ./stella/latest/run01/&#x000A;  COMMAND.txt    STDOUT.txt    siege.log    STDERR.txt    SUMMARY.csv    siegerc</pre>
+				            <h2>Known Issues</h2>
+				            <ul>
+				            <li>The output for the REQ@VU/s columns is a work in progress. It&#8217;s not
+				            aligned across tools and it will likely change in the next release.
+
+				            </li>
+
+				            <li>The summary data has not been audited. Don&#8217;t trust and double verify!
+
+				            </li>
+				            <li>httperf is functional but not all parameters are supported.
+
+				            </li>
+				            <li>The Ruby API has not been finalized. It&#8217;s functional but
+				            there&#8217;s no example because it is subject to change.
+
+				            </li>
+				            <li>There is an issue with parsing ipv6 ip addresses with Ruby-Pcap or Net-DNS.
+				            This affects only dns sniffing with pcap. Reproduce by running
+				            &#8220;stella watch -C dns&#8221; and requesting &#8220;apple.com&#8220;
+
+
+				            </li>
+				            </ul>
+				            <h2>Report an issue</h2>
+				            <p>
+				            Email issues and bugs to stella@solutious.com
+				            </p>
+				            <h2>More Information</h2>
+				            <p>
+
+				            <a href="http://www.youtube.com/watch?v=wmq-JDonTpc">Stellaaahhhh</a>
+				            </p>
+				            <h2>License</h2>
+				            <p>
+				            See <a href="LICENSE_txt.html">LICENSE.txt</a>
+				            </p>
+				          </div>
+
 
 
     <h2>Download</h2>
