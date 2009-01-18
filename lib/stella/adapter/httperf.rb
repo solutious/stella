@@ -3,22 +3,25 @@
 module Stella
   module Adapter
 
-    #Usage: httperf [-hdvV] [--add-header S] [--burst-length N] [--client N/N]
-    #	[--close-with-reset] [--debug N] [--failure-status N]
-    #	[--help] [--hog] [--http-version S] [--max-connections N]
-    #	[--max-piped-calls N] [--method S] [--no-host-hdr]
-    #	[--num-calls N] [--num-conns N] [--period [d|u|e]T1[,T2]]
-    #	[--port N] [--print-reply [header|body]] [--print-request [header|body]]
-    #	[--rate X] [--recv-buffer N] [--retry-on-failure] [--send-buffer N]
-    #	[--server S] [--server-name S] [--session-cookies]
-    #	[--ssl] [--ssl-ciphers L] [--ssl-no-reuse]
-    #	[--think-timeout X] [--timeout X] [--uri S] [--verbose] [--version]
-    #	[--wlog y|n,file] [--wsess N,N,X] [--wsesslog N,X,file]
-    #	[--wset N,X]
+    # Httperf is a wrapper for calling the httperf utility on the command line.
+    # All options and arguments are supported. This class is used by Stella::Command::LoadTest
+    # but can also be used on its own. The command line options are the same
+    # as a regular call to httperf.
+    #
+    #     Usage: httperf [-hdvV] [--add-header S] [--burst-length N] [--client N/N]
+    #	    [--close-with-reset] [--debug N] [--failure-status N]
+    #	    [--help] [--hog] [--http-version S] [--max-connections N]
+    #	    [--max-piped-calls N] [--method S] [--no-host-hdr]
+    #	    [--num-calls N] [--num-conns N] [--period [d|u|e]T1[,T2]]
+    #	    [--port N] [--print-reply [header|body]] [--print-request [header|body]]
+    #	    [--rate X] [--recv-buffer N] [--retry-on-failure] [--send-buffer N]
+    #	    [--server S] [--server-name S] [--session-cookies]
+    #	    [--ssl] [--ssl-ciphers L] [--ssl-no-reuse]
+    #	    [--think-timeout X] [--timeout X] [--uri S] [--verbose] [--version]
+    #	    [--wlog y|n,file] [--wsess N,N,X] [--wsesslog N,X,file]
+    #	    [--wset N,X]
     # 
     class Httperf < Stella::Adapter::Base
-      
-      
       
       attr_accessor :hog, :server, :uri, :num_conns, :num_calls, :rate, :timeout, :think_timeout, :port
       attr_accessor :burst_length, :client, :close_with_reset, :debug, :failure_status
@@ -37,17 +40,18 @@ module Stella
         super(options, arguments)
       end
       
-      
-      
-      def error
-        (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
-      end
-      
       # Before calling run
+      # Currently does nothing for httperf.
       def before
-
-        
       end
+      
+      # After calling run. 
+      # Currently does nothing for httperf.
+      def after
+      end
+      
+      # Generates the shell command from the supplied arguments.
+      # Returns a String.
       def command
         raise CommandNotReady.new(self.class.to_s) unless ready?
 
@@ -72,12 +76,12 @@ module Stella
         command
       end
       
-      # After calling run
-      def after
 
-
-      end
-
+      # Extracts the known named options from the arguments list.
+      # +arguments+ is an array of command-line arguments.
+      # The value for each named option found will be placed in the
+      # appropriate instance variable. 
+      # The remaining unnamed arguments is return in an Array. 
       def process_arguments(arguments)
         
         opts = OptionParser.new 
@@ -145,7 +149,7 @@ module Stella
         raise InvalidArgument.new(badarg)
       end
 
-      
+      # Returns the version number of httperf
       def version
         vsn = 0
         Stella::Util.capture_output("#{@name} --version") do |stdout, stderr|
@@ -154,31 +158,37 @@ module Stella
         vsn
       end
       
-      # loadtest
-      #
-      # True or false: is the call to siege a load test? If it's a call to help or version or
+      # True or false: is the call to httperf a load test? If it's a call to help or version or
       # to display the config this with return false. It's no reason for someone to make this 
       # call through Stella but it's here for goodness sake. 
       def loadtest?
         @uri && !@uri.empty?
       end
+      
+      # True or false: have enough arguments been supplied to generate a command?
       def ready?
         @name && !instance_variables.empty?
       end
       
+      # Add an arbitrary header to the Httperf requests.
+      # +name+ is a header name, i.e. Content-Type
+      # +value is the header value, i.e. text/html
+      # If either are empty or nil, the header will not be set. 
       def add_header(name=false, value=false)
         # This is a hack since we have an instance variable called add_header.
         # I figure this is the best of two evils because I'd rather keep the 
         # instance variable naming consistent. 
-        return @add_header if !name && !value 
+        return @add_header unless name && value 
         @add_header ||= []
         @add_header << "#{name}: #{value}"
       end
       
-      def user_agent=(list=[])
-        return unless list && !list.empty?
-        list = list.to_ary
-        list.each do |agent|
+      # Supply a specific user agent string to use for the requests. 
+      # +agents+ is a list of valid user-agent strings.
+      def user_agent=(agents=[])
+        return unless agents && !agents.empty?
+        agents = agents.to_ary
+        agents.each do |agent|
           add_header("User-Agent", agent)
         end
       end
@@ -198,6 +208,11 @@ module Stella
       def requests=(v)
         0
       end
+      
+      # Ratio of requests per user. 
+      # Warm up and ramp up use this value to maintain the appropriate number of
+      # requests per vuser as the number of vusers are incerased or decreased.
+      # NOTE: this is not currently implemented for Httperf.
       def vuser_requests
         0
       end
@@ -209,68 +224,47 @@ module Stella
         @wset.join(',')
       end
       
-      
       def wsesslog
         @wsesslog.join(',')
       end
       def wlog
         @wlog.join(',')
       end
-      
-      #def concurrent
-      #  (@concurrent * @load_factor).to_i
-      #end
-      #def concurrent_f
-      #  (@concurrent * @load_factor).to_f
-      #end
-      #def reps
-      #  @reps
-      #end
-      
-      
 
-      # Siege writes the summary to STDERR
+
+      # A File object pointing to Httperf's test summary (redirected from STDOUT)
       def summary_file
         File.new(stdout_path) if File.exists?(stdout_path)
       end
       
-      def rc_file
-        File.join(@working_directory, "siegerc") 
-      end
       
-      def log_file
-        File.join(@working_directory, "siege.log")
-      end
-      
-      def uris_file
-        File.join(@working_directory, File.basename(@file))
-      end
-      
-      # httperf --hog --timeout=30 --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --send-buffer=4096 --recv-buffer=16384 --num-conns=5 --num-calls=1
-      # httperf: warning: open file limit > FD_SETSIZE; limiting max. # of open files to FD_SETSIZE
-      # Maximum connect burst length: 1
-      # 
-      # Total: connections 5 requests 5 replies 5 test-duration 0.513 s
-      # 
-      # Connection rate: 9.7 conn/s (102.7 ms/conn, <=1 concurrent connections)
-      # Connection time [ms]: min 102.1 avg 102.7 max 104.1 median 102.5 stddev 0.8
-      # Connection time [ms]: connect 0.2
-      # Connection length [replies/conn]: 1.000
-      # 
-      # Request rate: 9.7 req/s (102.7 ms/req)
-      # Request size [B]: 62.0
-      # 
-      # Reply rate [replies/s]: min 0.0 avg 0.0 max 0.0 stddev 0.0 (0 samples)
-      # Reply time [ms]: response 102.3 transfer 0.1
-      # Reply size [B]: header 136.0 content 96.0 footer 0.0 (total 232.0)
-      # Reply status: 1xx=0 2xx=5 3xx=0 4xx=0 5xx=0
-      # 
-      # CPU time [s]: user 0.12 system 0.39 (user 22.5% system 75.3% total 97.8%)
-      # Net I/O: 2.8 KB/s (0.0*10^6 bps)
-      # 
-      # Errors: total 0 client-timo 0 socket-timo 0 connrefused 0 connreset 0
-      # Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0
-      
+      # Returns a Test::Run::Summary object containing the parsed output from httperf (STDOUT).
+      # Here is an example of the data returned by Httperf:
+      #
+      #     httperf --hog --timeout=30 --client=0/1 --server=127.0.0.1 --port=5600 --uri=/ --send-buffer=4096 --recv-buffer=16384 --num-conns=5 --num-calls=1
+      #     httperf: warning: open file limit > FD_SETSIZE; limiting max. # of open files to FD_SETSIZE
+      #     Maximum connect burst length: 1
+      #     
+      #     Total: connections 5 requests 5 replies 5 test-duration 0.513 s
+      #     
+      #     Connection rate: 9.7 conn/s (102.7 ms/conn, <=1 concurrent connections)
+      #     Connection time [ms]: min 102.1 avg 102.7 max 104.1 median 102.5 stddev 0.8
+      #     Connection time [ms]: connect 0.2
+      #     Connection length [replies/conn]: 1.000
+      #     
+      #     Request rate: 9.7 req/s (102.7 ms/req)
+      #     Request size [B]: 62.0
+      #     
+      #     Reply rate [replies/s]: min 0.0 avg 0.0 max 0.0 stddev 0.0 (0 samples)
+      #     Reply time [ms]: response 102.3 transfer 0.1
+      #     Reply size [B]: header 136.0 content 96.0 footer 0.0 (total 232.0)
+      #     Reply status: 1xx=0 2xx=5 3xx=0 4xx=0 5xx=0
+      #     
+      #     CPU time [s]: user 0.12 system 0.39 (user 22.5% system 75.3% total 97.8%)
+      #     Net I/O: 2.8 KB/s (0.0*10^6 bps)
+      #     
+      #     Errors: total 0 client-timo 0 socket-timo 0 connrefused 0 connreset 0
+      #     Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0
       def summary
         return unless summary_file
         

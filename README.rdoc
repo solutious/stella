@@ -17,6 +17,7 @@ Stella is a command-line tool for running, reporting, and analyzing performance 
   * Pcap (optional, for packet sniffing)
 * Ruby Libraries
   * rspec
+  * mongrel
   * net-dns 
   * Ruby-Pcap (optional, for packet sniffing)
 
@@ -37,7 +38,18 @@ Get it in one of the following ways:
   * git submodule init
   * git submodule update
  
-Use ab, siege, and httperf like you normally would with the addition of stella at the beginning (examples are below).
+=== Installing on Linux
+
+If you see the following error you need to install the Ruby header files.
+
+    ERROR: Error installing stella
+        ERROR: Failed to build gem native extension
+
+These are included when you install Ruby from source. They can also be installed with the following commands
+
+    $ sudo yum install ruby-devel
+    OR
+    $ sudo apt-get install ruby-dev
 
 === Debian (and derivatives)
 
@@ -63,6 +75,8 @@ On Ruby, 1.8.6, Ruby-Pcap produces the following warnings at runtime: "pcap.bund
   
 
 == Usage Examples
+
+Use ab, siege, and httperf like you normally would with the addition of stella at the beginning.
 
 * Run Apache Bench with a warmup and rampup from 10 to 20 virtual users in increments of 5
 <tt>$ stella --warmup=0.5 --rampup=5,20 ab -c 10 -n 50 http://stellaaahhhh.com/search?term=trooper</tt>

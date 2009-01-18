@@ -42,6 +42,12 @@ spec = Gem::Specification.new do |s|
 	s.add_dependency 'mongrel'
 	s.add_dependency 'rspec'
 	s.add_dependency 'net-dns'
+	s.add_dependency 'cucumber'
+	s.add_dependency 'fastthread'
+	s.add_dependency 'hoe'
+	s.add_dependency 'rake'
+	s.add_dependency 'rubyforge'
+	
 
 	s.platform = Gem::Platform::RUBY
 	s.has_rdoc = true
@@ -66,6 +72,20 @@ task :uninstall => [ :clean ] do
 	sh %{sudo gem uninstall #{name}}
 end
 
+
+# Rubyforge Release / Publish Tasks ==================================
+
+desc 'Publish website to rubyforge'
+task 'publish:doc' => 'doc/index.html' do
+  sh 'scp -rp doc/* rubyforge.org:/var/www/gforge-projects/stella/'
+end
+
+#task 'publish:gem' => [package('.gem'), package('.tar.gz')] do |t|
+#  sh <<-end
+#    rubyforge add_release stella stella #{spec.version} #{package('.gem')} &&
+#    rubyforge add_file    stella stella #{spec.version} #{package('.tar.gz')}
+#  end
+#end
 
 
 Rake::RDocTask.new do |t|

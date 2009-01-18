@@ -84,6 +84,11 @@ Gem::Specification.new do |s|
 	s.add_dependency 'mongrel'
 	s.add_dependency 'delano-useragent'
 	s.add_dependency 'delano-drydock'
+	s.add_dependency 'cucumber'
+	s.add_dependency 'fastthread'
+	s.add_dependency 'hoe'
+	s.add_dependency 'rake'
+	s.add_dependency 'rubyforge'
 	
   s.has_rdoc = true
   

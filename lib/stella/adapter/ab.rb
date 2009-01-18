@@ -3,9 +3,14 @@ require 'fileutils'
 
 module Stella
   module Adapter
-
-    #Usage: ab [options] [http[s]://]hostname[:port]/path
-    #Options are:
+    
+    # ApacheBench is a wrapper for calling the ab utility on the command line.
+    # All options and arguments are supported. This class is used by Stella::Command::LoadTest
+    # but can also be used on its own. The command line options are the same
+    # as a regular call to ab. 
+    #
+    #     Usage: ab [options] [http[s]://]hostname[:port]/path
+    #     Options are:
     #    -n requests     Number of requests to perform
     #    -c concurrency  Number of multiple requests to make
     #    -t timelimit    Seconds to max. wait for responses
@@ -50,15 +55,10 @@ module Stella
         @n = 1
         @name = 'ab'
         @load_factor = 1
-        
         super(options, arguments)
-        
       end
       
-      def error
-        (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
-      end
-      
+      # Returns the version number for Apache Bench
       def version
         vsn = 0
         Stella::Util.capture_output("#{@name} -V") do |stdout, stderr|
@@ -67,19 +67,49 @@ module Stella
         vsn
       end
       
+      # The file to the percentiles log (-e)
       def percentiles_file
         @working_directory + "/ab-percentiles.log" 
       end
       
+      # The file path to the requests log (-g)
       def requests_file
         @working_directory + "/ab-requests.log" 
       end
       
+      # Called before run. 
+      # Points the -e and -g paths to the test run directory, unless
+      # otherwise specified. 
       def before
         @e = percentiles_file if @e.nil?
         @g = requests_file if @g.nil?
       end
       
+      
+      # Called after run
+      # For Apache Bench, this copies the percentiles (-e) and requests (-g) from
+      # the test run directory to the paths supplied at run time. If -e or -g were
+      # not specified, this method will do nothing. 
+      def after
+        # We want to maintain copies of all test output, even when the user has 
+        # supplied other path names so we'll copy the files from the testrun directory
+        # to the location specified by the user.
+        # NOTE: For tests with more than one test run, the specified files will be 
+        # overwritten after each run. Should we force append the run number? 
+        [[@e, 'percentiles'], [@g, 'requests']].each do |tuple|
+          if File.expand_path(File.dirname(tuple[0])) != File.expand_path(@working_directory)
+            from = tuple[0]
+            to = @working_directory + "/ab-#{tuple[1]}.log"
+            next unless File.exists?(from)
+            FileUtils.cp(from, to)
+          end
+        end
+
+        
+      end
+
+      # Generates the shell command from the supplied arguments.
+      # Returns a String.
       def command
         raise CommandNotReady.new(self.class.to_s) unless ready?
 
@@ -116,12 +146,13 @@ module Stella
         (!self.loadtest?) || (@name && !instance_variables.empty? && !@arguments.empty?)
       end
       
-      
+      # Extracts the known named options from the arguments list.
+      # +arguments+ is an array of command-line arguments.
+      # The value for each named option found will be placed in the
+      # appropriate instance variable. 
+      # The remaining unnamed arguments is return in an Array.
       def process_arguments(arguments)
         opts = OptionParser.new 
-        
-        # TODO: there's no need to use an OpenStruct here. It's confusing b/c we can 
-        # use the instance var methods here instead of in Base::options=.
         
         # TODO: Print a note for w that we don't parse the HTML results
         %w{v w i V k d S r h}.each do |n|
@@ -181,36 +212,23 @@ module Stella
         raise InvalidArgument.new(badarg)
       end
 
-      def after
-        # We want to maintain copies of all test output, even when the user has 
-        # supplied other path names so we'll copy the files from the testrun directory
-        # to the location specified by the user.
-        # NOTE: For tests with more than one test run, the specified files will be 
-        # overwritten after each run. Should we force append the run number? 
-        [[@e, 'percentiles'], [@g, 'requests']].each do |tuple|
-          if File.expand_path(File.dirname(tuple[0])) != File.expand_path(@working_directory)
-            from = tuple[0]
-            to = @working_directory + "/ab-#{tuple[1]}.log"
-            next unless File.exists?(from)
-            FileUtils.cp(from, to)
-          end
-        end
-
-        
-      end
-
-
-
-      
-      def add_header(name, value)
+      # Add an arbitrary header to the Httperf requests.
+      # +name+ is a header name, i.e. Content-Type
+      # +value is the header value, i.e. text/html
+      # If either are empty or nil, the header will not be set.
+      def add_header(name=false, value=false)
+        return @add_header unless name && value
         @H ||= []
         @H << "#{name}: #{value}"
       end
       
-      def user_agent=(list=[])
-        return unless list && !list.empty?
-        list = list.to_ary
-        list.each do |agent|
+      
+      # Supply a specific user agent string to use for the requests. 
+      # +agents+ is a list of valid user-agent strings.
+      def user_agent=(agents=[])
+        return unless agents && !agents.empty?
+        agents = agents.to_ary
+        agents.each do |agent|
           add_header("User-Agent", agent)
         end
       end
@@ -229,11 +247,13 @@ module Stella
       def requests=(v)
         @n = v
       end
+      
+      # Ratio of requests per user. 
+      # Warm up and ramp up use this value to maintain the appropriate number of
+      # requests per vuser as the number of vusers are incerased or decreased.
+      # For ab, the ratio is the value of -n divided by -c. 
       def vuser_requests
         ratio = 1
-        # The request ratio tells us how many requests will be
-        # generated per vuser. It helps us later when we need to
-        # warmp up and ramp up.
         if @n > 0 && @c > 0
           ratio = (@n.to_f / @c.to_f).to_f
         # If concurrency isn't set, we'll assume the total number of requests
@@ -249,28 +269,29 @@ module Stella
       def n
         (@n * @load_factor).to_i
       end
-
-      def hosts
-        hosts = @arguments || []
-        #hosts << get_hosts_from_file
-        hosts = hosts.map{ |h| tmp = URI.parse(h.strip); "#{tmp.host}:#{tmp.port}" }
-        hosts
-      end
-
-      def paths
-        paths = @arguments || []
-        #hosts << get_hosts_from_file
-        paths = paths.map{ |h| tmp = URI.parse(h.strip); "#{tmp.path}?#{tmp.query}" }
-        paths
-      end
-
-
       
-      # Apache bench writes the summary to STDOUT
+      # A File object pointing to Apache Bench's test summary (redirected from STDOUT)
       def summary_file
         File.new(stdout_path) if File.exists?(stdout_path)
       end
 
+      # Returns a Test::Run::Summary object containing the parsed output from 
+      # Apache Bench (STDOUT). Here is an example of the data returned by Apache Bench:
+      #
+      #     Document Path:          /
+      #     Document Length:        96 bytes
+      #     
+      #     Concurrency Level:      75
+      #     Time taken for tests:   2.001 seconds
+      #     Complete requests:      750
+      #     Failed requests:        0
+      #     Write errors:           0
+      #     Total transferred:      174000 bytes
+      #     HTML transferred:       72000 bytes
+      #     Requests per second:    374.74 [#/sec] (mean)
+      #     Time per request:       200.138 [ms] (mean)
+      #     Time per request:       2.669 [ms] (mean, across all concurrent requests)
+      #     Transfer rate:          84.90 [Kbytes/sec] received
       def summary
         return unless summary_file
         raw = {}
@@ -285,21 +306,6 @@ module Stella
           # We want only the first one so we don't overwrite values.
           raw[n.to_sym] = v.to_f  unless raw.has_key? n.to_sym
         }
-
-        # Document Path:          /
-        # Document Length:        96 bytes
-        # 
-        # Concurrency Level:      75
-        # Time taken for tests:   2.001 seconds
-        # Complete requests:      750
-        # Failed requests:        0
-        # Write errors:           0
-        # Total transferred:      174000 bytes
-        # HTML transferred:       72000 bytes
-        # Requests per second:    374.74 [#/sec] (mean)
-        # Time per request:       200.138 [ms] (mean)
-        # Time per request:       2.669 [ms] (mean, across all concurrent requests)
-        # Transfer rate:          84.90 [Kbytes/sec] received
 
         stats = Stella::Test::Run::Summary.new
         
@@ -329,6 +335,22 @@ module Stella
         stats
       end
 
+
+
+    private
+      def hosts
+        hosts = @arguments || []
+        #hosts << get_hosts_from_file
+        hosts = hosts.map{ |h| tmp = URI.parse(h.strip); "#{tmp.host}:#{tmp.port}" }
+        hosts
+      end
+
+      def paths
+        paths = @arguments || []
+        #hosts << get_hosts_from_file
+        paths = paths.map{ |h| tmp = URI.parse(h.strip); "#{tmp.path}?#{tmp.query}" }
+        paths
+      end
 
 
     end

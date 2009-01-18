@@ -3,6 +3,11 @@
 module Stella
   module Adapter
 
+    # Siege is a wrapper for calling the siege utility on the command line.
+    # All options and arguments are supported. This class is used by Stella::Command::LoadTest
+    # but can also be used on its own. The command line options are the same
+    # as a regular call to siege:
+    #
     # SIEGE 
     # Usage: siege [options]
     #        siege [options] URL
@@ -56,11 +61,6 @@ module Stella
       end
       
       
-      
-      def error
-        (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
-      end
-      
       def version
         vsn = 0
         Stella::Util.capture_output("#{@name} --version") do |stdout, stderr|
@@ -69,8 +69,6 @@ module Stella
         vsn
       end
       
-      # loadtest
-      #
       # True or false: is the call to siege a load test? If it's a call to help or version or
       # to display the config this with return false. It's no reason for someone to make this 
       # call through Stella but it's here for goodness sake. 
@@ -84,6 +82,8 @@ module Stella
       
 
       # Before calling run
+      # For siege, this copies the siegerc and urls file (if supplied) to the
+      # test run directory.
       def before
 
         # Keep a copy of the configuration file. 
@@ -94,6 +94,16 @@ module Stella
         
         # TODO: Print message about neither --benchmark or --internet
       end
+      
+      # After calling run
+      # If a logfile path was supplied in siegerc, we'll copy the log output from 
+      # Stella's saved copy of the log file top to the supplied. 
+      def after
+        update_orig_logfile if @orig_logfile
+      end
+      
+      # Generates the shell command from the supplied arguments.
+      # Returns a String.  
       def command
         raise CommandNotReady.new(self.class.to_s) unless ready?
 
@@ -118,14 +128,12 @@ module Stella
         command
       end
       
-      # After calling run
-      def after
 
-        update_orig_logfile if @orig_logfile
-
-      end
-
-
+      # Extracts the known named options from the arguments list.
+      # +arguments+ is an array of command-line arguments.
+      # The value for each named option found will be placed in the
+      # appropriate instance variable. 
+      # The remaining unnamed arguments is return in an Array.
       def process_arguments(arguments)
         opts = OptionParser.new 
         opts.on('-V', '--version') do |v| @version = v end
@@ -170,16 +178,23 @@ module Stella
         raise InvalidArgument.new(badarg)
       end
 
-      
-      def add_header(name, value)
+      # Add an arbitrary header to the Httperf requests.
+      # +name+ is a header name, i.e. Content-Type
+      # +value is the header value, i.e. text/html
+      # If either are empty or nil, the header will not be set.
+      def add_header(name=false, value=false)
+        return @add_header unless name && value
         @header ||= []
         @header << "#{name}: #{value}"
       end
-      def user_agent=(list=[])
-        return unless list && !list.empty?
-        list = list.to_ary
+      
+      # Supply a specific user agent string to use for the requests. 
+      # +agents+ is a list of valid user-agent strings.
+      def user_agent=(agents=[])
+        return unless agents && !agents.empty?
+        agents = agents.to_ary
         @user_agent ||= []
-        @user_agent << list
+        @user_agent << agents
         @user_agent.flatten
       end
       
@@ -195,6 +210,11 @@ module Stella
       def requests=(v)
         @reps = (v / concurrent_f).to_i
       end
+      
+      # Ratio of requests per user. 
+      # Warm up and ramp up use this value to maintain the appropriate number of
+      # requests per vuser as the number of vusers are incerased or decreased.
+      # For siege this is the value of the -r (--repetitions) parameter.
       def vuser_requests
         @reps
       end
@@ -235,14 +255,10 @@ module Stella
         siegerc_str = FileUtil.read_file(File.expand_path(@rc))
 
         siegerc_vars = {
-          :verbose => [false, true],    # We want to maximize the data output by siege
+          :verbose => [false, true],    # The verbose output gives us data for each request
           :logging => [false, true], 
           :csv => [false, true]
         }
-
-        #if (@agent)
-        #  siegerc_vars['user-agent'] = ['.*', 'dogs2']
-        #end
 
         # We'll set the variables in the siegerc file
         siegerc_vars.each_pair do |var,value|
@@ -275,23 +291,42 @@ module Stella
         end
       end
 
-      # Siege writes the summary to STDERR
+      
+      # A File object pointing to Siege's test summary (redirected from STDERR)
       def summary_file
         File.new(stderr_path) if File.exists?(stderr_path)
       end
       
+      # The path to the siegerc file used for the test.
       def rc_file
         File.join(@working_directory, "siegerc")
       end
       
+      # The path to the siege.log file
       def log_file
         File.join(@working_directory, "siege.log")
       end
       
+      # The path to the URIs file (if supplied at runtime)
       def uris_file
-        File.join(@working_directory, File.basename(@file))
+        File.join(@working_directory, File.basename(@file)) if @file
       end
-          
+      
+      # Returns a Test::Run::Summary object containing the parsed output from 
+      # Siege (STDERR). Here is an example of the data returned by Siege:
+      #     
+      #     Transactions:               750 hits
+      #     Availability:               100.00 %
+      #     Elapsed time:               2.33 secs
+      #     Data transferred:           0.07 MB
+      #     Response time:              0.21 secs
+      #     Transaction rate:           321.89 trans/sec
+      #     Throughput:                 0.03 MB/sec
+      #     Concurrency:                67.49
+      #     Successful transactions:    750
+      #     Failed transactions:        0
+      #     Longest transaction:        0.33
+      #     Shortest transaction:       0.10
       def summary
         return unless summary_file
         raw = {}
@@ -305,19 +340,6 @@ module Stella
         }
 
         stats = Stella::Test::Run::Summary.new
-        
-        # Transactions:		         750 hits
-        # Availability:		      100.00 %
-        # Elapsed time:		        2.33 secs
-        # Data transferred:	        0.07 MB
-        # Response time:		        0.21 secs
-        # Transaction rate:	      321.89 trans/sec
-        # Throughput:		        0.03 MB/sec
-        # Concurrency:		       67.49
-        # Successful transactions:         750
-        # Failed transactions:	           0
-        # Longest transaction:	        0.33
-        # Shortest transaction:	        0.10
         
         stats.vusers = raw[:concurrency]
         stats.data_transferred = raw[:data_transferred]

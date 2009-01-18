@@ -9,7 +9,6 @@ module Stella::Adapter
   
   class Base
     
-    
     attr_accessor :working_directory
     attr_reader :load_factor, :arguments
     
@@ -21,7 +20,12 @@ module Stella::Adapter
         self.arguments = arguments 
       end
     end
-    
+      
+    # Returns the output from STDERR
+    def error
+      (File.exists? stderr_path) ? FileUtil.read_file(stderr_path) : "Unknown error"
+    end
+      
     def load_factor=(load_factor)
       @load_factor = load_factor
     end
