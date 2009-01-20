@@ -29,7 +29,7 @@ module Stella::Data
     field :http_version
     
     def has_body?
-      @body && !@body.nil & !@body.empty?
+      !@body.nil? && !@body.empty?
     end
     def has_request?
       false
@@ -97,7 +97,7 @@ module Stella::Data
     end
     
     def has_body?
-      @body && !@body.nil? & !@body.empty?
+      !@body.nil? && !@body.empty?
     end
     def has_request?
       false
@@ -109,7 +109,8 @@ module Stella::Data
     def body
       return nil unless @body
       #Base64.encode64(@body)
-      (!header || !header[:Content_Type] || header[:Content_Type] !~ /text/) ? '' : @body
+      #(!header || !header[:Content_Type] || header[:Content_Type] !~ /text/) ? '' : @body
+      @body
     end
     
     def inspect

@@ -99,6 +99,8 @@ module Stella
         #return if @options[:filter] && !(data_object.raw_data.to_s =~ /#{@options[:filter]}/i)
         #return if @options[:domain] && !(data_object.uri.to_s =~ /(www.)?#{@options[:domain]}/i)
         
+        
+        
         if @stella_options.format && data_object.respond_to?("to_#{@stella_options.format}")
           Stella::LOGGER.info(data_object.send("to_#{@stella_options.format}"))
           
@@ -114,7 +116,7 @@ module Stella
               Stella::LOGGER.info(data_object.response.inspect, '', '')
             end
             
-          elsif @stella_options.verbose > 0 
+          elsif @stella_options.verbose == 1
             Stella::LOGGER.info(data_object.to_s)
             Stella::LOGGER.info(data_object.body) if data_object.has_body?
             
