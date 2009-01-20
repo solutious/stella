@@ -89,8 +89,7 @@ module Stella
       
       
       
-      # monitor_domain
-      #
+
       # Use Ruby-Pcap to sniff packets off the network interface. 
       #
       # DNS monitor based on: http://www.linuxjournal.com/article/9614

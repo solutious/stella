@@ -1,12 +1,10 @@
 $: << File.dirname(__FILE__)
 require 'spec-helper'
-
-#require 'stella/cli'
+require 'stella'
 
 describe "Stella::CLI" do
   
   before(:all) do
-    Stella.debug = false
   end
   
   before(:each) do

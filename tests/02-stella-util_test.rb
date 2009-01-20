@@ -1,15 +1,11 @@
 $: << File.dirname(__FILE__)
 require 'spec-helper'
 
-#require 'stella/support'
-
-
 describe "Stella::Util" do
   
   before(:all) do
     load 'stella.rb'
     load 'stella/cli.rb'
-    Stella.debug = false
   end
   
   it "knows how to convert ff-3.2-osx and ff,3.2,osx into an array" do

@@ -334,8 +334,12 @@ module Stella
         
         stats
       end
-
-
+      
+      # Adds a URI to test. Note: ab accepts only one URI per test. 
+      def add_uri(uri)
+        @arguments ||= []
+        @arguments << uri
+      end
 
     private
       def hosts

@@ -12,7 +12,6 @@ task :default => :test
  
 desc 'Run specs with unit test style output'
 task :test do |t|
-#  sh "specrb -s tests/*_test.rb"
   sh "specrb -s tests/*_test.rb"
 end
 
@@ -23,8 +22,9 @@ STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__)))
 $: << File.join(STELLA_HOME, 'lib')
 
 require 'stella'
+
+name = 'stella'
 version = Stella::VERSION.to_s
-name = "stella"
 
 spec = Gem::Specification.new do |s|
 	s.name = name

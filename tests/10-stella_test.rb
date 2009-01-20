@@ -5,11 +5,13 @@ require 'spec-helper'
 describe 'Stella' do
   before(:all) do
     require 'stella'
-    Stella.debug = false
+  end
+  
+  it "debug-mode is disabled" do  
+    Stella.debug.should.blaming("Debug mode needs to be disabled").equal false
   end
   
   it "determine basic system information" do
-    
     Stella.sysinfo.should.be.instance_of Stella::SystemInfo
     Stella.sysinfo.uptime.should.be.instance_of Float
     Stella.sysinfo.uptime.should.be > 0

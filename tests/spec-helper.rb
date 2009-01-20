@@ -29,3 +29,4 @@ rescue LoadError
 else
 	::HAS_JSON = true
 end
+

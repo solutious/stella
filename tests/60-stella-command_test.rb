@@ -1,10 +1,11 @@
 $: << File.dirname(__FILE__)
 
 require 'spec-helper'
-require 'stella'
 require 'mongrel'
 require 'uri'
 require 'net/http'
+
+require 'stella'
 
 class TestHandler < Mongrel::HttpHandler
   attr_reader :ran_test

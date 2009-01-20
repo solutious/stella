@@ -356,7 +356,12 @@ module Stella
         stats
       end
 
-
+      # Adds a URI to test.
+      def add_uri(uri)
+        @arguments ||= []
+        @arguments << uri
+      end
+      
 
     end
   end

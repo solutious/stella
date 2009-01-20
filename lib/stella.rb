@@ -79,7 +79,11 @@ module Stella
     end
   end
   
-  def self.debug=(enable=false)
+  def self.debug
+    Stella::LOGGER.debug_level
+  end
+  
+  def self.debug=(enable)
     Stella::LOGGER.debug_level = enable
   end
   
