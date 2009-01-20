@@ -1,5 +1,11 @@
 STELLA, CHANGES
 
+#### 0.5.6 (2009-02-04) ###############################
+
+* Fixed body printing bug for stella -v watch -C
+* Added adapter tests 
+* Improved RDocs
+
 
 #### 0.5.5 (2009-01-14) ###############################
 

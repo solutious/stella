@@ -106,11 +106,31 @@ module Stella::Data
       false
     end
     
+    
     def body
       return nil unless @body
-      #Base64.encode64(@body)
-      #(!header || !header[:Content_Type] || header[:Content_Type] !~ /text/) ? '' : @body
-      @body
+      #TODO: Move to HTTPResponse::Body.to_s
+      if is_binary?
+       "[skipping binary content]"
+      elsif is_gzip?
+        #require 'zlib'
+        #Zlib::Inflate.inflate(@body)
+         "[skipping gzip content]"
+      else
+        @body
+      end
+    end
+    
+    def is_binary?
+      (!is_text?) == true
+    end
+    
+    def is_text?
+      (!header[:Content_Type].nil? && (header[:Content_Type][0].is_a? String) && header[:Content_Type][0][/text/] != nil)
+    end
+    
+    def is_gzip?
+      (!header[:Content_Encoding].nil? && (header[:Content_Encoding][0].is_a? String) && header[:Content_Encoding][0][/gzip/] != nil)
     end
     
     def inspect
