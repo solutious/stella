@@ -1,0 +1,19 @@
+Ruby-Pcap Patch (2008-02-10)
+-------------------------------------------------------
+
+"pcap.bundle: warning: do not use Fixnums as Symbols"
+
+Ruby-Pcap is a libpcap binding for Ruby. On Ruby 1.8.6, 
+the latest release (0.6) produces the warning above on 
+OS X. ruby-pcap-takuma-patch.txt is a patch from here:
+http://d.hatena.ne.jp/takuma104/20080210/1202638583
+
+You can get Ruby-Pcap from here:
+http://www.goto.info.waseda.ac.jp/~fukusima/ruby/pcap-e.html
+
+$ tar -zxf ruby-pcap-0.6.tar.gz
+$ cd pcap
+$ patch -p1 < ruby-pcap-takuma-patch.txt
+$ make 
+$ make install
+
