@@ -15,8 +15,6 @@ STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $:.unshift(File.join(STELLA_HOME, 'lib')) # Make sure our local lib is first in line
 
 require 'stella'
-require 'stella/cli'
+require 'drydock'
 
-app = Stella::CLI.new(ARGV, STDIN)
-app.run
 
