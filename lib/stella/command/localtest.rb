@@ -1,6 +1,6 @@
 
 
-module Stella
+module Stella::Command
   class LocalTest < Stella::Command::Base
 
       # A container for the test parameters

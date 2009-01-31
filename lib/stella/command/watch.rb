@@ -1,6 +1,6 @@
 
 
-module Stella
+module Stella::Command
   class Watch < Stella::Command::Base
     
     attr_accessor :adapter

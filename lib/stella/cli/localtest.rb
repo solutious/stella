@@ -24,7 +24,7 @@ module Stella
           raise UnknownValue.new(adapter)
         end
         
-        @driver = Stella::LocalTest.new
+        @driver = Stella::Command::LocalTest.new
       end
       
 

@@ -30,7 +30,7 @@ module Stella
       
       def run
         
-        @driver = Stella::Watch.new(@adapter)
+        @driver = Stella::Command::Watch.new(@adapter)
         @driver.format = @stella_options.format
         @driver.quiet = @stella_options.quiet
         @driver.verbose = @stella_options.verbose

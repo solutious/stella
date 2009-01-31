@@ -39,7 +39,7 @@ describe "Stella::Command::LoadTest" do
     puts 
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::ApacheBench.new(["-c", "#{TVUSERS}", "-n", "#{TCOUNT}", "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     files = %w{ab-percentiles.log ab-requests.log}
     execute_load_test(lt, testdef, adapter, files)
     lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
@@ -51,7 +51,7 @@ describe "Stella::Command::LoadTest" do
     puts 
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::Siege.new(["-c", "#{TVUSERS}", "-r", "#{TCOUNT / TVUSERS}", "--benchmark", "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     files = %w{siege.log siegerc}
     execute_load_test(lt, testdef, adapter, files)
     lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
@@ -65,7 +65,7 @@ describe "Stella::Command::LoadTest" do
     adapter = Stella::Adapter::Httperf.new(
       ["--wsess=#{(TCOUNT / TVUSERS).to_i},#{TVUSERS},0", "--rate=#{TCOUNT / TVUSERS}", "--uri=/test", "--server=#{HOST}", "--port=#{PORT}"]
     )
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     files = %w{}
     execute_load_test(lt, testdef, adapter, files)
     lt.test_stats.transactions_total.should.equal TCOUNT * TREPS
@@ -76,7 +76,7 @@ describe "Stella::Command::LoadTest" do
     puts 
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     execute_load_test(lt, testdef, adapter)
     File.symlink?(lt.test_path_symlink).should.equal true
     lt.test_stats.transactions_total.should.equal TREPS * TCOUNT
@@ -86,7 +86,7 @@ describe "Stella::Command::LoadTest" do
     puts 
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     lt.quiet = true
     output = capture(:stdout) do
       execute_load_test(lt, testdef, adapter)
@@ -101,7 +101,7 @@ describe "Stella::Command::LoadTest" do
       puts 
       testdef = Stella::Test::Definition.new
       adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
-      lt = Stella::LocalTest.new
+      lt = Stella::Command::LocalTest.new
       lt.format = format
       execute_load_test(lt, testdef, adapter)
       File.exists?(File.join(lt.test_path, "STATS.#{format}")).should.equal true
@@ -113,7 +113,7 @@ describe "Stella::Command::LoadTest" do
     puts
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     testdef.warmup = 0.5  # this means half of the number of requests
     execute_load_test(lt, testdef, adapter)
     File.exists?(File.join(lt.test_path, "STATS.yaml")).should.equal true
@@ -129,7 +129,7 @@ describe "Stella::Command::LoadTest" do
     puts
     testdef = Stella::Test::Definition.new
     adapter = Stella::Adapter::ApacheBench.new(["-c", TVUSERS.to_s, "-n", TCOUNT.to_s, "http://#{HOST}:#{PORT}/test"])
-    lt = Stella::LocalTest.new
+    lt = Stella::Command::LocalTest.new
     testdef.rampup = [TVUSERS,TVUSERS*2]
     execute_load_test(lt, testdef, adapter)
     File.exists?(File.join(lt.test_path, "STATS.yaml")).should.equal true
