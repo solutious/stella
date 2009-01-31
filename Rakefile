@@ -22,7 +22,6 @@ STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__)))
 $: << File.join(STELLA_HOME, 'lib')
 
 require 'stella'
-
 name = 'stella'
 version = Stella::VERSION.to_s
 

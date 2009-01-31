@@ -51,7 +51,6 @@ require 'stella/adapter/ab'
 require 'stella/adapter/siege'
 require 'stella/adapter/httperf'
 
-# = Stella
 #  A friend in performance testing. 
 #
 # This class ties Stella together. It must be required because it defines

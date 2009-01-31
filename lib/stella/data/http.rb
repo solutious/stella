@@ -75,6 +75,11 @@ module Stella::Data
       str
     end
     
+    def cookies
+      return [] if !header.is_a?(Hash) || header[:Cookie].empty?
+      header[:Cookie] 
+    end
+    
   end
   
   class HTTPResponse < Stella::Storable
@@ -147,6 +152,12 @@ module Stella::Data
     def to_s
       str = "%s: HTTP/%s %s (%s)" % [time.strftime(NICE_TIME_FORMAT), @http_version, @status, @message]
       str 
+    end
+    
+    
+    def cookies
+      return [] unless header.is_a?(Array) && !header[:Set_Cookie].empty?
+      header[:Set_Cookie] 
     end
   end
 end 

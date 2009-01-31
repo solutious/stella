@@ -100,7 +100,15 @@ module Stella
         #return if @options[:domain] && !(data_object.uri.to_s =~ /(www.)?#{@options[:domain]}/i)
         
         
-        
+        #if @options[:cookies]
+        #  Stella::LOGGER.info(data_object.to_s) 
+        #  Stella::LOGGER.info(data_object.cookies.join("#{$/} -> "))
+        #  
+        #  if data_object.has_response?
+        #    Stella::LOGGER.info(data_object.response.to_s)
+        #    Stella::LOGGER.info(" -> " << data_object.response.cookies.join("#{$/} -> "))          
+        #  end
+        #  
         if @stella_options.format && data_object.respond_to?("to_#{@stella_options.format}")
           Stella::LOGGER.info(data_object.send("to_#{@stella_options.format}"))
           
@@ -229,6 +237,7 @@ module Stella
         
         opts.on("#{$/}Common options")
         opts.on('-p=N', '--port=N', Integer, "With --useproxy this is the Proxy port. With --usecap this is the TCP port to filter. ") do |v| v end
+        #opts.on('-c', '--cookies' , "Only display cookies") do |v| v end
         #opts.on('-f=S', '--filter=S', String, "Filter out requests which do not contain this string") do |v| v end
         #opts.on('-d=S', '--domain=S', String, "Only display requests to the given domain") do |v| v end
         #opts.on('-r=S', '--record=S', String, "Record requests to file with an optional filename") do |v| v || true end
