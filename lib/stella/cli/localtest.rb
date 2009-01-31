@@ -60,6 +60,7 @@ module Stella
         @testdef.message = @stella_options.message
         
         
+        @driver.force = @stella_options.force
         @driver.quiet = @stella_options.quiet
         @driver.verbose = @stella_options.verbose
         @driver.format = @stella_options.format || 'yaml'

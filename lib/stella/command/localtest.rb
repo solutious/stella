@@ -10,10 +10,7 @@ module Stella
     
     attr_accessor :test_path
     
-    attr_accessor :quiet
-    attr_accessor :guid
-    attr_accessor :verbose
-    attr_accessor :format
+
     
       # list of all filesystem paths for each run in a single test
     attr_reader :test_runpaths

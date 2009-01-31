@@ -2,6 +2,9 @@ STELLA, CHANGES
 
 #### 0.5.6 (2009-02-04) ###############################
 
+* API Change: watch is replaced by pcap and proxy. 
+  * "stella watch -C" is now "stella pcap"
+  * "stella watch -P" is now "stella proxy"
 * Fixed body printing bug for stella -v watch -C
 * Added adapter tests 
 * Improved RDocs
@@ -9,7 +12,7 @@ STELLA, CHANGES
 
 #### 0.5.5 (2009-01-14) ###############################
 
-http://github.com/solutious/stella/tree/0.5.5
+http://github.com/solutious/stella/tree/stella-0.5.5
 
 * Now has specs (33 specifications, 303 requirements)
 * New dependency: test-spec (development copy only)
@@ -24,7 +27,7 @@ http://github.com/solutious/stella/tree/0.5.5
 
 #### 0.5.4-alpha (2009-01-07) #########################
 
-http://github.com/solutious/stella/tree/0.5.4-alpha
+http://github.com/solutious/stella/tree/stella-0.5.4-alpha
 
 * New command: watch. Monitor HTTP traffic with Ruby-Pcap (unix only) or proxy. Pcap also supports DNS sniffing.
 * Improved error handling for stats output

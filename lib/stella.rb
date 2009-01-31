@@ -44,12 +44,14 @@ require 'stella/test/stats'
 # Commands
 require 'stella/command/base'
 require 'stella/command/localtest'
+require 'stella/command/watch'
 
 # Adapters
 require 'stella/adapter/base'
 require 'stella/adapter/ab'
 require 'stella/adapter/siege'
 require 'stella/adapter/httperf'
+require 'stella/adapter/proxy'
 
 #  A friend in performance testing. 
 #

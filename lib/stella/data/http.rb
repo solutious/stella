@@ -18,6 +18,7 @@ module Stella::Data
   
   class HTTPRequest < Stella::Storable
     attr_reader :raw_data
+    attr_accessor :response
     
     field :time => DateTime
     field :client_ip 

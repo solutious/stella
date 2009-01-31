@@ -3,26 +3,14 @@
 module Stella::Command
   class Base
     
+    attr_accessor :quiet
+    attr_accessor :guid
+    attr_accessor :verbose
+    attr_accessor :format
+    attr_accessor :force
     
-    # TODO: See EC2::Platform for example to improve/generalize platform
-    # discovery. We'll need this for monitoring. 
-    IMPLEMENTATIONS = [
-      [/darwin/i,  :unix,    :macosx ]
-    ]
-    ARCHITECTURES = [
-      [/(i\d86)/i,  :i386             ]
-    ]
-    
-    # When using Stella::CLI this will contain the string used to call this command
-    # i.e. ab, siege, help, etc...
-    attr_accessor :shortname
-    
-    
-    def initialize()
-      
-      #agent = find_agent(*expand_str(v)) 
-      #@logger.info(:cli_print_agent, agent) if @options.verbose >= 1
-
+    def run
+      raise "Override 'run'"
     end
     
     def run_sleeper(duration)

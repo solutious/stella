@@ -11,14 +11,13 @@ module Stella
     require 'pcap'
     require 'observer'
     
-    # Stella::Adapter::PcapWatcher
-    #
+
     # Record HTTP or DNS events with Pcap (TCP sniffer). This requires ruby-pcap and the C pcap 
     # library as well as root acceess (TCP packet sniffing requires root privileges). If you're
     # running Ruby 1.9, JRuby, or Windows this will not be available on your system. 
     # To sniff traffic, you must be on either the machine sending the requests or the machine
     # receiving the requests. 
-    class PcapWatcher
+    class Pcap
       include Observable
       
       # Building Ruby::Pcap with Ruby 1.9.1
@@ -105,8 +104,8 @@ module Stella
 
         @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
         
-        req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
-        resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@dport}", @pcaplet.capture)
+        req_filter  = ::Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
+        resp_filter = ::Pcap::Filter.new("#{@protocol} and src port #{@dport}", @pcaplet.capture)
         @pcaplet.add_filter(req_filter | resp_filter)
         @pcaplet.each_packet do |packet|
           data = packet.udp_data
@@ -143,8 +142,8 @@ module Stella
         @pcaplet = Pcaplet.new(:device => @device, :count => @maxpacks)
             
         begin
-          req_filter  = Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
-          resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@sport}", @pcaplet.capture)
+          req_filter  = ::Pcap::Filter.new("#{@protocol} and dst port #{@dport}", @pcaplet.capture)
+          resp_filter = ::Pcap::Filter.new("#{@protocol} and src port #{@sport}", @pcaplet.capture)
           @pcaplet.add_filter(req_filter | resp_filter)
           @pcaplet.each_packet do |packet|
             data = packet.tcp_data
