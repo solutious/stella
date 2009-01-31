@@ -1,5 +1,11 @@
 STELLA, CHANGES
 
+#### 0.6.0 (2009-02-04) ###############################
+
+* COMPLETE REWRITE!
+	* The commands and API from 0.5.x are no longer supported. This ain't your grandmother's Stella.
+
+
 #### 0.5.6 (2009-02-04) ###############################
 
 * API Change: watch is replaced by pcap and proxy. 
