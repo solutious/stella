@@ -42,11 +42,14 @@ module Stella::Data
     
     def initialize(raw_data=nil)
       @raw_data = raw_data
-      if @raw_data
-        @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw_data) 
-      end
+      parse(@raw_data)
       @response = Stella::Data::HTTPResponse.new
       @time = DateTime.now
+    end
+    
+    def parse(raw)
+      return unless raw
+      @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw, @uri.host, @uri.port) 
     end
     
     def uri
@@ -62,6 +65,7 @@ module Stella::Data
     
 
     def headers
+      return [] unless header
       headers = []
       header.each_pair do |n,v|
         headers << [n.to_s.gsub('_', '-'), v[0]]
@@ -102,9 +106,12 @@ module Stella::Data
     
     def initialize(raw_data=nil)
       @raw_data = raw_data
-      if @raw_data
-        @status, @http_version, @message, @header, @body = HTTPUtil::parse_http_response(@raw_data)
-      end
+      parse(@raw_data)
+    end
+    
+    def parse(raw)
+      return unless raw
+      @status, @http_version, @message, @header, @body = HTTPUtil::parse_http_response(raw)
     end
     
     def has_body?

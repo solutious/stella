@@ -12,7 +12,7 @@ require 'drydock'
 require 'stella'
 require 'stella/command/get'
 
-
+debug :off
 
 # ======================================================  GLOBALS  ============
 global_usage "USAGE: #{$0} [global options] command [command options]"
@@ -30,16 +30,19 @@ end
 # =====================================================  COMMANDS  ============
 default :commands
 
-
-
 # ---------------------------------------------------  stella get  ------------
-usage "USAGE: #{$0} get"
-option :v, :victory, "I only know"
+usage "USAGE: #{$0} get [-u http://host/path/2/get]"
+option :A, :auth, String, "Basic authentication username, password, and optional realm (colon separated)"
+#option :P, :proxy, String, ""
+#option     :proxyauth, String, ""
 command :get => Stella::Command::Get do |obj, argv|
-
-  obj.read_raw if argv.empty?
+  
+  argv.empty? ? obj.read_raw : obj.uri = argv[0]
   resp = obj.run
-  puts resp.body.content
+  
+  resp.header.all.each do |h|
+    puts "#{h[0]}: #{h[1]}"
+  end
   
   #headers = { 'Content-Type' => 'text/xml' }
                           
@@ -55,7 +58,7 @@ command :get => Stella::Command::Get do |obj, argv|
   ##puts @client
   #@client.save_cookie_store
 end
-
+alias_command :head, :get
 
 
 # ----------------------------------------------  stella commands  ------------

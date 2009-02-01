@@ -12,13 +12,13 @@ module Stella::Command
     include Stella::Command::Base
     
     attr_accessor :raw
-    attr_accessor :host
-    attr_accessor :port
+    attr_accessor :uri
     attr_accessor :proxy
     
     def run
-      @req = req if !@req && @raw
+      @req ||= req
       raise "No request defined" unless @req
+      
       c = (@proxy) ? HTTPClient.new(@proxy) : HTTPClient.new
       c.get @req.uri, @req.headers
     end
@@ -34,7 +34,7 @@ module Stella::Command
     end
     
     def req
-      @req = Stella::Data::HTTPRequest.new(@raw)
+
     end
     
   end
