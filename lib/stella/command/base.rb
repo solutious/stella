@@ -1,13 +1,8 @@
 
       
 module Stella::Command
-  class Base
-    
-    attr_accessor :quiet
-    attr_accessor :guid
-    attr_accessor :verbose
-    attr_accessor :format
-    attr_accessor :force
+  module Base
+
     
     def run
       raise "Override 'run'"
@@ -21,6 +16,5 @@ module Stella::Command
       }
       sleep remainder if remainder > 0
     end
-
   end
 end

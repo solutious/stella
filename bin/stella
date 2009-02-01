@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby 
 
-require 'drydock'
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
+
 
 # 
 # 
@@ -8,21 +9,18 @@ require 'drydock'
 # <tt>$ stella -h</tt>
 #
 
-#
-#
-STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-$:.unshift(File.join(STELLA_HOME, 'lib')) # Make sure our local lib is first in line
-
+require 'drydock'
 require 'stella'
 require 'stella/command/get'
+
 
 default :commands
 
 
 global_usage "USAGE: #{$0} [global options] command [command options]"
 global_option :V, :version, "Display Stella version" do; Stella.info(Stella::VERSION); exit 0; end
-global_option :f, :format, "Specify the format for output files." do |v|; v; end
-global_option :F, :force, "Force the command to ignore errors."
+global_option :f, :format, String, "Specify the format for output files." do |v|; v; end
+global_option :F, :force, "Force the command to ignore errors." 
 global_option :q, :quiet, "Tell Stella to be quiet (overrides verbosity level)."
 global_option :v, :verbose, "Verbosity level. The more the merrier (i.e. -vvv is greater than -v)." do |v|
   @val ||= 0
@@ -30,9 +28,13 @@ global_option :v, :verbose, "Verbosity level. The more the merrier (i.e. -vvv is
 end
 
 usage "USAGE: #{$0} get"
-command :get do |options, argv, global_options|
-  hi = gets
-  puts hi
+option :v, :victory, "I only know"
+command :get => Stella::Command::Get do |obj, argv|
+  if argv.empty?
+    Stella.info("Enter the raw GET request:")
+    raw = gets
+  end
+  
 end
 
 usage "USAGE: #{$0} commands"

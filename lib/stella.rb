@@ -6,6 +6,7 @@ require 'rubygems'
 require 'logger'
 
 # Common dependencies
+STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $: << File.join(STELLA_HOME, 'vendor', 'useragent', 'lib')
 require 'user_agent'
 

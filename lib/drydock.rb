@@ -3,18 +3,24 @@ require 'ostruct'
 require 'pp'
 
 
+
 module Drydock
   class Command
-    attr_reader :cmd, :index
+    attr_reader :cmd, :index, :action
     def initialize(cmd, index, &b)
-      @cmd = (cmd.kind_of?(Symbol)) ? cmd.to_s : cmd
+      @cmd = (cmd.kind_of?(Symbol)) ? cmd : cmd.to_sym
       @index = index
+      @action = action
       @b = b
     end
     
     def call(cmd_str, argv, stdin, global_options, options)
-      block_args = [options, argv, global_options, stdin, cmd_str, self]
-      @b.call(*block_args[0..(@b.arity-1)])
+        global_options.merge(options).each_pair do |n,v|
+          self.send("#{n}=", v)
+        end
+        block_args = [self, argv, cmd_str, stdin] # TODO: review order
+
+      @b.call(*block_args[0..(@b.arity-1)]) # send only as many args as defined
     end
     def to_s
       @cmd.to_s
@@ -61,11 +67,9 @@ module Drydock
   end
   
   
-  # ex: usage "Usage: frylla [global options] command [command options]"
   def global_usage(msg)
     @global_opts_parser ||= OptionParser.new 
     @global_options ||= OpenStruct.new
-  
     @global_opts_parser.banner = msg
   end
   
@@ -81,22 +85,28 @@ module Drydock
     
     global_parser = @global_opts_parser
     
+    
     global_options = global_parser.getopts(argv)
-    global_options = global_options.keys.inject({}) do |hash, key|
-       hash[key.to_sym] = global_options[key]
-       hash
-    end
     
     cmd_name = (argv.empty?) ? @default_command : argv.shift
     raise UnknownCommand.new(cmd_name) unless command?(cmd_name)
     
     cmd = get_command(cmd_name) 
-    command_parser = @command_opts_parser[cmd.index]
     
+    command_parser = @command_opts_parser[cmd.index]
     command_options = command_parser.getopts(argv) if (!argv.empty? && command_parser)
-    command_options = command_options.keys.inject({}) do |hash, key|
-       hash[key.to_sym] = command_options[key]
-       hash
+    
+    [global_option_names, command_option_names[cmd.index]].flatten.each do |n|
+      unless cmd.respond_to?(n)
+        cmd.class.send(:define_method, n) do
+          instance_variable_get("@#{n}")
+        end
+      end
+      unless cmd.respond_to?("#{n}=")
+        cmd.class.send(:define_method, "#{n}=") do |val|
+          instance_variable_set("@#{n}", val)
+        end
+      end
     end
     
     [global_options, cmd_name, command_options, argv]
@@ -108,7 +118,10 @@ module Drydock
     get_current_option_parser.banner = msg
   end
   
-
+  def global_option_names
+    @global_option_names ||= []
+  end
+  
   # Grab the options parser for the current command or create it if it doesn't exist.
   def get_current_option_parser
     @command_opts_parser ||= []
@@ -116,15 +129,27 @@ module Drydock
     (@command_opts_parser[@command_index] ||= OptionParser.new)
   end
   
+  # Grab the current list of command-specific option names. This is a list of the
+  # long names. 
+  def current_command_option_names
+    @command_option_names ||= []
+    @command_index ||= 0
+    (@command_option_names[@command_index] ||= [])
+  end
+  
+  def command_option_names
+    @command_option_names ||= []
+  end
+  
   def global_option(*args, &b)
     @global_opts_parser ||= OptionParser.new
     args.unshift(@global_opts_parser)
-    option_parser(args, &b)
+    global_option_names << option_parser(args, &b)
   end
   
   def option(*args, &b)
     args.unshift(get_current_option_parser)
-    option_parser(args, &b)
+    current_command_option_names << option_parser(args, &b)
   end
   
   # Processes calls to option and global_option. Symbols are converted into 
@@ -141,9 +166,11 @@ module Drydock
     return if args.empty?
     opts_parser = args.shift
     
+    arg_name = ''
     symbol_switches = []
     args.each_with_index do |arg, index|
       if arg.is_a? Symbol
+        arg_name = arg.to_s if arg.to_s.size > arg_name.size
         args[index] = (arg.to_s.length == 1) ? "-#{arg.to_s}" : "--#{arg.to_s}"
         symbol_switches << args[index]
       elsif arg.kind_of?(Class)
@@ -153,6 +180,8 @@ module Drydock
       end
     end
     
+    #puts "LONG: #{arg_name}"
+    
     if args.size == 1
       opts_parser.on(args.shift)
     else
@@ -161,14 +190,21 @@ module Drydock
         result = (b.nil?) ? v : b.call(*block_args[0..(b.arity-1)])
       end
     end
+    
+    return arg_name
   end
   
   def command(*cmds, &b)
     @command_index ||= 0
     @command_opts_parser ||= []
+    @command_option_names ||= []
     cmds.each do |cmd| 
-      c = Command.new(cmd, @command_index, &b)
-      (@commands ||= {})[cmd] = c
+      if cmd.is_a? Hash
+        c = cmd.values.first.new(cmd.keys.first, @command_index, &b)
+      else
+        c = Drydock::Command.new(cmd, @command_index, &b)
+      end
+      (@commands ||= {})[c.cmd] = c
     end
     
     @command_index += 1
