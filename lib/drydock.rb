@@ -2,8 +2,6 @@ require 'optparse'
 require 'ostruct'
 require 'pp'
 
-# TODO: fix help display
-#
 
 #
 #
@@ -71,7 +69,7 @@ module Drydock
   
   FORWARDED_METHODS = %w(command before alias_command commands
                          global_option global_usage usage debug
-                         option help stdin default ).freeze
+                         option stdin default ignore).freeze
   
   @@debug = false
   def debug(toggle=false)
@@ -103,7 +101,7 @@ module Drydock
   def global_usage(msg)
     @global_opts_parser ||= OptionParser.new 
     @global_options ||= OpenStruct.new
-    @global_opts_parser.banner = msg
+    @global_opts_parser.banner = "USAGE: #{msg}"
   end
 
   # Split the +argv+ array into global args and command args and 
@@ -123,7 +121,14 @@ module Drydock
     cmd = get_command(cmd_name) 
       
     command_parser = @command_opts_parser[cmd.index]
-    command_options = command_parser.getopts(argv) if (!argv.empty? && command_parser)
+    command_options = {}
+    
+    # We only need to parse the options out of the arguments when
+    # there are args available, there is a valid parser, and 
+    # we weren't requested to ignore the options. 
+    if !argv.empty? && command_parser && command_parser != :ignore
+      command_options = command_parser.getopts(argv)
+    end
     
     # Add accessors to the Drydock::Command object 
     # for the global and command specific options
@@ -144,13 +149,10 @@ module Drydock
   end
   
   def usage(msg)
-    get_current_option_parser.banner = msg
+    get_current_option_parser.banner = "USAGE: #{msg}"
   end
   
-  def help
-    get_current_option_parser
-  end
-  
+
   def global_option_names
     @global_option_names ||= []
   end
@@ -160,6 +162,10 @@ module Drydock
     @command_opts_parser ||= []
     @command_index ||= 0
     (@command_opts_parser[@command_index] ||= OptionParser.new)
+  end
+  
+  def ignore(what=:all)
+    @command_opts_parser[@command_index] = :ignore if what == :options || what == :all
   end
   
   # Grab the current list of command-specific option names. This is a list of the

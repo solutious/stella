@@ -6,9 +6,12 @@ require 'util/httputil'
 require 'stella/command/base'
 require 'stella/data/http'
 
+# NOTE: Not working
 
-module Stella::Command
-  class Get < Drydock::Command
+#
+#
+module Stella::Command #:nodoc: all
+  class Get < Drydock::Command #:nodoc: all
     include Stella::Command::Base
     
     attr_accessor :raw
