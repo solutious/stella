@@ -14,7 +14,7 @@ module Drydock
       @b = b
     end
     
-    def call(cmd_str, argv, stdin, global_options, options)
+    def call(cmd_str, argv, stdin, global_options={}, options={})
         global_options.merge(options).each_pair do |n,v|
           self.send("#{n}=", v)
         end
@@ -85,18 +85,19 @@ module Drydock
     
     global_parser = @global_opts_parser
     
-    
     global_options = global_parser.getopts(argv)
     
+      
     cmd_name = (argv.empty?) ? @default_command : argv.shift
     raise UnknownCommand.new(cmd_name) unless command?(cmd_name)
     
     cmd = get_command(cmd_name) 
     
+      
     command_parser = @command_opts_parser[cmd.index]
     command_options = command_parser.getopts(argv) if (!argv.empty? && command_parser)
     
-    [global_option_names, command_option_names[cmd.index]].flatten.each do |n|
+    [global_option_names, (command_option_names[cmd.index] || [])].flatten.each do |n|
       unless cmd.respond_to?(n)
         cmd.class.send(:define_method, n) do
           instance_variable_get("@#{n}")
@@ -229,6 +230,7 @@ module Drydock
     raise NoCommandsDefined.new unless @commands
     @global_options, cmd_name, @command_options, argv = process_arguments(argv)
     
+    
     cmd_name ||= @default_command
     
     raise UnknownCommand.new(cmd_name) unless command?(cmd_name)
@@ -247,7 +249,7 @@ module Drydock
   
   def call_command(cmd_str, argv=[], stdin=nil)
     return unless command?(cmd_str)
-    get_command(cmd_str).call(cmd_str, argv, stdin, @global_options, @command_options)
+    get_command(cmd_str).call(cmd_str, argv, stdin, @global_options || {}, @command_options || {})
   end
   
   def get_command(cmd)
