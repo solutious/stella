@@ -13,9 +13,9 @@ require 'drydock'
 require 'stella'
 require 'stella/command/get'
 
+require 'net/httpclient'
 
 default :commands
-
 
 global_usage "USAGE: #{$0} [global options] command [command options]"
 global_option :V, :version, "Display Stella version" do; Stella.info(Stella::VERSION); exit 0; end
@@ -32,8 +32,15 @@ option :v, :victory, "I only know"
 command :get => Stella::Command::Get do |obj, argv|
   if argv.empty?
     Stella.info("Enter the raw GET request:")
-    raw = gets
+    #raw = gets
   end
+  
+  headers = { 'Content-Type' => 'text/xml' }
+                          
+  @client = Net::HTTPClient.new
+  @url = URI.parse 'http://solutious.com/'
+  
+  puts @client.get @url, headers
   
 end
 
