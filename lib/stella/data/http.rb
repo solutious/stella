@@ -46,6 +46,7 @@ module Stella::Data
         @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw_data) 
       end
       @response = Stella::Data::HTTPResponse.new
+      @time = DateTime.now
     end
     
     def uri
@@ -60,12 +61,15 @@ module Stella::Data
     end
     
 
-    
-    def inspect
+    def headers
       headers = []
       header.each_pair do |n,v|
-        headers << "#{n.to_s.gsub('_', '-')}: #{v[0]}"
+        headers << [n.to_s.gsub('_', '-'), v[0]]
       end
+      headers
+    end
+    
+    def inspect
       str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
       str << $/ + headers.join($/)
       str << $/ + $/ + body if body
@@ -128,6 +132,14 @@ module Stella::Data
       end
     end
     
+    def headers
+      headers = []
+      header.each_pair do |n,v|
+        headers << [n.to_s.gsub('_', '-'), v[0]]
+      end
+      headers
+    end
+    
     def is_binary?
       (!is_text?) == true
     end
@@ -141,10 +153,6 @@ module Stella::Data
     end
     
     def inspect
-      headers = []
-      header.each_pair do |n,v|
-        headers << "#{n.to_s.gsub('_', '-')}: #{v[0]}"
-      end
       str = "HTTP/%s %s (%s)" % [@http_version, @status, @message]
       str << $/ + headers.join($/)
       str << $/ + $/ + body if body

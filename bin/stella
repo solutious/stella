@@ -2,7 +2,6 @@
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
 
-
 # 
 # 
 # See:
@@ -13,11 +12,11 @@ require 'drydock'
 require 'stella'
 require 'stella/command/get'
 
-require 'net/httpclient'
 
-default :commands
 
+# ======================================================  GLOBALS  ============
 global_usage "USAGE: #{$0} [global options] command [command options]"
+
 global_option :V, :version, "Display Stella version" do; Stella.info(Stella::VERSION); exit 0; end
 global_option :f, :format, String, "Specify the format for output files." do |v|; v; end
 global_option :F, :force, "Force the command to ignore errors." 
@@ -27,23 +26,39 @@ global_option :v, :verbose, "Verbosity level. The more the merrier (i.e. -vvv is
   @val += 1
 end
 
+
+# =====================================================  COMMANDS  ============
+default :commands
+
+
+
+# ---------------------------------------------------  stella get  ------------
 usage "USAGE: #{$0} get"
 option :v, :victory, "I only know"
 command :get => Stella::Command::Get do |obj, argv|
-  if argv.empty?
-    Stella.info("Enter the raw GET request:")
-    #raw = gets
-  end
+
+  obj.read_raw if argv.empty?
+  resp = obj.run
+  puts resp.body.content
   
-  headers = { 'Content-Type' => 'text/xml' }
+  #headers = { 'Content-Type' => 'text/xml' }
                           
-  @client = Net::HTTPClient.new
-  @url = URI.parse 'http://solutious.com/'
-  
-  puts @client.get @url, headers
-  
+  #@client = HTTPClient.new('http://localhost:3114')
+  #@url = URI.parse "http://solutious.com/"
+  ##@url = URI.parse 'https://delaagsterekening.nl/api/suggestions/status.json?token=253'
+  ##@client.set_auth("https://delaagsterekening.nl/", "stella", "stella")
+  #@client.set_cookie_store("/tmp/cookie.dat")
+  #body, resp = @client.get @url, headers
+  #body.header.all.each do |h|
+  #  puts "#{h[0]}: #{h[1]}"
+  #end
+  ##puts @client
+  #@client.save_cookie_store
 end
 
+
+
+# ----------------------------------------------  stella commands  ------------
 usage "USAGE: #{$0} commands"
 command :commands do
   Stella.info("Available commands:")

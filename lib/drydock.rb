@@ -3,8 +3,20 @@ require 'ostruct'
 require 'pp'
 
 
-
 module Drydock
+  # The base class for all command objects. There is an instance of this class
+  # for every command defined. Global and command-specific options are added
+  # as attributes to this class dynamically. 
+  # 
+  # i.e. "example -v date -f yaml"
+  #
+  #     global_option :v, :verbose, "I want mooooore!"
+  #     option :f, :format, "Long date format"
+  #     command :date do |obj|
+  #         puts obj.verbose  #=> true
+  #         puts obj.format  #=> "yaml"
+  #     end
+  #
   class Command
     attr_reader :cmd, :index, :action
     def initialize(cmd, index, &b)
@@ -72,7 +84,6 @@ module Drydock
     @global_options ||= OpenStruct.new
     @global_opts_parser.banner = msg
   end
-  
 
   
   # Split the +argv+ array into global args and command args and 
@@ -273,6 +284,10 @@ module Drydock
   
 end
 
+trap ("SIGINT") do
+  puts "#{$/}Exiting..."
+  exit 0
+end
 
 Drydock::FORWARDED_METHODS.each do |m|
   eval(<<-end_eval, binding, "(Drydock)", __LINE__)
