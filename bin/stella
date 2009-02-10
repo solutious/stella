@@ -33,7 +33,7 @@ usage "#{$0} form [-u http://host/path/2/get]"
 option :A, :auth, String, "Basic authentication username, password, and optional realm (colon separated)"
 command :form => Stella::Command::Form do |obj, argv|
   raise "You must supply a URI" if argv.empty?
-  obj.uri = argv[0]
+  
   
 end
 

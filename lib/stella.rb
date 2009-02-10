@@ -5,6 +5,9 @@ require 'rubygems'
 
 require 'logger'
 
+require 'stella/testplan'
+require 'stella/loadtest'
+
 # Common dependencies
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $: << File.join(STELLA_HOME, 'vendor', 'useragent', 'lib')
@@ -41,6 +44,11 @@ module Stella
   
   def self.error(*args)
     LOGGER.error(*args)
+  end
+  
+  def self.fatal(*args)
+    LOGGER.error(*args)
+    exit 1
   end
   
   def self.debug(*args)

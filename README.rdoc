@@ -24,6 +24,7 @@ Stella is a command-line tool for running, reporting, and analyzing performance 
   * net-dns 
   * Ruby-Pcap (optional, for packet sniffing)
   * httpclient
+  * cucumber
 
 * One of:
   * Apache-Bench[http://httpd.apache.org/docs/2.2/programs/ab.html]
