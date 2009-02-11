@@ -1,18 +1,39 @@
 
-require 'uri'
-require 'stella/testplan/helpers'
-require 'stella/testplan/dsl'
+module Stella
+  class TestPlan
+    class Auth
+      attr_accessor :type
+      attr_accessor :user
+      attr_accessor :pass
+      def initialize(type, user, pass=nil)
+        @uri = type
+        @user = user
+        @pass = pass if pass
+      end
+    end
+    class Proxy 
+      attr_accessor :uri
+      attr_accessor :user
+      attr_accessor :pass
+      def initialize(uri, user=nil, pass=nil)
+        @uri = uri
+        @user = user if user
+        @pass = pass if pass
+      end
+    end
+  end
+end
 
 module Stella
-  
-  # 
-  # 
-  # 
+
   class TestPlan
       # The name of the testplan. 
     attr_accessor :name
-      # A URI object containing the base URI for the test.
-    attr_accessor :base_uri
+      # An array of hostnames (with optional port number) to be use during the test.
+      #     tp.servers << "stellaaahhhh.com:80"
+    attr_accessor :servers
+      # Used as the default protocol for the testplan. One of: http, https 
+    attr_accessor :protocol
       # A Stella::Testplan::Auth object
     attr_accessor :auth
       # A Stella::Testplan::Proxy object containing the proxy to be used for the test.
@@ -25,33 +46,50 @@ module Stella
     def initialize(name=:anonymous)
       @name = name
       @requests = []
+      @servers = []
+      @protocol = "http"
     end
     
     # Append a Stella::Testplan::Request object to +requests+.
     def add_request(req)
-      raise "That is not an instance of Stella::TestPlan::Request" unless req.is_a? Stella::TestPlan::Request
-      (@requests ||= []) << req
+      raise "That is not an instance of Stella::Data::HTTPRequest" unless req.is_a? Stella::Data::HTTPRequest
+      @requests << req
+    end
+    
+    def add_servers(*args)
+      return if args.empty?
+      @servers += args
     end
       
     # Creates a Stella::Testplan::Auth object and stores it to +@auth+
-    def set_auth(type, user, pass=nil)
+    def auth=(*args)
+      type, user, pass = args.flatten
+      puts user
       @auth = Stella::TestPlan::Auth.new(type, user, pass)
     end
     
     # Creates a Stella::Testplan::Proxy object and stores it to +@proxy+
-    def set_proxy(uri, user, pass=nil)
+    def proxy=(*args)
+      uri, user, pass = args.flatten
       @proxy = Stella::TestPlan::Proxy.new(uri, user, pass)
     end
     
-    # Creates a URI object and stores it to +@base_uri+
-    def set_base_uri(uri)
+    # A string to be parsed by URI#parsed or a URI object. The host and port are added to +@servers+ 
+    # in the form "host:port". The protocol is stored in +@protocol+. NOTE: The 
+    # protocol is used as a default for the test and if it's already set, this 
+    # method will not try to overwrite it. 
+    def base_uri=(*args)
+      uri_str = args.flatten.first
       begin
-        @base_uri = URI.parse uri
+        uri = URI.parse uri_str
+        host_str = uri.host
+        host_str << ":#{uri.port}" if uri.port
+        @servers << host_str
+        @protocol = uri.scheme unless @protocol
       rescue => ex
         Stella.fatal(ex)
       end
     end
-    
     
     
   end

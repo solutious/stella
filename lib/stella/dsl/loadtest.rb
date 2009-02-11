@@ -13,7 +13,8 @@ module Stella
       
       def plan(testplan)
         raise "Unknown testplan, '#{testplan}'" unless @plans.has_key?(testplan)
-        p @plans[testplan]
+        return unless @current_test
+        @current_test.testplan = @plans[testplan]
       end
       
       

@@ -1,7 +1,7 @@
 
 
 module Stella::Data
-  class DomainRequest < Stella::Storable
+  class DomainRequest < Storable
     attr_accessor :dns_data
     attr_reader :raw_data
     
@@ -40,7 +40,7 @@ module Stella::Data
     
   end
   
-  class DomainResponse < Stella::Storable
+  class DomainResponse < Storable
     attr_accessor :dns_data
     attr_reader :raw_data
     

@@ -5,8 +5,22 @@ require 'rubygems'
 
 require 'logger'
 
+require 'uri'
+require 'httpclient'
+
+require 'storable'
+
+require 'stella/data/http'
+require 'stella/data/domain'
+
+require 'stella/testrunner'
 require 'stella/testplan'
 require 'stella/loadtest'
+require 'stella/functest'
+
+require 'stella/dsl/testplan'
+require 'stella/dsl/loadtest'
+require 'stella/dsl/functest'
 
 # Common dependencies
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
@@ -29,6 +43,13 @@ module Stella
       self.to_s.to_f
     end
   end
+  
+  module DSL
+    include Stella::TestPlan::DSL
+    include Stella::LoadTest::DSL
+    include Stella::FunctionalTest::DSL
+  end
+  
   
   def self.debug_level
     Stella::LOGGER.debug_level

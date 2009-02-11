@@ -17,8 +17,32 @@ module Stella::Data
     
   end
   
+  class HTTPBody < Storable
+    field :path
+    field :content_type
+    field :form_param
+    attr_writer :content
+    
+    def content
+      @content if @content
+      raise "No content defined" unless @path && File.exists?(@path)
+      File.read @path
+    end
+    
+    
+    
+  end
+  
   class HTTPRequest < Storable
+    # A string representing a raw HTTP request
     attr_reader :raw_data
+    # A hash containing blocks to be executed depending on the HTTP response status.
+    # The hash keys are numeric HTTP Status Codes. 
+    #
+    #     200 => { ... }
+    #     304 => { ... }
+    #     500 => { ... }
+    #
     attr_accessor :response
     
     field :time => DateTime
@@ -26,6 +50,7 @@ module Stella::Data
     field :server_ip 
     field :header 
     field :uri
+    field :params
     field :body 
     field :http_method
     field :http_version
@@ -36,25 +61,48 @@ module Stella::Data
     def has_request?
       false
     end
-    def has_response?
-      (@response && @response.status && !@response.status.nil?)
+
+    def initialize (uri_str, method="GET", version="1.1")
+      @uri = (uri_str.is_a? String) ? URI.parse(uri_str) : uri
+      @http_method = method
+      @http_version = version
+      @headers = {}
+      @params = {}
+      @response = {}
+      @time = DateTime.now
     end
     
-    def initialize(raw_data=nil)
+    def from_raw(raw_data=nil)
       @raw_data = raw_data
       parse(@raw_data)
-      @response = Stella::Data::HTTPResponse.new
       @time = DateTime.now
+    end
+    
+    
+    def add_header(*args)
+      name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
+      @headers[name.to_s] ||= []
+      @headers[name.to_s] << value
+    end
+    def add_param(*args)
+      name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
+      @params[name.to_s] ||= []
+      @params[name.to_s] << value
+    end
+    
+    def add_response(code=200, &b)
+      @response[code] = b
+    end
+    def add_body(path, form_param=nil, content_type=nil)
+      @body = Stella::Data::HTTPBody.new
+      @body.path = path
+      @body.form_param = form_param
+      @body.content_type = content_type
     end
     
     def parse(raw)
       return unless raw
       @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw, @uri.host, @uri.port) 
-    end
-    
-    def uri
-      @uri.host = @server_ip.to_s if @uri && (@uri.host == 'unknown' || @uri.host.empty?)
-      @uri
     end
     
     def body
@@ -75,8 +123,8 @@ module Stella::Data
     
     def inspect
       str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
-      str << $/ + headers.join($/)
-      str << $/ + $/ + body if body
+      str << $/ + headers.join($/) unless headers.empty?
+      str << $/ + $/ + body.to_s if body
       str
     end
     
