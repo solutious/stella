@@ -90,8 +90,11 @@ module Stella::Data
       @params[name.to_s] << value
     end
     
-    def add_response(code=200, &b)
-      @response[code] = b
+    def add_response(*args, &b)
+      args << 200 if args.empty?
+      args.each do |status|
+        @response[status] = b
+      end
     end
     def add_body(path, form_param=nil, content_type=nil)
       @body = Stella::Data::HTTPBody.new

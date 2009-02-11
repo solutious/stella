@@ -1,8 +1,8 @@
 
 
 module Stella
-  class FunctionalTest
     module DSL 
+      module FunctionalTest
       attr_accessor :current_test
       
       def functest(name=:default, &define)
@@ -16,6 +16,14 @@ module Stella
         return unless @current_test
         @current_test.testplan = @plans[testplan]
       end
+      
+      def run(test=nil)
+        to_run = (test.nil?) ? @tests : [@tests[test]]
+        to_run.each do |t|
+          t.run(self)
+        end
+      end
+      
       
     end
   end

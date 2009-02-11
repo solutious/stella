@@ -1,10 +1,12 @@
 
-# See: http://blog.jayfields.com/search/label/DSL
-# See: http://expectations.rubyforge.org/
 
+
+#
+#
+#
 module Stella
-  class TestPlan
-    module DSL 
+  module DSL
+    module TestPlan 
       attr_accessor :current_plan
       def testplan(name, &define)
         @plans ||= {}
@@ -25,7 +27,11 @@ module Stella
         return unless @current_plan.is_a? Stella::TestPlan
         req = Stella::Data::HTTPRequest.new(uri, "POST")
         @current_plan.add_request req
+        index = @current_plan.requests.size
         define.call if define
+        metaclass.instance_eval do
+          define_method(:"#{req.http_method} #{req.uri} #{index}", &define) 
+        end
       end
       
       # TestPlan::Request#add_ methods

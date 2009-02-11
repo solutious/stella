@@ -1,8 +1,8 @@
 
 
 module Stella
-  class LoadTest
-    module DSL 
+  module DSL 
+    module LoadTest
       attr_accessor :current_test
       
       def loadtest(name=:default, &define)

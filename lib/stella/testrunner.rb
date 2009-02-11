@@ -1,7 +1,6 @@
 
 
 module Stella
-  
   module TestRunner
     attr_accessor :name
       # Name or instance of the testplan to execute
