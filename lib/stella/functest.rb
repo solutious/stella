@@ -32,10 +32,16 @@ module Stella
       
       request_methods = ns.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
       
-      ns.current_plan = @testplan
-      
+      @retries = 1
+      previous_methname = nil
       request_methods.each do |methname|
-        req = ns.send(methname)
+        @retries = 1 unless previous_methname == methname
+        previous_methname = methname
+        
+        # We need to define the request only the first time it's run. 
+        req = ns.send(methname) unless @retries > 1
+        puts req
+        puts
         
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= @testplan.protocol
@@ -56,12 +62,26 @@ module Stella
         puts "HTTP #{res.version} #{res.status} (#{res.reason})"
         
         if res && req.response.has_key?(res.status)
-          req.response[res.status].call(res.header, res.body.content)
+          response_handler_ret = req.response[res.status].call(res.header, res.body.content)
+          
+          if response_handler_ret.is_a?(Stella::TestPlan::ResponseHandler) && response_handler_ret.action == :repeat
+            @retries ||= 1
+            
+            if @retries > response_handler_ret[:times]
+              puts "Giving up."
+              @retries = 1
+              next
+            else  
+              puts "repeat #{@retries} of #{response_handler_ret[:times]} (sleep: #{response_handler_ret[:wait]})"
+              sleep response_handler_ret[:wait]
+              @retries += 1
+              redo
+            end
+          end
         else
-          #puts res.body.content[0..100]
-          #puts '...' if res.body.content.length >= 100
+          puts res.body.content[0..100]
+          puts '...' if res.body.content.length >= 100
         end
-        
         
         puts
       end

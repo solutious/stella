@@ -16,7 +16,7 @@ testplan :dsl_tryout do
   servers "localhost:5600"
   auth :basic, "stella", "stella"
 
-  post "/upload" do
+  xpost "/upload" do
     body "content", "bill[uploaded_data]"
     header "X-Stella", "Yay!"
     param :convert => true
@@ -29,22 +29,28 @@ testplan :dsl_tryout do
     end
   end
   
-  get "/product/22"
-  
-  get "/product" do
+  xget "/product" do
     param 'id' => @product_id
     
     response 200 do |header, body|
-      puts body
+      data = YAML.load(body)
+      puts "ID: #{data[:id]}"
+      repeat :times => 2, :wait => 1
     end
   end
   
+  get "/product/22" do
+    response 200 do |headers, body|
+      data = YAML.load(body)
+      puts "ID: #{data[:id]}"
+    end
+  end
   
 end
 
 functest :integration do
   plan :dsl_tryout
-  #verbose
+  verbose
 end
 
 

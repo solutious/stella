@@ -1,6 +1,12 @@
 
 module Stella
   class TestPlan
+    class ResponseHandler < Hash
+      attr_accessor :action
+      def initialize(action)
+        @action = action
+      end
+    end
     class Auth
       attr_accessor :type
       attr_accessor :user
@@ -149,6 +155,15 @@ module Stella
       end
       
 
+      def repeat(*args)
+        raise "Repeat format does not look like a hash" unless args.first.is_a?(Hash)
+        response_handler = Stella::TestPlan::ResponseHandler.new(:repeat)
+        [:times, :wait].each do |att|
+          response_handler[att] = args.first[att] || 1
+        end
+        
+        response_handler
+      end
       
       # TestPlan::Request#add_ methods
       [:header, :param, :response, :body].each do |method_name|
@@ -191,6 +206,8 @@ module Stella
       def post(uri, &define)
         make_request(:POST, uri, &define)
       end
+        def xpost(*args); end;
+        def xget(*args); end;
       
       def get(uri, &define)
         make_request(:GET, uri, &define)
@@ -205,6 +222,12 @@ module Stella
         index = @current_plan.requests.size
         name = :"#{index} #{req.http_method} #{req.uri}"
         req_method = Proc.new {
+          # These instance variables are very important. The bring in the context
+          # when the request method is called in the testrunner class. We know what 
+          # the current plan is while we're executing the DSL blocks to define the 
+          # request. The response block however, is called only after a require request
+          # is made. We set these instance variables so that the response block will
+          # know what request it's associated too.  
           instance_variable_set('@current_plan', @current_plan)
           instance_variable_set('@current_request', req)
           define.call if define
