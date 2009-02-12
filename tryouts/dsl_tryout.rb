@@ -9,15 +9,20 @@ require 'yaml'
 require 'stella'
 include Stella::DSL::TestPlan
 include Stella::DSL::FunctionalTest
+#extend Stella::DSL::TestPlan
+#extend Stella::DSL::FunctionalTest
 
 
 testplan :dsl_tryout do
   protocol :http
   servers "localhost:5600"
   auth :basic, "stella", "stella"
+  #session :on
+  #proxy "http://localhost:3114", "user", "pass"
 
-  xpost "/upload" do
-    body "content", "bill[uploaded_data]"
+
+  post "/upload" do
+    body "bill[uploaded_data]", "content"
     header "X-Stella", "Yay!"
     param :convert => true
     param :rand => rand
@@ -39,7 +44,7 @@ testplan :dsl_tryout do
     end
   end
   
-  get "/product/22" do
+  xget "/product/22" do
     response 200 do |headers, body|
       data = YAML.load(body)
       puts "ID: #{data[:id]}"
