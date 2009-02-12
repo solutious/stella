@@ -22,7 +22,6 @@ module Stella
         client = HTTPClient.new
       end
       
-      
       if @testplan.auth
         auth_domain = "#{@testplan.protocol}://#{@testplan.servers.first.to_s}/"
         puts "setting auth: #{@testplan.auth.user}:#{@testplan.auth.pass} @ #{auth_domain}"
@@ -31,31 +30,40 @@ module Stella
         
       client.set_cookie_store('/tmp/cookie.dat')
       
-      @testplan.requests.each do |req|
+      request_methods = ns.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
+      
+      ns.current_plan = @testplan
+      
+      request_methods.each do |methname|
+        req = ns.send(methname)
+        
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= @testplan.protocol
         uri.host ||= @testplan.servers.first.host
         uri.port ||= @testplan.servers.first.port
         puts "#{req.http_method} #{uri}"
         
-        #req.response.first[1].call
+        query = {}.merge!(req.params)
         
         if req.http_method =~ /POST|PUT/
-          body = {}.merge!(req.params)
-          body[req.body.form_param.to_s] = File.new(req.body.path) if req.body && req.body.path
-          puts body.keys, body['token']
-          res = client.post(uri.to_s, body)
-          
-          if res && req.response.has_key?(res.status)
-            req.response[res.status].call(res.header, res.body.content)
-          else
-            puts "HTTP #{res.version} #{res.status} (#{res.reason})"
-            puts res.body.content
-          end
-        else
-          
+          query[req.body.form_param.to_s] = File.new(req.body.path) if req.body && req.body.path
+          res = client.post(uri.to_s, query)
+        elsif req.http_method =~ /GET|HEAD/
+          res = client.get(uri.to_s, query)
+          p query if @verbose > 0
         end
         
+        puts "HTTP #{res.version} #{res.status} (#{res.reason})"
+        
+        if res && req.response.has_key?(res.status)
+          req.response[res.status].call(res.header, res.body.content)
+        else
+          #puts res.body.content[0..100]
+          #puts '...' if res.body.content.length >= 100
+        end
+        
+        
+        puts
       end
       
       client.save_cookie_store
@@ -90,6 +98,9 @@ module Stella
         end
       end
       
+      def verbose(*args)
+        @current_test.verbose += args.first || 1
+      end
       
     end
   end

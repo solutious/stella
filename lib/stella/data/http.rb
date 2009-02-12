@@ -26,7 +26,7 @@ module Stella::Data
     def content
       @content if @content
       raise "No content defined" unless @path && File.exists?(@path)
-      File.read @path
+      @content = File.read @path
     end
     
     
@@ -86,8 +86,13 @@ module Stella::Data
     end
     def add_param(*args)
       name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
-      @params[name.to_s] ||= []
-      @params[name.to_s] << value
+      if @params[name.to_s] && !@params[name.to_s].is_a?(Array)
+        @params[name.to_s] = [@params[name.to_s]]
+      else
+        @params[name.to_s] = ""
+      end
+      
+      @params[name.to_s] << value.to_s
     end
     
     def add_response(*args, &b)
@@ -96,11 +101,18 @@ module Stella::Data
         @response[status] = b
       end
     end
-    def add_body(path, form_param=nil, content_type=nil)
+    def add_body(content, form_param=nil, content_type=nil)
       @body = Stella::Data::HTTPBody.new
-      @body.path = path
-      @body.form_param = form_param
-      @body.content_type = content_type
+      
+      @body.form_param = form_param if form_param
+      @body.content_type = content_type if content_type
+      
+      if File.exists?(content)
+        @body.path = content
+        @body.content_type ||= "application/x-www-form-urlencoded"
+      else
+        @body.content = content
+      end
     end
     
     def parse(raw)

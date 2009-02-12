@@ -29,8 +29,9 @@ end
 
 get '/product' do
   content_type "text/plain"
-  msg = {
-    :error => "You must supply a product ID. Try: /product/ID"
+  product = {
+    :id => (params[:id] || 0).to_i,
+    :name => "John West Smoked Oysters"
   }.to_yaml
 end
 

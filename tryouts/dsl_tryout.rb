@@ -15,11 +15,9 @@ testplan :dsl_tryout do
   protocol :http
   servers "localhost:5600"
   auth :basic, "stella", "stella"
-  #session :on
-  #proxy "http://localhost:3114", "user", "pass"
-  
+
   post "/upload" do
-    body "/Users/delano/Projects/git/stella/docs/dated/2009-q1/dlr/orange_04.pdf", "bill[uploaded_data]"
+    body "content", "bill[uploaded_data]"
     header "X-Stella", "Yay!"
     param :convert => true
     param :rand => rand
@@ -31,11 +29,22 @@ testplan :dsl_tryout do
     end
   end
   
-
+  get "/product/22"
+  
+  get "/product" do
+    param 'id' => @product_id
+    
+    response 200 do |header, body|
+      puts body
+    end
+  end
+  
+  
 end
 
 functest :integration do
   plan :dsl_tryout
+  #verbose
 end
 
 

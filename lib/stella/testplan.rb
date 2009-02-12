@@ -129,6 +129,8 @@ module Stella
   module DSL
     module TestPlan 
       attr_accessor :current_plan
+      attr_accessor :current_request
+
       def testplan(name, &define)
         @plans ||= {}
         @current_plan = @plans[name] = Stella::TestPlan.new(name)
@@ -146,24 +148,19 @@ module Stella
         end
       end
       
-      def post(uri, &define)
-        return unless @current_plan.is_a? Stella::TestPlan
-        req = Stella::Data::HTTPRequest.new(uri, "POST")
-        @current_plan.add_request req
-        index = @current_plan.requests.size
-        define.call if define
-        metaclass.instance_eval do
-          define_method(:"#{req.http_method} #{req.uri} #{index}", &define) 
-        end
-      end
+
       
       # TestPlan::Request#add_ methods
       [:header, :param, :response, :body].each do |method_name|
         eval <<-RUBY, binding, '(Stella::TestPlan::DSL)', 1
         def #{method_name}(*args, &b)
-          return unless @current_plan.is_a? Stella::TestPlan
-          req = @current_plan.requests.last
-          req.add_#{method_name}(*args, &b)
+          raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan
+          
+          # NOTE: @current_request must be set in the calling namespace
+          # before this method is called. See: make_request
+          raise "current_request is not a valid request" unless @current_request.is_a? Stella::Data::HTTPRequest
+          
+          @current_request.add_#{method_name}(*args, &b)
         end
         private :#{method_name}
         RUBY
@@ -189,6 +186,34 @@ module Stella
         end
         private :#{method_name}
         RUBY
+      end
+      
+      def post(uri, &define)
+        make_request(:POST, uri, &define)
+      end
+      
+      def get(uri, &define)
+        make_request(:GET, uri, &define)
+      end
+      
+    private
+      
+      def make_request(method, uri, &define)
+        return unless @current_plan.is_a? Stella::TestPlan
+        req = Stella::Data::HTTPRequest.new(uri, method.to_s.upcase)
+        @current_plan.add_request req
+        index = @current_plan.requests.size
+        name = :"#{index} #{req.http_method} #{req.uri}"
+        req_method = Proc.new {
+          instance_variable_set('@current_plan', @current_plan)
+          instance_variable_set('@current_request', req)
+          define.call if define
+          req
+        }
+        metaclass.instance_eval do
+          define_method(name, &req_method) 
+        end
+
       end
       
     end
