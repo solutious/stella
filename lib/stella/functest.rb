@@ -24,42 +24,73 @@ module Stella
       
       
       if @testplan.auth
-        auth_domain = "#{@testplan.protocol}://#{@testplan.servers[0]}/"
+        auth_domain = "#{@testplan.protocol}://#{@testplan.servers.first.to_s}/"
         puts "setting auth: #{@testplan.auth.user}:#{@testplan.auth.pass} @ #{auth_domain}"
         client.set_auth(auth_domain, @testplan.auth.user, @testplan.auth.pass)
       end
         
       client.set_cookie_store('/tmp/cookie.dat')
       
-      #ns.
-      
       @testplan.requests.each do |req|
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= @testplan.protocol
-        uri.host ||= @testplan.servers.first
+        uri.host ||= @testplan.servers.first.host
+        uri.port ||= @testplan.servers.first.port
         puts "#{req.http_method} #{uri}"
         
-        req.response.first[1].call
+        #req.response.first[1].call
         
-        #if req.http_method =~ /POST|PUT/
-        #  body = {}.merge!(req.params)
-        #  body[req.body.form_param.to_s] = File.new(req.body.path) if req.body && req.body.path
-        #  puts body.keys, body['token']
-        #  res = client.post(uri.to_s, body)
-        #  
-        #  if res && req.response.has_key?(res.status)
-        #    req.response[res.status].call(res.header, res.body.content)
-        #  else
-        #    puts "HTTP #{res.version} #{res.status} (#{res.reason})"
-        #    puts res.body.content
-        #  end
-        #else
-        #  
-        #end
+        if req.http_method =~ /POST|PUT/
+          body = {}.merge!(req.params)
+          body[req.body.form_param.to_s] = File.new(req.body.path) if req.body && req.body.path
+          puts body.keys, body['token']
+          res = client.post(uri.to_s, body)
+          
+          if res && req.response.has_key?(res.status)
+            req.response[res.status].call(res.header, res.body.content)
+          else
+            puts "HTTP #{res.version} #{res.status} (#{res.reason})"
+            puts res.body.content
+          end
+        else
+          
+        end
         
       end
       
       client.save_cookie_store
+    end
+  end
+end
+
+
+
+
+module Stella
+    module DSL 
+      module FunctionalTest
+      attr_accessor :current_test
+      
+      def functest(name=:default, &define)
+        @tests ||= {}
+        @current_test = @tests[name] = Stella::FunctionalTest.new(name)
+        define.call if define
+      end
+      
+      def plan(testplan)
+        raise "Unknown testplan, '#{testplan}'" unless @plans.has_key?(testplan)
+        return unless @current_test
+        @current_test.testplan = @plans[testplan]
+      end
+      
+      def run(test=nil)
+        to_run = (test.nil?) ? @tests : [@tests[test]]
+        to_run.each do |t|
+          t.run(self)
+        end
+      end
+      
+      
     end
   end
 end

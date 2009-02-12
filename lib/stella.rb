@@ -18,10 +18,6 @@ require 'stella/testplan'
 require 'stella/loadtest'
 require 'stella/functest'
 
-require 'stella/dsl/testplan'
-require 'stella/dsl/loadtest'
-require 'stella/dsl/functest'
-
 # Common dependencies
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $: << File.join(STELLA_HOME, 'vendor', 'useragent', 'lib')
