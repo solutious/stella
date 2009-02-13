@@ -9,6 +9,7 @@ require 'yaml'
 require 'stella'
 include Stella::DSL::TestPlan
 include Stella::DSL::FunctionalTest
+include Stella::DSL::LoadTest
 #extend Stella::DSL::TestPlan
 #extend Stella::DSL::FunctionalTest
 
@@ -17,13 +18,13 @@ testplan :dsl_tryout do
   protocol :http
   servers "localhost:5600"
   auth :basic, "stella", "stella"
-  #session :on
-  #proxy "http://localhost:3114", "user", "pass"
+  session :on
+  proxy "http://localhost:3114", "user", "pass"
 
 
   post "/upload" do
-    body "bill[uploaded_data]", "content"
-    header "X-Stella", "Yay!"
+    body "bill", "/path/2/file"
+    header "X-Stella" => "Yay!"
     param :convert => true
     param :rand => rand
     
@@ -34,7 +35,7 @@ testplan :dsl_tryout do
     end
   end
   
-  xget "/product" do
+  get "/product" do
     param 'id' => @product_id
     
     response 200 do |header, body|
@@ -44,7 +45,7 @@ testplan :dsl_tryout do
     end
   end
   
-  xget "/product/22" do
+  get "/product/22" do
     response 200 do |headers, body|
       data = YAML.load(body)
       puts "ID: #{data[:id]}"
@@ -58,7 +59,24 @@ functest :integration do
   verbose
 end
 
+loadtest :moderate do
+  plan :suggestions_api
+  users 5
+  rampup :interval => 5, :max => 25, :delay => 10 # seconds
+  duration 60 # minutes
+end
 
+# Run functional test
 run :integration
 
 
+
+__END__
+
+users :anonymous do
+  set :global_var => true
+  user do
+    set 'bill[uploaded_data]' => 'path/2/pdf'
+  end
+  # ...
+end

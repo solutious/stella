@@ -35,10 +35,16 @@ module Stella
       def run(test=nil)
         to_run = (test.nil?) ? @tests : [@tests[test]]
         to_run.each do |t|
-          t.run
+          t.run(self)
         end
       end
       
+      def rampup(*args)
+      end 
+      
+      def warmup(*args)
+      end
+          
       [:users, :repetitions, :duration].each do |method_name|
         eval <<-RUBY, binding, '(Stella::LoadTest::DSL)', 1
         def #{method_name}(val)
