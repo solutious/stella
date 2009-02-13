@@ -4,8 +4,9 @@ Release: 0.6.0
 
 This is a BETA release. Proceed in double verify mode!
 
-NOTE: This is an experimental branch! It is probably ---> NOT FUNCTIONAL <---
-NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!
+*NOTE: This is an experimental branch! It is probably ---> NOT FUNCTIONAL <---*
+
+*NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
 
 
 == Overview
