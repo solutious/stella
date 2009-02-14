@@ -54,6 +54,10 @@ module Stella
   class TestPlan
       # The name of the testplan. 
     attr_accessor :name
+    
+      # A brief description of this testplan
+    attr_accessor :description
+    
       # An array of `::Server objects to be use during the test.
       #     tp.servers << "stellaaahhhh.com:80"
     attr_accessor :servers
@@ -74,6 +78,9 @@ module Stella
       @servers = []
       @protocol = "http"
     end
+    
+    alias :'desc'  :'description'
+    alias :'desc=' :'description='
     
     # Append a Stella::TestPlan::Request object to +requests+.
     def add_request(req)
@@ -196,8 +203,8 @@ module Stella
         RUBY
       end
       
-      # TestPlan#set_ methods
-      [:proxy, :auth, :base_uri].each do |method_name|
+      # TestPlan#= methods
+      [:proxy, :auth, :base_uri, :desc].each do |method_name|
         eval <<-RUBY, binding, '(Stella::TestPlan::DSL)', 1
         def #{method_name}(*args)
           return unless @current_plan.is_a? Stella::TestPlan

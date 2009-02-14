@@ -1,0 +1,83 @@
+diff --git a/ext/fastthread/extconf.rb b/ext/fastthread/extconf.rb
+index fcacfd9..479a3d9 100644
+--- a/ext/fastthread/extconf.rb
++++ b/ext/fastthread/extconf.rb
+@@ -1,3 +1,9 @@
+-require 'mkmf'
+-
+-create_makefile('fastthread')
++if !defined?(RUBY_ENGINE) || RUBY_ENGINE == "ruby"
++  require 'mkmf'
++  
++  create_makefile('fastthread')
++else
++  File.open('Makefile', 'w') do |f|
++    f.puts("all:")
++  end
++end
+diff --git a/ext/fastthread/fastthread.c b/ext/fastthread/fastthread.c
+index 355ed00..680d9b9 100644
+--- a/ext/fastthread/fastthread.c
++++ b/ext/fastthread/fastthread.c
+@@ -10,6 +10,8 @@
+  */
+ 
+ #include <ruby.h>
++#ifndef RUBY_VM
++
+ #include <intern.h>
+ #include <rubysig.h>
+ 
+@@ -623,7 +625,7 @@ wait_condvar(ConditionVariable *condvar, Mutex *mutex)
+         rb_raise(private_eThreadError, "not owner of the synchronization mutex");
+     }
+     unlock_mutex_inner(mutex);
+-    rb_ensure(wait_list, (VALUE)&condvar->waiting, lock_mutex, (VALUE)mutex);
++    rb_ensure((VALUE (*) (ANYARGS))wait_list, (VALUE)&condvar->waiting, lock_mutex, (VALUE)mutex);
+ }
+ 
+ static VALUE
+@@ -1169,9 +1171,12 @@ setup_classes(VALUE unused)
+     return Qnil;
+ }
+ 
++#endif /* RUBY_VM */
++
+ void
+ Init_fastthread()
+ {
++    #ifndef RUBY_VM
+     int saved_critical;
+ 
+     rb_require("thread");
+@@ -1182,5 +1187,6 @@ Init_fastthread()
+     saved_critical = rb_thread_critical;
+     rb_thread_critical = 1;
+     rb_ensure(setup_classes, Qnil, set_critical, (VALUE)saved_critical);
++    #endif /* RUBY_VM */
+ }
+ 
+diff --git a/setup.rb b/setup.rb
+index f54f84e..f259fb5 100755
+--- a/setup.rb
++++ b/setup.rb
+@@ -1383,11 +1383,15 @@ class Installer
+   end
+ 
+   def rubyextentions(dir)
+-    ents = glob_select("*.#{@config.dllext}", targetfiles())
+-    if ents.empty?
+-      setup_rb_error "no ruby extention exists: 'ruby #{$0} setup' first"
++    if !defined?(RUBY_ENGINE) || RUBY_ENGINE == "ruby"
++      ents = glob_select("*.#{@config.dllext}", targetfiles())
++      if ents.empty?
++        setup_rb_error "no ruby extention exists: 'ruby #{$0} setup' first"
++      end
++      ents
++    else
++      []
+     end
+-    ents
+   end
+ 
+   def targetfiles

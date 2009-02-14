@@ -13,6 +13,21 @@ This is a BETA release. Proceed in double verify mode!
 
 Stella is a command-line tool for running, reporting, and analyzing performance tests.
 
+== Features
+
+* Wrappers for Apache Bench, Siege, and Httperf
+  * Run multiple tests automatically to improve statistical sample size
+  * Adds ability to ramp up and warmp up will any tool
+  * Returns standardized stats for every test. CSV, YAML, or JSON
+  * Friendly error message to catch common tool problems
+  * Simple usage: stella ab -c 50 -n 1000 http://...
+* HTTP/DNS request sniffing
+  * Command-line output of requests and responses
+* Support Ruby 1.8.x, 1.9, and JRuby
+* Runs on Windows (Native and JRuby)
+* Not supported:
+  * Packet filtering on Windows
+  * Ruby-Pcap does not compile with Ruby 1.9.1
 
 == Prerequisites
 

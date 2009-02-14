@@ -15,11 +15,12 @@ include Stella::DSL::LoadTest
 
 
 testplan :dsl_tryout do
+  desc "A basic demonstration of the testplan DSL"
   protocol :http
-  servers "localhost:5600"
+  servers "localhost:3114"
   auth :basic, "stella", "stella"
-  session :on
-  proxy "http://localhost:3114", "user", "pass"
+  #session :on
+  #proxy "http://localhost:3114", "user", "pass"
 
 
   post "/upload" do
@@ -41,7 +42,7 @@ testplan :dsl_tryout do
     response 200 do |header, body|
       data = YAML.load(body)
       puts "ID: #{data[:id]}"
-      repeat :times => 2, :wait => 1
+      repeat :times => 2, :wait => 5
     end
   end
   
@@ -60,7 +61,7 @@ functest :integration do
 end
 
 loadtest :moderate do
-  plan :suggestions_api
+  plan :dsl_tryout
   users 5
   rampup :interval => 5, :max => 25, :delay => 10 # seconds
   duration 60 # minutes

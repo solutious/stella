@@ -40,8 +40,7 @@ module Stella
         
         # We need to define the request only the first time it's run. 
         req = ns.send(methname) unless @retries > 1
-        puts req
-        puts
+        puts 
         
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= @testplan.protocol
@@ -72,8 +71,9 @@ module Stella
               @retries = 1
               next
             else  
-              puts "repeat #{@retries} of #{response_handler_ret[:times]} (sleep: #{response_handler_ret[:wait]})"
-              sleep response_handler_ret[:wait]
+              print "repeat #{@retries} of #{response_handler_ret[:times]} "
+              run_sleeper(response_handler_ret[:wait])
+              puts
               @retries += 1
               redo
             end
@@ -87,6 +87,15 @@ module Stella
       end
       
       client.save_cookie_store
+    end
+    
+    def run_sleeper(duration, quiet=false)
+      remainder = duration % 1 
+      duration.to_i.times {
+        print '.' unless duration <= 1 || quiet
+        sleep 1
+      }
+      sleep remainder if remainder > 0
     end
   end
 end
