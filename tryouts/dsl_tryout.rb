@@ -74,9 +74,9 @@ run :integration
 
 __END__
 
-users :anonymous do
+clients :anonymous do
   set :global_var => true
-  user do
+  client do
     set 'bill[uploaded_data]' => 'path/2/pdf'
   end
   # ...
