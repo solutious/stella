@@ -5,31 +5,34 @@ module Stella
   class FunctionalTest
     include TestRunner
     
-    def run(ns)
+    # +namespace+ is a reference to the namespace which contains the instance
+    # variables. This will be the section of code that makes use of the DSL.
+    def run(namespace, environment)
       raise "No testplan defined" unless @testplan
       
-      # TODO: one thread for each of @testplan.servers
       
       puts "Running Test: #{@name}"
       puts " -> type: #{self.class}"
       puts " -> testplan: #{@testplan.name}"
       
-      if @testplan.proxy
-        client = HTTPClient.new(@testplan.proxy.uri)
-        client.set_proxy_auth(@testplan.proxy.user, @testplan.proxy.pass) if @testplan.proxy.user
-      else
+      #if @testplan.proxy
+      #  client = HTTPClient.new(@testplan.proxy.uri)
+      #  client.set_proxy_auth(@testplan.proxy.user, @testplan.proxy.pass) if @testplan.proxy.user
+      #else
         client = HTTPClient.new
-      end
+      #end
+      
+      # TODO: one thread for each of environment.machines
       
       if @testplan.auth
-        auth_domain = "#{@testplan.protocol}://#{@testplan.servers.first.to_s}/"
+        auth_domain = "#{@testplan.protocol}://#{environment.machines.first.to_s}/"
         puts "setting auth: #{@testplan.auth.user}:#{@testplan.auth.pass} @ #{auth_domain}"
         client.set_auth(auth_domain, @testplan.auth.user, @testplan.auth.pass)
       end
         
       client.set_cookie_store('/tmp/cookie.dat')
       
-      request_methods = ns.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
+      request_methods = namespace.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
       
       @retries = 1
       previous_methname = nil
@@ -38,13 +41,13 @@ module Stella
         previous_methname = methname
         
         # We need to define the request only the first time it's run. 
-        req = ns.send(methname) unless @retries > 1
+        req = namespace.send(methname) unless @retries > 1
         puts 
         
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= @testplan.protocol
-        uri.host ||= @testplan.servers.first.host
-        uri.port ||= @testplan.servers.first.port
+        uri.host ||= environment.machines.first.host
+        uri.port ||= environment.machines.first.port
         puts "#{req.http_method} #{uri}"
         
         query = {}.merge!(req.params)

@@ -20,8 +20,8 @@ end
 
 testplan :dsl_tryout do
   desc "A basic demonstration of the testplan DSL"
-  protocol :https
-  auth :basic, "stella", "stella"
+  protocol :http
+  auth :basic, "stella2", "stella"
   
   post "/upload" do
     body "bill", "/path/2/file"
@@ -66,7 +66,7 @@ end
 puts plans
 
 # Run functional test
-run :development, :moderate
+run :development, :integration
 
 
 

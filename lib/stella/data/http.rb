@@ -74,10 +74,15 @@ module Stella::Data
     
     def from_raw(raw_data=nil)
       @raw_data = raw_data
-      parse(@raw_data)
+      @http_method, @http_version, @uri, @header, @body = self.parse(@raw_data)
       @time = DateTime.now
     end
     
+    def self.parse(raw)
+      return unless raw
+      HTTPUtil::parse_http_request(raw, @uri.host, @uri.port) 
+    end
+
     
     def add_header(*args)
       name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
@@ -115,10 +120,6 @@ module Stella::Data
       end
     end
     
-    def parse(raw)
-      return unless raw
-      @http_method, @http_version, @uri, @header, @body = HTTPUtil::parse_http_request(raw, @uri.host, @uri.port) 
-    end
     
     def body
       return nil unless @body

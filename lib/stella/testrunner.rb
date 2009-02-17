@@ -25,12 +25,13 @@ module Stella
         @current_test.testplan = @plans[testplan]
       end
       
-      def run(env=nil, test=nil)
-        puts "Run #{test} in #{env}"
-        #to_run = (test.nil?) ? @tests : [@tests[test]]
-        #to_run.each do |t|
-        #  t.run(self)
-        #end
+      def run(env_name=nil, test_name=nil)
+        puts "Run #{test_name} in #{env_name}"
+        to_run = test_name.nil? ? @tests : [@tests[test_name]]
+        env = env_name.nil? ? @stella_environments.first : @stella_environments[env_name]
+        to_run.each do |t|
+          t.run(self, env)
+        end
       end
       
       def verbose(*args)
