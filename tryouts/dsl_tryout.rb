@@ -63,7 +63,7 @@ loadtest :moderate do
 end
 
 
-puts environments
+puts plans
 
 # Run functional test
 run :development, :moderate
