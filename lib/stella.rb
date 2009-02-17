@@ -10,9 +10,13 @@ require 'httpclient'
 
 require 'storable'
 
+require 'stella/common'
+
 require 'stella/data/http'
 require 'stella/data/domain'
 
+require 'stella/environment'
+require 'stella/clients'
 require 'stella/testrunner'
 require 'stella/testplan'
 require 'stella/loadtest'
@@ -64,6 +68,18 @@ module Stella
   
   def self.debug(*args)
     LOGGER.debug(*args)
+  end
+end
+
+module Stella
+  module DSL
+    include Stella::DSL::TestPlan
+    include Stella::DSL::FunctionalTest
+    include Stella::DSL::LoadTest
+    include Stella::DSL::Environment
+    # For Modules
+    #extend Stella::DSL::TestPlan
+    #extend Stella::DSL::FunctionalTest
   end
 end
 

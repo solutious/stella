@@ -7,45 +7,6 @@ module Stella
         @action = action
       end
     end
-    class Auth
-      attr_accessor :type
-      attr_accessor :user
-      attr_accessor :pass
-      def initialize(type, user, pass=nil)
-        @uri = type
-        @user = user
-        @pass = pass if pass
-      end
-    end
-    class Proxy 
-      attr_accessor :uri
-      attr_accessor :user
-      attr_accessor :pass
-      def initialize(uri, user=nil, pass=nil)
-        @uri = uri
-        @user = user if user
-        @pass = pass if pass
-      end
-    end
-    class Server
-      attr_accessor :host
-      attr_accessor :port
-      def initialize(*args)
-        raise "You must at least a hostname or IP address" if args.empty?
-        if args.first.is_a? String
-          @host, @port = args.first.split(":") 
-        else  
-          @host, @port = args.flatten
-        end
-        
-        @port = @port.to_i if @port
-      end
-      def to_s
-        str = "#{@host}"
-        str << ":#{@port}" if @port
-        str
-      end
-    end
   end
 end
 
@@ -54,19 +15,12 @@ module Stella
   class TestPlan
       # The name of the testplan. 
     attr_accessor :name
-    
       # A brief description of this testplan
     attr_accessor :description
-    
-      # An array of `::Server objects to be use during the test.
-      #     tp.servers << "stellaaahhhh.com:80"
-    attr_accessor :servers
       # Used as the default protocol for the testplan. One of: http, https 
     attr_accessor :protocol
       # A Stella::TestPlan::Auth object
     attr_accessor :auth
-      # A Stella::TestPlan::Proxy object containing the proxy to be used for the test.
-    attr_accessor :proxy
       # An array of Stella::TestPlan::Request objects representing all "primary" requests
       # for the given test plan (an html page for example). Each primary Request object can have an array of "auxilliary"
       # requests which represent dependencies for that resource (javascript, images, callbacks, etc...).
@@ -88,25 +42,13 @@ module Stella
       @requests << req
     end
     
-    def add_servers(*args)
-      return if args.empty?
-      args.each do |server|
-        @servers << Stella::TestPlan::Server.new(server)
-      end
-    end
       
     # Creates a Stella::TestPlan::Auth object and stores it to +@auth+
     def auth=(*args)
       type, user, pass = args.flatten
-      @auth = Stella::TestPlan::Auth.new(type, user, pass)
+      @auth = Stella::Common::Auth.new(type, user, pass)
     end
-    
-    # Creates a Stella::TestPlan::Proxy object and stores it to +@proxy+
-    def proxy=(*args)
-      uri, user, pass = args.flatten
-      @proxy = Stella::TestPlan::Proxy.new(uri, user, pass)
-    end
-    
+
     # A string to be parsed by URI#parsed or a URI object. The host and port are added to +@servers+ 
     # in the form "host:port". The protocol is stored in +@protocol+. NOTE: The 
     # protocol is used as a default for the test and if it's already set, this 
@@ -154,12 +96,7 @@ module Stella
         @plans 
       end
       
-      def servers(*args)
-        return unless @current_plan.is_a? Stella::TestPlan
-        args.each do |server|
-          @current_plan.add_servers server
-        end
-      end
+
       
 
       def repeat(*args)
@@ -189,7 +126,7 @@ module Stella
       
       # TestPlan::Request#add_ methods
       [:header, :param, :response].each do |method_name|
-        eval <<-RUBY, binding, '(Stella::TestPlan::DSL)', 1
+        eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(*args, &b)
           raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan
           
@@ -205,7 +142,7 @@ module Stella
       
       # TestPlan#= methods
       [:proxy, :auth, :base_uri, :desc].each do |method_name|
-        eval <<-RUBY, binding, '(Stella::TestPlan::DSL)', 1
+        eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(*args)
           return unless @current_plan.is_a? Stella::TestPlan
           @current_plan.#{method_name}=(args)
@@ -216,7 +153,7 @@ module Stella
       
       # = methods 
       [:protocol].each do |method_name|
-        eval <<-RUBY, binding, '(Stella::TestPlan::DSL)', 1
+        eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(val)
           return unless @current_plan.is_a? Stella::TestPlan
           @current_plan.#{method_name}=(val.to_s)

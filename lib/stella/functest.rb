@@ -5,7 +5,6 @@ module Stella
   class FunctionalTest
     include TestRunner
     
-    
     def run(ns)
       raise "No testplan defined" unless @testplan
       
@@ -106,7 +105,7 @@ end
 module Stella
     module DSL 
       module FunctionalTest
-      attr_accessor :current_test
+        include Stella::DSL::TestRunner
       
       def functest(name=:default, &define)
         @tests ||= {}
@@ -114,22 +113,6 @@ module Stella
         define.call if define
       end
       
-      def plan(testplan)
-        raise "Unknown testplan, '#{testplan}'" unless @plans.has_key?(testplan)
-        return unless @current_test
-        @current_test.testplan = @plans[testplan]
-      end
-      
-      def run(test=nil)
-        to_run = (test.nil?) ? @tests : [@tests[test]]
-        to_run.each do |t|
-          t.run(self)
-        end
-      end
-      
-      def verbose(*args)
-        @current_test.verbose += args.first || 1
-      end
       
     end
   end

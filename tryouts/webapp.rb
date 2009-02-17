@@ -11,7 +11,7 @@ require 'yaml'
 set :run => true
 set :environment => :development
 set :raise_errors => true
-set :port => 3144
+set :port => 3114
 
 #log = File.new("sinatra.log", "a")
 #STDOUT.reopen(log)
