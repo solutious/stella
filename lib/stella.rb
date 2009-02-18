@@ -99,4 +99,16 @@ class Object #:nodoc: all
    end
 
 end
-  
+
+class Array
+  # create a hash from an array of [key,value] tuples
+  # you can set default or provide a block just as with Hash::new
+  # Note: if you use [key, value1, value2, value#], hash[key] will
+  # be [value1, value2, value#]
+  # From: http://www.ruby-forum.com/topic/138218#615260
+  def stella_to_hash(default=nil, &block)
+    hash = block_given? ? Hash.new(&block) : Hash.new(default)
+    each { |(key, *value)| hash[key]=*value }
+    hash
+  end
+end

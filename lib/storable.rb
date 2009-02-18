@@ -1,5 +1,6 @@
 #--
 # TODO: Handle nested hashes and arrays. 
+# TODO: to_xml, see: http://codeforpeople.com/lib/ruby/xx/xx-2.0.0/README
 #++
 
 require 'yaml'
@@ -39,8 +40,8 @@ class Storable
   # The value of the field will be cast to the type (if provided) when read from a file. 
   # The value is not touched when the type is not provided. 
   def self.field(args={})
-    
-      args = {args => nil} unless args.is_a? Hash
+    # TODO: Examine casting from: http://codeforpeople.com/lib/ruby/fattr/fattr-1.0.3/
+    args = {args => nil} unless args.is_a? Hash
 
     args.each_pair do |m,t|
       

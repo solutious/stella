@@ -5,100 +5,71 @@ module Stella
   class FunctionalTest
     include TestRunner
     
-    # +namespace+ is a reference to the namespace which contains the instance
-    # variables. This will be the section of code that makes use of the DSL.
-    def run(namespace, environment)
-      raise "No testplan defined" unless @testplan
-      
-      
-      puts "Running Test: #{@name}"
-      puts " -> type: #{self.class}"
-      puts " -> testplan: #{@testplan.name}"
-      
-      #if @testplan.proxy
-      #  client = HTTPClient.new(@testplan.proxy.uri)
-      #  client.set_proxy_auth(@testplan.proxy.user, @testplan.proxy.pass) if @testplan.proxy.user
-      #else
-        client = HTTPClient.new
-      #end
-      
-      # TODO: one thread for each of environment.machines
-      
-      if @testplan.auth
-        auth_domain = "#{@testplan.protocol}://#{environment.machines.first.to_s}/"
-        puts "setting auth: #{@testplan.auth.user}:#{@testplan.auth.pass} @ #{auth_domain}"
-        client.set_auth(auth_domain, @testplan.auth.user, @testplan.auth.pass)
-      end
-        
-      client.set_cookie_store('/tmp/cookie.dat')
-      
-      request_methods = namespace.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
-      
-      @retries = 1
-      previous_methname = nil
-      request_methods.each do |methname|
-        @retries = 1 unless previous_methname == methname
-        previous_methname = methname
-        
-        # We need to define the request only the first time it's run. 
-        req = namespace.send(methname) unless @retries > 1
-        puts 
-        
-        uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
-        uri.scheme ||= @testplan.protocol
-        uri.host ||= environment.machines.first.host
-        uri.port ||= environment.machines.first.port
-        puts "#{req.http_method} #{uri}"
-        
-        query = {}.merge!(req.params)
-        
-        if req.http_method =~ /POST|PUT/
-          query[req.body.form_param.to_s] = File.new(req.body.path) if req.body && req.body.path
-          res = client.post(uri.to_s, query)
-        elsif req.http_method =~ /GET|HEAD/
-          res = client.get(uri.to_s, query)
-          p query if @verbose > 0
-        end
-        
-        puts "HTTP #{res.version} #{res.status} (#{res.reason})"
-        
-        if res && req.response.has_key?(res.status)
-          response_handler_ret = req.response[res.status].call(res.header, res.body.content)
-          
-          if response_handler_ret.is_a?(Stella::TestPlan::ResponseHandler) && response_handler_ret.action == :repeat
-            @retries ||= 1
-            
-            if @retries > response_handler_ret[:times]
-              puts "Giving up."
-              @retries = 1
-              next
-            else  
-              print "repeat #{@retries} of #{response_handler_ret[:times]} "
-              run_sleeper(response_handler_ret[:wait])
-              puts
-              @retries += 1
-              redo
-            end
-          end
-        else
-          puts res.body.content[0..100]
-          puts '...' if res.body.content.length >= 100
-        end
-        
-        puts
-      end
-      
-      client.save_cookie_store
+    def type; "functional"; end
+    
+    
+    
+    def update_start(machine, name)
+      puts '-'*60
+      puts "%10s: %s" % ["MACHINE", machine]
     end
     
-    def run_sleeper(duration, quiet=false)
-      remainder = duration % 1 
-      duration.to_i.times {
-        print '.' unless duration <= 1 || quiet
-        sleep 1
-      }
-      sleep remainder if remainder > 0
+    def update_authorized(domain, user, pass)
+      note = user
+      note += ":****" if pass
+      puts "%10s: %s" % ["user", note]
     end
+    
+    def update_request(method, uri, query, response_status, response_headers, response_body)
+      puts "#{method} #{uri}"
+      puts "%14s: %s" % ["status", response_status]
+      puts "%14s: %s" % ["query", query] if @verbose > 0 && !query.empty?
+      puts "%14s: %s" % ["response_headers", response_headers]
+    end
+    
+    def update_request_exception(method, uri, query, message)
+      puts "#{method} #{uri}"
+      puts "EXCEPTION: #{message}"
+    end
+    
+    def update_request_unexpected_response(method, uri, query, response_status, response_headers, response_body)
+      puts "#{method} #{uri}"
+      puts "%14s: %s" % ["status", response_status]
+      puts "%14s: %s" % ["note", "unexpected response status"]
+      #puts response_body[0..100]
+      #puts '...' if response_body.length >= 100
+    end
+    
+    def update_retrying(uri, retry_count, total)
+      puts "retrying: #{uri} (#{retry_count} of #{total})"
+    end
+
+
+    # +environment+ is a Stella::Common::Environment object. 
+    # +namespace+ is a reference to the namespace which contains the instance
+    # variables. This will be the section of code that makes use of the DSL.
+    def run(environment, namespace)
+      raise "No testplan defined" unless @testplan
+      raise "No machines defined for #{environment.name}" if environment.machines.empty?
+      
+      
+      if environment.proxy
+        http_client = HTTPClient.new(environment.proxy.uri)
+        http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
+      else
+        http_client = HTTPClient.new
+      end
+      
+      
+      environment.machines.each do |machine|
+        client = Stella::Client.new
+        client.add_observer(self)
+        client.execute_testplan(http_client, machine, namespace, @testplan, @verbose)
+      end
+      
+    end
+    
+
   end
 end
 

@@ -1,5 +1,10 @@
+# ---
+# See: http://codeforpeople.com/lib/ruby/flow/flow-2.0.0/sample/a.rb
+# +++
 
-
+#
+#
+#
 module Stella
   module TestRunner
     attr_accessor :name
@@ -13,6 +18,10 @@ module Stella
       @verbose = 0
     end
     
+    def update(*args)
+      what, *args = args
+      self.send("update_#{what}", *args) if respond_to? "update_#{what}"
+    end
     
   end
   module DSL
@@ -26,17 +35,26 @@ module Stella
       end
       
       def run(env_name=nil, test_name=nil)
-        puts "Run #{test_name} in #{env_name}"
         to_run = test_name.nil? ? @tests : [@tests[test_name]]
         env = env_name.nil? ? @stella_environments.first : @stella_environments[env_name]
         to_run.each do |t|
-          t.run(self, env)
+          puts '='*60
+          puts "RUNNING TEST: #{test_name}"
+          puts " %11s: %s" % ['type', t.type]
+          puts " %11s: %s" % ['testplan', t.testplan.name]
+          puts " %11s: %s" % ['env', env_name]
+           
+          
+          t.run(env, self)
         end
       end
       
       def verbose(*args)
         @current_test.verbose += args.first || 1
       end
+      
+    private
+      
     end
   end
 end

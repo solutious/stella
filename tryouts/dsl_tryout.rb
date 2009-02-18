@@ -7,6 +7,7 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local
 # TODO: prepend instance variables with "stella_"
 # TODO: is it possible to use "get" inside response blocks?
 # TODO: implement session handling
+# BUG: http://jira.codehaus.org/browse/JRUBY-2992
 
 require 'yaml'
 
@@ -21,7 +22,7 @@ end
 testplan :dsl_tryout do
   desc "A basic demonstration of the testplan DSL"
   protocol :http
-  auth :basic, "stella2", "stella"
+  auth :basic, "stella", "stella"
   
   post "/upload" do
     body "bill", "/path/2/file"
@@ -32,7 +33,6 @@ testplan :dsl_tryout do
     response 200, 201 do |headers, body|
       data = YAML.load(body)
       @product_id = data[:id]
-      puts "ID: #{data[:id]}"
     end
   end
   
@@ -41,8 +41,13 @@ testplan :dsl_tryout do
     
     response 200 do |header, body|
       data = YAML.load(body)
-      puts "ID: #{data[:id]}"
-      repeat :times => 1, :wait => 2
+      #repeat :times => 1, :wait => 2
+    end
+  end
+
+  get "/product/22" do
+    response 200 do |header, body|
+      data = YAML.load(body)
     end
   end
 
@@ -56,17 +61,17 @@ end
 
 loadtest :moderate do
   plan :dsl_tryout
-  #clients 5, :anon_clients        # <= machines * 100
+  clients 1000        # <= machines * 100
   #machines 1, :generic           # <= clients
   #rampup :interval => 5, :max => 25, :delay => 10 # seconds
   #duration 60 # minutes
 end
 
-
-puts plans
-
 # Run functional test
-run :development, :integration
+#run :development, :integration
+
+# Run load test
+run :development, :moderate
 
 
 

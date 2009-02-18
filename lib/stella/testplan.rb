@@ -1,10 +1,14 @@
 
 module Stella
   class TestPlan
-    class ResponseHandler < Hash
+    class ResponseHandler
       attr_accessor :action
-      def initialize(action)
+      attr_accessor :times
+      attr_accessor :wait
+      def initialize(action, times=1, wait=1)
         @action = action
+        @times = times
+        @wait = wait
       end
     end
   end
@@ -33,8 +37,15 @@ module Stella
       @protocol = "http"
     end
     
-    alias :'desc'  :'description'
-    alias :'desc=' :'description='
+    def desc
+      @description
+    end
+    def desc=(val)
+      @description = val
+    end
+    
+    #alias :'desc'  :'description'
+    #alias :'desc=' :'description='
     
     # Append a Stella::TestPlan::Request object to +requests+.
     def add_request(req)
@@ -96,14 +107,11 @@ module Stella
         @plans 
       end
       
-
-      
-
       def repeat(*args)
         raise "Repeat format does not look like a hash" unless args.first.is_a?(Hash)
         response_handler = Stella::TestPlan::ResponseHandler.new(:repeat)
         [:times, :wait].each do |att|
-          response_handler[att] = args.first[att] || 1
+          response_handler.send("#{att}=", args.first[att])
         end
         
         response_handler
@@ -111,7 +119,7 @@ module Stella
       
       def body(*args)
         
-        raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan
+        raise "current_plan is not a valid testplan: #{@current_plan}" unless @current_plan.is_a? Stella::TestPlan
         
         # NOTE: @current_request must be set in the calling namespace
         # before this method is called. See: make_request
@@ -119,7 +127,7 @@ module Stella
         
         param, content_type, content = args if args.size == 3
         param, content = args if args.size == 2
-        content = args if args.size == 1
+        content = args.first if args.size == 1
         
         @current_request.add_body(content, param, content_type)
       end
