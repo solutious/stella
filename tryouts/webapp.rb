@@ -13,14 +13,14 @@ set :environment => :development
 set :raise_errors => true
 set :port => 3114
 
-log = File.new("/dev/null", "a")
-STDOUT.reopen(log)
-STDERR.reopen(log)
+#log = File.new("/dev/null", "a")
+#STDOUT.reopen(log)
+#STDERR.reopen(log)
 
 
-use Rack::Auth::Basic do |username, password|
-  username == 'stella' && password == 'stella'
-end
+#use Rack::Auth::Basic do |username, password|
+#  username == 'stella' && password == 'stella'
+#end
 
 
 get '/' do

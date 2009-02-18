@@ -16,6 +16,7 @@ module Stella
     def initialize(name=:default)
       @name = name
       @verbose = 0
+      init if respond_to? :init
     end
     
     def update(*args)
@@ -42,6 +43,7 @@ module Stella
           puts "RUNNING TEST: #{test_name}"
           puts " %11s: %s" % ['type', t.type]
           puts " %11s: %s" % ['testplan', t.testplan.name]
+          puts " %11s: %s" % ['desc', t.testplan.description]
           puts " %11s: %s" % ['env', env_name]
            
           

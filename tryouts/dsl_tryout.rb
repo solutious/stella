@@ -25,6 +25,7 @@ testplan :dsl_tryout do
   auth :basic, "stella", "stella"
   
   post "/upload" do
+    name "Add Product"
     body "bill", "/path/2/file"
     header "X-Stella" => "Yay!"
     param :convert => true
@@ -37,8 +38,8 @@ testplan :dsl_tryout do
   end
   
   get "/product" do
+    name "View Product"
     param 'id' => @product_id
-      param 'id' => @product_id
     
     response 200 do |header, body|
       data = YAML.load(body)
@@ -62,10 +63,9 @@ end
 
 loadtest :moderate do
   plan :dsl_tryout
-  clients 10        # <= machines * 100
-  #machines 1, :generic           # <= clients
-  #rampup :interval => 5, :max => 25, :delay => 10 # seconds
-  #duration 60 # minutes
+  clients 1        # <= machines * 100
+  repetitions 10
+  #duration 1.seconds  
   verbose
 end
 
@@ -73,7 +73,7 @@ end
 #run :development, :integration
 
 # Run load test
-run :development, :integration
+run :development, :moderate
 
 
 

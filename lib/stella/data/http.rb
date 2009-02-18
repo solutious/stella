@@ -46,6 +46,9 @@ module Stella::Data
     #
     attr_accessor :response_handler
     
+    field :name
+    field :stella_id
+    field :unique_id
     field :time => DateTime
     field :client_ip 
     field :server_ip 
@@ -55,6 +58,7 @@ module Stella::Data
     field :body 
     field :http_method
     field :http_version
+    
     
     def has_body?
       !@body.nil? && !@body.empty?
@@ -70,8 +74,15 @@ module Stella::Data
       @headers = {}
       @params = {}
       @response_handler = {}
-      @time = DateTime.now
+      @time = Time.now
+      @stella_id = Stella::Crypto.sign(time.to_i.to_s, "#{@http_method}/#{@uri}/#{@params}")
+      @unique_id = nil
     end
+    
+    def set_unique_id(seasoning=rand)
+      @unique_id = Stella::Crypto.sign(rand.to_s + seasoning.to_s, "#{@http_method}/#{@uri}/#{@params}")
+    end
+
     
     def from_raw(raw_data=nil)
       @raw_data = raw_data

@@ -1,5 +1,4 @@
 # See, re Threadify on JRuby: http://www.ruby-forum.com/topic/158180
-require 'threadify'
 
 #
 #
@@ -16,6 +15,13 @@ module Stella
     
     attr_reader :requests_successful
     attr_reader :requests_failed
+    
+    def init
+      @repetitions = 1
+      @clients = 1
+      @duration = 0
+      reset
+    end
     
     def reset
       @testplans_started = 0
@@ -64,42 +70,66 @@ module Stella
     def run(environment, namespace)
       raise "No testplan defined" unless @testplan
       raise "No machines defined for #{environment.name}" if environment.machines.empty?
-      
-      reset # set counters to 0
-      
+
       [:duration, :clients, :repetitions].each do |p|
         val = instance_variable_get("@#{p}")
         puts " %11s: %s" % [p, val] if val
       end
       
-      (1..@clients).to_a.threadify do |i|
-        if environment.proxy
-          http_client = HTTPClient.new(environment.proxy.uri)
-          http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
-        else
-          http_client = HTTPClient.new
-        end
+      stats = Stats.new("LoadTest")
+      request_stats = {}
 
-        environment.machines.each do |machine|
-          client = Stella::Client.new
-          client.add_observer(self)
-          client.execute_testplan(http_client, machine, namespace, @testplan, @verbose)
-        end
+      time_started = Time.now
+      seconds_elapsed = 0
+      (1..@clients).to_a.threadify do |i|
+        @repetitions.times do |rep|
         
+          if environment.proxy
+            http_client = HTTPClient.new(environment.proxy.uri)
+            http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
+          else
+            http_client = HTTPClient.new
+          end
+
+
+          environment.machines.each do |machine|
+            client = Stella::Client.new
+            client.add_observer(self)
+            client.execute_testplan(http_client, machine, namespace, @testplan, @verbose)
+            request_stats.merge!(client.request_stats)
+          end
+          
+          seconds_elapsed = Time.now - time_started
+          redo if seconds_elapsed <= @duration 
+          break if seconds_elapsed >= @duration
+        end
       end
-      
-      puts "DONE!"
+
+      stats.tick
+      puts "DONE! (#{seconds_elapsed.minutes} minutes)"
       instance_variables.each do |name|
         #next unless name =~ /request/
         puts "%20s: %s" % [name, instance_variable_get(name)]
       end
-      
+      puts stats
+      request_stats.each do |rstat|
+        puts rstat
+        #puts "#{rstat[rstat][:name]}: #{rstat[rstat][:stats]}"
+      end
     end
     
     
     def clients=(*args)
       count = args.flatten.first
       @clients = count
+    end
+    
+    def repetitions=(*args)
+      @repetitions = args.flatten.first
+    end
+    
+    def duration=(*args)
+      @duration = args.flatten.first
     end
   end
 end

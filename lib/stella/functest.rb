@@ -56,13 +56,16 @@ module Stella
       raise "No machines defined for #{environment.name}" if environment.machines.empty?
       
       
-      if environment.proxy
-        http_client = HTTPClient.new(environment.proxy.uri)
-        http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
-      else
-        http_client = HTTPClient.new
+      begin
+        if environment.proxy
+          http_client = HTTPClient.new(environment.proxy.uri)
+          http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
+        else
+          http_client = HTTPClient.new
+        end
+      rescue => ex
+        puts ex.class
       end
-      
       
       environment.machines.each do |machine|
         client = Stella::Client.new

@@ -7,6 +7,13 @@ module Stella
   class Client
     include Observable
     
+    attr_reader :request_stats
+    
+    def initialize
+      @request_stats = {
+      }
+    end
+    
     def execute_testplan(http_client, machine, namespace, plan, verbose=1)
       changed
       notify_observers(:start, machine, plan.name)
@@ -27,10 +34,17 @@ module Stella
       request_methods.each do |methname|
         retry_count = 1 unless previous_methname == methname
         previous_methname = methname
-      
+        
         # We need to define the request only the first time it's run. 
         req = namespace.send(methname) unless retry_count > 1 
-      
+        req.set_unique_id(self.object_id)
+        
+        @request_stats[req.stella_id.to_sym] ||= {
+          :name => req.name,
+          :stats => Stats.new( req.stella_id),
+          :requests => []
+        }
+        
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)
         uri.scheme ||= plan.protocol
         uri.host ||= machine.host
@@ -43,14 +57,23 @@ module Stella
             body = req.body.content if req.body && req.body.path
             
             if req.body.form_param.nil? && query.empty?
+              @request_stats[req.stella_id.to_sym][:stats].tick
               res = http_client.post(uri.to_s, body)
+              @request_stats[req.stella_id.to_sym][:stats].tick
             else
               query[req.body.form_param.to_s] = body
-              res = http_client.post(uri.to_s, query)
+              
+              @request_stats[req.stella_id.to_sym][:stats].tick
+              res = http_client.post(uri.to_s, query)              
+              @request_stats[req.stella_id.to_sym][:stats].tick
             end
 
           else
+            
+            @request_stats[req.stella_id.to_sym][:stats].tick
             res = http_client.send(req.http_method.downcase, uri.to_s, query)
+            @request_stats[req.stella_id.to_sym][:stats].tick
+              
           end
         
         rescue => ex

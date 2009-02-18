@@ -37,15 +37,17 @@ module Stella
       @protocol = "http"
     end
     
-    def desc
+
+    def description
       @description
     end
-    def desc=(val)
+    def description=(val)
+      val = val.first if val.is_a? Array
       @description = val
     end
     
-    #alias :'desc'  :'description'
-    #alias :'desc=' :'description='
+    alias :desc  :description
+    alias :desc= :description=
     
     # Append a Stella::TestPlan::Request object to +requests+.
     def add_request(req)
@@ -132,6 +134,16 @@ module Stella
         @current_request.add_body(content, param, content_type)
       end
       
+      def name(*args)
+        raise "current_plan is not a valid testplan: #{@current_plan}" unless @current_plan.is_a? Stella::TestPlan
+        
+        # NOTE: @current_request must be set in the calling namespace
+        # before this method is called. See: make_request
+        raise "current_request is not a valid request" unless @current_request.is_a? Stella::Data::HTTPRequest
+        @current_request.name = args.first
+      end
+      
+      
       def response(*args, &b)
         raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan
         
@@ -143,7 +155,7 @@ module Stella
       end
       private :response
       
-      # TestPlan::Request#add_ methods
+      # Stella::Data::HTTPRequest#add_ methods
       [:header, :param].each do |method_name|
         eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(*args, &b)
@@ -160,7 +172,7 @@ module Stella
       end
       
       # TestPlan#= methods
-      [:proxy, :auth, :base_uri, :desc].each do |method_name|
+      [:proxy, :auth, :base_uri, :desc, :description].each do |method_name|
         eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(*args)
           return unless @current_plan.is_a? Stella::TestPlan
@@ -198,7 +210,8 @@ module Stella
         req = Stella::Data::HTTPRequest.new(uri, method.to_s.upcase)
         @current_plan.add_request req
         index = @current_plan.requests.size
-        name = :"#{index} #{req.http_method} #{req.uri}"
+        method_name = :"#{index} #{req.http_method} #{req.uri}"
+        
         req_method = Proc.new {
           # These instance variables are very important. The bring in the context
           # when the request method is called in the testrunner class. We know what 
@@ -212,7 +225,7 @@ module Stella
           req
         }
         metaclass.instance_eval do
-          define_method(name, &req_method) 
+          define_method(method_name, &req_method) 
         end
 
       end

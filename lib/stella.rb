@@ -2,13 +2,16 @@
 require 'date'
 require 'time'
 require 'rubygems'
-
 require 'logger'
-
 require 'uri'
 require 'httpclient'
 
 require 'storable'
+require 'stats'
+require 'threadify'
+require 'timeunits'
+
+require 'stella/crypto'
 
 require 'stella/common'
 
@@ -21,6 +24,8 @@ require 'stella/testrunner'
 require 'stella/testplan'
 require 'stella/loadtest'
 require 'stella/functest'
+
+srand
 
 # Common dependencies
 STELLA_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..'))
