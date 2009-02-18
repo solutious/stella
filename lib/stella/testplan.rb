@@ -132,8 +132,19 @@ module Stella
         @current_request.add_body(content, param, content_type)
       end
       
+      def response(*args, &b)
+        raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan
+        
+        # NOTE: @current_request must be set in the calling namespace
+        # before this method is called. See: make_request
+        raise "current_request is not a valid request" unless @current_request.is_a? Stella::Data::HTTPRequest
+        
+        @current_request.add_response_handler(*args, &b)
+      end
+      private :response
+      
       # TestPlan::Request#add_ methods
-      [:header, :param, :response].each do |method_name|
+      [:header, :param].each do |method_name|
         eval <<-RUBY, binding, '(Stella::DSL::TestPlan)', 1
         def #{method_name}(*args, &b)
           raise "current_plan is not a valid testplan" unless @current_plan.is_a? Stella::TestPlan

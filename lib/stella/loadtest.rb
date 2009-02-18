@@ -1,5 +1,8 @@
+# See, re Threadify on JRuby: http://www.ruby-forum.com/topic/158180
 require 'threadify'
 
+#
+#
 module Stella
   class LoadTest
     include TestRunner

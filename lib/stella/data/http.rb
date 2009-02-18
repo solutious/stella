@@ -25,7 +25,7 @@ module Stella::Data
     
     def content
       @content if @content
-      raise "No content defined" unless @path && File.exists?(@path)
+      raise "No content defined (#{@path})" unless @path && File.exists?(@path)
       @content = File.read @path
     end
     
@@ -36,6 +36,7 @@ module Stella::Data
   class HTTPRequest < Storable
     # A string representing a raw HTTP request
     attr_reader :raw_data
+    
     # A hash containing blocks to be executed depending on the HTTP response status.
     # The hash keys are numeric HTTP Status Codes. 
     #
@@ -43,7 +44,7 @@ module Stella::Data
     #     304 => { ... }
     #     500 => { ... }
     #
-    attr_accessor :response
+    attr_accessor :response_handler
     
     field :time => DateTime
     field :client_ip 
@@ -68,7 +69,7 @@ module Stella::Data
       @http_version = version
       @headers = {}
       @params = {}
-      @response = {}
+      @response_handler = {}
       @time = DateTime.now
     end
     
@@ -100,10 +101,10 @@ module Stella::Data
       @params[name.to_s] << value.to_s
     end
     
-    def add_response(*args, &b)
+    def add_response_handler(*args, &b)
       args << 200 if args.empty?
       args.each do |status|
-        @response[status] = b
+        @response_handler[status] = b
       end
     end
     def add_body(content, form_param=nil, content_type=nil)
@@ -118,6 +119,7 @@ module Stella::Data
       else
         @body.content = content
       end
+      
     end
     
     

@@ -38,6 +38,7 @@ testplan :dsl_tryout do
   
   get "/product" do
     param 'id' => @product_id
+      param 'id' => @product_id
     
     response 200 do |header, body|
       data = YAML.load(body)
@@ -61,17 +62,18 @@ end
 
 loadtest :moderate do
   plan :dsl_tryout
-  clients 1000        # <= machines * 100
+  clients 10        # <= machines * 100
   #machines 1, :generic           # <= clients
   #rampup :interval => 5, :max => 25, :delay => 10 # seconds
   #duration 60 # minutes
+  verbose
 end
 
 # Run functional test
 #run :development, :integration
 
 # Run load test
-run :development, :moderate
+run :development, :integration
 
 
 

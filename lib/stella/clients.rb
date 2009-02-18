@@ -36,21 +36,23 @@ module Stella
         uri.host ||= machine.host
         uri.port ||= machine.port
         
-      
         query = {}.merge!(req.params)
-      
-        if req.http_method =~ /POST|PUT/
-          body = File.new(req.body.path) if req.body && req.body.path
-        
-          if req.body.form_param.nil? && query.empty?
-            query = body
-          else
-            query[req.body.form_param.to_s] = body
-          end
-        end
         
         begin
-          res = http_client.send(req.http_method.downcase, uri.to_s, query)
+          if req.http_method =~ /POST|PUT/
+            body = req.body.content if req.body && req.body.path
+            
+            if req.body.form_param.nil? && query.empty?
+              res = http_client.post(uri.to_s, body)
+            else
+              query[req.body.form_param.to_s] = body
+              res = http_client.post(uri.to_s, query)
+            end
+
+          else
+            res = http_client.send(req.http_method.downcase, uri.to_s, query)
+          end
+        
         rescue => ex
           changed
           notify_observers(:request_exception, req.http_method, uri, query, ex.message)
@@ -62,7 +64,7 @@ module Stella
         
 
         
-        unless req.response.has_key?(res.status)
+        unless req.response_handler.has_key?(res.status)
           changed
           notify_observers(:request_unexpected_response, req.http_method, uri, query, res.status, response_headers, res.body.content)
         else
@@ -70,7 +72,7 @@ module Stella
           changed
           notify_observers(:request, req.http_method, uri, query, res.status, response_headers, res.body.content)
           
-          response_handler_ret = req.response[res.status].call(response_headers, res.body.content)
+          response_handler_ret = req.response_handler[res.status].call(response_headers, res.body.content)
         
           if response_handler_ret.is_a?(Stella::TestPlan::ResponseHandler) && response_handler_ret.action == :repeat
             retry_count ||= 1
