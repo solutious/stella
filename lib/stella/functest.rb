@@ -30,9 +30,10 @@ module Stella
       puts
     end
     
-    def update_request_exception(method, uri, query, message)
+    def update_request_exception(method, uri, query, ex)
       puts "#{method} #{uri}"
-      puts "EXCEPTION: #{message}"
+      puts "EXCEPTION: #{ex.message}"
+      puts ex.backtrace
     end
     
     def update_request_unexpected_response(method, uri, query, response_status, response_headers, response_body)
@@ -67,12 +68,16 @@ module Stella
         puts ex.class
       end
       
+      request_stats = {}
       environment.machines.each do |machine|
         client = Stella::Client.new
         client.add_observer(self)
-        client.execute_testplan(http_client, machine, namespace, @testplan, @verbose)
+        client.execute_testplan(request_stats, http_client, machine, namespace, @testplan, @verbose)
       end
       
+      request_stats.each do |rstat|
+        puts "#{rstat[0]}: #{rstat[1]}"
+      end
     end
     
 

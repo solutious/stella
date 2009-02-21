@@ -14,7 +14,7 @@ module Stella
       }
     end
     
-    def execute_testplan(http_client, machine, namespace, plan, verbose=1)
+    def execute_testplan(request_stats, http_client, machine, namespace, plan, verbose=1)
       changed
       notify_observers(:start, machine, plan.name)
       
@@ -39,7 +39,7 @@ module Stella
         req = namespace.send(methname) unless retry_count > 1 
         req.set_unique_id(self.object_id)
         
-        @request_stats[req.stella_id.to_sym] ||= {
+        request_stats[req.stella_id.to_sym] ||= {
           :name => req.name,
           :stats => Stats.new( req.stella_id),
           :requests => []
@@ -52,33 +52,28 @@ module Stella
         
         query = {}.merge!(req.params)
         
+        
+        
         begin
+          
           if req.http_method =~ /POST|PUT/
-            body = req.body.content if req.body && req.body.path
             
-            if req.body.form_param.nil? && query.empty?
-              @request_stats[req.stella_id.to_sym][:stats].tick
-              res = http_client.post(uri.to_s, body)
-              @request_stats[req.stella_id.to_sym][:stats].tick
-            else
-              query[req.body.form_param.to_s] = body
-              
-              @request_stats[req.stella_id.to_sym][:stats].tick
-              res = http_client.post(uri.to_s, query)              
-              @request_stats[req.stella_id.to_sym][:stats].tick
+            if req.body.has_content?
+              body = req.body.content
+              param = req.body.form_param || 'file'  # How do we handle bodies with no form name?
+              query[param] = body # NOTE: HTTPClient prefers a file handle rather than reading in the file
             end
 
-          else
-            
-            @request_stats[req.stella_id.to_sym][:stats].tick
-            res = http_client.send(req.http_method.downcase, uri.to_s, query)
-            @request_stats[req.stella_id.to_sym][:stats].tick
-              
           end
-        
+          
+          # Make the request. 
+          time_started = Time.now
+          res = http_client.send(req.http_method.downcase, uri.to_s, query)
+          request_stats[req.stella_id.to_sym][:stats].sample(Time.now - time_started)
+          
         rescue => ex
           changed
-          notify_observers(:request_exception, req.http_method, uri, query, ex.message)
+          notify_observers(:request_exception, req.http_method, uri, query, ex)
           next
         end
         

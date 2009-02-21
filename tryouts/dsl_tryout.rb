@@ -26,7 +26,7 @@ testplan :dsl_tryout do
   
   post "/upload" do
     name "Add Product"
-    body "bill", "/path/2/file"
+    body "bill", "/tmp/README.rdoc"
     header "X-Stella" => "Yay!"
     param :convert => true
     param :rand => rand
@@ -37,7 +37,7 @@ testplan :dsl_tryout do
     end
   end
   
-  get "/product" do
+  xget "/product" do
     name "View Product"
     param 'id' => @product_id
     
@@ -47,7 +47,7 @@ testplan :dsl_tryout do
     end
   end
 
-  get "/product/22" do
+  xget "/product/22" do
     response 200 do |header, body|
       data = YAML.load(body)
     end
@@ -58,7 +58,7 @@ end
 
 functest :integration do
   plan :dsl_tryout
-  verbose  
+  verbose  2
 end
 
 loadtest :moderate do

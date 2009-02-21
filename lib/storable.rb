@@ -109,7 +109,7 @@ class Storable
     fnames = field_names
     fnames.each_with_index do |key,index|
       
-      value = from[key]
+      
       
       # TODO: Correct this horrible implementation (sorry, me. It's just one of those days.)
       
@@ -123,10 +123,16 @@ class Storable
         value = from[key].to_f
       elsif field_types[index] == Integer
         value = from[key].to_i
+      elsif field_types[index] == Array
+        (value ||= []) << from[key]
+      else
+        value = from[key] || from[key.to_s] # support for symbol keys and string keys
+        value = value.first if value.is_a?(Array) && value.size == 1 # I
       end
       
       me.send("#{key}=", value) if self.method_defined?("#{key}=")  
     end
+    
     me
   end
   # Return the object data as a hash

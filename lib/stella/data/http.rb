@@ -18,18 +18,13 @@ module Stella::Data
   end
   
   class HTTPBody < Storable
-    field :path
     field :content_type
     field :form_param
-    attr_writer :content
+    field :content
     
-    def content
-      @content if @content
-      raise "No content defined (#{@path})" unless @path && File.exists?(@path)
-      @content = File.read @path
+    def has_content?
+      !@content.nil?
     end
-    
-    
     
   end
   
@@ -77,6 +72,7 @@ module Stella::Data
       @time = Time.now
       @stella_id = Stella::Crypto.sign(time.to_i.to_s, "#{@http_method}/#{@uri}/#{@params}")
       @unique_id = nil
+      @body = HTTPBody.new
     end
     
     def set_unique_id(seasoning=rand)
@@ -103,13 +99,17 @@ module Stella::Data
     end
     def add_param(*args)
       name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
-      if @params[name.to_s] && !@params[name.to_s].is_a?(Array)
-        @params[name.to_s] = [@params[name.to_s]]
-      else
-        @params[name.to_s] = ""
-      end
       
-      @params[name.to_s] << value.to_s
+      # BUG: This auto-array shit is causing a problem where the one request
+      # will set the param and then next will set it again and it becomes
+      # an array. 
+      #if @params[name.to_s] && !@params[name.to_s].is_a?(Array)
+      #  @params[name.to_s] = [@params[name.to_s]]
+      #else
+      #  @params[name.to_s] = ""
+      #end
+      
+      @params[name.to_s] = value.to_s
     end
     
     def add_response_handler(*args, &b)
@@ -118,6 +118,8 @@ module Stella::Data
         @response_handler[status] = b
       end
     end
+    
+    # +content+ can be literal content or a file path
     def add_body(content, form_param=nil, content_type=nil)
       @body = Stella::Data::HTTPBody.new
       
@@ -125,7 +127,7 @@ module Stella::Data
       @body.content_type = content_type if content_type
       
       if File.exists?(content)
-        @body.path = content
+        @body.content = File.new(content)
         @body.content_type ||= "application/x-www-form-urlencoded"
       else
         @body.content = content

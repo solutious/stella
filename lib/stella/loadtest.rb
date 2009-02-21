@@ -42,6 +42,7 @@ module Stella
     
     def update_done(*args)
       @testplans_completed += 1
+      puts
     end
     
     def update_authorized(domain, user, pass)
@@ -51,16 +52,18 @@ module Stella
       @requests_successful += 1
     end
     
-    def update_request_exception(method, uri, query, message)
+    def update_request_exception(method, uri, query, ex)
       @requests_failed += 1
+      puts [method, uri, query, ex.message].join("::")
     end
     
     def update_request_unexpected_response(method, uri, query, response_status, response_headers, response_body)
       @requests_failed += 1
+      puts [method, uri, query, response_status, response_headers, response_body].join("::")
     end
     
     def update_retrying(uri, retry_count, total)
-      puts "retrying: #{uri} (#{retry_count} of #{total})"
+      #print retry_count
     end
     
     
@@ -82,8 +85,9 @@ module Stella
       time_started = Time.now
       seconds_elapsed = 0
       (1..@clients).to_a.threadify do |i|
-        @repetitions.times do |rep|
         
+        @repetitions.times do |rep|
+
           if environment.proxy
             http_client = HTTPClient.new(environment.proxy.uri)
             http_client.set_proxy_auth(environment.proxy.user, environment.proxy.pass) if environment.proxy.user
@@ -95,13 +99,21 @@ module Stella
           environment.machines.each do |machine|
             client = Stella::Client.new
             client.add_observer(self)
-            client.execute_testplan(http_client, machine, namespace, @testplan, @verbose)
-            request_stats.merge!(client.request_stats)
+            client.execute_testplan(request_stats, http_client, machine, namespace, @testplan, @verbose)
           end
           
           seconds_elapsed = Time.now - time_started
-          redo if seconds_elapsed <= @duration 
-          break if seconds_elapsed >= @duration
+
+          request_stats.each do |rstat|
+            puts "#{rstat[0]}: #{rstat[1]}"
+          end
+          
+          # If a duration was given, we make sure to run for that
+          # amount of time.
+          if @duration > 0
+            redo if seconds_elapsed <= @duration 
+            break if seconds_elapsed >= @duration
+          end
         end
       end
 
@@ -111,10 +123,11 @@ module Stella
         #next unless name =~ /request/
         puts "%20s: %s" % [name, instance_variable_get(name)]
       end
+      
       puts stats
+      puts
       request_stats.each do |rstat|
-        puts rstat
-        #puts "#{rstat[rstat][:name]}: #{rstat[rstat][:stats]}"
+        puts "#{rstat[0]}: #{rstat[1]}"
       end
     end
     

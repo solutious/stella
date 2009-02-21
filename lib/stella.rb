@@ -7,7 +7,7 @@ require 'uri'
 require 'httpclient'
 
 require 'storable'
-require 'stats'
+require 'stella/stats'
 require 'threadify'
 require 'timeunits'
 
