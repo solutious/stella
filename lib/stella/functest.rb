@@ -75,8 +75,9 @@ module Stella
         client.execute_testplan(request_stats, http_client, machine, namespace, @testplan, @verbose)
       end
       
+
       request_stats.each do |rstat|
-        puts "#{rstat[0]}: #{rstat[1]}"
+        puts rstat[1][:stats].to_s
       end
     end
     

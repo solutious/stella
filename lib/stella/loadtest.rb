@@ -37,12 +37,12 @@ module Stella
     end
     
     def update_start(machine, name)
+      puts
       @testplans_started += 1
     end
     
     def update_done(*args)
       @testplans_completed += 1
-      puts
     end
     
     def update_authorized(domain, user, pass)
@@ -105,7 +105,7 @@ module Stella
           seconds_elapsed = Time.now - time_started
 
           request_stats.each do |rstat|
-            puts "#{rstat[0]}: #{rstat[1]}"
+            puts rstat[1][:stats].to_s
           end
           
           # If a duration was given, we make sure to run for that
@@ -124,10 +124,12 @@ module Stella
         puts "%20s: %s" % [name, instance_variable_get(name)]
       end
       
-      puts stats
+      puts "Final Status"
+      puts stats.to_s
       puts
+
       request_stats.each do |rstat|
-        puts "#{rstat[0]}: #{rstat[1]}"
+        puts rstat[1][:stats].to_s
       end
     end
     

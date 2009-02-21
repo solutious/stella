@@ -41,8 +41,7 @@ module Stella
         
         request_stats[req.stella_id.to_sym] ||= {
           :name => req.name,
-          :stats => Stats.new( req.stella_id),
-          :requests => []
+          :stats => Stats.new( req.name )
         }
         
         uri = req.uri.is_a?(URI) ? req.uri : URI.parse(req.uri.to_s)

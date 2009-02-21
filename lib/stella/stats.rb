@@ -56,6 +56,7 @@ class Stats
 
   # Calculates the standard deviation of the data so far.
   def sd
+    return 0.0 if @n <= 1
     # (sqrt( ((s).sumsq - ( (s).sum * (s).sum / (s).n)) / ((s).n-1) ))
     begin
       return Math.sqrt( (@sumsq - ( @sum * @sum / @n)) / (@n-1) )
