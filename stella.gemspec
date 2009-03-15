@@ -44,11 +44,6 @@
   lib/timeunits.rb
   lib/util/httputil.rb
   stella.gemspec
-  support/fastthread-ruby1.9-one-big-patch.diff
-  support/kvm.h
-  support/ruby-pcap-takuma-notes.txt
-  support/ruby-pcap-takuma-patch.txt
-  support/useragents.txt
   tryouts/drb/drb_test.rb
   tryouts/drb/open4.rb
   tryouts/drb/slave.rb
@@ -60,7 +55,7 @@
   # = EXECUTABLES =
   # The list of executables in your project (if any). Don't include the path, 
   # just the base filename.
-  s.executables = %w[stella stella.bat]
+  s.executables = %w[]
   
   s.extra_rdoc_files = %w[README.rdoc LICENSE.txt]
   s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.rdoc"]

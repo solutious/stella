@@ -27,7 +27,7 @@ module Stella
       end
       
       tf = Tempfile.new('stella-cookie')
-      http_client.set_cookie_store(tf)
+      http_client.set_cookie_store(tf.to_s)
     
       request_methods = namespace.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
       

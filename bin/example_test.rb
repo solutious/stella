@@ -1,20 +1,23 @@
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
+#!/usr/bin/ruby
 
-# A Tryout for Stella's Domain specific language 
+# Stella Test DSL - Example 1: Multiple requests, with response data
+# 
+# NOTE: You need to run bin/example_webapp.rb so this test has an HTTP
+# server to work its magic on.
+#
 #
 
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
 
-require 'yaml'
 
 require 'stella'
+require 'yaml'
+
+
 include Stella::DSL
 
 
-environment :development do
-  machines "localhost:3114"
-end
-
-testplan :dsl_tryout do
+testplan :dsl_example1 do
   desc "A basic demonstration of the testplan DSL"
   protocol :http
   auth :basic, "stella", "stella"
@@ -29,7 +32,6 @@ testplan :dsl_tryout do
     
     response 200, 201 do |headers, body, objid|
       data = YAML.load(body)
-      #puts "SEND#{objid}: #{data[:id]}" if objid == 1
       @product_id = data[:id]
     end
   end
@@ -40,39 +42,58 @@ testplan :dsl_tryout do
     
     response 200 do |header, body, objid|
       data = YAML.load(body)
-      #puts "  RECEIVE#{objid}: #{data[:id]}" if objid == 1
-      repeat :times => 1, :wait => 2
+      #repeat :times => 1, :wait => 2
     end
   end
 
   get "/product/22" do
+    name "Product 22"
     response 200 do |header, body, objid|
       data = YAML.load(body)
-      #puts "    STEP3(#{objid}): #{data[:id]}" if objid == 1
     end
   end
 
 end
 
+# Environments 
+#
+# Stella can execute the same test plan on different environments.
+# You can specify several environment blocks by giving them unique
+# names. Each environment can contain any number of machines. 
+environment :development do
+  machines "localhost:3114"  
+  # machine "localhost:3115"
+  # ...
+end
 
+# Functional Test
+#
+# A functional test executes the test plan with a single client. It 
+# produces more output than a load test which can be used to verify 
+# both that the test plan was written correctly and that the server
+# is responding as expected for each request. 
 functest :integration do
-  plan :dsl_tryout
+  plan :dsl_example1
   verbose  2
 end
 
+# Load Test
+#
+# A load test executes the test plan with 1 or more clients over a
+# period of time. 
 loadtest :moderate do
-  plan :dsl_tryout
-  clients 50        # <= machines * 100
-  repetitions 100
+  plan :dsl_example1
+  clients 2        # <= machines * 100
+  repetitions 10
   #duration 1.seconds  
   verbose
 end
 
-# Run functional test
-#run :development, :integration
+# Uncomment one of the following:
 
-# Run load test
-run :development, :moderate
+#run :development, :integration     # Run functional test
+#run :development, :moderate        # Run load test
+
 
 
 
