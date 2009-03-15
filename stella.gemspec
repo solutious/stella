@@ -24,7 +24,6 @@
   README.rdoc
   Rakefile
   lib/logger.rb
-  lib/slave.rb
   lib/stella.rb
   lib/stella/clients.rb
   lib/stella/command/base.rb
@@ -56,8 +55,6 @@
   tryouts/dsl_tryout.rb
   tryouts/oo_tryout.rb
   tryouts/webapp.rb
-  vendor/useragent
-  
   )
   
   # = EXECUTABLES =
