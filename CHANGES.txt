@@ -1,9 +1,19 @@
 STELLA, CHANGES
 
-#### 0.6.0 (2009-02-04) ###############################
+#### TODO
+
+* TODO: prepend instance variables with "stella_"
+* TODO: implement session handling
+* BUG: http://jira.codehaus.org/browse/JRUBY-2992
+
+#### 0.6.0 (2009-03-15) ###############################
+
+http://github.com/solutious/stella/tree/0.6
 
 * COMPLETE REWRITE!
-	* The commands and API from 0.5.x are no longer supported. This ain't your grandmother's Stella.
+  * The commands and API from 0.5.x are no longer supported. This ain't your grandmother's Stella.
+* NEW: Tests are now defined using a DSL. See tryouts/dsl_tryout.rb for an example. 
+* NEW: Tests are run with Ruby directly: ruby testplan.rb (for now)
 
 
 #### 0.5.6 (2009-02-04) ###############################

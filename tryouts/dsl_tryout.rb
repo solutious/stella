@@ -4,11 +4,6 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local
 #
 
 
-# TODO: prepend instance variables with "stella_"
-# TODO: is it possible to use "get" inside response blocks?
-# TODO: implement session handling
-# BUG: http://jira.codehaus.org/browse/JRUBY-2992
-
 require 'yaml'
 
 require 'stella'
@@ -24,6 +19,7 @@ testplan :dsl_tryout do
   protocol :http
   auth :basic, "stella", "stella"
   
+  
   post "/upload" do
     name "Add Product"
     body "bill", "/tmp/README.rdoc"
@@ -31,25 +27,28 @@ testplan :dsl_tryout do
     param :convert => true
     param :rand => rand
     
-    response 200, 201 do |headers, body|
+    response 200, 201 do |headers, body, objid|
       data = YAML.load(body)
+      #puts "SEND#{objid}: #{data[:id]}" if objid == 1
       @product_id = data[:id]
     end
   end
   
-  xget "/product" do
+  get "/product" do
     name "View Product"
     param 'id' => @product_id
     
-    response 200 do |header, body|
+    response 200 do |header, body, objid|
       data = YAML.load(body)
-      #repeat :times => 1, :wait => 2
+      #puts "  RECEIVE#{objid}: #{data[:id]}" if objid == 1
+      repeat :times => 1, :wait => 2
     end
   end
 
-  xget "/product/22" do
-    response 200 do |header, body|
+  get "/product/22" do
+    response 200 do |header, body, objid|
       data = YAML.load(body)
+      #puts "    STEP3(#{objid}): #{data[:id]}" if objid == 1
     end
   end
 
@@ -63,8 +62,8 @@ end
 
 loadtest :moderate do
   plan :dsl_tryout
-  clients 1        # <= machines * 100
-  repetitions 10
+  clients 50        # <= machines * 100
+  repetitions 100
   #duration 1.seconds  
   verbose
 end

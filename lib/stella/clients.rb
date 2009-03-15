@@ -1,6 +1,6 @@
 
 require "observer"
-
+require "tempfile"
 
 
 module Stella
@@ -8,8 +8,9 @@ module Stella
     include Observable
     
     attr_reader :request_stats
-    
-    def initialize
+    attr_accessor :client_id
+    def initialize(client_id=1)
+      @client_id = client_id
       @request_stats = {
       }
     end
@@ -25,7 +26,8 @@ module Stella
         notify_observers(:authorized, auth_domain, plan.auth.user, plan.auth.pass)
       end
       
-      http_client.set_cookie_store('/tmp/cookie.dat')
+      tf = Tempfile.new('stella-cookie')
+      http_client.set_cookie_store(tf)
     
       request_methods = namespace.methods.select { |meth| meth =~ /\d+\s[A-Z]/ }
       
@@ -89,7 +91,7 @@ module Stella
           changed
           notify_observers(:request, req.http_method, uri, query, res.status, response_headers, res.body.content)
           
-          response_handler_ret = req.response_handler[res.status].call(response_headers, res.body.content)
+          response_handler_ret = req.response_handler[res.status].call(response_headers, res.body.content, @client_id)
         
           if response_handler_ret.is_a?(Stella::TestPlan::ResponseHandler) && response_handler_ret.action == :repeat
             retry_count ||= 1

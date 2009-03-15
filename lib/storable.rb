@@ -1,6 +1,7 @@
 #--
 # TODO: Handle nested hashes and arrays. 
 # TODO: to_xml, see: http://codeforpeople.com/lib/ruby/xx/xx-2.0.0/README
+# TODO: Rename to Stuffany
 #++
 
 require 'yaml'
@@ -12,6 +13,7 @@ require 'fileutils'
 # Storable.field method which tells Storable the order and 
 # name.
 class Storable
+  VERSION = 2
   NICE_TIME_FORMAT  = "%Y-%m-%d@%H:%M:%S".freeze unless defined? NICE_TIME_FORMAT
   SUPPORTED_FORMATS = %w{tsv csv yaml json}.freeze unless defined? SUPPORTED_FORMATS
   
@@ -25,7 +27,10 @@ class Storable
     @format = v
   end
   
+  # TODO: from_args([HASH or ordered params])
+  
   def init
+    # NOTE: I think this can be removed
     self.class.send(:class_variable_set, :@@field_names, []) unless class_variable_defined?(:@@field_names)
     self.class.send(:class_variable_set, :@@field_types, []) unless class_variable_defined?(:@@field_types)
   end
@@ -85,8 +90,9 @@ class Storable
   end
   
   # Create a new instance of the object using data from file. 
-  def self.from_file(file_path=nil, format=nil)
+  def self.from_file(file_path, format='yaml')
     raise "Cannot read file (#{file_path})" unless File.exists?(file_path)
+    raise "#{self} doesn't support from_#{format}" unless self.respond_to?("from_#{format}")
     format = format || File.extname(file_path).tr('.', '')
     me = send("from_#{format}", read_file_to_array(file_path))
     me.format = format
@@ -109,25 +115,31 @@ class Storable
     fnames = field_names
     fnames.each_with_index do |key,index|
       
-      
+      stored_value = from[key] || from[key.to_s] # support for symbol keys and string keys
       
       # TODO: Correct this horrible implementation (sorry, me. It's just one of those days.)
       
-      if field_types[index] == Time
-        value = Time.parse(from[key].to_s)
-      elsif field_types[index] == DateTime
-        value = DateTime.parse(from[key].to_s)
-      elsif field_types[index] == TrueClass
-        value = (from[key].to_s == "true")
-      elsif field_types[index] == Float
-        value = from[key].to_f
-      elsif field_types[index] == Integer
-        value = from[key].to_i
-      elsif field_types[index] == Array
-        (value ||= []) << from[key]
+      if field_types[index] == Array
+        ((value ||= []) << stored_value).flatten 
+      elsif field_types[index] == Hash
+        value = stored_value
       else
-        value = from[key] || from[key.to_s] # support for symbol keys and string keys
-        value = value.first if value.is_a?(Array) && value.size == 1 # I
+        # SimpleDB stores attribute shit as lists of values
+        value = stored_value.first if stored_value.is_a?(Array) && stored_value.size == 1
+
+        if field_types[index] == Time
+          value = Time.parse(value)
+        elsif field_types[index] == DateTime
+          value = DateTime.parse(value)
+        elsif field_types[index] == TrueClass
+          value = (value.to_s == "true")
+        elsif field_types[index] == Float
+          value = value.to_f
+        elsif field_types[index] == Integer
+          value = value.to_i
+        else
+          value = value.first if value.is_a?(Array) && value.size == 1 # I
+        end
       end
       
       me.send("#{key}=", value) if self.method_defined?("#{key}=")  

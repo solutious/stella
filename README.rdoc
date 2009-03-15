@@ -1,53 +1,14 @@
-= Stella - Your Performance Testing Friend
+= Stella - 0.6.0 ALPHA
 
-Release: 0.6.0
-
-This is a BETA release. Proceed in double verify mode!
-
-*NOTE: This is an experimental branch! It is probably ---> NOT FUNCTIONAL <---*
+Stella is a Ruby library for writing functional and performance tests in a sexy DSL (domain specific language).
 
 *NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
 
-
 == Overview
 
-Stella is a command-line tool for running, reporting, and analyzing performance tests.
 
-== Features
+== Example
 
-* Wrappers for Apache Bench, Siege, and Httperf
-  * Run multiple tests automatically to improve statistical sample size
-  * Adds ability to ramp up and warmp up will any tool
-  * Returns standardized stats for every test. CSV, YAML, or JSON
-  * Friendly error message to catch common tool problems
-  * Simple usage: stella ab -c 50 -n 1000 http://...
-* HTTP/DNS request sniffing
-  * Command-line output of requests and responses
-* Support Ruby 1.8.x, 1.9, and JRuby
-* Runs on Windows (Native and JRuby)
-* Not supported:
-  * Packet filtering on Windows
-  * Ruby-Pcap does not compile with Ruby 1.9.1
-
-== Prerequisites
-
-* Linux, BSD, Solaris
-* Ruby 1.8.x, 1.9.x, or JRuby[http://jruby.codehaus.org/] 1.1
-* Native Libraries (c or c++) 
-  * Pcap (optional, for packet sniffing)
-* Ruby Libraries
-  * rspec
-  * mongrel
-  * net-dns 
-  * Ruby-Pcap (optional, for packet sniffing)
-  * httpclient
-  * cucumber
-
-* One of:
-  * Apache-Bench[http://httpd.apache.org/docs/2.2/programs/ab.html]
-  * Siege[http://www.joedog.org/index/siege-home]
-  * Httperf[http://www.hpl.hp.com/research/linux/httperf/]
-    * <em>Note: Argument handling for Httperf is incomplete</em>
 
 
 == Installation
@@ -55,49 +16,26 @@ Stella is a command-line tool for running, reporting, and analyzing performance 
 Get it in one of the following ways:
 
 * RubyForge: http://stella.rubyforge.org/
-  * gem install stella 
+* gem install stella 
 * git clone git://github.com/solutious/stella.git
-  * git submodule init
-  * git submodule update
- 
-=== Installing on Linux
-
-If you see the following error you need to install the Ruby header files.
-
-    ERROR: Error installing stella
-        ERROR: Failed to build gem native extension
-
-These are included when you install Ruby from source. They can also be installed with the following commands
-
-    $ sudo yum install ruby-devel
-    OR
-    $ sudo apt-get install ruby-dev
-
-=== Debian (and derivatives)
-
-Debian and its derivative (Ubunutu) handling packing a bit differently[http://pkg-ruby-extras.alioth.debian.org/rubygems.html]. There are a couple errors to watch out for during the installation. The solutions are below:
-
-  "no such file to load -- mkmf (LoadError)"
-  $ apt-get install ruby1.8-dev
-
-  "ERROR: RDoc documentation generator not installed!"
-  $ apt-get install rdoc
-
-
-  
-== Known Issues
-
-
-
-== Report an issue
-
-Email issues and bugs to stella@solutious.com
+* gem install solutious-stella --source http://gems.github.com
 
 
 == More Information
 
 Stellaaahhhh[http://www.youtube.com/watch?v=wmq-JDonTpc]
 
+
+== Credits
+
+* Delano Mandelbaum (delano@solutious.com)
+
+
+== Thanks 
+
+* Harm Aarts for the great test case and feedback!
+* Kalin Harvey for keeping me on track.
+* Dave L, the best intern money can't buy. 
 
 == License
 

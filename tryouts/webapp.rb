@@ -22,6 +22,15 @@ set :port => 3114
 #  username == 'stella' && password == 'stella'
 #end
 
+# 
+# Generates a string of random alphanumeric characters
+# These are used as IDs throughout the system
+def strand( len )
+   chars = ("a".."z").to_a + ("0".."9").to_a
+   newpass = ""
+   1.upto(len) { |i| newpass << chars[rand(chars.size-1)] }
+   return newpass
+end
 
 get '/' do
   redirect '/product'
@@ -30,7 +39,7 @@ end
 get '/product' do
   content_type "text/plain"
   product = {
-    :id => (params[:id] || 0).to_i,
+    :id => (params[:id] || 0).to_s,
     :name => "John West Smoked Oysters"
   }.to_yaml
 end
@@ -46,7 +55,7 @@ end
 post '/upload' do
   content_type "text/plain"
   product = {
-    :id => rand(100),
+    :id => strand(3),
     :name => "John West Smoked Oysters",
     :convert => params[:convert] || false,
     :rand => params[:rand]

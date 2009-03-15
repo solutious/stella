@@ -37,7 +37,6 @@ module Stella
     end
     
     def update_start(machine, name)
-      puts
       @testplans_started += 1
     end
     
@@ -97,16 +96,16 @@ module Stella
 
 
           environment.machines.each do |machine|
-            client = Stella::Client.new
+            client = Stella::Client.new(1)
             client.add_observer(self)
             client.execute_testplan(request_stats, http_client, machine, namespace, @testplan, @verbose)
           end
           
           seconds_elapsed = Time.now - time_started
 
-          request_stats.each do |rstat|
-            puts rstat[1][:stats].to_s
-          end
+          #request_stats.each do |rstat|
+          #  puts rstat[1][:stats].to_s
+          #end
           
           # If a duration was given, we make sure to run for that
           # amount of time.
