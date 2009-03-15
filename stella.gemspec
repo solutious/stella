@@ -10,7 +10,8 @@
   
   # = DEPENDENCIES =
   # Add all gem dependencies
-  #s.add_dependency ''
+  s.add_dependency 'httpclient2'
+  
   
   # = MANIFEST =
   # The complete list of files to be included in the release. When GitHub packages your gem, 

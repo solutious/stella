@@ -2,13 +2,56 @@
 
 Stella is a Ruby library for writing functional and performance tests in a sexy DSL (domain specific language).
 
-*NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
+==== NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
 
-== Overview
+== Example 1
+
+     testplan :maintain_value do
+       desc "Maintain a value between requests"
+       auth :basic, "stella", "stella"
+       protocol :http
+     
+       post "/upload" do
+         name "Add Product"
+         body "bill", "/path/2/file.txt"
+         header "X-Stella" => "Version #{Stella::VERSION}"
+         param :convert => true
+         param :rand => rand
+         
+         response 200, 201 do |headers, body, objid|
+           data = YAML.load(body)
+           @product_id = data[:id]                   # Save a response value
+         end
+       end
+       
+       get "/product" do
+         name "View Product"
+         param 'id' => @product_id                   # Use the saved value
+         
+         response 200 do |header, body, objid|
+           data = YAML.load(body)
+           repeat :times => 2, :wait => 1.second     # Repeat this request twice
+         end
+       end
+     end
+     
+     loadtest :quick_load do
+		   plan :maintain_value
+		   clients 2
+		   duration 5.minutes 
+		   verbose
+		 end
+		 
+		 environment :development do
+		   machines "localhost:3114"  
+		   # machine "localhost:3115"
+		   # ...
+		 end
+		 
+		 run :development, :quick_load 
 
 
-== Example
-
+See bin/example_test.rb for a running example. 
 
 
 == Installation

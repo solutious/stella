@@ -2,47 +2,53 @@
 
 # Stella Test DSL - Example 1: Multiple requests, with response data
 # 
-# NOTE: You need to run bin/example_webapp.rb so this test has an HTTP
-# server to work its magic on.
+# To run the example test, do the following:
+# 
+# * run bin/example_webapp.rb in an other terminal window. This provides
+# an HTTP server for this script to run against. 
+# 
+# * Uncomment one of the run commands at the bottom of this file.
+#
+# * run bin/example_test.rb and watch the output!
 #
 #
+# NOTE: The test and the web app will be running on your machine. If you
+# run a heavy duty test, you're machine will be slow and possibly not
+# responsive!
+#
 
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
-
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Put the local lib first in line
 
 require 'stella'
 require 'yaml'
 
-
 include Stella::DSL
-
 
 testplan :dsl_example1 do
   desc "A basic demonstration of the testplan DSL"
   protocol :http
   auth :basic, "stella", "stella"
   
-  
   post "/upload" do
     name "Add Product"
-    body "bill", "/tmp/README.rdoc"
-    header "X-Stella" => "Yay!"
+    body "bill", "/path/2/file.txt"
+    header "X-Stella" => "Version #{Stella::VERSION}"
     param :convert => true
     param :rand => rand
     
     response 200, 201 do |headers, body, objid|
       data = YAML.load(body)
-      @product_id = data[:id]
+      @product_id = data[:id]             # Store the response value
     end
   end
   
   get "/product" do
     name "View Product"
-    param 'id' => @product_id
+    param 'id' => @product_id             # Use the value from the previous request
     
     response 200 do |header, body, objid|
       data = YAML.load(body)
-      #repeat :times => 1, :wait => 2
+      repeat :times => 2, :wait => 1      # Repeat this request
     end
   end
 
@@ -83,9 +89,9 @@ end
 # period of time. 
 loadtest :moderate do
   plan :dsl_example1
-  clients 2        # <= machines * 100
-  repetitions 10
-  #duration 1.seconds  
+  clients 2
+  repetitions 10             # Specify the number of times to execute the plan
+  #duration 1.minutes        # OR the total duration of the test (not both)
   verbose
 end
 
@@ -93,43 +99,4 @@ end
 
 #run :development, :integration     # Run functional test
 #run :development, :moderate        # Run load test
-
-
-
-
-__END__
-
-
-## TODO: variable interpolation. Should happen at test time so
-## instance variables can be grabbed from the calling space. 
-  
-#  get "/product/${token}" do
-#    ## TODO: Override environment settings. 
-#    #protocol :https
-#    response 200 do |headers, body|
-#      data = YAML.load(body)
-#      puts "ID: #{data[:id]}"
-#    end
-#  end
-
-
-
-
-clients :anon_clients do
-  set :global_var => true
-  pattern :random   # One of: roundrobin, random (default)
-  client :default do
-    set 'bill[uploaded_data]' => 'path/2/pdf'
-  end
-  # ...
-end
-
-#environment :staging do
-#  proxy "http://localhost:3114", "user", "pass"  
-#  machine "localhost" do
-#    port 3114
-#    ssh :user, :pass, 222
-#    monitoring :basic
-#  end
-#end
 

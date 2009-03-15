@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake/clean'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'hanna/rdoctask'
 require 'fileutils'
 include FileUtils
  
@@ -15,10 +15,10 @@ CHANGES = "CHANGES.txt"
 LICENSE = "LICENSE.txt"
 
 # Files and directories to be deleted when you run "rake clean"
-CLEAN.include [ 'pkg', '*.gem', '.config']
+CLEAN.include [ 'pkg', '*.gem', '.config', 'doc']
 
 # Virginia assumes your project and gemspec have the same name
-name = (Dir.glob('*.gemspec') || ['virginia']).first.split('.').first
+name = (Dir.glob('*.gemspec') || ['stella']).first.split('.').first
 load "#{name}.gemspec"
 version = @spec.version
 
@@ -69,14 +69,14 @@ end
 Rake::RDocTask.new do |t|
 	t.rdoc_dir = 'doc'
 	t.title    = @spec.summary
-	t.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
+	t.options << '--line-numbers'
 	t.options << '--charset' << 'utf-8'
 	t.rdoc_files.include(LICENSE)
 	t.rdoc_files.include(README)
 	t.rdoc_files.include(CHANGES)
-	#t.rdoc_files.include('bin/*')
-	#t.rdoc_files.include('lib/*.rb')
-	#t.rdoc_files.include('lib/**/*.rb')
+	t.rdoc_files.include('bin/*')
+	t.rdoc_files.include('lib/*.rb')
+	t.rdoc_files.include('lib/**/*.rb')
 end
 
 
