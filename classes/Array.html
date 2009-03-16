@@ -25,7 +25,10 @@
   <body class='page'>
     <div class='class' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>["<span class='type'>Class</span>\n", "Array\n"]</h1>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Array
+        </h1>
         <ol class='paths'>
           <li>
             <a href="../files/lib/stella_rb.html">lib/stella.rb</a>
@@ -42,16 +45,17 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000028">stella_to_hash</a></li>
+              <li><a href="#M000045">stella_to_hash</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000028'>
-                <a name='M000028'>      </a>
+              <div class='public-instance method' id='method-M000045'>
+                <a name='M000045'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>stella_to_hash</span>\n", "<span class='arguments'>(default=nil, &amp;block)</span>\n"]
+                  <span class='name'>stella_to_hash</span>
+                  <span class='arguments'>(default=nil, &amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -62,10 +66,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000028-source'>     <span class="ruby-comment cmt"># File lib/stella.rb, line 114</span>&#x000A;114:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stella_to_hash</span>(<span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;115:     <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">block_given?</span> <span class="ruby-value">? </span><span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">default</span>)&#x000A;116:     <span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span>(<span class="ruby-identifier">key</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">value</span>)<span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>]=<span class="ruby-operator">*</span><span class="ruby-identifier">value</span> }&#x000A;117:     <span class="ruby-identifier">hash</span>&#x000A;118:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000045-source'>     <span class="ruby-comment cmt"># File lib/stella.rb, line 114</span>&#x000A;114:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stella_to_hash</span>(<span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;115:     <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">block_given?</span> <span class="ruby-value">? </span><span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">default</span>)&#x000A;116:     <span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span>(<span class="ruby-identifier">key</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">value</span>)<span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>]=<span class="ruby-operator">*</span><span class="ruby-identifier">value</span> }&#x000A;117:     <span class="ruby-identifier">hash</span>&#x000A;118:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
