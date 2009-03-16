@@ -36,19 +36,19 @@ Stella is a Ruby library for writing functional tests in a sexy DSL (domain spec
      end
      
      functest :quick_test do
-		   plan :product_api
-		   clients 2
-		   duration 5.minutes 
-		   verbose
-		 end
-		 
-		 environment :development do
-		   machines "localhost:3114"  
-		   # machine "localhost:3115"
-		   # ...
-		 end
-		 
-		 run :development, :quick_test 
+       plan :product_api
+       clients 2
+       duration 5.minutes 
+       verbose
+     end
+     
+     environment :development do
+       machines "localhost:3114"  
+       # machine "localhost:3115"
+       # ...
+     end
+     
+     run :development, :quick_test 
 
 
 See bin/example_test.rb for a running example. 
