@@ -25,10 +25,7 @@
   <body class='page'>
     <div class='class' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>
-          <span class='type'>Class</span>
-          Stella::FunctionalTest
-        </h1>
+        <h1 class='name'>["<span class='type'>Class</span>\n", "Stella::FunctionalTest\n"]</h1>
         <ol class='paths'>
           <li>
             <a href="../../files/lib/stella/functest_rb.html">lib/stella/functest.rb</a>
@@ -45,14 +42,14 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000187">run</a></li>
-              <li><a href="#M000180">type</a></li>
-              <li><a href="#M000182">update_authorized</a></li>
-              <li><a href="#M000183">update_request</a></li>
-              <li><a href="#M000184">update_request_exception</a></li>
-              <li><a href="#M000185">update_request_unexpected_response</a></li>
-              <li><a href="#M000186">update_retrying</a></li>
-              <li><a href="#M000181">update_start</a></li>
+              <li><a href="#M000153">run</a></li>
+              <li><a href="#M000146">type</a></li>
+              <li><a href="#M000148">update_authorized</a></li>
+              <li><a href="#M000149">update_request</a></li>
+              <li><a href="#M000150">update_request_exception</a></li>
+              <li><a href="#M000151">update_request_unexpected_response</a></li>
+              <li><a href="#M000152">update_retrying</a></li>
+              <li><a href="#M000147">update_start</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -66,11 +63,10 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000187'>
-                <a name='M000187'>      </a>
+              <div class='public-instance method' id='method-M000153'>
+                <a name='M000153'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>run</span>
-                  <span class='arguments'>(environment, namespace)</span>
+                  ["<span class='name'>run</span>\n", "<span class='arguments'>(environment, namespace)</span>\n"]
                 </div>
                 <div class='description'>
                   <p>
@@ -82,101 +78,94 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000187-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000153-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000187-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 55</span>&#x000A;55:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">environment</span>, <span class="ruby-identifier">namespace</span>)&#x000A;56:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No testplan defined&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@testplan</span>&#x000A;57:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;No machines defined for #{environment.name}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">machines</span>.<span class="ruby-identifier">empty?</span>&#x000A;58:       &#x000A;59:       &#x000A;60:       <span class="ruby-keyword kw">begin</span>&#x000A;61:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>&#x000A;62:           <span class="ruby-identifier">http_client</span> = <span class="ruby-constant">HTTPClient</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">uri</span>)&#x000A;63:           <span class="ruby-identifier">http_client</span>.<span class="ruby-identifier">set_proxy_auth</span>(<span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">pass</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">user</span>&#x000A;64:         <span class="ruby-keyword kw">else</span>&#x000A;65:           <span class="ruby-identifier">http_client</span> = <span class="ruby-constant">HTTPClient</span>.<span class="ruby-identifier">new</span>&#x000A;66:         <span class="ruby-keyword kw">end</span>&#x000A;67:       <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;68:         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">class</span>&#x000A;69:       <span class="ruby-keyword kw">end</span>&#x000A;70:       &#x000A;71:       <span class="ruby-identifier">request_stats</span> = {}&#x000A;72:       <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">machines</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">machine</span><span class="ruby-operator">|</span>&#x000A;73:         <span class="ruby-identifier">client</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>&#x000A;74:         <span class="ruby-identifier">client</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-keyword kw">self</span>)&#x000A;75:         <span class="ruby-identifier">client</span>.<span class="ruby-identifier">execute_testplan</span>(<span class="ruby-identifier">request_stats</span>, <span class="ruby-identifier">http_client</span>, <span class="ruby-identifier">machine</span>, <span class="ruby-identifier">namespace</span>, <span class="ruby-ivar">@testplan</span>, <span class="ruby-ivar">@verbose</span>)&#x000A;76:       <span class="ruby-keyword kw">end</span>&#x000A;77:       &#x000A;78: &#x000A;79:       <span class="ruby-identifier">request_stats</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rstat</span><span class="ruby-operator">|</span>&#x000A;80:         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">rstat</span>[<span class="ruby-value">1</span>][<span class="ruby-identifier">:stats</span>].<span class="ruby-identifier">to_s</span>&#x000A;81:       <span class="ruby-keyword kw">end</span>&#x000A;82:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000153-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 55</span>&#x000A;55:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">environment</span>, <span class="ruby-identifier">namespace</span>)&#x000A;56:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No testplan defined&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@testplan</span>&#x000A;57:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;No machines defined for #{environment.name}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">machines</span>.<span class="ruby-identifier">empty?</span>&#x000A;58:       &#x000A;59:       &#x000A;60:       <span class="ruby-keyword kw">begin</span>&#x000A;61:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>&#x000A;62:           <span class="ruby-identifier">http_client</span> = <span class="ruby-constant">HTTPClient</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">uri</span>)&#x000A;63:           <span class="ruby-identifier">http_client</span>.<span class="ruby-identifier">set_proxy_auth</span>(<span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">pass</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">user</span>&#x000A;64:         <span class="ruby-keyword kw">else</span>&#x000A;65:           <span class="ruby-identifier">http_client</span> = <span class="ruby-constant">HTTPClient</span>.<span class="ruby-identifier">new</span>&#x000A;66:         <span class="ruby-keyword kw">end</span>&#x000A;67:       <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;68:         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">class</span>&#x000A;69:       <span class="ruby-keyword kw">end</span>&#x000A;70:       &#x000A;71:       <span class="ruby-identifier">request_stats</span> = {}&#x000A;72:       <span class="ruby-identifier">environment</span>.<span class="ruby-identifier">machines</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">machine</span><span class="ruby-operator">|</span>&#x000A;73:         <span class="ruby-identifier">client</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>&#x000A;74:         <span class="ruby-identifier">client</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-keyword kw">self</span>)&#x000A;75:         <span class="ruby-identifier">client</span>.<span class="ruby-identifier">execute_testplan</span>(<span class="ruby-identifier">request_stats</span>, <span class="ruby-identifier">http_client</span>, <span class="ruby-identifier">machine</span>, <span class="ruby-identifier">namespace</span>, <span class="ruby-ivar">@testplan</span>, <span class="ruby-ivar">@verbose</span>)&#x000A;76:       <span class="ruby-keyword kw">end</span>&#x000A;77:       &#x000A;78: &#x000A;79:       <span class="ruby-identifier">request_stats</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rstat</span><span class="ruby-operator">|</span>&#x000A;80:         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">rstat</span>[<span class="ruby-value">1</span>][<span class="ruby-identifier">:stats</span>].<span class="ruby-identifier">to_s</span>&#x000A;81:       <span class="ruby-keyword kw">end</span>&#x000A;82:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000180'>
-                <a name='M000180'>      </a>
+              <div class='public-instance method' id='method-M000146'>
+                <a name='M000146'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>type</span>
-                  <span class='arguments'>()</span>
+                  ["<span class='name'>type</span>\n", "<span class='arguments'>()</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000146-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000180-source'>   <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 8</span>&#x000A;8:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type</span>; <span class="ruby-value str">&quot;functional&quot;</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000146-source'>   <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 8</span>&#x000A;8:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type</span>; <span class="ruby-value str">&quot;functional&quot;</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000182'>
-                <a name='M000182'>      </a>
+              <div class='public-instance method' id='method-M000148'>
+                <a name='M000148'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_authorized</span>
-                  <span class='arguments'>(domain, user, pass)</span>
+                  ["<span class='name'>update_authorized</span>\n", "<span class='arguments'>(domain, user, pass)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000182-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000148-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000182-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 17</span>&#x000A;17:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_authorized</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">pass</span>)&#x000A;18:       <span class="ruby-identifier">note</span> = <span class="ruby-identifier">user</span>&#x000A;19:       <span class="ruby-identifier">note</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;:****&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pass</span>&#x000A;20:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%10s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;user&quot;</span>, <span class="ruby-identifier">note</span>]&#x000A;21:       <span class="ruby-identifier">puts</span>&#x000A;22:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000148-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 17</span>&#x000A;17:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_authorized</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">pass</span>)&#x000A;18:       <span class="ruby-identifier">note</span> = <span class="ruby-identifier">user</span>&#x000A;19:       <span class="ruby-identifier">note</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;:****&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pass</span>&#x000A;20:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%10s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;user&quot;</span>, <span class="ruby-identifier">note</span>]&#x000A;21:       <span class="ruby-identifier">puts</span>&#x000A;22:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000183'>
-                <a name='M000183'>      </a>
+              <div class='public-instance method' id='method-M000149'>
+                <a name='M000149'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_request</span>
-                  <span class='arguments'>(method, uri, query, response_status, response_headers, response_body)</span>
+                  ["<span class='name'>update_request</span>\n", "<span class='arguments'>(method, uri, query, response_status, response_headers, response_body)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000149-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000183-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 24</span>&#x000A;24:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">response_status</span>, <span class="ruby-identifier">response_headers</span>, <span class="ruby-identifier">response_body</span>)&#x000A;25:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;26:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;status&quot;</span>, <span class="ruby-identifier">response_status</span>]&#x000A;27:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;query&quot;</span>, <span class="ruby-identifier">query</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">query</span>.<span class="ruby-identifier">empty?</span>&#x000A;28:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;response_headers&quot;</span>, <span class="ruby-identifier">response_headers</span>]&#x000A;29:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;%18s: #{$/}%s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;response_body&quot;</span>, <span class="ruby-identifier">response_body</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>]] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>&#x000A;30:       <span class="ruby-identifier">puts</span>&#x000A;31:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000149-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 24</span>&#x000A;24:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">response_status</span>, <span class="ruby-identifier">response_headers</span>, <span class="ruby-identifier">response_body</span>)&#x000A;25:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;26:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;status&quot;</span>, <span class="ruby-identifier">response_status</span>]&#x000A;27:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;query&quot;</span>, <span class="ruby-identifier">query</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">query</span>.<span class="ruby-identifier">empty?</span>&#x000A;28:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;response_headers&quot;</span>, <span class="ruby-identifier">response_headers</span>]&#x000A;29:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;%18s: #{$/}%s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;response_body&quot;</span>, <span class="ruby-identifier">response_body</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>]] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>&#x000A;30:       <span class="ruby-identifier">puts</span>&#x000A;31:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000184'>
-                <a name='M000184'>      </a>
+              <div class='public-instance method' id='method-M000150'>
+                <a name='M000150'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_request_exception</span>
-                  <span class='arguments'>(method, uri, query, ex)</span>
+                  ["<span class='name'>update_request_exception</span>\n", "<span class='arguments'>(method, uri, query, ex)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000184-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000150-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000184-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 33</span>&#x000A;33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_exception</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">ex</span>)&#x000A;34:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;35:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;EXCEPTION: #{ex.message}&quot;</span>&#x000A;36:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;37:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000150-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 33</span>&#x000A;33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_exception</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">ex</span>)&#x000A;34:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;35:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;EXCEPTION: #{ex.message}&quot;</span>&#x000A;36:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;37:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000185'>
-                <a name='M000185'>      </a>
+              <div class='public-instance method' id='method-M000151'>
+                <a name='M000151'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_request_unexpected_response</span>
-                  <span class='arguments'>(method, uri, query, response_status, response_headers, response_body)</span>
+                  ["<span class='name'>update_request_unexpected_response</span>\n", "<span class='arguments'>(method, uri, query, response_status, response_headers, response_body)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000185-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000151-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000185-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 39</span>&#x000A;39:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_unexpected_response</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">response_status</span>, <span class="ruby-identifier">response_headers</span>, <span class="ruby-identifier">response_body</span>)&#x000A;40:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;41:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;status&quot;</span>, <span class="ruby-identifier">response_status</span>]&#x000A;42:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;note&quot;</span>, <span class="ruby-value str">&quot;unexpected response status&quot;</span>]&#x000A;43:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">response_body</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">500</span>]&#x000A;44:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">'...'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">response_body</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">500</span>&#x000A;45:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000151-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 39</span>&#x000A;39:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_unexpected_response</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">response_status</span>, <span class="ruby-identifier">response_headers</span>, <span class="ruby-identifier">response_body</span>)&#x000A;40:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{method} #{uri}&quot;</span>&#x000A;41:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;status&quot;</span>, <span class="ruby-identifier">response_status</span>]&#x000A;42:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%18s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;note&quot;</span>, <span class="ruby-value str">&quot;unexpected response status&quot;</span>]&#x000A;43:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">response_body</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">500</span>]&#x000A;44:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">'...'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">response_body</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">500</span>&#x000A;45:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000186'>
-                <a name='M000186'>      </a>
+              <div class='public-instance method' id='method-M000152'>
+                <a name='M000152'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_retrying</span>
-                  <span class='arguments'>(uri, retry_count, total)</span>
+                  ["<span class='name'>update_retrying</span>\n", "<span class='arguments'>(uri, retry_count, total)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000186-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000152-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000186-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 47</span>&#x000A;47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_retrying</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">retry_count</span>, <span class="ruby-identifier">total</span>)&#x000A;48:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;retrying: #{uri} (#{retry_count} of #{total})&quot;</span>&#x000A;49:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000152-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 47</span>&#x000A;47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_retrying</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">retry_count</span>, <span class="ruby-identifier">total</span>)&#x000A;48:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;retrying: #{uri} (#{retry_count} of #{total})&quot;</span>&#x000A;49:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000181'>
-                <a name='M000181'>      </a>
+              <div class='public-instance method' id='method-M000147'>
+                <a name='M000147'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update_start</span>
-                  <span class='arguments'>(machine, name)</span>
+                  ["<span class='name'>update_start</span>\n", "<span class='arguments'>(machine, name)</span>\n"]
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000147-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000181-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 12</span>&#x000A;12:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_start</span>(<span class="ruby-identifier">machine</span>, <span class="ruby-identifier">name</span>)&#x000A;13:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">'-'</span><span class="ruby-operator">*</span><span class="ruby-value">60</span>&#x000A;14:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%10s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;MACHINE&quot;</span>, <span class="ruby-identifier">machine</span>]  &#x000A;15:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000147-source'>    <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 12</span>&#x000A;12:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_start</span>(<span class="ruby-identifier">machine</span>, <span class="ruby-identifier">name</span>)&#x000A;13:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">'-'</span><span class="ruby-operator">*</span><span class="ruby-value">60</span>&#x000A;14:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;%10s: %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-value str">&quot;MACHINE&quot;</span>, <span class="ruby-identifier">machine</span>]  &#x000A;15:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
