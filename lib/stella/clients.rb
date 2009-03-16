@@ -7,6 +7,8 @@ module Stella
   class Client
     include Observable
     
+    @@IDS = {}
+    
     attr_reader :request_stats
     attr_accessor :client_id
     def initialize(client_id=1)
@@ -72,6 +74,15 @@ module Stella
           res = http_client.send(req.http_method.downcase, uri.to_s, query)
           request_stats[req.stella_id.to_sym][:stats].sample(Time.now - time_started)
           
+          id1 = (query || {})['id']
+          id2 = YAML.load(res.body.content || '')[:id]
+          if id1          
+            #puts "#{id1} (#{req.unique_id}): #{@@IDS[id1].join(', ')}" if @@IDS.has_key?(id1) && @@IDS[id1].size > 1
+            @@IDS[id1] ||= []
+            @@IDS[id1] << @client_id
+            @@IDS[id1].uniq!
+          end
+          
         rescue => ex
           changed
           notify_observers(:request_exception, req.http_method, uri, query, ex)
@@ -91,7 +102,7 @@ module Stella
           changed
           notify_observers(:request, req.http_method, uri, query, res.status, response_headers, res.body.content)
           
-          response_handler_ret = req.response_handler[res.status].call(response_headers, res.body.content, @client_id)
+          response_handler_ret = req.response_handler[res.status].call(response_headers, res.body.content, @client_id, req.unique_id)
         
           if response_handler_ret.is_a?(Stella::TestPlan::ResponseHandler) && response_handler_ret.action == :repeat
             retry_count ||= 1

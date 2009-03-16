@@ -53,12 +53,12 @@ module Stella
     
     def update_request_exception(method, uri, query, ex)
       @requests_failed += 1
-      puts [method, uri, query, ex.message].join("::")
+      puts [method, uri, query, ex.message].join("|")
     end
     
     def update_request_unexpected_response(method, uri, query, response_status, response_headers, response_body)
       @requests_failed += 1
-      puts [method, uri, query, response_status, response_headers, response_body].join("::")
+      #puts [method, uri, query, response_status, response_headers, response_body].join("|")
     end
     
     def update_retrying(uri, retry_count, total)
@@ -68,7 +68,7 @@ module Stella
     
     # +environment+ is a Stella::Common::Environment object. 
     # +namespace+ is a reference to the namespace which contains the instance
-    # variables. This will be the section of code that makes use of the DSL.
+    # variables. 
     def run(environment, namespace)
       raise "No testplan defined" unless @testplan
       raise "No machines defined for #{environment.name}" if environment.machines.empty?
@@ -85,7 +85,7 @@ module Stella
       seconds_elapsed = 0
       (1..@clients).to_a.threadify do |i|
         
-        @repetitions.times do |rep|
+        (0..@repetitions).to_a.each do |rep|
 
           if environment.proxy
             http_client = HTTPClient.new(environment.proxy.uri)
@@ -96,7 +96,7 @@ module Stella
 
 
           environment.machines.each do |machine|
-            client = Stella::Client.new(1)
+            client = Stella::Client.new(i)
             client.add_observer(self)
             client.execute_testplan(request_stats, http_client, machine, namespace, @testplan, @verbose)
           end

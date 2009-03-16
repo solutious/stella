@@ -1,6 +1,6 @@
 = Stella - 0.6.0 ALPHA
 
-Stella is a Ruby library for writing functional and performance tests in a sexy DSL (domain specific language).
+Stella is a Ruby library for writing functional tests in a sexy DSL (domain specific language).
 
 ==== NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
 
@@ -35,8 +35,8 @@ Stella is a Ruby library for writing functional and performance tests in a sexy 
        end
      end
      
-     loadtest :quick_load do
-		   plan :maintain_value
+     functest :quick_test do
+		   plan :product_api
 		   clients 2
 		   duration 5.minutes 
 		   verbose
@@ -48,7 +48,7 @@ Stella is a Ruby library for writing functional and performance tests in a sexy 
 		   # ...
 		 end
 		 
-		 run :development, :quick_load 
+		 run :development, :quick_test 
 
 
 See bin/example_test.rb for a running example. 

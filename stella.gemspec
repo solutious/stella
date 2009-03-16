@@ -10,7 +10,7 @@
   
   # = DEPENDENCIES =
   # Add all gem dependencies
-  s.add_dependency 'httpclient2'
+  s.add_dependency 'httpclient'
   
   
   # = MANIFEST =
@@ -24,6 +24,8 @@
   LICENSE.txt
   README.rdoc
   Rakefile
+  bin/example_test.rb
+  bin/example_webapp.rb
   lib/logger.rb
   lib/stella.rb
   lib/stella/clients.rb
@@ -48,9 +50,7 @@
   tryouts/drb/drb_test.rb
   tryouts/drb/open4.rb
   tryouts/drb/slave.rb
-  tryouts/dsl_tryout.rb
   tryouts/oo_tryout.rb
-  tryouts/webapp.rb
   )
   
   # = EXECUTABLES =
