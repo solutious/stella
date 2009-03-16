@@ -6,7 +6,7 @@ Stella is a Ruby library for writing functional tests in a sexy DSL (domain spec
 
 == Example 1
 
-     testplan :maintain_value do
+     testplan :product_api do
        desc "Maintain a value between requests"
        auth :basic, "stella", "stella"
        protocol :http
