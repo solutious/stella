@@ -1,4 +1,4 @@
-= Stella - 0.6.0 ALPHA
+= Stella - 0.6.0
 
 Stella is a Ruby library for writing functional tests in a sexy DSL (domain specific language).
 
@@ -58,7 +58,6 @@ See bin/example_test.rb for a running example.
 
 Get it in one of the following ways:
 
-* RubyForge: http://stella.rubyforge.org/
 * gem install stella 
 * git clone git://github.com/solutious/stella.git
 * gem install solutious-stella --source http://gems.github.com
@@ -66,7 +65,7 @@ Get it in one of the following ways:
 
 == More Information
 
-Stellaaahhhh[http://www.youtube.com/watch?v=wmq-JDonTpc]
+Stellaaahhhh[http://www.youtube.com/watch?v=jHHprvyl-Hc]
 
 
 == Credits
