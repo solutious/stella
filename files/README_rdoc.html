@@ -25,26 +25,26 @@
   <body class='page'>
     <div class='file' id='wrapper'>
       <div class='header'>
-        <div class='name'>["README.rdoc\n"]</div>
+        <div class='name'>README.rdoc</div>
         <div class='paths'>
           README.rdoc
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2009-03-16 16:16:29 -0400</span>
+          <span class='datetime'>Thu Mar 26 07:56:30 -0400 2009</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
-            <h1><a href="../classes/Stella.html">Stella</a> - 0.6.0 ALPHA</h1>
+            <h1><a href="../classes/Stella.html">Stella</a> - 0.6.0</h1>
             <p>
             <a href="../classes/Stella.html">Stella</a> is a Ruby library for writing
             functional tests in a sexy DSL (domain specific language).
             </p>
             <h4>NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*</h4>
             <h2>Example 1</h2>
-            <pre>testplan :product_api do&#x000A;  desc &quot;Maintain a value between requests&quot;&#x000A;  auth :basic, &quot;stella&quot;, &quot;stella&quot;&#x000A;  protocol :http&#x000A;&#x000A;  post &quot;/upload&quot; do&#x000A;    name &quot;Add Product&quot;&#x000A;    body &quot;bill&quot;, &quot;/path/2/file.txt&quot;&#x000A;    header &quot;X-Stella&quot; =&gt; &quot;Version #{Stella::VERSION}&quot;&#x000A;    param :convert =&gt; true&#x000A;    param :rand =&gt; rand&#x000A;&#x000A;    response 200, 201 do |headers, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      @product_id = data[:id]                   # Save a response value&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/product&quot; do&#x000A;    name &quot;View Product&quot;&#x000A;    param 'id' =&gt; @product_id                   # Use the saved value&#x000A;&#x000A;    response 200 do |header, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      repeat :times =&gt; 2, :wait =&gt; 1.second     # Repeat this request twice&#x000A;    end&#x000A;  end&#x000A;end&#x000A;&#x000A;functest :quick_test do&#x000A;  plan :product_api&#x000A;  clients 2&#x000A;  duration 5.minutes&#x000A;  verbose&#x000A;end&#x000A;&#x000A;environment :development do&#x000A;  machines &quot;localhost:3114&quot;&#x000A;  # machine &quot;localhost:3115&quot;&#x000A;  # ...&#x000A;end&#x000A;&#x000A;run :development, :quick_test</pre>
+            <pre>testplan :product_api do&#x000A;  desc &quot;Maintain a value between requests&quot;&#x000A;  auth :basic, &quot;stella&quot;, &quot;stella&quot;&#x000A;  protocol :http&#x000A;&#x000A;  post &quot;/upload&quot; do&#x000A;    name &quot;Add Product&quot;&#x000A;    body &quot;bill&quot;, &quot;/path/2/file.txt&quot;&#x000A;    header &quot;X-Stella&quot; =&gt; &quot;Version #{Stella::VERSION}&quot;&#x000A;    param :convert =&gt; true&#x000A;    param :rand =&gt; rand&#x000A;&#x000A;    response 200, 201 do |headers, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      @product_id = data[:id]                   # Save a response value&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/product&quot; do&#x000A;    name &quot;View Product&quot;&#x000A;    param 'id' =&gt; @product_id                   # Use the saved value&#x000A;&#x000A;    response 200 do |header, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      repeat :times =&gt; 2, :wait =&gt; 1.second     # Repeat this request twice&#x000A;    end&#x000A;  end&#x000A;end&#x000A;&#x000A;functest :quick_test do&#x000A;  plan :product_api&#x000A;  verbose&#x000A;end&#x000A;&#x000A;environment :development do&#x000A;  machines &quot;localhost:3114&quot;&#x000A;  # machine &quot;localhost:3115&quot;&#x000A;  # ...&#x000A;end&#x000A;&#x000A;run :development, :quick_test</pre>
             <p>
             See <a href="bin/example_test_rb.html">bin/example_test.rb</a> for a
             running example.
@@ -54,9 +54,6 @@
             Get it in one of the following ways:
             </p>
             <ul>
-            <li>RubyForge: <a href="http://stella.rubyforge.org/">stella.rubyforge.org/</a>
-            
-            </li>
             <li>gem install stella
             
             </li>
@@ -70,7 +67,7 @@
             </ul>
             <h2>More Information</h2>
             <p>
-            <a href="http://www.youtube.com/watch?v=wmq-JDonTpc">Stellaaahhhh</a>
+            <a href="http://www.youtube.com/watch?v=jHHprvyl-Hc">Stellaaahhhh</a>
             </p>
             <h2>Credits</h2>
             <ul>

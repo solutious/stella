@@ -25,7 +25,10 @@
   <body class='page'>
     <div class='class' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>["<span class='type'>Class</span>\n", "Stella::Crypto::Key\n"]</h1>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Stella::Crypto::Key
+        </h1>
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/stella/crypto_rb.html">lib/stella/crypto.rb</a>
@@ -47,16 +50,16 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000060">from_file</a></li>
-              <li><a href="#M000059">new</a></li>
+              <li><a href="#M000061">from_file</a></li>
+              <li><a href="#M000060">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000062">decrypt</a></li>
-              <li><a href="#M000061">encrypt</a></li>
-              <li><a href="#M000063">private?</a></li>
-              <li><a href="#M000064">public?</a></li>
-              <li><a href="#M000065">type</a></li>
+              <li><a href="#M000063">decrypt</a></li>
+              <li><a href="#M000062">encrypt</a></li>
+              <li><a href="#M000064">private?</a></li>
+              <li><a href="#M000065">public?</a></li>
+              <li><a href="#M000066">type</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -79,10 +82,11 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000060'>
-                <a name='M000060'>      </a>
+              <div class='public-class method' id='method-M000061'>
+                <a name='M000061'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>from_file</span>\n", "<span class='arguments'>(filename)</span>\n"]
+                  <span class='name'>from_file</span>
+                  <span class='arguments'>(filename)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -91,16 +95,17 @@
                   <pre>key = Crypto::Key.from_file('path/2/id_rsa')</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000060-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 66</span>&#x000A;66:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_file</span>(<span class="ruby-identifier">filename</span>)    &#x000A;67:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>( <span class="ruby-identifier">filename</span> )&#x000A;68:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000061-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 66</span>&#x000A;66:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_file</span>(<span class="ruby-identifier">filename</span>)    &#x000A;67:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>( <span class="ruby-identifier">filename</span> )&#x000A;68:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000059'>
-                <a name='M000059'>      </a>
+              <div class='public-class method' id='method-M000060'>
+                <a name='M000060'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>new</span>\n", "<span class='arguments'>(data)</span>\n"]
+                  <span class='name'>new</span>
+                  <span class='arguments'>(data)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -109,17 +114,18 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000059-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 58</span>&#x000A;58:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)&#x000A;59:       <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span> &#x000A;60:       <span class="ruby-ivar">@public</span> = (<span class="ruby-identifier">data</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^-----BEGIN (RSA|DSA) PRIVATE KEY-----$/</span>).<span class="ruby-identifier">nil?</span>&#x000A;61:       <span class="ruby-ivar">@key</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">PKey</span><span class="ruby-operator">::</span><span class="ruby-constant">RSA</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@data</span>)&#x000A;62:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000060-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 58</span>&#x000A;58:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)&#x000A;59:       <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span> &#x000A;60:       <span class="ruby-ivar">@public</span> = (<span class="ruby-identifier">data</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^-----BEGIN (RSA|DSA) PRIVATE KEY-----$/</span>).<span class="ruby-identifier">nil?</span>&#x000A;61:       <span class="ruby-ivar">@key</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">PKey</span><span class="ruby-operator">::</span><span class="ruby-constant">RSA</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@data</span>)&#x000A;62:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000062'>
-                <a name='M000062'>      </a>
+              <div class='public-instance method' id='method-M000063'>
+                <a name='M000063'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>decrypt</span>\n", "<span class='arguments'>(text)</span>\n"]
+                  <span class='name'>decrypt</span>
+                  <span class='arguments'>(text)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -127,16 +133,17 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000062-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 76</span>&#x000A;76:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">decrypt</span>(<span class="ruby-identifier">text</span>)&#x000A;77:       <span class="ruby-ivar">@key</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{type}_decrypt&quot;</span>, <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">decode64</span>(<span class="ruby-identifier">text</span>))&#x000A;78:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000063-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 76</span>&#x000A;76:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">decrypt</span>(<span class="ruby-identifier">text</span>)&#x000A;77:       <span class="ruby-ivar">@key</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{type}_decrypt&quot;</span>, <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">decode64</span>(<span class="ruby-identifier">text</span>))&#x000A;78:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000061'>
-                <a name='M000061'>      </a>
+              <div class='public-instance method' id='method-M000062'>
+                <a name='M000062'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>encrypt</span>\n", "<span class='arguments'>(text)</span>\n"]
+                  <span class='name'>encrypt</span>
+                  <span class='arguments'>(text)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -144,46 +151,49 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000061-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 71</span>&#x000A;71:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encrypt</span>(<span class="ruby-identifier">text</span>)&#x000A;72:       <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-ivar">@key</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{type}_encrypt&quot;</span>, <span class="ruby-identifier">text</span>))&#x000A;73:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000063'>
-                <a name='M000063'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>private?</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000063-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 80</span>&#x000A;80:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">private?</span>();  <span class="ruby-operator">!</span><span class="ruby-ivar">@public</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000062-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 71</span>&#x000A;71:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encrypt</span>(<span class="ruby-identifier">text</span>)&#x000A;72:       <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-ivar">@key</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{type}_encrypt&quot;</span>, <span class="ruby-identifier">text</span>))&#x000A;73:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000064'>
                 <a name='M000064'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>public?</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>private?</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000064-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 81</span>&#x000A;81:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">public?</span>();  <span class="ruby-ivar">@public</span>;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000064-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 80</span>&#x000A;80:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">private?</span>();  <span class="ruby-operator">!</span><span class="ruby-ivar">@public</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000065'>
                 <a name='M000065'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>type</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>public?</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000065-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 83</span>&#x000A;83:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type</span>&#x000A;84:       <span class="ruby-ivar">@public</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">:public</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:private</span>&#x000A;85:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000065-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 81</span>&#x000A;81:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">public?</span>();  <span class="ruby-ivar">@public</span>;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000066'>
+                <a name='M000066'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>type</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000066-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000066-source'>    <span class="ruby-comment cmt"># File lib/stella/crypto.rb, line 83</span>&#x000A;83:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type</span>&#x000A;84:       <span class="ruby-ivar">@public</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">:public</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:private</span>&#x000A;85:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

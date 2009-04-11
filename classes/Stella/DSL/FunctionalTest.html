@@ -25,7 +25,10 @@
   <body class='page'>
     <div class='class' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>["<span class='type'>Module</span>\n", "Stella::DSL::FunctionalTest\n"]</h1>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Stella::DSL::FunctionalTest
+        </h1>
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/stella/functest_rb.html">lib/stella/functest.rb</a>
@@ -38,7 +41,7 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000111">functest</a></li>
+              <li><a href="#M000129">functest</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -52,16 +55,17 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000111'>
-                <a name='M000111'>      </a>
+              <div class='public-instance method' id='method-M000129'>
+                <a name='M000129'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>functest</span>\n", "<span class='arguments'>(name=:default, &amp;define)</span>\n"]
+                  <span class='name'>functest</span>
+                  <span class='arguments'>(name=:default, &amp;define)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000111-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000111-source'>     <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 96</span>&#x000A; 96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">functest</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:default</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">define</span>)&#x000A; 97:         <span class="ruby-ivar">@tests</span> <span class="ruby-operator">||=</span> {}&#x000A; 98:         <span class="ruby-ivar">@current_test</span> = <span class="ruby-ivar">@tests</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">FunctionalTest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>)&#x000A; 99:         <span class="ruby-identifier">define</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">define</span>&#x000A;100:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000129-source'>     <span class="ruby-comment cmt"># File lib/stella/functest.rb, line 96</span>&#x000A; 96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">functest</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:default</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">define</span>)&#x000A; 97:         <span class="ruby-ivar">@tests</span> <span class="ruby-operator">||=</span> {}&#x000A; 98:         <span class="ruby-ivar">@current_test</span> = <span class="ruby-ivar">@tests</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">FunctionalTest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>)&#x000A; 99:         <span class="ruby-identifier">define</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">define</span>&#x000A;100:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

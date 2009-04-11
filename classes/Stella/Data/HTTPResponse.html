@@ -25,7 +25,10 @@
   <body class='page'>
     <div class='class' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>["<span class='type'>Class</span>\n", "Stella::Data::HTTPResponse\n"]</h1>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Stella::Data::HTTPResponse
+        </h1>
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/stella/data/http_rb.html">lib/stella/data/http.rb</a>
@@ -42,22 +45,22 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000095">new</a></li>
+              <li><a href="#M000092">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000100">body</a></li>
-              <li><a href="#M000107">cookies</a></li>
-              <li><a href="#M000097">has_body?</a></li>
-              <li><a href="#M000098">has_request?</a></li>
-              <li><a href="#M000099">has_response?</a></li>
-              <li><a href="#M000101">headers</a></li>
-              <li><a href="#M000105">inspect</a></li>
-              <li><a href="#M000102">is_binary?</a></li>
-              <li><a href="#M000104">is_gzip?</a></li>
-              <li><a href="#M000103">is_text?</a></li>
-              <li><a href="#M000096">parse</a></li>
-              <li><a href="#M000106">to_s</a></li>
+              <li><a href="#M000097">body</a></li>
+              <li><a href="#M000104">cookies</a></li>
+              <li><a href="#M000094">has_body?</a></li>
+              <li><a href="#M000095">has_request?</a></li>
+              <li><a href="#M000096">has_response?</a></li>
+              <li><a href="#M000098">headers</a></li>
+              <li><a href="#M000102">inspect</a></li>
+              <li><a href="#M000099">is_binary?</a></li>
+              <li><a href="#M000101">is_gzip?</a></li>
+              <li><a href="#M000100">is_text?</a></li>
+              <li><a href="#M000093">parse</a></li>
+              <li><a href="#M000103">to_s</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -75,161 +78,174 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000095'>
-                <a name='M000095'>      </a>
+              <div class='public-class method' id='method-M000092'>
+                <a name='M000092'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>new</span>\n", "<span class='arguments'>(raw_data=nil)</span>\n"]
+                  <span class='name'>new</span>
+                  <span class='arguments'>(raw_data=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000095-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000092-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000095-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 186</span>&#x000A;186:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">raw_data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;187:       <span class="ruby-ivar">@raw_data</span> = <span class="ruby-identifier">raw_data</span>&#x000A;188:       <span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@raw_data</span>)&#x000A;189:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000092-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 186</span>&#x000A;186:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">raw_data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;187:       <span class="ruby-ivar">@raw_data</span> = <span class="ruby-identifier">raw_data</span>&#x000A;188:       <span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@raw_data</span>)&#x000A;189:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000100'>
-                <a name='M000100'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>body</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000100-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000100-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 207</span>&#x000A;207:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">body</span>&#x000A;208:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@body</span>&#x000A;209:       <span class="ruby-comment cmt">#TODO: Move to HTTPResponse::Body.to_s</span>&#x000A;210:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">is_binary?</span>&#x000A;211:        <span class="ruby-value str">&quot;[skipping binary content]&quot;</span>&#x000A;212:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">is_gzip?</span>&#x000A;213:         <span class="ruby-comment cmt">#require 'zlib'</span>&#x000A;214:         <span class="ruby-comment cmt">#Zlib::Inflate.inflate(@body)</span>&#x000A;215:          <span class="ruby-value str">&quot;[skipping gzip content]&quot;</span>&#x000A;216:       <span class="ruby-keyword kw">else</span>&#x000A;217:         <span class="ruby-ivar">@body</span>&#x000A;218:       <span class="ruby-keyword kw">end</span>&#x000A;219:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000107'>
-                <a name='M000107'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>cookies</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000107-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000107-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 254</span>&#x000A;254:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cookies</span>&#x000A;255:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">header</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Set_Cookie</span>].<span class="ruby-identifier">empty?</span>&#x000A;256:       <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Set_Cookie</span>] &#x000A;257:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
               <div class='public-instance method' id='method-M000097'>
                 <a name='M000097'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>has_body?</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>body</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000097-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000097-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 196</span>&#x000A;196:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_body?</span>&#x000A;197:       <span class="ruby-operator">!</span><span class="ruby-ivar">@body</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@body</span>.<span class="ruby-identifier">empty?</span>&#x000A;198:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000098'>
-                <a name='M000098'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>has_request?</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000098-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000098-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 199</span>&#x000A;199:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_request?</span>&#x000A;200:       <span class="ruby-keyword kw">false</span>&#x000A;201:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000099'>
-                <a name='M000099'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>has_response?</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000099-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000099-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 202</span>&#x000A;202:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_response?</span>&#x000A;203:       <span class="ruby-keyword kw">false</span>&#x000A;204:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000101'>
-                <a name='M000101'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>headers</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000101-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000101-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 221</span>&#x000A;221:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">headers</span>&#x000A;222:       <span class="ruby-identifier">headers</span> = []&#x000A;223:       <span class="ruby-identifier">header</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;224:         <span class="ruby-identifier">headers</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'_'</span>, <span class="ruby-value str">'-'</span>), <span class="ruby-identifier">v</span>[<span class="ruby-value">0</span>]]&#x000A;225:       <span class="ruby-keyword kw">end</span>&#x000A;226:       <span class="ruby-identifier">headers</span>&#x000A;227:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000105'>
-                <a name='M000105'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>inspect</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000105-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000105-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 241</span>&#x000A;241:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>&#x000A;242:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;HTTP/%s %s (%s)&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@message</span>]&#x000A;243:       <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">$/</span>)&#x000A;244:       <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span>&#x000A;245:       <span class="ruby-identifier">str</span>&#x000A;246:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000102'>
-                <a name='M000102'>      </a>
-                <div class='synopsis'>
-                  ["<span class='name'>is_binary?</span>\n", "<span class='arguments'>()</span>\n"]
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000102-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 229</span>&#x000A;229:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_binary?</span>&#x000A;230:       (<span class="ruby-operator">!</span><span class="ruby-identifier">is_text?</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>&#x000A;231:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000097-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 207</span>&#x000A;207:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">body</span>&#x000A;208:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@body</span>&#x000A;209:       <span class="ruby-comment cmt">#TODO: Move to HTTPResponse::Body.to_s</span>&#x000A;210:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">is_binary?</span>&#x000A;211:        <span class="ruby-value str">&quot;[skipping binary content]&quot;</span>&#x000A;212:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">is_gzip?</span>&#x000A;213:         <span class="ruby-comment cmt">#require 'zlib'</span>&#x000A;214:         <span class="ruby-comment cmt">#Zlib::Inflate.inflate(@body)</span>&#x000A;215:          <span class="ruby-value str">&quot;[skipping gzip content]&quot;</span>&#x000A;216:       <span class="ruby-keyword kw">else</span>&#x000A;217:         <span class="ruby-ivar">@body</span>&#x000A;218:       <span class="ruby-keyword kw">end</span>&#x000A;219:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000104'>
                 <a name='M000104'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>is_gzip?</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>cookies</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000104-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000104-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 237</span>&#x000A;237:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_gzip?</span>&#x000A;238:       (<span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>][<span class="ruby-value">0</span>][<span class="ruby-regexp re">/gzip/</span>] <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)&#x000A;239:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000104-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 254</span>&#x000A;254:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cookies</span>&#x000A;255:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">header</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Set_Cookie</span>].<span class="ruby-identifier">empty?</span>&#x000A;256:       <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Set_Cookie</span>] &#x000A;257:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000103'>
-                <a name='M000103'>      </a>
+              <div class='public-instance method' id='method-M000094'>
+                <a name='M000094'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>is_text?</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>has_body?</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000103-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000094-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000103-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 233</span>&#x000A;233:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_text?</span>&#x000A;234:       (<span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>][<span class="ruby-value">0</span>][<span class="ruby-regexp re">/text/</span>] <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)&#x000A;235:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000094-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 196</span>&#x000A;196:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_body?</span>&#x000A;197:       <span class="ruby-operator">!</span><span class="ruby-ivar">@body</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@body</span>.<span class="ruby-identifier">empty?</span>&#x000A;198:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000095'>
+                <a name='M000095'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>has_request?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000095-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000095-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 199</span>&#x000A;199:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_request?</span>&#x000A;200:       <span class="ruby-keyword kw">false</span>&#x000A;201:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000096'>
                 <a name='M000096'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>parse</span>\n", "<span class='arguments'>(raw)</span>\n"]
+                  <span class='name'>has_response?</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000096-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000096-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 191</span>&#x000A;191:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">raw</span>)&#x000A;192:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">raw</span>&#x000A;193:       <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@message</span>, <span class="ruby-ivar">@header</span>, <span class="ruby-ivar">@body</span> = <span class="ruby-constant">HTTPUtil</span><span class="ruby-operator">::</span><span class="ruby-identifier">parse_http_response</span>(<span class="ruby-identifier">raw</span>)&#x000A;194:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000096-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 202</span>&#x000A;202:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_response?</span>&#x000A;203:       <span class="ruby-keyword kw">false</span>&#x000A;204:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000106'>
-                <a name='M000106'>      </a>
+              <div class='public-instance method' id='method-M000098'>
+                <a name='M000098'>      </a>
                 <div class='synopsis'>
-                  ["<span class='name'>to_s</span>\n", "<span class='arguments'>()</span>\n"]
+                  <span class='name'>headers</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000106-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000098-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000106-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 248</span>&#x000A;248:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;249:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;%s: HTTP/%s %s (%s)&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">time</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-constant">NICE_TIME_FORMAT</span>), <span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@message</span>]&#x000A;250:       <span class="ruby-identifier">str</span> &#x000A;251:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000098-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 221</span>&#x000A;221:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">headers</span>&#x000A;222:       <span class="ruby-identifier">headers</span> = []&#x000A;223:       <span class="ruby-identifier">header</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;224:         <span class="ruby-identifier">headers</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'_'</span>, <span class="ruby-value str">'-'</span>), <span class="ruby-identifier">v</span>[<span class="ruby-value">0</span>]]&#x000A;225:       <span class="ruby-keyword kw">end</span>&#x000A;226:       <span class="ruby-identifier">headers</span>&#x000A;227:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000102'>
+                <a name='M000102'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>inspect</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000102-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 241</span>&#x000A;241:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>&#x000A;242:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;HTTP/%s %s (%s)&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@message</span>]&#x000A;243:       <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">$/</span>)&#x000A;244:       <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$/</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span>&#x000A;245:       <span class="ruby-identifier">str</span>&#x000A;246:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000099'>
+                <a name='M000099'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>is_binary?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000099-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000099-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 229</span>&#x000A;229:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_binary?</span>&#x000A;230:       (<span class="ruby-operator">!</span><span class="ruby-identifier">is_text?</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>&#x000A;231:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000101'>
+                <a name='M000101'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>is_gzip?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000101-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000101-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 237</span>&#x000A;237:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_gzip?</span>&#x000A;238:       (<span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Encoding</span>][<span class="ruby-value">0</span>][<span class="ruby-regexp re">/gzip/</span>] <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)&#x000A;239:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000100'>
+                <a name='M000100'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>is_text?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000100-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000100-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 233</span>&#x000A;233:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_text?</span>&#x000A;234:       (<span class="ruby-operator">!</span><span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">header</span>[<span class="ruby-identifier">:Content_Type</span>][<span class="ruby-value">0</span>][<span class="ruby-regexp re">/text/</span>] <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>)&#x000A;235:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000093'>
+                <a name='M000093'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>parse</span>
+                  <span class='arguments'>(raw)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000093-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000093-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 191</span>&#x000A;191:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">raw</span>)&#x000A;192:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">raw</span>&#x000A;193:       <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@message</span>, <span class="ruby-ivar">@header</span>, <span class="ruby-ivar">@body</span> = <span class="ruby-constant">HTTPUtil</span><span class="ruby-operator">::</span><span class="ruby-identifier">parse_http_response</span>(<span class="ruby-identifier">raw</span>)&#x000A;194:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000103'>
+                <a name='M000103'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000103-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000103-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 248</span>&#x000A;248:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;249:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;%s: HTTP/%s %s (%s)&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">time</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-constant">NICE_TIME_FORMAT</span>), <span class="ruby-ivar">@http_version</span>, <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@message</span>]&#x000A;250:       <span class="ruby-identifier">str</span> &#x000A;251:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
