@@ -43,7 +43,7 @@ Get it in one of the following ways:
 If you see the following error you need to install the Ruby header files.
 
     ERROR: Error installing stella
-        ERROR: Failed to build gem native extension
+    ERROR: Failed to build gem native extension
 
 These are included when you install Ruby from source. They can also be installed with the following commands
 
