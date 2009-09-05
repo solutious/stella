@@ -7,7 +7,7 @@ require 'timeout'
 
 module Stella
   
-  # A motley collection of methods that Rudy loves to call!
+  # A motley collection of methods that Stella loves to call!
   module Utils
     extend self
     include Socket::Constants
@@ -47,7 +47,6 @@ module Stella
     # is printed to STDERR and the program exits with 7. 
     def require_glob(*path)
       begin
-        # TODO: Use autoload
         Dir.glob(File.join(*path.flatten)).each do |path|
           require path
         end

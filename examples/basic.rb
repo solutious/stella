@@ -1,9 +1,7 @@
 
-
 include Stella::DSL
 
-
-testplan :get_product do
+testplan :basic do
   desc "A basic demonstration of the testplan DSL"
 
   get "/products" do

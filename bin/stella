@@ -14,7 +14,7 @@ $:.unshift STELLA_LIB_HOME  # Put our local lib in first place
 require 'drydock'
 require 'stella'
 
-# Command-line interface for /bin/rudy
+# Command-line interface for bin/stella
 class StellaCLI
   extend Drydock
   
@@ -43,17 +43,21 @@ class StellaCLI
     puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
     exit 0
   end
-  
 
-  # ----------------------------------  STELLA MISCELLANEOUS  --------
+  
+  # ------------------------------------------------  STELLA  --------
   # ------------------------------------------------------------------
 
   about "Run a test"
   command :run do
-    Stella:: 
+    p Stella::Data::HTTP
   end
   
+
   
+  # ----------------------------------  STELLA MISCELLANEOUS  --------
+  # ------------------------------------------------------------------
+
   before do |obj|
     # Don't print Rudy header unless requested to
     obj.global.print_header = false  if (obj.global.verbose == 0)

@@ -9,6 +9,8 @@ end
 
 module Stella
   autoload :Error, STELLA_LIB_HOME + "/stella/exceptions"
+  autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
+  autoload :Data, STELLA_LIB_HOME + "/stella/data"
   
   @@sysinfo = SysInfo.new.freeze
   
