@@ -8,26 +8,17 @@ unless defined?(STELLA_LIB_HOME)
 end
 
 module Stella
+  require 'stella/version'
+  
   autoload :Error, STELLA_LIB_HOME + "/stella/exceptions"
   autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
   autoload :Data, STELLA_LIB_HOME + "/stella/data"
+  autoload :Config, STELLA_LIB_HOME + "/stella/config"
   
   @@sysinfo = SysInfo.new.freeze
-  
+    
   @@logger = STDERR
   @@loglev = 1
-  
-  module VERSION #:nodoc:
-    unless defined?(MAJOR)
-      MAJOR = 0.freeze
-      MINOR = 7.freeze
-      TINY  = 0.freeze
-      PATCH = '001'.freeze
-    end
-    def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
-    def self.to_f; self.to_s.to_f; end
-    def self.patch; PATCH; end
-  end
   
   # Puts +msg+ to +@@logger+
   def self.li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
@@ -39,6 +30,7 @@ module Stella
   end
   
   def self.loglev; @@loglev; end
+  def self.loglev=(val); @@loglev = val; end
   def self.sysinfo; @@sysinfo; end
   
   def self.quiet?; @@loglev == 0; end

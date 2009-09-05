@@ -13,6 +13,7 @@ $:.unshift STELLA_LIB_HOME  # Put our local lib in first place
 
 require 'drydock'
 require 'stella'
+require 'stella/cli'
 
 # Command-line interface for bin/stella
 class StellaCLI
@@ -28,16 +29,15 @@ class StellaCLI
   
   global :A, :apikey, String, "API Key"
   global :S, :secret, String, "Secret Key"
-  global :f, :format, String, "Output format"
-  global :n, :nocolor, "Disable output colors"
-  global :q, :quiet, "Run with less output"
+  global :q, :quiet, "Be quiet!" do
+    Stella.enable_quiet
+  end
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
+    Stella.enable_debug
   end
-  
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
-    @verbose ||= 0
-    @verbose += 1
+    Stella.loglev += 1
   end
   global :V, :version, "Display version number" do
     puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
@@ -49,26 +49,25 @@ class StellaCLI
   # ------------------------------------------------------------------
 
   about "Run a test"
-  command :run do
-    p Stella::Data::HTTP
-  end
+  option :p, :testplan, String, "Path to a testplan definition"
+  option :e, :environment, String, "Name of the target environment (default: dev)"
+  command :run => Stella::CLI
   
-
+  about "Initialize the current directory"
+  command :init => Stella::CLI
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
   # ------------------------------------------------------------------
 
   before do |obj|
-    # Don't print Rudy header unless requested to
-    obj.global.print_header = false  if (obj.global.verbose == 0)
     @start = Time.now
   end
 
   after do |obj|  
-    if obj.global.verbose > 0
+    @elapsed = Time.now - @start
+    if Stella.loglev > 0 && @elapsed > 0.1
       puts
-      @elapsed = Time.now - @start
-      puts "Elapsed: %.2f seconds" % @elapsed.to_f if @elapsed > 0.1
+      puts "Elapsed: %.2f seconds" % @elapsed.to_f
     end
   end
   

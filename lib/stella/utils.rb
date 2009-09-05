@@ -91,6 +91,36 @@ module Stella
       end
     end
     
+    # A basic file writer
+    def write_to_file(filename, content, mode, chmod=600)
+      mode = (mode == :append) ? 'a' : 'w'
+      f = File.open(filename,mode)
+      f.puts content
+      f.close
+      return unless Stella.sysinfo.os == :unix
+      raise "Provided chmod is not a Fixnum (#{chmod})" unless chmod.is_a?(Fixnum)
+      File.chmod(chmod, filename)
+    end
+
+    # 
+    # Generates a string of random alphanumeric characters.
+    # * +len+ is the length, an Integer. Default: 8
+    # * +safe+ in safe-mode, ambiguous characters are removed (default: true):
+    #       i l o 1 0
+    def strand( len=8, safe=true )
+       chars = ("a".."z").to_a + ("0".."9").to_a
+       chars.delete_if { |v| %w(i l o 1 0).member?(v) } if safe
+       str = ""
+       1.upto(len) { |i| str << chars[rand(chars.size-1)] }
+       str
+    end
+    
+    # Returns +str+ with the leading indentation removed. 
+    # Stolen from http://github.com/mynyml/unindent/ because it was better.
+    def noindent(str)
+      indent = str.split($/).each {|line| !line.strip.empty? }.map {|line| line.index(/[^\s]/) }.compact.min
+      str.gsub(/^[[:blank:]]{#{indent}}/, '')
+    end
     
   end
 end
