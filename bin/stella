@@ -1,15 +1,15 @@
 #!/usr/bin/ruby
 
-
-# = Rudy
+# = Stella
 # 
-# === Not your granparent's deployment tool
+# === Heavy-duty performance testing. 
 #
 #   See rudy -h for usage
 # 
 
-$:.unshift File.join(File.dirname(__FILE__), '..', 'lib') # Put our local lib in first place
-$:.unshift File.join(File.dirname(__FILE__), '..', '..', 'drydock', 'lib') 
+STELLA_LIB_HOME = File.expand_path File.join(File.dirname(__FILE__), '..', 'lib')
+
+$:.unshift STELLA_LIB_HOME  # Put our local lib in first place
 
 require 'drydock'
 require 'stella'
@@ -50,7 +50,7 @@ class StellaCLI
 
   about "Run a test"
   command :run do
-    p :hi
+    Stella:: 
   end
   
   
