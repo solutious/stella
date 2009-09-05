@@ -1,0 +1,82 @@
+= Stella - 0.6.0
+
+Stella is a Ruby library for writing functional tests in a sexy DSL (domain specific language).
+
+==== NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
+
+== Example 1
+
+     testplan :product_api do
+       desc "Maintain a value between requests"
+       auth :basic, "stella", "stella"
+       protocol :http
+     
+       post "/upload" do
+         name "Add Product"
+         body "bill", "/path/2/file.txt"
+         header "X-Stella" => "Version #{Stella::VERSION}"
+         param :convert => true
+         param :rand => rand
+         
+         response 200, 201 do |headers, body, objid|
+           data = YAML.load(body)
+           @product_id = data[:id]                   # Save a response value
+         end
+       end
+       
+       get "/product" do
+         name "View Product"
+         param 'id' => @product_id                   # Use the saved value
+         
+         response 200 do |header, body, objid|
+           data = YAML.load(body)
+           repeat :times => 2, :wait => 1.second     # Repeat this request twice
+         end
+       end
+     end
+     
+     functest :quick_test do
+       plan :product_api
+       verbose
+     end
+     
+     environment :development do
+       machines "localhost:3114"  
+       # machine "localhost:3115"
+       # ...
+     end
+     
+     run :development, :quick_test 
+
+
+See bin/example_test.rb for a running example. 
+
+
+== Installation
+
+Get it in one of the following ways:
+
+* gem install stella 
+* git clone git://github.com/solutious/stella.git
+* gem install solutious-stella --source http://gems.github.com
+
+
+== More Information
+
+Stellaaahhhh[http://www.youtube.com/watch?v=jHHprvyl-Hc]
+
+
+== Credits
+
+* Delano Mandelbaum (delano@solutious.com)
+
+
+== Thanks 
+
+* Harm Aarts for the great test case and feedback!
+* Kalin Harvey for keeping me on track.
+* Dave L, the best intern money can't buy. 
+
+== License
+
+See LICENSE.txt

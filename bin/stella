@@ -1,0 +1,87 @@
+#!/usr/bin/ruby
+
+
+# = Rudy
+# 
+# === Not your granparent's deployment tool
+#
+#   See rudy -h for usage
+# 
+
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib') # Put our local lib in first place
+$:.unshift File.join(File.dirname(__FILE__), '..', '..', 'drydock', 'lib') 
+
+require 'drydock'
+require 'stella'
+
+# Command-line interface for /bin/rudy
+class StellaCLI
+  extend Drydock
+  
+  debug :off
+  
+  default :run       # when no command is provided
+  trawler :run       # unknown command names will forward here.
+  
+  # ----------------------------------------  STELLA GLOBALS  --------
+  # ------------------------------------------------------------------
+  
+  global :A, :apikey, String, "API Key"
+  global :S, :secret, String, "Secret Key"
+  global :f, :format, String, "Output format"
+  global :n, :nocolor, "Disable output colors"
+  global :q, :quiet, "Run with less output"
+  global :D, :debug, "Enable debug mode" do
+    Drydock.debug true
+  end
+  
+  global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
+    @verbose ||= 0
+    @verbose += 1
+  end
+  global :V, :version, "Display version number" do
+    puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
+    exit 0
+  end
+  
+
+  # ----------------------------------  STELLA MISCELLANEOUS  --------
+  # ------------------------------------------------------------------
+
+  about "Run a test"
+  command :run do
+    p :hi
+  end
+  
+  
+  before do |obj|
+    # Don't print Rudy header unless requested to
+    obj.global.print_header = false  if (obj.global.verbose == 0)
+    @start = Time.now
+  end
+
+  after do |obj|  
+    if obj.global.verbose > 0
+      puts
+      @elapsed = Time.now - @start
+      puts "Elapsed: %.2f seconds" % @elapsed.to_f if @elapsed > 0.1
+    end
+  end
+  
+end
+
+begin
+  Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Drydock::ArgError, Drydock::OptError, Drydock::InvalidArgument => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.usage
+rescue Stella::Error => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.backtrace if Drydock.debug?
+rescue Interrupt
+  puts "#{$/}Exiting... "
+  exit 1
+rescue => ex
+  STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
+  STDERR.puts ex.backtrace if Drydock.debug?
+end
