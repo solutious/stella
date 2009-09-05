@@ -53,8 +53,10 @@ class StellaCLI
   option :e, :environment, String, "Name of the target environment (default: dev)"
   command :run => Stella::CLI
   
-  about "Initialize the current directory"
-  command :init => Stella::CLI
+  about "Initialize Stella"
+  command :init do
+    Stella::Config.init
+  end
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
   # ------------------------------------------------------------------
@@ -65,7 +67,7 @@ class StellaCLI
 
   after do |obj|  
     @elapsed = Time.now - @start
-    if Stella.loglev > 0 && @elapsed > 0.1
+    if Stella.loglev > 1 && @elapsed > 0.1
       puts
       puts "Elapsed: %.2f seconds" % @elapsed.to_f
     end

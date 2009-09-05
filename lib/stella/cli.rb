@@ -2,13 +2,13 @@
 
 class Stella::CLI < Drydock::Command
   
-  def run
-    p Stella::Config.from_file('./.stella/config')
-  end
-  
-  
   def init
-    Stella::Config.init
+    @conf = Stella::Config.refresh
   end
+  
+  def run
+    p @conf
+  end
+  
   
 end
