@@ -28,7 +28,7 @@ require 'stella/cli'
 class Stella::CLI::Definition
   extend Drydock
   
-  debug :off
+  debug :on
   
   default :verify    # when no command is provided
   trawler :verify    # unknown command names will forward here.
@@ -64,6 +64,14 @@ class Stella::CLI::Definition
   command :init do
     Stella::Config.init
   end
+  
+  if Drydock.debug?
+    about "Blast away all Stella config assets"
+    command :blast do
+      Stella::Config.blast
+    end
+  end
+  
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
   # ------------------------------------------------------------------

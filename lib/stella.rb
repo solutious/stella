@@ -9,8 +9,8 @@ end
 
 module Stella
   require 'stella/version'
+  require 'stella/exceptions'
   
-  autoload :Error, STELLA_LIB_HOME + "/stella/exceptions"
   autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
   autoload :Data, STELLA_LIB_HOME + "/stella/data"
   autoload :Config, STELLA_LIB_HOME + "/stella/config"
