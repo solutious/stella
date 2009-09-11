@@ -1,16 +1,16 @@
 
 usecase 60 do
-  name "Simple search"
+  desc "Simple search"
   #userpool :anonymous
   #httpauth :stella, :stella
 
   get "/" do
-    name "Enter homepage"
+    desc "Enter homepage"
     wait 1
   end
   
   get "/search" do
-    name "Search"
+    desc "Search"
     wait 3
     
     param :what  => 'food'
@@ -22,7 +22,7 @@ usecase 60 do
   end
   
   get "/listing/:lid" do
-    name "Select listing"
+    desc "Select listing"
     wait 3
     
     response 200 do |header, body|
@@ -33,19 +33,12 @@ usecase 60 do
 end
 
 usecase 40 do
-  name "Direct to listing"
-  load :lid, 'listing_ids.csv'  # May need to be environment dependant
+  desc "Direct to listing"
   
   get "/listing/:lid" do
-    name "Select listing"
+    param :lid => '1999'
+    desc "Select listing"
     wait 5
   end
 end
-
-
-__END__
-/
-/search/?what=${what}&where=${where}
-/listing/
-
 

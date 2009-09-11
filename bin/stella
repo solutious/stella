@@ -2,10 +2,19 @@
 
 # = Stella
 # 
-# === Heavy-duty performance testing. 
+# === Your friend in web app performance testing
 #
-#   See rudy -h for usage
+# Config (default paths):
 # 
+#     ./.stella/config   (current directory)
+#     ~/.stella/config   (your home directory)
+#
+# Usage:
+# 
+#     $ stella -h
+#     $ stella verify 
+#     $ stella load -u 10 -t 60 http://test.example.com/
+#     $ stella load -u 10 -r 40 -p plans/basic.rb http://test.example.com/
 
 STELLA_LIB_HOME = File.expand_path File.join(File.dirname(__FILE__), '..', 'lib')
 
@@ -16,13 +25,13 @@ require 'stella'
 require 'stella/cli'
 
 # Command-line interface for bin/stella
-class StellaCLI
+class Stella::CLI::Definition
   extend Drydock
   
   debug :off
   
-  default :run       # when no command is provided
-  trawler :run       # unknown command names will forward here.
+  default :verify    # when no command is provided
+  trawler :verify    # unknown command names will forward here.
   
   # ----------------------------------------  STELLA GLOBALS  --------
   # ------------------------------------------------------------------
@@ -48,10 +57,8 @@ class StellaCLI
   # ------------------------------------------------  STELLA  --------
   # ------------------------------------------------------------------
 
-  about "Run a test"
-  option :p, :testplan, String, "Path to a testplan definition"
-  option :e, :environment, String, "Name of the target environment (default: dev)"
-  command :run => Stella::CLI
+  about "Verify a testplan"
+  command :verify => Stella::CLI
   
   about "Initialize Stella"
   command :init do

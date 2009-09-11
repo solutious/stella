@@ -6,7 +6,7 @@ class Stella::CLI < Drydock::Command
     @conf = Stella::Config.refresh
   end
   
-  def run
+  def verify
     p @conf
   end
   
