@@ -10,7 +10,7 @@ module Stella::Engine
         :repetitions  => 1
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.ld "RUNNING: #{plan.inspect}"
+      Stella.li2 "RUNNING: #{plan}"
     end
     
   end

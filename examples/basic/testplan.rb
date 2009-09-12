@@ -1,3 +1,4 @@
+desc "The Basic Testplan"
 
 usecase 60 do
   desc "Simple search"
@@ -24,12 +25,10 @@ usecase 60 do
   get "/listing/:lid" do
     desc "Select listing"
     wait 3
-    
     response 200 do |header, body|
       data = YAML.load(body)
     end
   end
-  
 end
 
 usecase 40 do

@@ -14,10 +14,13 @@ class Stella::CLI < Drydock::Command
     if @option.testplan
       testplan = Stella::Testplan.load_file @option.testplan
     else
-      uri = URI.parse @args.first
       testplan = Stella::Testplan.new
       usecase = Stella::Testplan::Usecase.new
-      usecase.add_request :get, uri.path
+      @argv.each do |uri|
+        uri = URI.parse uri
+        uri.path = '/' if uri.path.empty?
+        usecase.add_request :get, uri.path
+      end
       testplan.add_usecase usecase
     end
     

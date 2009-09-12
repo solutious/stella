@@ -3,9 +3,10 @@
 module Stella
 class Testplan
   attr_accessor :usecases
+  attr_accessor :desc
   
   def initialize
-    @usecases = []
+    @desc, @usecases = "Stella's plan", []
   end
   
   def self.load_file(path)
@@ -13,17 +14,34 @@ class Testplan
     plan = Stella::Testplan.new
     # eval so the DSL code can be executed in this namespace.
     plan.instance_eval conf
+    plan
   end
   
   def usecase(*args, &blk)
     return @usecases if args.empty?
-    ucase = Stella::Testplan::Usecase.new(&blk)
-    Stella.ld "Usecase: #{ucase.desc}"
-    @usecases << ucase 
+    uc = Stella::Testplan::Usecase.new(&blk)
+    add_usecase uc
   end
   
   def add_usecase(uc)
+    Stella.ld "Usecase: #{uc.desc}"
     @usecases << uc
+    uc
+  end
+  
+  def desc(*args)
+    @desc = args.first unless args.empty?
+    @desc
+  end
+
+  def to_s
+    ucstr = []
+    @usecases.each_with_index do |uc,i| 
+      description = uc.desc || "usecase#{i+1}"
+      requests = uc.requests.collect { |r| r.uri.to_s }
+      ucstr << "%s(%s)" % [description, requests.join(', ')]
+    end
+    "%s: %s" % [@desc, ucstr.join('; ')]
   end
   
   class Usecase

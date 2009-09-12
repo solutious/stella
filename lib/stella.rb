@@ -31,6 +31,11 @@ module Stella
   
   # Puts +msg+ to +@@logger+
   def self.li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
+  def self.li1(*msg); li *msg if @@loglev >= 1 end
+  def self.li2(*msg); li *msg if @@loglev >= 2 end
+  def self.li3(*msg); li *msg if @@loglev >= 3 end
+  def self.li4(*msg); li *msg if @@loglev >= 4 end
+  
   # Puts +msg+ to +@@logger+ with "ERROR: " prepended
   def self.le(*msg); @@logger.puts "  " << msg.join("#{$/}  "); end
   # Puts +msg+ to +@@logger+ if +Rudy.debug?+ returns true

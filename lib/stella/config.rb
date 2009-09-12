@@ -61,7 +61,7 @@ class Stella::Config < Storable
     path = nil
     while !dir.empty?
       tmp = File.join(dir.join(File::SEPARATOR), DIR_NAME, 'config')
-      Stella.ld " -> looking for #{path}"
+      Stella.ld " -> looking for #{tmp}"
       path = tmp and break if File.exists? tmp
       dir.pop
     end
