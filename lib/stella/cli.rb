@@ -11,8 +11,22 @@ class Stella::CLI < Drydock::Command
   end
   
   def verify
-    Stella.run( :testplan => @option.testplan )
+    if @option.testplan
+      testplan = Stella::Testplan.load_file @option.testplan
+    else
+      uri = URI.parse @args.first
+      testplan = Stella::Testplan.new
+      usecase = Stella::Testplan::Usecase.new
+      usecase.add_request :get, uri.path
+      testplan.add_usecase usecase
+    end
+    
+    Stella::Engine::Functional.run testplan
   end
   
+  
+  def load
+    
+  end
   
 end

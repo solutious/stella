@@ -29,7 +29,7 @@ module Stella::Data::HTTP
       !@body.nil? && !@body.empty?
     end
     
-    def initialize (uri_str, method="GET", version="1.1", &definition)
+    def initialize (method, uri_str, version="1.1", &definition)
       @uri = (uri_str.is_a? String) ? URI.parse(uri_str) : uri
       @http_method = method
       @http_version = version

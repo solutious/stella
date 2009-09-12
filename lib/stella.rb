@@ -17,7 +17,8 @@ module Stella
   require 'stella/exceptions'
   require 'stella/utils'
   require 'stella/dsl'
-  
+  require 'stella/engine'
+
   autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
   autoload :Data, STELLA_LIB_HOME + "/stella/data"
   autoload :Config, STELLA_LIB_HOME + "/stella/config"
@@ -48,19 +49,6 @@ module Stella
   def self.debug?; @@loglev > 3; end
   def self.enable_debug; @@loglev = 4; end
   def self.disable_debug; @@loglev = 1; end
-  
-  def self.run(opts={})
-    opts = {
-      :users        => 1,
-      :duration     => 60,
-      :repetitions  => 1
-    }.merge! opts
-    Stella.ld "OPTIONS: #{opts.inspect}"
-    
-    plan = Stella::Testplan.load_file opts[:testplan]
-    p plan
-  end
-  
   
 end
 

@@ -16,8 +16,14 @@ class Testplan
   end
   
   def usecase(*args, &blk)
-    
-    @usecases << Stella::Testplan::Usecase.new(&blk)
+    return @usecases if args.empty?
+    ucase = Stella::Testplan::Usecase.new(&blk)
+    Stella.ld "Usecase: #{ucase.desc}"
+    @usecases << ucase 
+  end
+  
+  def add_usecase(uc)
+    @usecases << uc
   end
   
   class Usecase
@@ -41,10 +47,8 @@ class Testplan
       add_request :post, *args, &blk
     end
     
-    private
-    
     def add_request(meth, *args, &blk)
-      req = Stella::Data::HTTP::Request.new args.first, 'GET', &blk
+      req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args.first, &blk
       Stella.ld req
       @requests << req
     end
