@@ -7,14 +7,10 @@ class Stella::CLI < Drydock::Command
   end
   
   def verify_valid?
-    true
-  end
-  
-  def verify
     if @option.testplan
-      testplan = Stella::Testplan.load_file @option.testplan
+      @testplan = Stella::Testplan.load_file @option.testplan
     else
-      testplan = Stella::Testplan.new
+      @testplan = Stella::Testplan.new
       usecase = Stella::Testplan::Usecase.new
       @argv.each do |uri|
         uri = URI.parse uri
@@ -23,8 +19,11 @@ class Stella::CLI < Drydock::Command
       end
       testplan.add_usecase usecase
     end
-    
-    Stella::Engine::Functional.run testplan
+    true
+  end
+  
+  def verify
+    Stella::Engine::Functional.run @testplan
   end
   
   

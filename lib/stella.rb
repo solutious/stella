@@ -16,6 +16,7 @@ module Stella
   require 'stella/version'
   require 'stella/exceptions'
   require 'stella/utils'
+  require 'stella/mixins'
   require 'stella/dsl'
   require 'stella/engine'
 

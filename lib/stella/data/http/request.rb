@@ -1,8 +1,9 @@
 
 
 module Stella::Data::HTTP
-  
   class Request < Storable
+    include Gibbler::Complex
+    
     # A string representing a raw HTTP request
     attr_reader :raw_data
     
@@ -34,6 +35,7 @@ module Stella::Data::HTTP
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
       @wait = 0
+      @desc = "Request"
       @body = Stella::Data::HTTP::Body.new
       instance_eval &definition unless definition.nil?
     end

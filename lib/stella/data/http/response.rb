@@ -3,6 +3,8 @@
 module Stella::Data::HTTP
   
   class Response < Storable
+    include Gibbler::Complex
+    
     attr_reader :raw_data
     
     field :time => DateTime

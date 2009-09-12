@@ -1,40 +1,32 @@
 desc "The Basic Testplan"
 
-usecase 60 do
-  desc "Simple search"
+usecase 60, "Simple search" do
   #userpool :anonymous
   #httpauth :stella, :stella
   
-  get "/" do
-    desc "Homepage"
+  get "/", "Homepage" do
     wait 1
   end
   
-  get "/search" do
-    content_type "text/html"
-    desc "Search"
+  get "/search", "Search Results" do
     wait 3
-    
     param :what  => 'food'
     param :where => 'vancouver'
-    
-    response 200 do 
-      headers # => {}
-      html
+    response 200 do
+      #headers
+      #body
+      #html
     end
   end
   
   get "/listing/:lid.yaml" do
-    desc "Select listing"
+    desc "Selected listing"
     wait 3
-    response 200 do |header, body|
-      data = YAML.load(body)
-    end
   end
+        
 end
 
-usecase 40 do
-  desc "Direct to listing"
+usecase 40, "Direct to listing" do
   
   get "/listing/:lid" do
     #param :lid => random[:lid]

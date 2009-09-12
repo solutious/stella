@@ -13,6 +13,7 @@ set :environment => :development
 set :dump_errors => true
 set :port => 3114
 set :reload => true
+set :max_listings => 1000
 
 #log = File.new("/dev/null", "a")
 #STDOUT.reopen(log)
@@ -62,7 +63,7 @@ post '/listing/add' do
   else
     @listings = options.listings
     if filter_name(params[:name], @listings).empty?
-      @listings.shift if @listings.size >= 10
+      @listings.shift if @listings.size >= options.max_listings
       @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
       redirect '/listings'
     else
