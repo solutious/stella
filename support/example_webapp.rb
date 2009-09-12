@@ -136,7 +136,7 @@ __END__
 <body>
 <h1>Business Finder</h1>
 <p style="margin-left: 50px; margin-top: 20px;"><em>
-<a href="/listing/add">Add Listing</a> - 
+<a href="/listing/add?name=<%= params[:what] %>&amp;city=<%= params[:where] %>">Add Listing</a> - 
 <a href="/listings">View All</a> - 
 <a href="/">New Search</a>
 </em></p>
@@ -145,12 +145,13 @@ __END__
 </html>
 
 @@add_form
+<% city = blank?(params[:city]) ? 'Toronto' : params[:city] %>
 <% if !blank?(@msg) %>
 <p style="color: red"><em>Error: <%= @msg %></em></p>
 <% end %>
 <form method="post">
 Name: <input name="name" value="<%= params[:name] %>"/><br/>
-City: <input name="city" value="<%= params[:city] || 'Toronto' %>" /><br/>
+City: <input name="city" value="<%= city %>" /><br/>
 <input type="submit" />
 </form>
 

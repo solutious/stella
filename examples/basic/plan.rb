@@ -18,11 +18,11 @@ usecase 60 do
     param :where => 'vancouver'
     
     response 200 do |header, body|
-      @lid = body.scan(/listing=(\d+?)/).first
+      @lid = body.scan(/listing\/(\d+?)/).first
     end
   end
   
-  get "/listing/:lid" do
+  get "/listing/:lid.yaml" do
     desc "Select listing"
     wait 3
     response 200 do |header, body|
