@@ -123,6 +123,12 @@ helpers do
     listings.select { |l| l[:city].match(/#{city}/i) }
   end
   
+  def format_listing(lid, name, city)
+    listing = %Q{<div class="listing" id="listing-#{lid}">}
+    listing << %Q{<a href="/listing/#{lid}.yaml">#{name}</a> }
+    listing << %Q{#{city}</div>}
+  end
+  
   # Generates a string of random alphanumeric characters
   # These are used as IDs throughout the system
   def strand( len )
@@ -144,9 +150,9 @@ __END__
 <body>
 <h1>Business Finder</h1>
 <p style="margin-left: 50px; margin-top: 20px;"><em>
+<a href="/">New Search</a> -
 <a href="/listing/add?name=<%= params[:what] %>&amp;city=<%= params[:where] %>">Add Listing</a> - 
-<a href="/listings">View All</a> - 
-<a href="/">New Search</a>
+<a href="/listings">View All</a>
 </em></p>
 <%= yield %>
 </body>
@@ -164,8 +170,8 @@ City: <input name="city" value="<%= city %>" /><br/>
 </form>
 
 @@listings
-<% for listing in @listings %>
-  <div class="listing" id="listing<%= listing[:id] %>"><a href="/listing/<%= listing[:id] %>.yaml"><%= listing[:name] %></a> <%= listing[:city] %></div>
+<% for l in @listings %>
+  <%= format_listing(l[:id], l[:name], l[:city]) %>
 <% end %>
 
 @@search_form
@@ -183,10 +189,8 @@ for "<b><%= params[:what] %></b>"
 <% if !blank?(params[:where]) %>
 in "<b><%= params[:where] %></b>"
 <% end %>
-<% for listing in @listings %>
-  <% name = listing[:name].gsub(/(#{params[:what]})/i, "<em><b>\\1</b></em>") %>
-  <% city = listing[:city].gsub(/(#{params[:where]})/i, "<em><b>\\1</b></em>") %>
-  <p><a href="/listing/<%= listing[:id] %>"><%= name %></a> <%= city %></p>
+<% for l in @listings %>
+  <%= format_listing(l[:id], name, city) %>
 <% end %>
 
 @@search_error
