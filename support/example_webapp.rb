@@ -33,18 +33,19 @@ end
 
 
 get '/search' do
-  redirect '/' if params[:what].nil? || params[:what].empty?
+  redirect '/' if blank?(params[:what]) && blank?(params[:where])
+  params[:what] ||= ''
   params[:where] ||= ''
   @title << " - Search Results"
   @listings = filter_name(params[:what], options.listings)
-  if !params[:where].empty? 
+  if !blank?(params[:where])
     @listings = filter_city(params[:where], @listings)
   end
   if @listings.empty?
     status 404
-    erb :nothing 
+    erb :search_error 
   else
-    erb :search
+    erb :search_results
   end
 end
 
@@ -56,7 +57,8 @@ post '/listing/add' do
   @title = "Add a Business"
   if blank?(params[:name]) || blank?(params[:city])
     status 500
-    "ERROR: Must specify name"
+    @msg = blank?(params[:city]) ? "Must specify city" : "Must specify name"
+    erb :add_form
   else
     @listings = options.listings
     @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
@@ -133,14 +135,29 @@ __END__
 </head>
 <body>
 <h1>Business Finder</h1>
-<%= yield %>
-<p style="margin-left: 50px; margin-top: 20px">
-<a  href="/listing/add">Add Listing</a> - 
+<p style="margin-left: 50px; margin-top: 20px;"><em>
+<a href="/listing/add">Add Listing</a> - 
 <a href="/listings">View All</a> - 
 <a href="/">New Search</a>
-</p>
+</em></p>
+<%= yield %>
 </body>
 </html>
+
+@@add_form
+<% if !blank?(@msg) %>
+<p style="color: red"><em>Error: <%= @msg %></em></p>
+<% end %>
+<form method="post">
+Name: <input name="name" value="<%= params[:name] %>"/><br/>
+City: <input name="city" value="<%= params[:city] || 'Toronto' %>" /><br/>
+<input type="submit" />
+</form>
+
+@@listings
+<% for listing in @listings %>
+  <p><a href="/listing/<%= listing[:id] %>.yaml"><%= listing[:name] %></a> <%= listing[:city] %></p>
+<% end %>
 
 @@search_form
 <form action="/search">
@@ -149,31 +166,23 @@ Where: <input name="where" /><br/>
 <input type="submit" />
 </form>
 
-@@add_form
-<form method="post">
-Name: <input name="name" /><br/>
-City: <input name="city" value="Toronto" /><br/>
-<input type="submit" />
-</form>
-
-@@search
-Looking for "<b><%= params[:what] %></b>" in "<b><%= params[:where] %></b>"
+@@search_results
+Looking 
+<% if !blank?(params[:what]) %>
+for "<b><%= params[:what] %></b>"
+<% end %>
+<% if !blank?(params[:where]) %>
+in "<b><%= params[:where] %></b>"
+<% end %>
 <% for listing in @listings %>
   <% name = listing[:name].gsub(/(#{params[:what]})/i, "<em><b>\\1</b></em>") %>
   <% city = listing[:city].gsub(/(#{params[:where]})/i, "<em><b>\\1</b></em>") %>
   <p><a href="/listing/<%= listing[:id] %>"><%= name %></a> <%= city %></p>
 <% end %>
 
-@@listings
-<% for listing in @listings %>
-  <p><a href="/listing/<%= listing[:id] %>.yaml"><%= listing[:name] %></a> <%= listing[:city] %></p>
-<% end %>
-
-@@nothing
+@@search_error
 Looking for "<b><%= params[:what] %></b>" 
-<% if !params[:where].empty? %>
+<% if !blank?(params[:where]) %>
 in "<b><%= params[:where] %></b>"
 <% end %>
-<p><i>Nothing found</i> (<a href="/listings">view all</a>)</p>
-
-
+<p><i>Nothing found</i></p>
