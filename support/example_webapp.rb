@@ -34,22 +34,33 @@ end
 
 get '/search' do
   redirect '/' if params[:what].nil? || params[:what].empty?
+  params[:where] ||= ''
   @title << " - Search Results"
   @listings = filter_name(params[:what], options.listings)
-  if params[:where].nil? || params[:where].empty? 
+  if !params[:where].empty? 
     @listings = filter_city(params[:where], @listings)
   end
-  erb @listings.empty? ? :nothing : :search
+  if @listings.empty?
+    status 404
+    erb :nothing 
+  else
+    erb :search
+  end
 end
 
 get '/listing/add' do
+  erb :add_form
+end
+
+post '/listing/add' do
   @title = "Add a Business"
-  if params[:name] && params[:city]
+  if blank?(params[:name]) || blank?(params[:city])
+    status 500
+    "ERROR: Must specify name"
+  else
     @listings = options.listings
     @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
     redirect '/listings'
-  else
-    erb :add_form
   end
 end
 
@@ -72,7 +83,6 @@ get '/listings' do
   erb :listings
 end
 
-
 set :listings => [
   { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto' },
   { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto' },
@@ -86,6 +96,10 @@ set :listings => [
 
 
 helpers do
+  
+  def blank?(v)
+    v.nil? || v.empty?
+  end
   
   def filter_id(id, listings)
     listings.select { |l| l[:id] == id.to_i }
@@ -136,7 +150,7 @@ Where: <input name="where" /><br/>
 </form>
 
 @@add_form
-<form>
+<form method="post">
 Name: <input name="name" /><br/>
 City: <input name="city" value="Toronto" /><br/>
 <input type="submit" />
