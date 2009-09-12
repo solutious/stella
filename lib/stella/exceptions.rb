@@ -6,4 +6,7 @@ module Stella
     def message; "#{self.class}: #{@obj}"; end
   end
   
+  class InvalidOption < Stella::Error
+  end
+  
 end

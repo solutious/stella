@@ -3,7 +3,7 @@ usecase 60 do
   desc "Simple search"
   #userpool :anonymous
   #httpauth :stella, :stella
-
+  
   get "/" do
     desc "Enter homepage"
     wait 1
@@ -36,7 +36,8 @@ usecase 40 do
   desc "Direct to listing"
   
   get "/listing/:lid" do
-    param :lid => '1999'
+    #param :lid => random[:lid]
+    param :lid => "1999"
     desc "Select listing"
     wait 5
   end

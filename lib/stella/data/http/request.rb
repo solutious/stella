@@ -15,14 +15,10 @@ module Stella::Data::HTTP
     #
     attr_accessor :response_handler
     
-    field :name
-    field :stella_id
-    field :unique_id
-    field :time => DateTime
-    field :client_ip 
-    field :server_ip 
+    field :desc
     field :header 
     field :uri
+    field :wait
     field :params
     field :body 
     field :http_method
@@ -32,73 +28,53 @@ module Stella::Data::HTTP
     def has_body?
       !@body.nil? && !@body.empty?
     end
-    def has_request?
-      false
-    end
-
-    def initialize (uri_str, method="GET", version="1.1")
+    
+    def initialize (uri_str, method="GET", version="1.1", &definition)
       @uri = (uri_str.is_a? String) ? URI.parse(uri_str) : uri
       @http_method = method
       @http_version = version
       @headers = {}
       @params = {}
       @response_handler = {}
-      @time = Time.now.utc
+      @wait = 0
       
-      @unique_id = nil
       @body = Stella::Data::HTTP::Body.new
+      instance_eval &definition unless definition.nil?
     end
     
-    def set_unique_id(seasoning=rand)
-      #@unique_id = Stella::Crypto.sign(rand.to_s + seasoning.to_s, "#{@http_method}/#{@uri}/#{@params}")
-    end
-
-    def stella_id
-      #@stella_id = Stella::Crypto.sign(time.to_i.to_s, "#{@http_method}/#{@uri}/#{@params}")
+    def desc(*args)
+      @desc = args.first unless args.empty?
+      @desc
     end
     
-    def from_raw(raw_data=nil)
-      @raw_data = raw_data
-      @http_method, @http_version, @uri, @header, @body = self.parse(@raw_data)
-      @time = DateTime.now
+    def wait(*args)
+      @wait = args.first unless args.empty?
+      @wait
     end
     
-    def self.parse(raw)
-      return unless raw
-      HTTPUtil::parse_http_request(raw, @uri.host, @uri.port) 
+    def headers(*args)
+      @headers.merge args.first unless args.empty?
+      @headers
     end
-
+    alias_method :header, :headers
     
-    def add_header(*args)
-      name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
-      @headers[name.to_s] ||= []
-      @headers[name.to_s] << value
+    def params(*args)
+      @params.merge args.first unless args.empty?
+      @params
     end
-    def add_param(*args)
-      name, value = (args[0].is_a? Hash) ? args[0].to_a.flatten : args
-      
-      # BUG: This auto-array shit is causing a problem where the one request
-      # will set the param and then next will set it again and it becomes
-      # an array. 
-      #if @params[name.to_s] && !@params[name.to_s].is_a?(Array)
-      #  @params[name.to_s] = [@params[name.to_s]]
-      #else
-      #  @params[name.to_s] = ""
-      #end
-      
-      @params[name.to_s] = value.to_s
-    end
+    alias_method :param, :params
     
-    def add_response_handler(*args, &b)
+    def response(*args, &definition)
       args << 200 if args.empty?
       args.each do |status|
-        @response_handler[status] = b
+        @response_handler[status] = definition
       end
     end
     
     # +content+ can be literal content or a file path
-    def add_body(content, form_param=nil, content_type=nil)
-      @body = Stella::Data::HTTPBody.new
+    def body(*args)
+      return @body if args.empty?
+      content, form_param, content_type = *args
       
       @body.form_param = form_param if form_param
       @body.content_type = content_type if content_type
@@ -112,23 +88,6 @@ module Stella::Data::HTTP
       
     end
     
-    
-    def body
-      return nil unless @body
-      @body
-      #(!header || header[:Content_Type] || header[:Content_Type] !~ /text/) ? Base64.encode64(@body) : @body
-    end
-    
-
-    def headers
-      return [] unless header
-      headers = []
-      header.each_pair do |n,v|
-        headers << [n.to_s.gsub('_', '-'), v[0]]
-      end
-      headers
-    end
-    
     def inspect
       str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
       str << $/ + headers.join($/) unless headers.empty?
@@ -137,7 +96,7 @@ module Stella::Data::HTTP
     end
     
     def to_s
-      str = "%s: %s %s HTTP/%s" % [time.strftime(NICE_TIME_FORMAT), http_method, uri.to_s, http_version]
+      str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
       str
     end
     

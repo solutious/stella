@@ -6,11 +6,9 @@ class Stella::Config < Storable
   field :source
   field :apikey
   field :secret
-  
-  def source?(v)
-    return false if @source.nil?
-    @source
-  end
+    
+   # Returns true when the current config matches the default config
+  def default?; to_hash.gibbler == DEFAULT_CONFIG_HASH; end
   
   def self.each_path(&blk)
     [PROJECT_PATH, USER_PATH].each do |path|
@@ -42,7 +40,6 @@ class Stella::Config < Storable
     
     Stella.li "Creating #{PROJECT_PATH}"
     Stella::Utils.write_to_file(PROJECT_PATH, 'target:', 'w', 0600)
-    
   end
   
   def self.blast
@@ -80,11 +77,9 @@ class Stella::Config < Storable
     DEFAULT_CONFIG = <<CONF
 apikey: ''
 secret: ''
-source:
-remote: 
-host: stella.solutious.com
-port: 443
+source: stella.solutious.com:443
 CONF
+    DEFAULT_CONFIG_HASH = YAML.load(DEFAULT_CONFIG).gibbler
   end
     
   class AlreadyInitialized < Stella::Error; end

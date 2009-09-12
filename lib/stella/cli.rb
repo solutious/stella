@@ -6,8 +6,12 @@ class Stella::CLI < Drydock::Command
     @conf = Stella::Config.refresh
   end
   
+  def verify_valid?
+    true
+  end
+  
   def verify
-    p @conf
+    Stella.run( :testplan => @option.testplan )
   end
   
   

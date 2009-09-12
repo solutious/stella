@@ -58,6 +58,12 @@ class Stella::CLI::Definition
   # ------------------------------------------------------------------
 
   about "Verify a testplan"
+  usage "stella verify http://stellaaahhhh.com/"
+  usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :p, :testplan, String, "Path to testplan" do |v|
+    raise Stella::InvalidOption, "Bad path: #{v}" unless File.exists?(v)
+    v
+  end
   command :verify => Stella::CLI
   
   about "Initialize Stella"
@@ -78,6 +84,7 @@ class Stella::CLI::Definition
 
   before do |obj|
     @start = Time.now
+    Stella.enable_debug if Drydock.debug?
   end
 
   after do |obj|  
