@@ -6,19 +6,21 @@ usecase 60 do
   #httpauth :stella, :stella
   
   get "/" do
-    desc "Enter homepage"
+    desc "Homepage"
     wait 1
   end
   
   get "/search" do
+    content_type "text/html"
     desc "Search"
     wait 3
     
     param :what  => 'food'
     param :where => 'vancouver'
     
-    response 200 do |header, body|
-      @lid = body.scan(/listing\/(\d+?)/).first
+    response 200 do 
+      headers # => {}
+      html
     end
   end
   

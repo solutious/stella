@@ -23,7 +23,7 @@ module Stella::Data::HTTP
     field :body 
     field :http_method
     field :http_version
-    
+    field :content_type
     
     def has_body?
       !@body.nil? && !@body.empty?
@@ -31,13 +31,9 @@ module Stella::Data::HTTP
     
     def initialize (method, uri_str, version="1.1", &definition)
       @uri = (uri_str.is_a? String) ? URI.parse(uri_str) : uri
-      @http_method = method
-      @http_version = version
-      @headers = {}
-      @params = {}
-      @response_handler = {}
+      @http_method, @http_version = method, version
+      @headers, @params, @response_handler = {}, {}, {}
       @wait = 0
-      
       @body = Stella::Data::HTTP::Body.new
       instance_eval &definition unless definition.nil?
     end
@@ -45,6 +41,11 @@ module Stella::Data::HTTP
     def desc(*args)
       @desc = args.first unless args.empty?
       @desc
+    end
+    
+    def content_type(*args)
+      @content_type = args.first unless args.empty?
+      @content_type
     end
     
     def wait(*args)

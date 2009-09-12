@@ -61,8 +61,15 @@ post '/listing/add' do
     erb :add_form
   else
     @listings = options.listings
-    @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
-    redirect '/listings'
+    if filter_name(params[:name], @listings).empty?
+      @listings.shift if @listings.size >= 10
+      @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
+      redirect '/listings'
+    else
+      status 500
+      @msg = "That business exists (#{params[:name]})"
+      erb :add_form
+    end
   end
 end
 
@@ -86,10 +93,10 @@ get '/listings' do
 end
 
 set :listings => [
-  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto' },
-  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto' },
-  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto' },
-  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto' },
+  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'  },
+  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto'  },
+  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto'  },
+  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto'  },
   { :id => 1004, :name => 'Forever and Always Beads', :city => 'Montreal' },
   { :id => 1005, :name => "Big Al's Flavour Country", :city => 'Montreal' },
   { :id => 1006, :name => 'Big Time Furniture World', :city => 'Montreal' },
@@ -157,7 +164,7 @@ City: <input name="city" value="<%= city %>" /><br/>
 
 @@listings
 <% for listing in @listings %>
-  <p><a href="/listing/<%= listing[:id] %>.yaml"><%= listing[:name] %></a> <%= listing[:city] %></p>
+  <div class="listing" id="listing<%= listing[:id] %>"><a href="/listing/<%= listing[:id] %>.yaml"><%= listing[:name] %></a> <%= listing[:city] %></div>
 <% end %>
 
 @@search_form

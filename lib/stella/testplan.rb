@@ -34,14 +34,20 @@ class Testplan
     @desc
   end
 
-  def to_s
-    ucstr = []
+  def pretty
+    str = []
+    str << " %-50s ".att(:reverse) % [@desc]
     @usecases.each_with_index do |uc,i| 
-      description = uc.desc || "usecase#{i+1}"
-      requests = uc.requests.collect { |r| r.uri.to_s }
-      ucstr << "%s(%s)" % [description, requests.join(', ')]
+      description = uc.desc || "Usecase ##{i+1}"
+      str << "  %s".bright % [description]
+      requests = uc.requests.each do |r| 
+        str << "    %s" % r.uri
+        if Stella.loglev > 2
+          [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
+        end
+      end
     end
-    "%s: %s" % [@desc, ucstr.join('; ')]
+    str.join($/)
   end
   
   class Usecase
