@@ -24,6 +24,7 @@ module Stella
   autoload :Data, STELLA_LIB_HOME + "/stella/data"
   autoload :Config, STELLA_LIB_HOME + "/stella/config"
   autoload :Testplan, STELLA_LIB_HOME + "/stella/testplan"
+  autoload :Client, STELLA_LIB_HOME + "/stella/client"
   
   @@sysinfo = SysInfo.new.freeze
     

@@ -17,7 +17,7 @@ class Stella::CLI < Drydock::Command
         uri.path = '/' if uri.path.empty?
         usecase.add_request :get, uri.path
       end
-      testplan.add_usecase usecase
+      @testplan.add_usecase usecase
     end
     true
   end

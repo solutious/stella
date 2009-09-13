@@ -31,7 +31,7 @@ class Stella::Config < Storable
     dir = File.dirname USER_PATH
     Dir.mkdir(dir, 0700) unless File.exists? dir
     unless File.exists? USER_PATH
-      Stella.li "Creating #{USER_PATH} (Don't forget to add your credentials)"
+      Stella.li "Creating #{USER_PATH} (Add your credentials here)"
       Stella::Utils.write_to_file(USER_PATH, DEFAULT_CONFIG, 'w', 0600)
     end
     
@@ -77,7 +77,7 @@ class Stella::Config < Storable
     DEFAULT_CONFIG = <<CONF
 apikey: ''
 secret: ''
-source: stella.solutious.com:443
+remote: stella.solutious.com:443
 CONF
     DEFAULT_CONFIG_HASH = YAML.load(DEFAULT_CONFIG).gibbler
   end
