@@ -56,21 +56,25 @@ module Stella::Data::HTTP
     end
     
     def headers(*args)
-      @headers.merge args.first unless args.empty?
+      @headers.merge! args.first unless args.empty?
       @headers
     end
     alias_method :header, :headers
     
     def params(*args)
-      @params.merge args.first unless args.empty?
+      @params.merge! args.first unless args.empty?
       @params
     end
     alias_method :param, :params
     
     def response(*args, &definition)
-      args << 200 if args.empty?
-      args.each do |status|
-        @response_handler[status] = definition
+      if definition.nil?
+        @response_handler
+      else
+        args << 200 if args.empty?
+        args.each do |status|
+          @response_handler[status] = definition
+        end
       end
     end
     

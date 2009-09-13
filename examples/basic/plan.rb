@@ -5,34 +5,35 @@ usecase 60, "Simple search" do
   #httpauth :stella, :stella
   
   get "/", "Homepage" do
-    wait 1
+    #wait 1
   end
   
   get "/search", "Search Results" do
-    wait 3
-    param :what  => 'food'
-    param :where => 'vancouver'
+    #wait 3
+    param :what  => 'Big'
+    param :where => ''
     response 200 do
-      #headers
-      #body
-      #html
+      headers['Content-Type']
+      listing = doc.css('div.listing').first
+      @lid = listing['id'].match(/(\d+)/)[0]
     end
   end
   
-  get "/listing/:lid.yaml" do
+  get "/listing/:lid" do
     desc "Selected listing"
-    wait 3
+    #wait 3
+    response 200 do
+      p [:lid2, @lid]
+    end
   end
         
 end
 
 usecase 40, "Direct to listing" do
-  
-  get "/listing/:lid" do
+  get "/listing/:lid.yaml" do
     #param :lid => random[:lid]
     param :lid => "1999"
     desc "Select listing"
-    wait 5
   end
 end
 

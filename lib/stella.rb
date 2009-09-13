@@ -2,6 +2,7 @@ require 'gibbler'
 require 'gibbler/aliases'
 require 'storable'
 require 'sysinfo'
+require 'ostruct'
 
 unless defined?(STELLA_LIB_HOME)
   STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__)

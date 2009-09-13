@@ -6,16 +6,20 @@ module Stella::Engine
     
     def run(plan, opts={})
       opts = {
+        :hosts        => [],
         :duration     => nil,
         :repetitions  => 1
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.ld "PLANHASH: #{plan.digest}"
+      Stella.li2 "Hosts: " << opts[:hosts].join(', ')
       Stella.li2 plan.pretty
       plan.check!  # raise errors
       
-      client = Stella::Client.new
-      client.execute plan
+      client = Stella::Client.new opts[:hosts].first
+      plan.usecases.each do |uc|
+        client.execute uc
+      end
     end
     
   end
