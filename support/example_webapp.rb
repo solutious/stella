@@ -33,7 +33,7 @@ get '/' do
 end
 
 
-get '/search' do
+get '/search/?' do
   redirect '/' if blank?(params[:what]) && blank?(params[:where])
   params[:what] ||= ''
   params[:where] ||= ''
@@ -62,7 +62,7 @@ post '/listing/add' do
     erb :add_form
   else
     @listings = options.listings
-    if filter_name(params[:name], @listings).empty?
+    if find_name(params[:name], @listings).empty?
       @listings.shift if @listings.size >= options.max_listings
       @listings << { :name => params[:name], :id => rand(10000), :city => params[:city] }
       redirect '/listings'
@@ -104,6 +104,16 @@ set :listings => [
   { :id => 1007, :name => 'High-End Keyboard Makers', :city => 'Montreal' }
 ]
 
+before do
+  @cookie = request.cookies["bff-history"]
+  @cookie = blank?(@cookie) ? {} : YAML.load(@cookie)
+  @cookie[:history] ||= []
+  @cookie[:history].delete params[:what]
+  @cookie[:history].unshift params[:what] unless blank?(params[:what])
+  @cookie[:history].pop if @cookie[:history].size > 5
+  @cookie[:location] = params[:where] unless blank?(params[:where])
+  response.set_cookie "bff-history", :path => '/', :value => @cookie.to_yaml
+end
 
 helpers do
   
@@ -117,6 +127,10 @@ helpers do
   
   def filter_name(name, listings)
     listings.select { |l| l[:name].match(/#{name}/i) }
+  end
+  
+  def find_name(name, listings)
+    listings.select { |l| l[:name] == name }
   end
   
   def filter_city(city, listings)
@@ -146,6 +160,9 @@ __END__
 <html>
 <head>
 <title><%= @title %></title>
+<style>
+.hilite { background-color: #FEE00B; font-weight: bold; }
+</style>
 </head>
 <body>
 <h1>Business Finder</h1>
@@ -176,10 +193,18 @@ City: <input name="city" value="<%= city %>" /><br/>
 
 @@search_form
 <form action="/search">
-What: <input name="what" /><br/>
-Where: <input name="where" /><br/>
+What: <input name="what" value="" /><br/>
+Where: <input name="where" value="<%= @cookie[:location] %>" /><br/>
 <input type="submit" />
 </form>
+<ul id="history">
+  <% unless @cookie[:history].empty? %>
+  <h3>Previous Searches</h3>
+  <% end %>
+  <% for what in @cookie[:history] %>
+  <li><em><a href="/search/?what=<%= what %>&amp;where=<%= @cookie[:location] %>"><%= what %></a></em></li>
+  <% end %>
+</ul>
 
 @@search_results
 Looking 
@@ -189,7 +214,10 @@ for "<b><%= params[:what] %></b>"
 <% if !blank?(params[:where]) %>
 in "<b><%= params[:where] %></b>"
 <% end %>
+<br/><br/> 
 <% for l in @listings %>
+  <% name = l[:name].gsub(/(#{params[:what]})/i, "<span class='hilite'>\\1</span>") %>
+  <% city = l[:city].gsub(/(#{params[:where]})/i, "<span class='hilite'>\\1</span>") %>
   <%= format_listing(l[:id], name, city) %>
 <% end %>
 
