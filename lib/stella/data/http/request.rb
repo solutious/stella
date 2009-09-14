@@ -118,9 +118,7 @@ module Stella::Data::HTTP
       Proc.new do
         value = case input.class.to_s
         when "Symbol"
-          values = resource input
-          Stella.ld "RANDVALUES: #{input} #{value.inspect}"
-          values
+          resource(input)
         when "Array"
           input
         when "Range"
@@ -130,7 +128,30 @@ module Stella::Data::HTTP
         when "NilClass"
           Stella::Utils.strand( rand(100) )
         end
+        Stella.ld "RANDVALUES: #{input} #{value.inspect}"
         value = value[ rand(value.size) ] if value.is_a?(Array)
+        Stella.ld "SELECTED: #{value}"
+        value
+      end
+    end
+    
+    def sequential(input=nil)
+      digest = input.gibbler
+      Proc.new do
+        @sequential_offset ||= {}
+        @sequential_offset[digest] ||= 0
+        value = case input.class.to_s
+        when "Symbol"
+          ret = resource(input)
+          ret
+        when "Array"
+          input
+        when "Range"
+          input.to_a
+        end
+        Stella.ld "SEQVALUES: #{input} #{value.inspect}"
+        value = value[ @sequential_offset[digest] ] if value.is_a?(Array)
+        @sequential_offset[digest] += 1
         Stella.ld "SELECTED: #{value}"
         value
       end

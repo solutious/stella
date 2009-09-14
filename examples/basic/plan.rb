@@ -30,26 +30,38 @@ usecase "Simple search" do
     desc "Add a business"
     param :name => random(8)
     param :city => "Vancouver"
-    response 200 do
-      puts body
+    response 302 do
+      repeat 25
     end
   end
 end
 
 usecase "Direct to listing" do
-  resource :listing_ids, list('listing_ids.csv')
-  get '/' do
+  resource :preset_listing_ids, list('listing_ids.csv')
+  
+  get "/listing/:lid.yaml" do
+    desc "Select listing"
+    param :lid => random(:preset_listing_ids)
     response 200 do
-      set :extras, [1112,1111,1113]
+      repeat 100
+    end
+  end
+  
+  get '/listings' do
+    response 200 do
+      listings = doc.css('div.listing').to_a
+      listings.collect! { |l|; l['id'].match(/(\d+)/)[0]; }
+      set :current_listing_ids, listings
     end
   end
   
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => random(:extras)
+    param :lid => sequential(:current_listing_ids)
     response 200 do
-      sleep 0.1 and repeat 4
+      repeat 100
     end
   end
+  
 end
 

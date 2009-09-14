@@ -38,7 +38,7 @@ module Stella
         if ret.kind_of?(ResponseModifier)
           case ret.class.to_s
           when "Stella::Client::Repeat"
-            Stella.ld "REPETITION: #{counter} of #{ret.times}"
+            Stella.ld "REPETITION: #{counter} of #{ret.times+1}"
             redo if counter <= ret.times
           end
         end
@@ -112,7 +112,7 @@ module Stella
       #Stella.ld "PARAMS: #{params.inspect}"
       #Stella.ld "IVARS: #{container.instance_variables}"
       value = params[name.to_sym] 
-      value = container.get name.to_sym if value.nil?
+      value = container.resource name.to_sym if value.nil?
       value
     end 
     
@@ -159,7 +159,7 @@ module Stella
         alias_method :header, :headers
       def status; @response.status; end
       def set(n, v); usecase.resource n, v; end
-      def get(n);    usecase.resource n;    end
+      def resource(n);    usecase.resource n;    end
       def wait(t); sleep t; end
       
       def repeat(t); Repeat.new(t); end

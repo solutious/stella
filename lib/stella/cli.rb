@@ -7,6 +7,33 @@ class Stella::CLI < Drydock::Command
   end
   
   def verify_valid?
+    create_testplan
+  end
+  
+  def verify
+    opts = {}
+    opts[:hosts] = @hosts
+    opts[:benchmark] = true if @option.benchmark
+    Stella::Engine::Functional.run @testplan, opts
+  end
+  
+  
+  def load
+    
+  end
+  
+  def preview_valid?
+    create_testplan
+  end
+  
+  def preview
+    Stella.li2 "file: #{@option.testplan} (#{@testplan.digest})"
+    Stella.li @testplan.pretty
+  end
+
+
+  private
+  def create_testplan
     @hosts = @argv.collect { |uri|; URI.parse uri; }
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
@@ -25,22 +52,6 @@ class Stella::CLI < Drydock::Command
     true
   end
   
-  def verify
-    opts = {}
-    opts[:hosts] = @hosts
-    opts[:benchmark] = true if @option.benchmark
-    Stella::Engine::Functional.run @testplan, opts
-  end
   
-  
-  def load
-    
-  end
-  
-  alias_method :preview_valid?, :verify_valid?
-  def preview
-    Stella.li2 "file: #{@option.testplan} (#{@testplan.digest})"
-    Stella.li @testplan.pretty
-  end
   
 end
