@@ -23,8 +23,9 @@ module Stella::Engine
       Stella.li2 ' ' << " %-57s %6s ".att(:reverse) % [req.desc, '']
     end
     
-    def update_receive_response(uri, req, params, container)
+    def update_receive_response(meth, uri, req, params, container)
       Stella.li '  %-60s %3d' % [uri, container.status]
+      Stella.li2 "  Method: " << req.http_method
       Stella.li2 "  Params: " << params.inspect
       Stella.li3 $/, "  Headers:"
       container.headers.all.each do |pair|
@@ -36,6 +37,10 @@ module Stella::Engine
     end
     
     def update_execute_response_handler(req, container)
+    end
+    
+    def update_error_execute_response_handler(ex, req, container)
+      Stella.le ex.message
     end
     
   end

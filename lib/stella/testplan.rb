@@ -23,16 +23,31 @@ class Testplan
   end
   
   def check!
+    # Adjust ratios if necessary
+    needy = @usecases.select do |u| 
+      u.ratio < 0 
+    end
+    needy.each do |u|
+      u.ratio = (remaining_ratio / needy.size).to_i
+    end
     raise WackyRatio, @testplan_current_ratio if @testplan_current_ratio > 100 
   end
   
+  def remaining_ratio
+    100 - @testplan_current_ratio
+  end
+  private :remaining_ratio
+  
   def usecase(*args, &blk)
     return @usecases if args.empty?
+    ration, name = nil,nil
+    ratio, name = args[0], args[1] if args[0].is_a?(Fixnum)
+    ratio, name = args[1], args[0] if args[0].is_a?(String)
     uc = Stella::Testplan::Usecase.new
     uc.base_path = @base_path
     uc.instance_eval &blk
-    uc.ratio, uc.desc = (args[0] || 100).to_i, args[1]
-    @testplan_current_ratio += uc.ratio
+    uc.ratio, uc.desc = (ratio || -1).to_i, name
+    @testplan_current_ratio += uc.ratio if uc.ratio > 0
     add_usecase uc
   end
   def xusecase(*args, &blk); Stella.ld "Skipping usecase"; end

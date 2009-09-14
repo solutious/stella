@@ -1,6 +1,6 @@
 desc "The Basic Testplan"
 
-xusecase nil, "Simple search" do
+usecase "Simple search" do
   #userpool :anonymous
   #httpauth :stella, :stella
   
@@ -38,13 +38,13 @@ xusecase nil, "Simple search" do
   end
 end
 
-usecase 40, "Direct to listing" do
+usecase "Direct to listing" do
   resource :listing_ids, list('listing_ids.csv')
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => random(1000..1007)
+    param :lid => random(:listing_ids)
     response 200 do
-      :repeat
+      sleep 1 and repeat 4
     end
   end
 end

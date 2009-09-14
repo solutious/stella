@@ -41,7 +41,7 @@ module Stella
   def li4(*msg); li *msg if @@loglev >= 4 end
   
   # Puts +msg+ to +@@logger+ with "ERROR: " prepended
-  def le(*msg); @@logger.puts "  " << msg.join("#{$/}  "); end
+  def le(*msg); @@logger.puts "  " << msg.join("#{$/}  ").color(:red); end
   # Puts +msg+ to +@@logger+ if +Rudy.debug?+ returns true
   def ld(*msg)
     @@logger.puts "D:  " << msg.join("#{$/}D:  ") if debug?

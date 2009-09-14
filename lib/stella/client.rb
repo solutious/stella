@@ -18,6 +18,7 @@ module Stella
     def execute(usecase)
       http_client = generate_http_client
       container = Container.new
+      counter = 0
       usecase.requests.each do |req|
         params = prepare_params(usecase, req.params)
         uri = build_request_uri req.uri, params, container
@@ -28,9 +29,20 @@ module Stella
         
         changed and notify_observers(:send_request, meth, uri, req, params)
         container.response = http_client.send(meth, uri, params) # booya!
-        changed and notify_observers(:receive_response, uri, req, params, container)
+        changed and notify_observers(:receive_response, meth, uri, req, params, container)
         
-        execute_response_handler container, req
+        counter += 1
+        
+        ret = execute_response_handler container, req
+        
+        if ret.kind_of?(ResponseModifier)
+          case ret.class.to_s
+          when "Stella::Client::Repeat"
+            Stella.ld "REPETITION: #{counter} of #{ret.times}"
+            redo if counter <= ret.times
+          end
+        end
+        
         sleep req.wait if req.wait && !benchmark?
       end
     end
@@ -149,6 +161,17 @@ module Stella
       def status; @response.status; end
       def set(n, v); instance_variable_set "@#{n}", v; end
       def get(n);    instance_variable_get "@#{n}";    end
+      def wait(t); sleep t; end
+      
+      def repeat(t); Repeat.new(t); end
+    end
+    
+    class ResponseModifier; end
+    class Repeat < ResponseModifier; 
+      attr_accessor :times
+      def initialize(times)
+        @times = times
+      end
     end
   end
 end
