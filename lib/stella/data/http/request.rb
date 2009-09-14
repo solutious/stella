@@ -54,6 +54,7 @@ module Stella::Data::HTTP
       @wait = args.first unless args.empty?
       @wait
     end
+    alias_method :sleep, :wait
     
     def headers(*args)
       @headers.merge! args.first unless args.empty?
