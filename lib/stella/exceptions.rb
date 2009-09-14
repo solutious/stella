@@ -9,4 +9,7 @@ module Stella
   class InvalidOption < Stella::Error
   end
   
+  class NoHostDefined < Stella::Error
+  end
+  
 end

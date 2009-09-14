@@ -4,26 +4,26 @@ usecase 60, "Simple search" do
   #userpool :anonymous
   #httpauth :stella, :stella
   
-  get "/", "Homepage" do
-    #wait 1
+  get "http://localhost:4000/", "Homepage" do
+    wait 1
   end
   
-  get "/search", "Search Results" do
-    #wait 3
+  get "search", "Search Results" do
+    wait 3
     param :what  => 'Big'
     param :where => ''
     response 200 do
       headers['Content-Type']
       listing = doc.css('div.listing').first
-      @lid = listing['id'].match(/(\d+)/)[0]
+      set :lid, listing['id'].match(/(\d+)/)[0]
     end
   end
   
-  get "/listing/:lid" do
+  get "/listing/:lid?lid=:lid" do
     desc "Selected listing"
-    #wait 3
+    wait 3
     response 200 do
-      p [:lid2, @lid]
+      p status
     end
   end
         

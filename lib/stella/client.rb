@@ -10,62 +10,21 @@ module Stella
     attr_accessor :base_uri
     attr_accessor :proxy
     
-    class Container
-      attr_accessor :response
-      def doc
-        if @response.header['Content-Type'] == ['text/html']
-          Nokogiri::HTML(body.content)
-        end
-      end
-
-      def body; @response.body; end
-      def headers; @response.header; end
-      alias_method :header, :headers
-      def status; @response.status; end
-      
-      
-    end
-    
     def initialize(base_uri=nil, client_id=1)
       @base_uri, @client_id = base_uri, client_id
       @cookie_file = Tempfile.new('stella-cookie')
-    end
-    
-    def find_replacement_value(name, container, params)
-      value = nil
-      Stella.ld "REPLACE: #{name}"
-      Stella.ld "IVARS: #{container.instance_variables}"
-      Stella.ld "PARAMS: #{params.inspect}"
-      container.instance_variables.each { |var|
-        if var.to_s == "@#{name}"
-          value = container.instance_variable_get("@#{name}") 
-          break
-        end
-      }
-      value = params[name.to_sym] if value.nil?
-      value
     end
     
     def execute(usecase)
       http_client = generate_http_client
       container = Container.new
       usecase.requests.each do |req|
-        uri = base_uri.to_s
-        uri.gsub! /\/$/, '';
-        request_uri = req.uri.to_s
-        
-        # TODO: Use scan instead
-        if a = request_uri.match(/:([a-z_]+)/i)
-          val = find_replacement_value(a[1], container, req.params)
-          unless val.nil?
-            Stella.ld "FOUND: #{val}"
-            request_uri.gsub! /:#{a[1]}/, val
-          end
-        end
-        
-        uri << request_uri
+        uri = build_request_uri req, container
+        raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         meth = req.http_method.to_s.downcase
-        Stella.ld "#{meth}: " << "#{uri} " << req.params.inspect
+        Stella.li " #{req.desc} ".att(:reverse)
+        Stella.li " #{uri}"
+        Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
         container.response = http_client.send(meth, uri, req.params)
         
         if req.response.has_key? container.status
@@ -92,5 +51,72 @@ module Stella
       http_client
     end
     
+    # Testplan URIs can be relative or absolute. Either one can
+    # contain variables in the form <tt>:varname</tt>, as in:
+    #
+    #     http://example.com/product/:productid
+    # 
+    # This method creates a new URI object using the @base_uri
+    # if necessary and replaces all variables with literal values.
+    # If no replacement value can be found, the variable is not touched. 
+    def build_request_uri(req, container)
+      uri = ""
+      request_uri = req.uri.to_s
+      if req.uri.host.nil?
+        uri = base_uri.to_s
+        uri.gsub! /\/$/, ''  # Don't double up on the first slash
+        request_uri = '/' << request_uri unless request_uri.match(/^\//)
+      end
+      # We call req.uri again because we need  
+      # to modify request_uri inside the loop. 
+      req.uri.to_s.scan(/:([a-z_]+)/i) do |instances|
+        instances.each do |varname|
+          val = find_replacement_value(varname, req.params, container)
+          Stella.ld "FOUND: #{val}"
+          request_uri.gsub! /:#{varname}/, val unless val.nil?
+        end
+      end
+      uri << request_uri
+
+      URI.parse uri
+    end
+    
+    # Testplan URIs can contain variables in the form <tt>:varname</tt>. 
+    # This method looks at the request parameters and then at the 
+    # instance variables inside the test container for a replacement
+    # value. If not found, returns nil. 
+    def find_replacement_value(name, params, container)
+      value = nil
+      Stella.ld "REPLACE: #{name}"
+      Stella.ld "PARAMS: #{params.inspect}"
+      Stella.ld "IVARS: #{container.instance_variables}"
+      value = params[name.to_sym] 
+      if value.nil?
+        container.instance_variables.each { |var|
+          if var.to_s == "@#{name}"
+            value = container.instance_variable_get("@#{name}") 
+            break
+          end
+        }
+      end
+      value
+    end 
+    
+    class Container
+      attr_accessor :response
+      def doc
+        case @response.header['Content-Type']
+        when ['text/html']
+          Nokogiri::HTML(body)
+        end
+      end
+
+      def body; @response.body.content; end
+      def headers; @response.header; end
+        alias_method :header, :headers
+      def status; @response.status; end
+      def set(n, v); instance_variable_set "@#{n}", v; end
+      def get(n);    instance_variable_get "@#{n}";    end
+    end
   end
 end
