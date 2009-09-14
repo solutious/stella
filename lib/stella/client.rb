@@ -82,7 +82,7 @@ module Stella
         instances.each do |varname|
           val = find_replacement_value(varname, params, container)
           #Stella.ld "FOUND: #{val}"
-          request_uri.gsub! /:#{varname}/, val unless val.nil?
+          request_uri.gsub! /:#{varname}/, val.to_s unless val.nil?
         end
       end
       uri << request_uri

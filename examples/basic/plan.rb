@@ -39,10 +39,10 @@ usecase 60, "Simple search" do
 end
 
 usecase 40, "Direct to listing" do
-  resource :lid, list('listing_ids.csv')
+  resource :listing_ids, list('listing_ids.csv')
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => random(:lid)
+    param :lid => random(1000..1007)
   end
 end
 

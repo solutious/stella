@@ -113,10 +113,21 @@ module Stella::Data::HTTP
       header[:Cookie] 
     end
     
-    def random(name)
+    def random(input=nil)
+      
       Proc.new do
-        value = resource name
-        Stella.ld "RANDVALUES: #{name} #{value.inspect}"
+        value = case input.class.to_s
+        when "Symbol"
+          values = resource input
+          Stella.ld "RANDVALUES: #{input} #{value.inspect}"
+          values
+        when "Array"
+          input
+        when "Range"
+          input.to_a
+        when "NilClass"
+          Stella::Utils.strand( rand(100) )
+        end
         value = value[ rand(value.size) ] if value.is_a?(Array)
         Stella.ld "SELECTED: #{value}"
         value

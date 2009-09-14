@@ -8,7 +8,6 @@ class Stella::CLI < Drydock::Command
   
   def verify_valid?
     @hosts = @argv.collect { |uri|; URI.parse uri; }
-    
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
     else

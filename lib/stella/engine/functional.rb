@@ -12,16 +12,16 @@ module Stella::Engine
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.ld "PLANHASH: #{plan.digest}"
-      Stella.li2 "Hosts: " << opts[:hosts].join(', ')
-      Stella.li2 plan.pretty
+      Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
+      #Stella.li2 plan.pretty
       plan.check!  # raise errors
       
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)
       client.enable_benchmark_mode if opts[:benchmark]
       
-      plan.usecases.each do |uc|
-        puts ' %-65s '.att(:reverse).bright % uc.desc
+      plan.usecases.each_with_index do |uc,i|
+        puts ' %-65s '.att(:reverse).bright % (uc.desc || "Usecase ##{i+1}")
         Stella.rescue { client.execute uc }
       end
     end
