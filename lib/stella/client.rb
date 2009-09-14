@@ -42,6 +42,8 @@ module Stella
         
         ret = execute_response_handler container, req
         
+        Drydock::Screen.flush
+        
         if ret.kind_of?(ResponseModifier)
           case ret.class.to_s
           when "Stella::Client::Repeat"
@@ -50,10 +52,8 @@ module Stella
           end
         end
         
-        Drydock::Screen.flush
-        
-        counter = 0
-        sleep req.wait if req.wait && !benchmark?
+        counter = 0 # reset
+        run_sleeper(req.wait) if req.wait && !benchmark?
       end
     end
     
@@ -62,6 +62,11 @@ module Stella
     def benchmark?; @bm == true; end
       
   private
+    def run_sleeper(wait)
+      ms = wait.is_a?(Range) ? rand(wait.last * 1000).to_f : wait * 1000
+      sleep ms / 1000
+    end
+    
     def generate_http_client
       if @proxy
         http_client = HTTPClient.new(@proxy.uri)

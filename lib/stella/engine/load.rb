@@ -12,28 +12,35 @@ module Stella::Engine
         :benchmark    => false,
         :repetitions  => 1
       }.merge! opts
+      opts[:users] = plan.usecases.size if opts[:users] < plan.usecases.size
+      
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ')
       
-      thread_package = build_thread_package plan, opts
-      
-      Thread.ify thread_package, :threads => opts[:users] do |package|
-        index, client, usecase = *package
-        
+      packages = build_thread_package plan, opts
+      Thread.ify packages, :threads => opts[:users] do |package|
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
-          Stella.rescue { client.execute usecase }
+          Stella.rescue { package.client.execute package.usecase }
           Drydock::Screen.flush
         end
-      
       end
       
     end
     
   protected
+    class ThreadPackage
+      attr_accessor :index
+      attr_accessor :client
+      attr_accessor :usecase
+      def initialize(i, c, u)
+        @index, @client, @usecase = i, c, u
+      end
+    end
+  
     def build_thread_package(plan, opts)
-      thread_package, pointer = Array.new(opts[:users]), 0
+      packages, pointer = Array.new(opts[:users]), 0
       plan.usecases.each_with_index do |usecase,i|
         
         count = case opts[:users]
@@ -49,16 +56,16 @@ module Stella::Engine
         
         Stella.ld "THREAD PACKAGE: #{usecase.desc} #{pointer} #{(pointer+count)} #{count}"
         # Fill the thread_package with the contents of the block
-        thread_package.fill(pointer, count) do |index|
+        packages.fill(pointer, count) do |index|
           Stella.li2 "Creating client ##{index+1}"
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
           client.enable_benchmark_mode if opts[:benchmark]
-          [[index+1, client, usecase.clone]]  # Why does fill need a nested Array
+          ThreadPackage.new(index+1, client, usecase.clone)
         end
         pointer += count
       end
-      thread_package
+      packages
     end
     
     def update_send_request(client_id, usecase, meth, uri, req, params, counter)
@@ -66,8 +73,8 @@ module Stella::Engine
     end
     
     def update_receive_response(client_id, usecase, meth, uri, req, params, container)
-      desc = "#{usecase.desc}:#{req.desc}"
-      Stella.li 'Client%-3s %3d %-6s %-45s  %s' % [client_id, container.status, req.http_method, uri, desc]
+      desc = "#{usecase.desc} > #{req.desc}"
+      Stella.li '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -77,9 +84,10 @@ module Stella::Engine
     end
     
     def update_request_error(client_id, usecase, meth, uri, req, params, ex)
-      desc = "#{usecase.desc}:#{req.desc}"
-      Stella.le 'Client%-3s %-45s  %s' % [client_id, ex.message, desc]
+      desc = "#{usecase.desc} > #{req.desc}"
+      Stella.le '  Client%-3s %-45s %s' % [client_id, desc, ex.message]
     end
+
     
   end
 end

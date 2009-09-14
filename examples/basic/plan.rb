@@ -1,11 +1,11 @@
-# db70f0e9b31d68c5eda23cc588fe87979c17dbe9
+# 1f5e852e934debd56aa98552c0a9227c93006f21
 
-desc "The Basic Testplan"
+desc "Business Finder Testplan"
 
 usecase 70, "Simple search" do
   
   get "/", "Homepage" do
-    wait 1
+    wait 1..3
   end
   
   get "/search", "Search Results" do
