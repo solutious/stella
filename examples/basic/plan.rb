@@ -38,11 +38,17 @@ end
 
 usecase "Direct to listing" do
   resource :listing_ids, list('listing_ids.csv')
+  get '/' do
+    response 200 do
+      set :extras, [1112,1111,1113]
+    end
+  end
+  
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => random(:listing_ids)
+    param :lid => random(:extras)
     response 200 do
-      sleep 1 and repeat 4
+      sleep 0.1 and repeat 4
     end
   end
 end

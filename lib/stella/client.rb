@@ -17,9 +17,11 @@ module Stella
     
     def execute(usecase)
       http_client = generate_http_client
-      container = Container.new
+      container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|
+        counter += 1
+        
         params = prepare_params(usecase, req.params)
         uri = build_request_uri req.uri, params, container
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
@@ -27,11 +29,9 @@ module Stella
         meth = req.http_method.to_s.downcase
         Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
         
-        changed and notify_observers(:send_request, meth, uri, req, params)
+        changed and notify_observers(:send_request, meth, uri, req, params, counter)
         container.response = http_client.send(meth, uri, params) # booya!
         changed and notify_observers(:receive_response, meth, uri, req, params, container)
-        
-        counter += 1
         
         ret = execute_response_handler container, req
         
@@ -43,6 +43,7 @@ module Stella
           end
         end
         
+        counter = 0
         sleep req.wait if req.wait && !benchmark?
       end
     end
@@ -103,22 +104,15 @@ module Stella
     
     # Testplan URIs can contain variables in the form <tt>:varname</tt>. 
     # This method looks at the request parameters and then at the 
-    # instance variables inside the test container for a replacement
-    # value. If not found, returns nil. 
+    # usecase's resource hash for a replacement value. 
+    # If not found, returns nil. 
     def find_replacement_value(name, params, container)
       value = nil
       #Stella.ld "REPLACE: #{name}"
       #Stella.ld "PARAMS: #{params.inspect}"
       #Stella.ld "IVARS: #{container.instance_variables}"
       value = params[name.to_sym] 
-      if value.nil?
-        container.instance_variables.each { |var|
-          if var.to_s == "@#{name}"
-            value = container.instance_variable_get("@#{name}") 
-            break
-          end
-        }
-      end
+      value = container.get name.to_sym if value.nil?
       value
     end 
     
@@ -146,7 +140,12 @@ module Stella
     end
     
     class Container
+      attr_accessor :usecase
       attr_accessor :response
+      def initialize(usecase)
+        @usecase = usecase
+      end
+      
       def doc
         @container_doc and return @container_doc
         @container_doc = case @response.header['Content-Type']
@@ -159,8 +158,8 @@ module Stella
       def headers; @response.header; end
         alias_method :header, :headers
       def status; @response.status; end
-      def set(n, v); instance_variable_set "@#{n}", v; end
-      def get(n);    instance_variable_get "@#{n}";    end
+      def set(n, v); usecase.resource n, v; end
+      def get(n);    usecase.resource n;    end
       def wait(t); sleep t; end
       
       def repeat(t); Repeat.new(t); end
