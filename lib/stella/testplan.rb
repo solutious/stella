@@ -31,9 +31,9 @@ class Testplan
   
   def check!
     # Adjust ratios if necessary
-    needy = @usecases.select { |u| u.ratio < 0 }
+    needy = @usecases.select { |u| u.ratio == -1 }
     needy.each do |u|
-      u.ratio = (remaining_ratio / needy.size).to_i
+      u.ratio = (remaining_ratio / needy.size).to_f
     end
     # Give usecases a name if necessary
     @usecases.each_with_index { |uc,i| uc.desc ||= "Usecase ##{i+1}" }
@@ -46,13 +46,13 @@ class Testplan
     
   def usecase(*args, &blk)
     return @usecases if args.empty?
-    ration, name = nil,nil
-    ratio, name = args[0], args[1] if args[0].is_a?(Fixnum)
+    ratio, name = nil,nil
+    ratio, name = args[0], args[1] if args[0].is_a?(Numeric)
     ratio, name = args[1], args[0] if args[0].is_a?(String)
     uc = Stella::Testplan::Usecase.new
     uc.base_path = @base_path
     uc.instance_eval &blk
-    uc.ratio, uc.desc = (ratio || -1).to_i, name
+    uc.ratio, uc.desc = (ratio || -1).to_f, name
     @testplan_current_ratio += uc.ratio if uc.ratio > 0
     add_usecase uc
   end
@@ -87,7 +87,7 @@ class Testplan
   
   private
   def remaining_ratio
-    100 - @testplan_current_ratio
+    1.0 - @testplan_current_ratio
   end
   
 end

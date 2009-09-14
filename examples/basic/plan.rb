@@ -2,17 +2,18 @@
 
 desc "Business Finder Testplan"
 
-usecase 70, "Simple search" do
+usecase 65, "Simple search" do
   
   get "/", "Homepage" do
-    wait 1..3
+    wait 1..5
   end
   
   get "/search", "Search Results" do
-    wait 3
+    wait 2..5
     param :what  => 'Big'
     param :where => ''
     response 200 do
+      # doc contains the parsed HTML document
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
     end
@@ -20,7 +21,7 @@ usecase 70, "Simple search" do
   
   get "/listing/:lid" do
     desc "Selected listing"
-    wait 3
+    wait 1..8
     response 200 do
       #status 
       #headers['Content-Type']
@@ -28,38 +29,28 @@ usecase 70, "Simple search" do
     end
   end
   
-  post "/listing/add" do
-    desc "Add a business"
-    param :name => random(8)
-    param :city => "Vancouver"
-    response 302 do
-      repeat 3
-    end
-  end
 end
 
-usecase 30, "Direct to listing" do
+usecase "YAML API" do
   resource :preset_listing_ids, list('listing_ids.csv')
   
-  get "/listing/:lid.yaml" do
-    desc "Select listing"
+  get "/listing/:lid.yaml", "Select listing" do
     param :lid => random(:preset_listing_ids)
     response 200 do
       repeat 5
     end
   end
   
-  get '/listings' do
+  get '/listings.yaml', "View All" do
     response 200 do
-      listings = doc.css('div.listing').to_a
-      listings.collect! { |l|; l['id'].match(/(\d+)/)[0]; }
+      # doc contains the parsed YAML object
+      listings = doc.collect! { |l|; l[:id]; }
       set :current_listing_ids, listings
     end
   end
   
-  get "/listing/:lid.yaml" do
-    desc "Select listing"
-    param :lid => sequential(:current_listing_ids)
+  get "/listing/:lid.yaml", "Select listing" do
+    param :lid => rsequential(:current_listing_ids)
     response 200 do
       repeat 7
     end
@@ -67,3 +58,14 @@ usecase 30, "Direct to listing" do
   
 end
 
+usecase 5, "Self-serve" do
+  post "/listing/add" do
+    desc "Add a business"
+    wait 1..4 
+    param :name => random(8)
+    param :city => "Vancouver"
+    response 302 do
+      repeat 3
+    end
+  end
+end

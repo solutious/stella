@@ -75,7 +75,7 @@ post '/listing/add' do
 end
 
 get '/listing/:id.yaml' do 
-  content_type "text/plain"
+  content_type "text/yaml"
   listing = filter_id params[:id], options.listings
   listing.to_yaml
 end
@@ -91,6 +91,13 @@ get '/listings' do
   @listings = options.listings
   @title = "Business Listings"
   erb :listings
+end
+
+get '/listings.yaml' do
+  content_type "text/yaml"
+  @listings = options.listings
+  @title = "Business Listings"
+  @listings.to_yaml
 end
 
 set :listings => [

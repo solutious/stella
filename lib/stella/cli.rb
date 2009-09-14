@@ -56,8 +56,8 @@ class Stella::CLI < Drydock::Command
       end
       @testplan.add_usecase usecase
     end
+    @testplan.check!  # raise errors, update usecase ratios
     Stella.ld "PLANHASH: #{@testplan.digest}"
-    @testplan.check!  # raise errors
     true
   end
   

@@ -63,7 +63,12 @@ module Stella
       
   private
     def run_sleeper(wait)
-      ms = wait.is_a?(Range) ? rand(wait.last * 1000).to_f : wait * 1000
+      if wait.is_a?(Range)
+        ms = rand(wait.last * 1000).to_f 
+        ms = wait.first if ms < wait.first
+      else
+        ms = wait * 1000
+      end
       sleep ms / 1000
     end
     
@@ -165,6 +170,8 @@ module Stella
         @container_doc = case @response.header['Content-Type']
         when ['text/html']
           Nokogiri::HTML(body)
+        when ['text/yaml']
+          YAML.load(body)
         end
       end
 

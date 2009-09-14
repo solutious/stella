@@ -27,7 +27,9 @@ class Testplan
     end
     
     def ratio
-      (@ratio || 0).to_f / 100
+      r = (@ratio || 0).to_f
+      r = r/100 if r > 1 
+      r
     end
     
     # Reads the contents of the file <tt>path</tt> (the current working
