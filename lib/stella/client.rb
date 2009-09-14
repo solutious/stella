@@ -19,14 +19,15 @@ module Stella
       http_client = generate_http_client
       container = Container.new
       usecase.requests.each do |req|
-        uri = build_request_uri req, container
+        params = prepare_params(usecase, req.params)
+        uri = build_request_uri req.uri, params, container
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
         
         changed and notify_observers(:send_request, meth, uri, req)
-        container.response = http_client.send(meth, uri, req.params) # booya!
+        container.response = http_client.send(meth, uri, params) # booya!
         changed and notify_observers(:receive_response, uri, req, container)
         
         execute_response_handler container, req
@@ -50,6 +51,15 @@ module Stella
       http_client
     end
     
+    def prepare_params(usecase, params)
+      newparams = {}
+      params.each_pair do |n,v|
+        v = usecase.instance_eval &v if v.is_a?(Proc)
+        newparams[n] = v
+      end
+      newparams
+    end
+    
     # Testplan URIs can be relative or absolute. Either one can
     # contain variables in the form <tt>:varname</tt>, as in:
     #
@@ -58,19 +68,19 @@ module Stella
     # This method creates a new URI object using the @base_uri
     # if necessary and replaces all variables with literal values.
     # If no replacement value can be found, the variable is not touched. 
-    def build_request_uri(req, container)
+    def build_request_uri(requri, params, container)
       uri = ""
-      request_uri = req.uri.to_s
-      if req.uri.host.nil?
+      request_uri = requri.to_s
+      if requri.host.nil?
         uri = base_uri.to_s
         uri.gsub! /\/$/, ''  # Don't double up on the first slash
         request_uri = '/' << request_uri unless request_uri.match(/^\//)
       end
       # We call req.uri again because we need  
       # to modify request_uri inside the loop. 
-      req.uri.to_s.scan(/:([a-z_]+)/i) do |instances|
+      requri.to_s.scan(/:([a-z_]+)/i) do |instances|
         instances.each do |varname|
-          val = find_replacement_value(varname, req.params, container)
+          val = find_replacement_value(varname, params, container)
           #Stella.ld "FOUND: #{val}"
           request_uri.gsub! /:#{varname}/, val unless val.nil?
         end

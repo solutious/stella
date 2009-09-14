@@ -5,6 +5,7 @@ class Testplan
   include Gibbler::Complex
   
   attr_accessor :usecases
+  attr_accessor :base_path
   attr_accessor :desc
   
   def initialize
@@ -15,6 +16,7 @@ class Testplan
   def self.load_file(path)
     conf = File.read path
     plan = Stella::Testplan.new
+    plan.base_path = File.dirname path
     # eval so the DSL code can be executed in this namespace.
     plan.instance_eval conf
     plan
@@ -26,7 +28,9 @@ class Testplan
   
   def usecase(*args, &blk)
     return @usecases if args.empty?
-    uc = Stella::Testplan::Usecase.new(&blk)
+    uc = Stella::Testplan::Usecase.new
+    uc.base_path = @base_path
+    uc.instance_eval &blk
     uc.ratio, uc.desc = (args[0] || 100).to_i, args[1]
     @testplan_current_ratio += uc.ratio
     add_usecase uc
@@ -64,15 +68,33 @@ class Testplan
     attr_accessor :desc
     attr_accessor :requests
     attr_accessor :ratio
+    attr_accessor :resources
+    attr_accessor :base_path
     
     def initialize(&blk)
-      @requests = []
+      @requests, @resources = [], {}
       instance_eval &blk unless blk.nil?
     end
     
     def desc(*args)
       @desc = args.first unless args.empty?
       @desc
+    end
+    
+    def resource(name, value=nil)
+      @resources[name] = value unless value.nil?
+      @resources[name]
+    end
+    
+    # Reads the contents of the file <tt>path</tt> (the current working
+    # directory is assumed to be the same directory containing the test plan).
+    def file(path)
+      path = File.join(@base_path, path) if @base_path
+      File.read(path)
+    end
+    
+    def list(path)
+      file(path).split $/
     end
     
     def add_request(meth, *args, &blk)
@@ -101,6 +123,7 @@ class Testplan
 end
 end
 
+__END__
 # instance_exec for Ruby 1.8 written by Mauricio Fernandez
 # http://eigenclass.org/hiki/instance_exec
 if RUBY_VERSION =~ /1.8/

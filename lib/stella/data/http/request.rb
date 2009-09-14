@@ -113,6 +113,16 @@ module Stella::Data::HTTP
       header[:Cookie] 
     end
     
+    def random(name)
+      Proc.new do
+        value = resource name
+        Stella.ld "RANDVALUES: #{name} #{value.inspect}"
+        value = value[ rand(value.size) ] if value.is_a?(Array)
+        Stella.ld "SELECTED: #{value}"
+        value
+      end
+    end
+    
   end
   
 end
