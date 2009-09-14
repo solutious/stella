@@ -24,10 +24,11 @@ module Stella
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
-        changed and notify_observers(:execute_uri, meth, uri, req)
         
-        # send the request
-        container.response = http_client.send(meth, uri, req.params)
+        changed and notify_observers(:send_request, meth, uri, req)
+        container.response = http_client.send(meth, uri, req.params) # booya!
+        changed and notify_observers(:receive_response, uri, req, container)
+        
         execute_response_handler container, req
         sleep req.wait if req.wait && !benchmark?
       end
@@ -110,10 +111,11 @@ module Stella
       end
       unless handlers.empty?
         begin
-          container.instance_eval &handlers.values.first
-        rescue => ex
           changed
-          notify_observers(:error_response_handler, ex, req, container)
+          container.instance_eval &handlers.values.first
+          notify_observers(:execute_response_handler, req, container)
+        rescue => ex
+          notify_observers(:error_execute_response_handler, ex, req, container)
           Stella.ld ex.message, ex.backtrace
         end
       end

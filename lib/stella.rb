@@ -14,6 +14,7 @@ local_libs.each { |dir| $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, '
 
 
 module Stella
+  extend self
   require 'stella/version'
   require 'stella/exceptions'
   require 'stella/utils'
@@ -33,30 +34,36 @@ module Stella
   @@loglev = 1
   
   # Puts +msg+ to +@@logger+
-  def self.li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
-  def self.li1(*msg); li *msg if @@loglev >= 1 end
-  def self.li2(*msg); li *msg if @@loglev >= 2 end
-  def self.li3(*msg); li *msg if @@loglev >= 3 end
-  def self.li4(*msg); li *msg if @@loglev >= 4 end
+  def li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
+  def li1(*msg); li *msg if @@loglev >= 1 end
+  def li2(*msg); li *msg if @@loglev >= 2 end
+  def li3(*msg); li *msg if @@loglev >= 3 end
+  def li4(*msg); li *msg if @@loglev >= 4 end
   
   # Puts +msg+ to +@@logger+ with "ERROR: " prepended
-  def self.le(*msg); @@logger.puts "  " << msg.join("#{$/}  "); end
+  def le(*msg); @@logger.puts "  " << msg.join("#{$/}  "); end
   # Puts +msg+ to +@@logger+ if +Rudy.debug?+ returns true
-  def self.ld(*msg)
+  def ld(*msg)
     @@logger.puts "D:  " << msg.join("#{$/}D:  ") if debug?
   end
   
-  def self.loglev; @@loglev; end
-  def self.loglev=(val); @@loglev = val; end
-  def self.sysinfo; @@sysinfo; end
+  def loglev; @@loglev; end
+  def loglev=(val); @@loglev = val; end
+  def sysinfo; @@sysinfo; end
   
-  def self.quiet?; @@loglev == 0; end
-  def self.enable_quiet; @@loglev = 0; end
-  def self.disable_quiet; @@loglev = 1; end
+  def quiet?; @@loglev == 0; end
+  def enable_quiet; @@loglev = 0; end
+  def disable_quiet; @@loglev = 1; end
 
-  def self.debug?; @@loglev > 3; end
-  def self.enable_debug; @@loglev = 4; end
-  def self.disable_debug; @@loglev = 1; end
+  def debug?; @@loglev > 3; end
+  def enable_debug; @@loglev = 4; end
+  def disable_debug; @@loglev = 1; end
   
+  def rescue(&blk)
+    blk.call
+  rescue => ex
+    Stella.le "ERROR: #{ex.message}"
+    Stella.ld ex.backtrace
+  end
 end
 

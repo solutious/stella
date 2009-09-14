@@ -87,6 +87,12 @@ class Testplan
     def head(*args, &blk);   add_request :head,   *args, &blk; end
     def delete(*args, &blk); add_request :delete, *args, &blk; end
     
+    def xget(*args, &blk);    Stella.ld "Skipping get" end
+    def xput(*args, &blk);    Stella.ld "Skipping put" end
+    def xpost(*args, &blk);   Stella.ld "Skipping post" end
+    def xhead(*args, &blk);   Stella.ld "Skipping head" end
+    def xdelete(*args, &blk); Stella.ld "Skipping delete" end
+    
   end
   
   class WackyRatio < Stella::Error

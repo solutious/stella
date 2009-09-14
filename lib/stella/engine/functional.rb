@@ -7,7 +7,6 @@ module Stella::Engine
     def run(plan, opts={})
       opts = {
         :hosts        => [],
-        :duration     => nil,
         :benchmark    => false,
         :repetitions  => 1
       }.merge! opts
@@ -20,8 +19,10 @@ module Stella::Engine
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)
       client.enable_benchmark_mode if opts[:benchmark]
+      
       plan.usecases.each do |uc|
-        client.execute uc
+        puts ' %-65s '.att(:reverse).bright % uc.desc
+        Stella.rescue { client.execute uc }
       end
     end
     

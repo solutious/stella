@@ -22,20 +22,28 @@ usecase 60, "Simple search" do
     desc "Selected listing"
     wait 3
     response 200 do
-      d
       #status 
       #headers['Content-Type']
       #body
     end
   end
-        
+  
+  post "/listing/add" do
+    desc "Add a business"
+    param :name => "Heavenly trucks #{rand(1000000)}"
+    param :city => "Vancouver"
+    response 200 do
+      puts body
+    end
+  end
 end
 
 usecase 40, "Direct to listing" do
+  #resource :lid => file('listing_ids.csv')
   get "/listing/:lid.yaml" do
-    #param :lid => random[:lid]
-    param :lid => "1999"
     desc "Select listing"
+    #param :lid => random[:lid]
+    param :lid => "1000"
   end
 end
 

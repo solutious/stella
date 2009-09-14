@@ -11,16 +11,32 @@ module Stella::Engine
       what, *args = args
       Stella.ld "OBSERVER UPDATE: #{what}"
       if !respond_to?("update_#{what}")
-        puts "NO UPDATE HANDLER FOR: #{what}" 
+        Stella.ld "NO UPDATE HANDLER FOR: #{what}" 
       else
-        self.send("update_#{what}", *args) 
+        Stella.rescue {
+          self.send("update_#{what}", *args) 
+        }
       end
     end
     
-    def update_execute_uri(meth, uri, req)
-      Stella.li " #{req.desc} ".att(:reverse)
-      Stella.li " #{uri}"
+    def update_send_request(meth, uri, req)
+      Stella.li2 ' ' << " %-64s ".att(:reverse) % req.desc
     end
+    
+    def update_receive_response(uri, req, container)
+      Stella.li '  %-60s %3d' % [uri, container.status]
+      Stella.li3 $/, "  Headers:"
+      container.headers.all.each do |pair|
+        Stella.li3 "    %s: %s" % pair
+      end
+      Stella.li2 $/, "  Content:"
+      Stella.li2 container.body
+
+    end
+    
+    def update_execute_response_handler(req, container)
+    end
+    
   end
 end
 

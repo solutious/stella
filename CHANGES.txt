@@ -1,23 +1,9 @@
 STELLA, CHANGES
 
-#### TODO
-
-* TODO: prepend instance variables with "stella_"
-* TODO: implement session handling
-* BUG: http://jira.codehaus.org/browse/JRUBY-2992
-* TODO: variable interpolation that happens at test time so instance variables can be grabbed from the calling space. 
-#
-#  get "/product/${token}" do
-#    ## TODO: Override environment settings. 
-#    #protocol :https
-#    response 200 do |headers, body|
-#      data = YAML.load(body)
-#      puts "ID: #{data[:id]}"
-#    end
-#  end
-
 
 #### 0.7.0 (2009-09-05) ###############################
+
+NOTE: Complete rewrite
 
 
 #### 0.6.0 (2009-03-15) ###############################
