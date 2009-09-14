@@ -6,7 +6,6 @@ class Testplan
   include Gibbler::Complex
   
   class WackyRatio < Stella::Error
-    def message; "Usecase ratio cannot be higher than 100 (#{@obj})"; end
   end
 
   
@@ -38,7 +37,11 @@ class Testplan
     end
     # Give usecases a name if necessary
     @usecases.each_with_index { |uc,i| uc.desc ||= "Usecase ##{i+1}" }
-    raise WackyRatio, @testplan_current_ratio if @testplan_current_ratio > 100 
+    if @testplan_current_ratio > 1.0 
+      msg = "Usecase ratio cannot be higher than 1.0"
+      msg << " (#{@testplan_current_ratio})"
+      raise WackyRatio, msg
+    end
   end
     
   def usecase(*args, &blk)

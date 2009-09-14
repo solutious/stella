@@ -33,7 +33,7 @@ module Stella
   
   @@sysinfo = SysInfo.new.freeze
     
-  @@logger = STDERR
+  @@logger = Drydock::Screen
   @@loglev = 1
   
   # Puts +msg+ to +@@logger+

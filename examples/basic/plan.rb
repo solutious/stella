@@ -2,7 +2,7 @@
 
 desc "The Basic Testplan"
 
-usecase "Simple search" do
+usecase 70, "Simple search" do
   
   get "/", "Homepage" do
     wait 1
@@ -28,7 +28,7 @@ usecase "Simple search" do
     end
   end
   
-  xpost "/listing/add" do
+  post "/listing/add" do
     desc "Add a business"
     param :name => random(8)
     param :city => "Vancouver"
@@ -38,7 +38,7 @@ usecase "Simple search" do
   end
 end
 
-usecase "Direct to listing" do
+usecase 30, "Direct to listing" do
   resource :preset_listing_ids, list('listing_ids.csv')
   
   get "/listing/:lid.yaml" do
@@ -59,9 +59,9 @@ usecase "Direct to listing" do
   
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => rsequential(:current_listing_ids)
+    param :lid => sequential(:current_listing_ids)
     response 200 do
-      repeat 5
+      repeat 7
     end
   end
   

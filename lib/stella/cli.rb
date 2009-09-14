@@ -24,7 +24,7 @@ class Stella::CLI < Drydock::Command
   def load
     opts = {}
     opts[:hosts] = @hosts
-    [:benchmark, :users].each do |opt|
+    [:benchmark, :users, :repetitions, :delay, :time].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     Stella::Engine::Load.run @testplan, opts
@@ -51,7 +51,8 @@ class Stella::CLI < Drydock::Command
       @argv.each do |uri|
         uri = URI.parse uri
         uri.path = '/' if uri.path.empty?
-        usecase.add_request :get, uri.path
+        req = usecase.add_request :get, uri.path
+        req.wait = @option.delay if @option.delay
       end
       @testplan.add_usecase usecase
     end

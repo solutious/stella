@@ -31,8 +31,14 @@ module Stella
         Stella.ld "#{meth}: " << "#{uri_obj.to_s} " << req.params.inspect
         
         changed and notify_observers(:send_request, @client_id, usecase, meth, uri, req, params, counter)
-        container.response = http_client.send(meth, uri, params) # booya!
-        changed and notify_observers(:receive_response, @client_id, usecase, meth, uri, req, params, container)
+        begin
+          container.response = http_client.send(meth, uri, params) # booya!
+          changed and notify_observers(:receive_response, @client_id, usecase, meth, uri, req, params, container)
+        rescue => ex
+          changed and notify_observers(:request_error, @client_id, usecase, meth, uri, req, params, ex)
+          next
+        end
+        
         
         ret = execute_response_handler container, req
         
@@ -43,6 +49,8 @@ module Stella
             redo if counter <= ret.times
           end
         end
+        
+        Drydock::Screen.flush
         
         counter = 0
         sleep req.wait if req.wait && !benchmark?

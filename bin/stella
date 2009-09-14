@@ -71,7 +71,8 @@ class Stella::CLI::Definition
   option :b, :benchmark, "Benchmark mode (ignore wait times)"
   option :u, :users, Integer, "Number of virtual users"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vuser)"
-#  option :d, :duration, String, "Max duration to run test"
+  option :t, :time, String, "Max duration to run test"
+  option :d, :delay, Float, "Delay between client requests (s)"
   option :p, :testplan, String, "Path to testplan" do |v|
     raise Stella::InvalidOption, "Bad path: #{v}" unless File.exists?(v)
     v
