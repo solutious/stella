@@ -137,12 +137,6 @@ class Thread
   end
 end
 
-class Object
-  def threadify! *values
-    throw :threadify, *values
-  end
-end
-
 
 if __FILE__ == $0
   require 'open-uri'

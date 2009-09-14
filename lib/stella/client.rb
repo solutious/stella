@@ -9,10 +9,11 @@ module Stella
     attr_reader :client_id
     attr_accessor :base_uri
     attr_accessor :proxy
-    
+    attr_reader :stats
     def initialize(base_uri=nil, client_id=1)
       @base_uri, @client_id = base_uri, client_id
       @cookie_file = Tempfile.new('stella-cookie')
+      @stats = Stella::Stats.new("Client #{@client_id}")
     end
     
     def execute(usecase)
@@ -21,17 +22,17 @@ module Stella
       counter = 0
       usecase.requests.each do |req|
         counter += 1
-        
+        uri_obj = URI.parse(req.uri)
         params = prepare_params(usecase, req.params)
-        uri = build_request_uri req.uri, params, container
-        raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
+        uri = build_request_uri uri_obj, params, container
+        raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         
         meth = req.http_method.to_s.downcase
-        Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
+        Stella.ld "#{meth}: " << "#{uri_obj.to_s} " << req.params.inspect
         
-        changed and notify_observers(:send_request, @client_id, meth, uri, req, params, counter)
+        changed and notify_observers(:send_request, @client_id, usecase, meth, uri, req, params, counter)
         container.response = http_client.send(meth, uri, params) # booya!
-        changed and notify_observers(:receive_response, @client_id, meth, uri, req, params, container)
+        changed and notify_observers(:receive_response, @client_id, usecase, meth, uri, req, params, container)
         
         ret = execute_response_handler container, req
         

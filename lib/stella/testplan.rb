@@ -1,16 +1,24 @@
-
+require 'stella/testplan/usecase'
+require 'stella/testplan/stats'
 
 module Stella
 class Testplan
   include Gibbler::Complex
   
+  class WackyRatio < Stella::Error
+    def message; "Usecase ratio cannot be higher than 100 (#{@obj})"; end
+  end
+
+  
   attr_accessor :usecases
   attr_accessor :base_path
   attr_accessor :desc
+  attr_reader :stats
   
   def initialize
     @desc, @usecases = "Stella's plan", []
     @testplan_current_ratio = 0
+    @stats = Stella::Testplan::Stats.new
   end
   
   def self.load_file(path)
@@ -24,20 +32,15 @@ class Testplan
   
   def check!
     # Adjust ratios if necessary
-    needy = @usecases.select do |u| 
-      u.ratio < 0 
-    end
+    needy = @usecases.select { |u| u.ratio < 0 }
     needy.each do |u|
       u.ratio = (remaining_ratio / needy.size).to_i
     end
+    # Give usecases a name if necessary
+    @usecases.each_with_index { |uc,i| uc.desc ||= "Usecase ##{i+1}" }
     raise WackyRatio, @testplan_current_ratio if @testplan_current_ratio > 100 
   end
-  
-  def remaining_ratio
-    100 - @testplan_current_ratio
-  end
-  private :remaining_ratio
-  
+    
   def usecase(*args, &blk)
     return @usecases if args.empty?
     ration, name = nil,nil
@@ -79,63 +82,11 @@ class Testplan
     str.join($/)
   end
   
-  class Usecase
-    include Gibbler::Complex
-    attr_accessor :desc
-    attr_accessor :requests
-    attr_accessor :ratio
-    attr_accessor :resources
-    attr_accessor :base_path
-    
-    def initialize(&blk)
-      @requests, @resources = [], {}
-      instance_eval &blk unless blk.nil?
-    end
-    
-    def desc(*args)
-      @desc = args.first unless args.empty?
-      @desc
-    end
-    
-    def resource(name, value=nil)
-      @resources[name] = value unless value.nil?
-      @resources[name]
-    end
-    
-    # Reads the contents of the file <tt>path</tt> (the current working
-    # directory is assumed to be the same directory containing the test plan).
-    def file(path)
-      path = File.join(@base_path, path) if @base_path
-      File.read(path)
-    end
-    
-    def list(path)
-      file(path).split $/
-    end
-    
-    def add_request(meth, *args, &blk)
-      req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args[0], &blk
-      req.desc = args[1] if args.size > 1 # Description is optional
-      Stella.ld req
-      @requests << req
-    end
-    def get(*args, &blk);    add_request :get,    *args, &blk; end
-    def put(*args, &blk);    add_request :put,    *args, &blk; end
-    def post(*args, &blk);   add_request :post,   *args, &blk; end
-    def head(*args, &blk);   add_request :head,   *args, &blk; end
-    def delete(*args, &blk); add_request :delete, *args, &blk; end
-    
-    def xget(*args, &blk);    Stella.ld "Skipping get" end
-    def xput(*args, &blk);    Stella.ld "Skipping put" end
-    def xpost(*args, &blk);   Stella.ld "Skipping post" end
-    def xhead(*args, &blk);   Stella.ld "Skipping head" end
-    def xdelete(*args, &blk); Stella.ld "Skipping delete" end
-    
+  private
+  def remaining_ratio
+    100 - @testplan_current_ratio
   end
   
-  class WackyRatio < Stella::Error
-    def message; "Usecase ratio cannot be higher than 100 (#{@obj})"; end
-  end
 end
 end
 

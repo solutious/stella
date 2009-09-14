@@ -19,12 +19,12 @@ module Stella::Engine
       end
     end
     
-    def update_send_request(client_id, meth, uri, req, params, counter)
+    def update_send_request(client_id, usecase, meth, uri, req, params, counter)
       notice = "repeat: #{counter-1}" if counter > 1
       Stella.li2 ' ' << " %-46s %16s ".att(:reverse) % [req.desc, notice]
     end
     
-    def update_receive_response(client_id, meth, uri, req, params, container)
+    def update_receive_response(client_id, usecase, meth, uri, req, params, container)
       Stella.li '  %-59s %3d' % [uri, container.status]
       Stella.li2 "  Method: " << req.http_method
       Stella.li2 "  Params: " << params.inspect

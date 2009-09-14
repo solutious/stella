@@ -29,7 +29,7 @@ module Stella::Data::HTTP
     end
     
     def initialize (method, uri_str, version="1.1", &definition)
-      @uri = (uri_str.is_a? String) ? URI.parse(uri_str) : uri
+      @uri = uri_str
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
       @wait = 0
@@ -96,8 +96,8 @@ module Stella::Data::HTTP
     
     def inspect
       str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
-      str << $/ + headers.join($/) unless headers.empty?
-      str << $/ + $/ + body.to_s if body
+      #str << $/ + headers.join($/) unless headers.empty?
+      #str << $/ + $/ + body.to_s if body
       str
     end
     

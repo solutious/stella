@@ -38,7 +38,7 @@ usecase "Simple search" do
   end
 end
 
-xusecase "Direct to listing" do
+usecase "Direct to listing" do
   resource :preset_listing_ids, list('listing_ids.csv')
   
   get "/listing/:lid.yaml" do

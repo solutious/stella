@@ -20,14 +20,15 @@ module Stella
   require 'stella/version'
   require 'stella/exceptions'
   require 'stella/utils'
+  require 'stella/stats'
   require 'stella/mixins'
   require 'stella/dsl'
   require 'stella/engine'
+  require 'stella/testplan'
 
   autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
   autoload :Data, STELLA_LIB_HOME + "/stella/data"
   autoload :Config, STELLA_LIB_HOME + "/stella/config"
-  autoload :Testplan, STELLA_LIB_HOME + "/stella/testplan"
   autoload :Client, STELLA_LIB_HOME + "/stella/client"
   
   @@sysinfo = SysInfo.new.freeze
