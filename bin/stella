@@ -28,7 +28,7 @@ require 'stella/cli'
 class Stella::CLI::Definition
   extend Drydock
   
-  debug :on
+  debug :off
   default :verify    # when no command is provided
   
   # ----------------------------------------  STELLA GLOBALS  --------

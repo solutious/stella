@@ -35,6 +35,7 @@ class Testplan
     @testplan_current_ratio += uc.ratio
     add_usecase uc
   end
+  def xusecase(*args, &blk); Stella.ld "Skipping usecase"; end
   
   def add_usecase(uc)
     Stella.ld "Usecase: #{uc.desc}"

@@ -21,6 +21,7 @@
   s.add_dependency 'gibbler',    '>= 0.6.0'
   s.add_dependency 'tryouts',    '>= 0.8.4'
   s.add_dependency 'storable',   '>= 0.5.6'
+  s.add_dependency 'httpclient', '>= 2.1.5'
   
   # = MANIFEST =
   # git ls-files

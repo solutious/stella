@@ -21,7 +21,8 @@ module Stella::Engine
       client.enable_benchmark_mode if opts[:benchmark]
       
       plan.usecases.each_with_index do |uc,i|
-        puts ' %-65s '.att(:reverse).bright % (uc.desc || "Usecase ##{i+1}")
+        desc = (uc.desc || "Usecase ##{i+1}")
+        puts ' %-60s %3s%% '.att(:reverse).bright % [desc, uc.ratio || '??']
         Stella.rescue { client.execute uc }
       end
     end

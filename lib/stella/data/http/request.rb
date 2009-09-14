@@ -125,6 +125,8 @@ module Stella::Data::HTTP
           input
         when "Range"
           input.to_a
+        when "Fixnum"
+          Stella::Utils.strand( input )
         when "NilClass"
           Stella::Utils.strand( rand(100) )
         end

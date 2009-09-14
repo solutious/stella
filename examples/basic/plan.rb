@@ -1,6 +1,6 @@
 desc "The Basic Testplan"
 
-usecase 60, "Simple search" do
+xusecase nil, "Simple search" do
   #userpool :anonymous
   #httpauth :stella, :stella
   
@@ -30,7 +30,7 @@ usecase 60, "Simple search" do
   
   post "/listing/add" do
     desc "Add a business"
-    param :name => "Heavenly trucks #{rand(1000000)}"
+    param :name => random(8)
     param :city => "Vancouver"
     response 200 do
       puts body
@@ -43,6 +43,9 @@ usecase 40, "Direct to listing" do
   get "/listing/:lid.yaml" do
     desc "Select listing"
     param :lid => random(1000..1007)
+    response 200 do
+      :repeat
+    end
   end
 end
 

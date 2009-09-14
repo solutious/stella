@@ -26,9 +26,9 @@ module Stella
         meth = req.http_method.to_s.downcase
         Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
         
-        changed and notify_observers(:send_request, meth, uri, req)
+        changed and notify_observers(:send_request, meth, uri, req, params)
         container.response = http_client.send(meth, uri, params) # booya!
-        changed and notify_observers(:receive_response, uri, req, container)
+        changed and notify_observers(:receive_response, uri, req, params, container)
         
         execute_response_handler container, req
         sleep req.wait if req.wait && !benchmark?
@@ -119,22 +119,25 @@ module Stella
         Stella.ld "HANDLER REGEX: #{regex} (#{container.status})"
         container.status.to_s =~ regex
       end
+      ret = nil
       unless handlers.empty?
         begin
           changed
-          container.instance_eval &handlers.values.first
+          ret = container.instance_eval &handlers.values.first
           notify_observers(:execute_response_handler, req, container)
         rescue => ex
           notify_observers(:error_execute_response_handler, ex, req, container)
           Stella.ld ex.message, ex.backtrace
         end
       end
+      ret
     end
     
     class Container
       attr_accessor :response
       def doc
-        case @response.header['Content-Type']
+        @container_doc and return @container_doc
+        @container_doc = case @response.header['Content-Type']
         when ['text/html']
           Nokogiri::HTML(body)
         end
