@@ -3,9 +3,7 @@
 module Stella::Data::HTTP
   class Request < Storable
     include Gibbler::Complex
-    
-    # A string representing a raw HTTP request
-    attr_reader :raw_data
+    include Stella::Data::Helpers
     
     # A hash containing blocks to be executed depending on the HTTP response status.
     # The hash keys are numeric HTTP Status Codes. 
@@ -111,50 +109,6 @@ module Stella::Data::HTTP
     def cookies
       return [] if !header.is_a?(Hash) || header[:Cookie].empty?
       header[:Cookie] 
-    end
-    
-    def random(input=nil)
-      
-      Proc.new do
-        value = case input.class.to_s
-        when "Symbol"
-          resource(input)
-        when "Array"
-          input
-        when "Range"
-          input.to_a
-        when "Fixnum"
-          Stella::Utils.strand( input )
-        when "NilClass"
-          Stella::Utils.strand( rand(100) )
-        end
-        Stella.ld "RANDVALUES: #{input} #{value.inspect}"
-        value = value[ rand(value.size) ] if value.is_a?(Array)
-        Stella.ld "SELECTED: #{value}"
-        value
-      end
-    end
-    
-    def sequential(input=nil)
-      digest = input.gibbler
-      Proc.new do
-        @sequential_offset ||= {}
-        @sequential_offset[digest] ||= 0
-        value = case input.class.to_s
-        when "Symbol"
-          ret = resource(input)
-          ret
-        when "Array"
-          input
-        when "Range"
-          input.to_a
-        end
-        Stella.ld "SEQVALUES: #{input} #{value.inspect}"
-        value = value[ @sequential_offset[digest] ] if value.is_a?(Array)
-        @sequential_offset[digest] += 1
-        Stella.ld "SELECTED: #{value}"
-        value
-      end
     end
     
   end

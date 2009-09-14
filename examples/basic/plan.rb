@@ -31,7 +31,7 @@ usecase "Simple search" do
     param :name => random(8)
     param :city => "Vancouver"
     response 302 do
-      repeat 25
+      repeat 3
     end
   end
 end
@@ -43,7 +43,7 @@ usecase "Direct to listing" do
     desc "Select listing"
     param :lid => random(:preset_listing_ids)
     response 200 do
-      repeat 100
+      repeat 5
     end
   end
   
@@ -57,9 +57,9 @@ usecase "Direct to listing" do
   
   get "/listing/:lid.yaml" do
     desc "Select listing"
-    param :lid => sequential(:current_listing_ids)
+    param :lid => rsequential(:current_listing_ids)
     response 200 do
-      repeat 100
+      repeat 5
     end
   end
   
