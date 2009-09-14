@@ -8,6 +8,7 @@ module Stella::Engine
       opts = {
         :hosts        => [],
         :duration     => nil,
+        :benchmark    => false,
         :repetitions  => 1
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
@@ -17,6 +18,8 @@ module Stella::Engine
       plan.check!  # raise errors
       
       client = Stella::Client.new opts[:hosts].first
+      client.add_observer(self)
+      client.enable_benchmark_mode if opts[:benchmark]
       plan.usecases.each do |uc|
         client.execute uc
       end

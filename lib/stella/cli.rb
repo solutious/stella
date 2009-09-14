@@ -25,7 +25,11 @@ class Stella::CLI < Drydock::Command
   end
   
   def verify
-    Stella::Engine::Functional.run @testplan, :hosts => @hosts
+    opts = {
+      :hosts => @hosts,
+      :benchmark => @option.benchmark || false
+    }
+    Stella::Engine::Functional.run @testplan, opts
   end
   
   

@@ -21,24 +21,22 @@ module Stella
       usecase.requests.each do |req|
         uri = build_request_uri req, container
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
-        meth = req.http_method.to_s.downcase
-        Stella.li " #{req.desc} ".att(:reverse)
-        Stella.li " #{uri}"
-        Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
-        container.response = http_client.send(meth, uri, req.params)
         
-        if req.response.has_key? container.status
-          begin
-            container.instance_eval &req.response[container.status] 
-          rescue => ex
-            Stella.le "Error in response block:", ex.message
-            Stella.ld ex.backtrace
-          end
-        end
-        sleep req.wait if req.wait
+        meth = req.http_method.to_s.downcase
+        Stella.ld "#{meth}: " << "#{req.uri.to_s} " << req.params.inspect
+        changed and notify_observers(:execute_uri, meth, uri, req)
+        
+        # send the request
+        container.response = http_client.send(meth, uri, req.params)
+        execute_response_handler container, req
+        sleep req.wait if req.wait && !benchmark?
       end
     end
     
+    def enable_benchmark_mode; @bm = true; end
+    def disable_benchmark_mode; @bm = false; end
+    def benchmark?; @bm == true; end
+      
   private
     def generate_http_client
       if @proxy
@@ -72,12 +70,11 @@ module Stella
       req.uri.to_s.scan(/:([a-z_]+)/i) do |instances|
         instances.each do |varname|
           val = find_replacement_value(varname, req.params, container)
-          Stella.ld "FOUND: #{val}"
+          #Stella.ld "FOUND: #{val}"
           request_uri.gsub! /:#{varname}/, val unless val.nil?
         end
       end
       uri << request_uri
-
       URI.parse uri
     end
     
@@ -87,9 +84,9 @@ module Stella
     # value. If not found, returns nil. 
     def find_replacement_value(name, params, container)
       value = nil
-      Stella.ld "REPLACE: #{name}"
-      Stella.ld "PARAMS: #{params.inspect}"
-      Stella.ld "IVARS: #{container.instance_variables}"
+      #Stella.ld "REPLACE: #{name}"
+      #Stella.ld "PARAMS: #{params.inspect}"
+      #Stella.ld "IVARS: #{container.instance_variables}"
       value = params[name.to_sym] 
       if value.nil?
         container.instance_variables.each { |var|
@@ -101,6 +98,26 @@ module Stella
       end
       value
     end 
+    
+    # Find the appropriate response handler by executing the
+    # HTTP response status against the configured handlers. 
+    # If several match, the first one is used. 
+    def execute_response_handler(container, req)
+      handlers = req.response.select do |regex,handler|
+        regex = /#{regex}/ unless regex.is_a? Regexp
+        Stella.ld "HANDLER REGEX: #{regex} (#{container.status})"
+        container.status.to_s =~ regex
+      end
+      unless handlers.empty?
+        begin
+          container.instance_eval &handlers.values.first
+        rescue => ex
+          changed
+          notify_observers(:error_response_handler, ex, req, container)
+          Stella.ld ex.message, ex.backtrace
+        end
+      end
+    end
     
     class Container
       attr_accessor :response
