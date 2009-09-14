@@ -1,8 +1,6 @@
 desc "The Basic Testplan"
 
 usecase "Simple search" do
-  #userpool :anonymous
-  #httpauth :stella, :stella
   
   get "/", "Homepage" do
     wait 1

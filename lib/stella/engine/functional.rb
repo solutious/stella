@@ -11,10 +11,7 @@ module Stella::Engine
         :repetitions  => 1
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.ld "PLANHASH: #{plan.digest}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
-      #Stella.li2 plan.pretty
-      plan.check!  # raise errors
       
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)

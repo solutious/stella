@@ -20,6 +20,9 @@ class Stella::CLI < Drydock::Command
       end
       @testplan.add_usecase usecase
     end
+    Stella.ld "PLANHASH: #{@testplan.digest}"
+    Stella.li2 "Hosts: " <<@hosts.join(', ') if !@hosts.empty?
+    @testplan.check!  # raise errors
     true
   end
   
@@ -33,6 +36,12 @@ class Stella::CLI < Drydock::Command
   
   def load
     
+  end
+  
+  alias_method :preview_valid?, :verify_valid?
+  def preview
+    Stella.li2 "file: #{@option.testplan} (#{@testplan.digest})"
+    Stella.li @testplan.pretty
   end
   
 end
