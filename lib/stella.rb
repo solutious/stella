@@ -12,6 +12,8 @@ require 'sysinfo'
 require 'gibbler'
 require 'gibbler/aliases'
 require 'ostruct'
+require 'threadify'
+require 'drydock/screen'
 
 module Stella
   extend self

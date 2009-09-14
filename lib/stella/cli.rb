@@ -17,9 +17,17 @@ class Stella::CLI < Drydock::Command
     Stella::Engine::Functional.run @testplan, opts
   end
   
+  def load_valid?
+    create_testplan
+  end
   
   def load
-    
+    opts = {}
+    opts[:hosts] = @hosts
+    [:benchmark, :users].each do |opt|
+      opts[opt] = @option.send(opt) unless @option.send(opt).nil?
+    end
+    Stella::Engine::Load.run @testplan, opts
   end
   
   def preview_valid?

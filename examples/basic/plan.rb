@@ -28,7 +28,7 @@ usecase "Simple search" do
     end
   end
   
-  post "/listing/add" do
+  xpost "/listing/add" do
     desc "Add a business"
     param :name => random(8)
     param :city => "Vancouver"
@@ -38,7 +38,7 @@ usecase "Simple search" do
   end
 end
 
-usecase "Direct to listing" do
+xusecase "Direct to listing" do
   resource :preset_listing_ids, list('listing_ids.csv')
   
   get "/listing/:lid.yaml" do

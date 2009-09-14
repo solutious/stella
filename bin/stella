@@ -55,7 +55,7 @@ class Stella::CLI::Definition
   # ------------------------------------------------  STELLA  --------
   # ------------------------------------------------------------------
 
-  about "Verify a testplan"
+  about "Run a functional test"
   usage "stella verify http://stellaaahhhh.com/"
   usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
   option :b, :benchmark, "Benchmark mode (ignore wait times)"
@@ -64,6 +64,19 @@ class Stella::CLI::Definition
     v
   end
   command :verify => Stella::CLI
+  
+  about "Run a load test"
+  usage "stella load http://stellaaahhhh.com/"
+  usage "stella load -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :b, :benchmark, "Benchmark mode (ignore wait times)"
+  option :u, :users, Integer, "Number of virtual users"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vuser)"
+#  option :d, :duration, String, "Max duration to run test"
+  option :p, :testplan, String, "Path to testplan" do |v|
+    raise Stella::InvalidOption, "Bad path: #{v}" unless File.exists?(v)
+    v
+  end
+  command :load => Stella::CLI
   
   about "Preview a testplan"
   usage "stella preview -p path/2/testplan.rb http://stellaaahhhh.com/"
