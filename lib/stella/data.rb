@@ -64,7 +64,7 @@ module Stella::Data
         when "Range"
           input.to_a
         end
-        Stella.ld "SEQVALUES: #{input} #{value.inspect}"
+        Stella.ld "RSEQVALUES: #{input} #{value.inspect}"
         @rsequential_offset ||= {}
         @rsequential_offset[digest] ||= value.size-1 rescue 1
         if value.is_a?(Array)

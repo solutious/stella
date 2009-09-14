@@ -1,4 +1,6 @@
-require 'uri'
-class URI::Generic
-  include Gibbler::String
+
+module URI
+  class Generic
+    include Gibbler::String
+  end
 end

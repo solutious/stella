@@ -1,17 +1,17 @@
-require 'gibbler'
-require 'gibbler/aliases'
-require 'storable'
-require 'sysinfo'
-require 'ostruct'
 
 unless defined?(STELLA_LIB_HOME)
   STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__)
 end
 
-local_libs = %w{net-ssh net-scp aws-s3 caesars drydock rye storable sysinfo annoy gibbler}
+local_libs = %w{drydock storable sysinfo gibbler}
 local_libs.each { |dir| $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib') }
 #require 'rubygems'
 
+require 'storable'
+require 'sysinfo'
+require 'gibbler'
+require 'gibbler/aliases'
+require 'ostruct'
 
 module Stella
   extend self
