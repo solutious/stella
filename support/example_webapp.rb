@@ -115,6 +115,10 @@ before do
   @cookie = request.cookies["bff-history"]
   @cookie = blank?(@cookie) ? {} : YAML.load(@cookie)
   @cookie[:history] ||= []
+  if params[:clear] == 'true'
+    @cookie[:history] = []
+    @cookie[:location] = ''
+  end
   @cookie[:history].delete params[:what]
   @cookie[:history].unshift params[:what] unless blank?(params[:what])
   @cookie[:history].pop if @cookie[:history].size > 5
@@ -169,6 +173,8 @@ __END__
 <title><%= @title %></title>
 <style>
 .hilite { background-color: #FEE00B; font-weight: bold; }
+.footer { color: #ccc; font-weight: lighter; font-size: 80%; margin-top: 30px; }
+.footer a { color: #69c;}
 </style>
 </head>
 <body>
@@ -176,9 +182,13 @@ __END__
 <p style="margin-left: 50px; margin-top: 20px;"><em>
 <a href="/">New Search</a> -
 <a href="/listing/add?name=<%= params[:what] %>&amp;city=<%= params[:where] %>">Add Listing</a> - 
+<a href="/?clear=true">!!</a> -
 <a href="/listings">View All</a>
 </em></p>
 <%= yield %>
+<div class="footer">
+A <a href="http://solutious.com/projects/stella/">Stella</a> demo by <a href="http://solutious.com/">Solutious</a>. 
+</div>
 </body>
 </html>
 
