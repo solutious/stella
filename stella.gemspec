@@ -8,7 +8,7 @@
   s.email = "delano@solutious.com"
   s.homepage = "http://solutious.com/projects/stella/"
   
-  s.extra_rdoc_files = %w[README.rdoc Rudyfile LICENSE.txt CHANGES.txt]
+  s.extra_rdoc_files = %w[README.rdoc LICENSE.txt CHANGES.txt]
   s.has_rdoc = true
   s.rdoc_options = ["--line-numbers", "--title", s.summary, "--main", "README.rdoc"]
   s.require_paths = %w[lib]
