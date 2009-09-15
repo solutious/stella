@@ -86,9 +86,9 @@ See examples/ for more.
 
 Get it in one of the following ways:
 
-* gem install stella 
-* git clone git://github.com/solutious/stella.git
-* gem install solutious-stella --source http://gems.github.com
+     $ gem install stella 
+     $ git clone git://github.com/solutious/stella.git
+     $ gem install solutious-stella --source http://gems.github.com
 
 
 == More Information

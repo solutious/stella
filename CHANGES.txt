@@ -5,6 +5,10 @@ STELLA, CHANGES
 
 NOTE: Complete rewrite
 
+* New internal architecture. 
+* Improved stability and output for high thread loads. 
+* Updated test plan DSL
+
 
 #### 0.6.0 (2009-03-15) ###############################
 
