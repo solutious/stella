@@ -6,6 +6,12 @@ usecase 65, "Simple search" do
   
   get "/", "Homepage" do
     wait 1..5
+    response 200 do
+      status                       # => 200
+      headers['Content-Type']      # => ['text/html']
+      body                         # => <html>...
+      doc                          # => Nokigiri::HTML::Document
+    end
   end
   
   get "/search", "Search Results" do
@@ -13,22 +19,15 @@ usecase 65, "Simple search" do
     param :what  => 'Big'
     param :where => ''
     response 200 do
-      p doc.class
-      # doc contains the parsed HTML document
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
     end
   end
   
-  get "/listing/:lid" do
-    desc "Selected listing"
-    wait 1..8
-    response 200 do
-      #status 
-      #headers['Content-Type']
-      #body
-    end
-  end
+  get "/listing/:lid" do           # URIs can contain variables.
+    desc "Selected listing"        # This one will be replaced by
+    wait 1..8                      # the one stored in the previous
+  end                              # request.
   
 end
 
