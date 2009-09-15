@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.rdoc [Your friend in performance testing]</title>
+    <title>File: README.rdoc [Stella: Your friend in performance testing.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,47 +31,88 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Thu Mar 26 07:56:30 -0400 2009</span>
+          <span class='datetime'>2009-09-15 15:40:32 -0400</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
-            <h1><a href="../classes/Stella.html">Stella</a> - 0.6.0</h1>
+            <h1><a href="../classes/Stella.html">Stella</a> - 0.7 PREVIEW</h1>
             <p>
-            <a href="../classes/Stella.html">Stella</a> is a Ruby library for writing
-            functional tests in a sexy DSL (domain specific language).
+            Perform load tests on your web applications with beauty and brute strength.
             </p>
-            <h4>NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*</h4>
-            <h2>Example 1</h2>
-            <pre>testplan :product_api do&#x000A;  desc &quot;Maintain a value between requests&quot;&#x000A;  auth :basic, &quot;stella&quot;, &quot;stella&quot;&#x000A;  protocol :http&#x000A;&#x000A;  post &quot;/upload&quot; do&#x000A;    name &quot;Add Product&quot;&#x000A;    body &quot;bill&quot;, &quot;/path/2/file.txt&quot;&#x000A;    header &quot;X-Stella&quot; =&gt; &quot;Version #{Stella::VERSION}&quot;&#x000A;    param :convert =&gt; true&#x000A;    param :rand =&gt; rand&#x000A;&#x000A;    response 200, 201 do |headers, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      @product_id = data[:id]                   # Save a response value&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/product&quot; do&#x000A;    name &quot;View Product&quot;&#x000A;    param 'id' =&gt; @product_id                   # Use the saved value&#x000A;&#x000A;    response 200 do |header, body, objid|&#x000A;      data = YAML.load(body)&#x000A;      repeat :times =&gt; 2, :wait =&gt; 1.second     # Repeat this request twice&#x000A;    end&#x000A;  end&#x000A;end&#x000A;&#x000A;functest :quick_test do&#x000A;  plan :product_api&#x000A;  verbose&#x000A;end&#x000A;&#x000A;environment :development do&#x000A;  machines &quot;localhost:3114&quot;&#x000A;  # machine &quot;localhost:3115&quot;&#x000A;  # ...&#x000A;end&#x000A;&#x000A;run :development, :quick_test</pre>
             <p>
-            See <a href="bin/example_test_rb.html">bin/example_test.rb</a> for a
-            running example.
+            <em>NOTE: 0.7 release is not compatible with previous releases!</em>
+            </p>
+            <h2>Features</h2>
+            <ul>
+            <li>Realistic load simulation
+            
+            </li>
+            <li>Sophisticated response handling (with automatic HTML document parsing)
+            
+            </li>
+            <li>Dynamic variable replacement
+            
+            </li>
+            </ul>
+            <h2>PREVIEW NOTICE</h2>
+            <p>
+            This is an early preview of <a href="../classes/Stella.html">Stella</a>.
+            It&#8217;s still missing the following features (as of 2009-09-15):
+            </p>
+            <ul>
+            <li>Reporting of any kind.
+            
+            </li>
+            <li>Documentation.
+            
+            </li>
+            <li>File uploads.
+            
+            </li>
+            </ul>
+            <h2>Usage Example</h2>
+            <pre># Verify a test plan is defined correctly&#x000A;# by running a single user functional test.&#x000A;$ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Perform a load test&#x000A;# using the same test plan.&#x000A;$ stella load -p examples/basic/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Preview a test plan&#x000A;$ stella preview -p examples/basic/plan.rb</pre>
+            <h2>Test Plan Example</h2>
+            <p>
+            Test plans are defined in the Ruby programming language. This makes it
+            possible to define sophisticated logic to handle responses. They also
+            typically contain more than one usecase which is important when simulating
+            realistic load. In this example, 65% of virtual users will execute the
+            first usecase and 35% will execute the second.
+            </p>
+            <pre>usecase 65, &quot;Simple search&quot; do&#x000A;&#x000A;  get &quot;/&quot;, &quot;Homepage&quot; do&#x000A;    wait 1..5&#x000A;    response 200 do&#x000A;      status                       # =&gt; 200&#x000A;      headers['Content-Type']      # =&gt; ['text/html']&#x000A;      body                         # =&gt; &lt;html&gt;...&#x000A;      doc                          # =&gt; Nokigiri::HTML::Document&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/search&quot;, &quot;Search Results&quot; do&#x000A;    wait 2..5&#x000A;    param :what  =&gt; 'Big Al'&#x000A;    param :where =&gt; 'Toronto'&#x000A;    response 200 do&#x000A;      listing = doc.css('div.listing').first&#x000A;      set :lid, listing['id'].match(/(\d+)/)[0]&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/listing/:lid&quot; do           # URIs can contain variables.&#x000A;    desc &quot;Selected listing&quot;        # This one will be replaced by&#x000A;    wait 1..8                      # the one stored in the previous&#x000A;  end                              # request.&#x000A;&#x000A;end&#x000A;&#x000A;usecase 35, &quot;YAML API&quot; do&#x000A;&#x000A;  resource :listing_ids, list('ids.csv')&#x000A;&#x000A;  get &quot;/listing/:lid.yaml&quot; do&#x000A;    desc &quot;Select listing&quot;&#x000A;    param :lid =&gt; random(:listing_ids)&#x000A;    response 200 do&#x000A;      repeat 5&#x000A;    end&#x000A;  end&#x000A;&#x000A;end</pre>
+            <p>
+            See examples/ for more.
             </p>
             <h2>Installation</h2>
             <p>
             Get it in one of the following ways:
             </p>
+            <pre>$ gem install stella&#x000A;$ git clone git://github.com/solutious/stella.git&#x000A;$ gem install solutious-stella --source http://gems.github.com</pre>
+            <h2>More Information</h2>
             <ul>
-            <li>gem install stella
+            <li><a href="http://solutious.com/projects/stella">Homepage</a>
             
             </li>
-            <li>git clone git://github.com/solutious/stella.git
+            <li><a href="http://github.com/solutious/stella">Codes</a>
             
             </li>
-            <li>gem install solutious-stella &#8212;source <a
-            href="http://gems.github.com">gems.github.com</a>
+            <li><a href="http://solutious.com/stella">RDocs</a>
+            
+            </li>
+            <li><a href="http://www.youtube.com/watch?v=jHHprvyl-Hc">Stellaaahhhh</a>
             
             </li>
             </ul>
-            <h2>More Information</h2>
-            <p>
-            <a href="http://www.youtube.com/watch?v=jHHprvyl-Hc">Stellaaahhhh</a>
-            </p>
             <h2>Credits</h2>
             <ul>
-            <li>Delano Mandelbaum (delano@solutious.com)
+            <li>Delano Mandelbaum (<a href="http://solutious.com">solutious.com</a>)
+            
+            </li>
+            <li><a href="../classes/Threadify.html">Threadify</a> (C) Ara T Howard (<a
+            href="http://codeforpeople.com/">codeforpeople.com/</a>)
             
             </li>
             </ul>

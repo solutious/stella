@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: CHANGES.txt [Your friend in performance testing]</title>
+    <title>File: CHANGES.txt [Stella: Your friend in performance testing.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Mon Mar 16 16:19:52 -0400 2009</span>
+          <span class='datetime'>2009-09-15 15:40:32 -0400</span>
         </div>
       </div>
       <div id='content'>
@@ -41,29 +41,22 @@
             STELLA, CHANGES
             </p>
             <p>
-            #### TODO
+            #### 0.7.0 (2009-09-05) ###############################
+            </p>
+            <p>
+            NOTE: Complete rewrite
             </p>
             <ul>
-            <li>TODO: prepend instance variables with &#8220;stella_&#8220;
+            <li>New internal architecture.
             
             </li>
-            <li>TODO: implement session handling
+            <li>Improved stability and output for high thread loads.
             
             </li>
-            <li>BUG: <a
-            href="http://jira.codehaus.org/browse/JRUBY-2992">jira.codehaus.org/browse/JRUBY-2992</a>
-            
-            </li>
-            <li>TODO: variable interpolation that happens at test time so instance
-            variables can be grabbed from the calling space.
+            <li>Updated test plan DSL
             
             </li>
             </ul>
-            <p>
-            # # get &#8220;/product/${token}&#8221; do # ## TODO: Override environment
-            settings. # protocol :https # response 200 do |headers, body| # data =
-            YAML.load(body) # puts &#8220;ID: #{data[:id]}&#8221; # end # end
-            </p>
             <p>
             #### 0.6.0 (2009-03-15) ###############################
             </p>
@@ -134,8 +127,8 @@
             <li>Improved argument handling for load tool adapters (httperf not complete)
             
             </li>
-            <li>Re-built <a href="../classes/Storable.html">Stella::Storable</a> and
-            subclasses (now using &#8220;field&#8221; method)
+            <li>Re-built Stella::Storable and subclasses (now using &#8220;field&#8221;
+            method)
             
             </li>
             <li>Test::Stats, Test::Run::Summary cleanup

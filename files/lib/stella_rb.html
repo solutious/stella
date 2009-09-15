@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: stella.rb [Your friend in performance testing]</title>
+    <title>File: stella.rb [Stella: Your friend in performance testing.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Mon Mar 16 16:19:52 -0400 2009</span>
+          <span class='datetime'>2009-09-15 15:40:32 -0400</span>
         </div>
       </div>
       <div id='content'>
@@ -40,26 +40,21 @@
             <div id='requires'>
               <h2>Required files</h2>
               <ol>
-                <li>date</li>
-                <li>time</li>
-                <li>rubygems</li>
-                <li>logger</li>
-                <li>uri</li>
-                <li>httpclient</li>
                 <li>storable</li>
-                <li>stella/stats</li>
+                <li>sysinfo</li>
+                <li>gibbler</li>
+                <li>gibbler/aliases</li>
+                <li>ostruct</li>
                 <li>threadify</li>
-                <li>timeunits</li>
-                <li>stella/crypto</li>
-                <li>stella/common</li>
-                <li>stella/data/http</li>
-                <li>stella/data/domain</li>
-                <li>stella/environment</li>
-                <li>stella/clients</li>
-                <li>stella/testrunner</li>
+                <li>drydock/screen</li>
+                <li>stella/version</li>
+                <li>stella/exceptions</li>
+                <li>stella/utils</li>
+                <li>stella/stats</li>
+                <li>stella/mixins</li>
+                <li>stella/dsl</li>
+                <li>stella/engine</li>
                 <li>stella/testplan</li>
-                <li>stella/loadtest</li>
-                <li>stella/functest</li>
               </ol>
             </div>
           </div>
@@ -69,14 +64,9 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>STELLA_HOME</td>
+                    <td class='context-item-name'>STELLA_LIB_HOME</td>
                     <td>=</td>
-                    <td class='context-item-value'>File.expand_path(File.join(File.dirname(__FILE__), '..'))</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      Common dependencies
-                    </td>
+                    <td class='context-item-value'>File.expand_path File.dirname(__FILE__)</td>
                   </tr>
                 </table>
               </div>
