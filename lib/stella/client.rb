@@ -166,8 +166,10 @@ module Stella
       end
       
       def doc
-        @container_doc and return @container_doc
-        @container_doc = case @response.header['Content-Type']
+        # NOTE: It's important to parse the document on every 
+        # request because this container is available for the
+        # entire life of a usecase. 
+        case @response.header['Content-Type']
         when ['text/html']
           Nokogiri::HTML(body)
         when ['text/yaml']
