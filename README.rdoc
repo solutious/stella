@@ -8,14 +8,15 @@ Perform load tests on your web applications with beauty and brute strength.
 
 * Realistic load simulation
 * Sophisticated response handling (with automatic HTML document parsing)
-* Load resources from file
+* Dynamic variable replacement 
 
 == PREVIEW NOTICE
 
 This is an early preview of Stella. It's still missing the following features (as of 2009-09-15):
 
 * Reporting of any kind. 
-
+* Documentation.
+* File uploads.
 
 == Usage Example
 
@@ -39,6 +40,12 @@ Test plans are defined in the Ruby programming language. This makes it possible 
   
       get "/", "Homepage" do
         wait 1..5
+        response 200 do
+          status                       # => 200
+          headers['Content-Type']      # => ['text/html']
+          body                         # => <html>...
+          doc                          # => Nokigiri::HTML::Document
+        end
       end
   
       get "/search", "Search Results" do
@@ -46,41 +53,25 @@ Test plans are defined in the Ruby programming language. This makes it possible 
         param :what  => 'Big Al'
         param :where => 'Toronto'
         response 200 do
-          # doc contains the parsed HTML document
           listing = doc.css('div.listing').first
-          # Here we save a listing ID to 
-          # a variable called :lid
           set :lid, listing['id'].match(/(\d+)/)[0]
         end
       end
       
-      # This URI path contains a variable which
-      # will be replaced with the listing ID
-      # saved in the previous request.
-      get "/listing/:lid" do
-        desc "Selected listing"
-        wait 1..8
-        response 200 do
-          status                   # => 200
-          headers['Content-Type']  # => ['text/html']
-          body                     # => <html>...
-          doc                      # => Nokigiri::HTML::Document
-        end
-      end
+      get "/listing/:lid" do           # URIs can contain variables.
+        desc "Selected listing"        # This one will be replaced by
+        wait 1..8                      # the one stored in the previous
+      end                              # request.
   
     end
 
     usecase 35, "YAML API" do
     
-      # Read in a list of IDs from a file. 
-      resource :preset_listing_ids, list('listing_ids.csv')
+      resource :listing_ids, list('ids.csv')
       
-      # This URI path contains a variable 
-      # called :lid. Here we replace that
-      # variable with a random value from
-      # the preset_listing_ids resource. 
-      get "/listing/:lid.yaml", "Select listing" do
-        param :lid => random(:preset_listing_ids)
+      get "/listing/:lid.yaml" do
+        desc "Select listing"
+        param :lid => random(:listing_ids)
         response 200 do
           repeat 5
         end
