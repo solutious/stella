@@ -13,11 +13,14 @@ module Stella::Engine
         :repetitions  => 1
       }.merge! opts
       opts[:users] = plan.usecases.size if opts[:users] < plan.usecases.size
+      opts[:users] = 1000 if opts[:users] > 1000
       
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ')
       
       packages = build_thread_package plan, opts
+      Drydock::Screen.flush
+      
       Thread.ify packages, :threads => opts[:users] do |package|
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
@@ -58,7 +61,7 @@ module Stella::Engine
         Stella.ld "THREAD PACKAGE: #{usecase.desc} #{pointer} #{(pointer+count)} #{count}"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
-          Stella.li2 "Creating client ##{index+1}"
+          Stella.li2 "Creating client ##{index+1} "
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
           client.enable_benchmark_mode if opts[:benchmark]

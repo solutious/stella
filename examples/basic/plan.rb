@@ -13,6 +13,7 @@ usecase 65, "Simple search" do
     param :what  => 'Big'
     param :where => ''
     response 200 do
+      p doc.class
       # doc contains the parsed HTML document
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
@@ -58,7 +59,7 @@ usecase "YAML API" do
   
 end
 
-usecase 5, "Self-serve" do
+usecase 10, "Advertiser self-serve" do
   post "/listing/add" do
     desc "Add a business"
     wait 1..4 

@@ -15,12 +15,9 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'rye',        '>= 0.8.9'
-  s.add_dependency 'drydock',    '>= 0.6.6'
-  s.add_dependency 'caesars',    '>= 0.7.3'
-  s.add_dependency 'gibbler',    '>= 0.6.0'
-  s.add_dependency 'tryouts',    '>= 0.8.4'
-  s.add_dependency 'storable',   '>= 0.5.6'
+  s.add_dependency 'drydock',    '>= 0.6.7'
+  s.add_dependency 'gibbler',    '>= 0.6.2'
+  s.add_dependency 'storable',   '>= 0.5.7'
   s.add_dependency 'httpclient', '>= 2.1.5'
   
   # = MANIFEST =

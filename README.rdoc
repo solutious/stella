@@ -1,57 +1,96 @@
-= Stella - 0.6.0
+= Stella - 0.7 PREVIEW
 
-Stella is a Ruby library for writing functional tests in a sexy DSL (domain specific language).
+Perform load tests on your web applications with beauty and brute strength.
 
-==== NOTE: The 0.6 release was a complete rewrite from previous versions. All commands, APIs, and documentation have changed!*
+<i>NOTE: 0.7 release is not compatible with previous releases!</i>
 
-== Example 1
+== Features
 
-     testplan :product_api do
-       desc "Maintain a value between requests"
-       auth :basic, "stella", "stella"
-       protocol :http
-     
-       post "/upload" do
-         name "Add Product"
-         body "bill", "/path/2/file.txt"
-         header "X-Stella" => "Version #{Stella::VERSION}"
-         param :convert => true
-         param :rand => rand
-         
-         response 200, 201 do |headers, body, objid|
-           data = YAML.load(body)
-           @product_id = data[:id]                   # Save a response value
-         end
-       end
-       
-       get "/product" do
-         name "View Product"
-         param 'id' => @product_id                   # Use the saved value
-         
-         response 200 do |header, body, objid|
-           data = YAML.load(body)
-           repeat :times => 2, :wait => 1.second     # Repeat this request twice
-         end
-       end
-     end
-     
-     functest :quick_test do
-       plan :product_api
-       verbose
-     end
-     
-     environment :development do
-       machines "localhost:3114"  
-       # machine "localhost:3115"
-       # ...
-     end
-     
-     run :development, :quick_test 
+* Realistic load simulation
+* Sophisticated response handling (with automatic HTML document parsing)
+* Load resources from file
+
+== PREVIEW NOTICE
+
+This is an early preview of Stella. It's still missing the following features (as of 2009-09-15):
+
+* Reporting of any kind. 
 
 
-See bin/example_test.rb for a running example. 
+== Usage Example
 
+    # Verify a test plan is defined correctly
+    # by running a single user functional test.
+    $ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/
+    
+    # Perform a load test  
+    # using the same test plan. 
+    $ stella load -p examples/basic/plan.rb http://stellaaahhhh.com/
+    
+    # Preview a test plan
+    $ stella preview -p examples/basic/plan.rb
+    
+    
+== Test Plan Example
 
+Test plans are defined in the Ruby programming language. This makes it possible to define sophisticated logic to handle responses. They also typically contain more than one usecase which is important when simulating realistic load. In this example, 65% of virtual users will execute the first usecase and 35% will execute the second.
+
+    usecase 65, "Simple search" do
+  
+      get "/", "Homepage" do
+        wait 1..5
+      end
+  
+      get "/search", "Search Results" do
+        wait 2..5
+        param :what  => 'Big Al'
+        param :where => 'Toronto'
+        response 200 do
+          # doc contains the parsed HTML document
+          listing = doc.css('div.listing').first
+          # Here we save a listing ID to 
+          # a variable called :lid
+          set :lid, listing['id'].match(/(\d+)/)[0]
+        end
+      end
+      
+      # This URI path contains a variable which
+      # will be replaced with the listing ID
+      # saved in the previous request.
+      get "/listing/:lid" do
+        desc "Selected listing"
+        wait 1..8
+        response 200 do
+          status                   # => 200
+          headers['Content-Type']  # => ['text/html']
+          body                     # => <html>...
+          doc                      # => Nokigiri::HTML::Document
+        end
+      end
+  
+    end
+
+    usecase 35, "YAML API" do
+    
+      # Read in a list of IDs from a file. 
+      resource :preset_listing_ids, list('listing_ids.csv')
+      
+      # This URI path contains a variable 
+      # called :lid. Here we replace that
+      # variable with a random value from
+      # the preset_listing_ids resource. 
+      get "/listing/:lid.yaml", "Select listing" do
+        param :lid => random(:preset_listing_ids)
+        response 200 do
+          repeat 5
+        end
+      end
+
+    end
+    
+See examples/ for more. 
+
+    
 == Installation
 
 Get it in one of the following ways:
@@ -63,13 +102,16 @@ Get it in one of the following ways:
 
 == More Information
 
-Stellaaahhhh[http://www.youtube.com/watch?v=jHHprvyl-Hc]
+* Homepage[http://solutious.com/projects/stella]
+* Codes[http://github.com/solutious/stella]
+* RDocs[http://solutious.com/stella]
+* Stellaaahhhh[http://www.youtube.com/watch?v=jHHprvyl-Hc]
 
 
 == Credits
 
-* Delano Mandelbaum (delano@solutious.com)
-
+* Delano Mandelbaum (http://solutious.com)
+* Threadify (C) Ara T Howard (http://codeforpeople.com/)
 
 == Thanks 
 

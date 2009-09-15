@@ -183,7 +183,7 @@ module Stella
       def resource(n);    usecase.resource n;    end
       def wait(t); sleep t; end
       
-      def repeat(t); Repeat.new(t); end
+      def repeat(t=1); Repeat.new(t); end
     end
     
     class ResponseModifier; end
