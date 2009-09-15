@@ -22,6 +22,8 @@ module Stella::Engine
         Stella.li ' %-65s '.att(:reverse).bright % [desc]
         Stella.rescue { client.execute uc }
       end
+      
+      Drydock::Screen.flush
     end
     
   end

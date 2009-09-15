@@ -27,6 +27,7 @@ module Stella::Engine
         end
       end
       
+      Drydock::Screen.flush
     end
     
   protected
