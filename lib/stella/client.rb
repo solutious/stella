@@ -16,6 +16,7 @@ module Stella
       @stats = Stella::Stats.new("Client #{@client_id}")
     end
     
+    
     def execute(usecase)
       http_client = generate_http_client
       container = Container.new(usecase)
@@ -30,15 +31,14 @@ module Stella
         meth = req.http_method.to_s.downcase
         Stella.ld "#{meth}: " << "#{uri_obj.to_s} " << req.params.inspect
         
-        changed and notify_observers(:send_request, @client_id, usecase, meth, uri, req, params, counter)
         begin
+          update(:send_request, usecase, meth, uri, req, params, counter)
           container.response = http_client.send(meth, uri, params) # booya!
-          changed and notify_observers(:receive_response, @client_id, usecase, meth, uri, req, params, container)
+          update(:receive_response, usecase, meth, uri, req, params, container)
         rescue => ex
-          changed and notify_observers(:request_error, @client_id, usecase, meth, uri, req, params, ex)
+          update(:request_error, usecase, meth, uri, req, params, ex)
           next
         end
-        
         
         ret = execute_response_handler container, req
         
@@ -62,6 +62,11 @@ module Stella
     def benchmark?; @bm == true; end
       
   private
+    def update(kind, *args)
+      changed
+      notify_observers(kind, @client_id, *args)
+    end
+  
     def run_sleeper(wait)
       if wait.is_a?(Range)
         ms = rand(wait.last * 1000).to_f 
@@ -148,11 +153,10 @@ module Stella
       ret = nil
       unless handler.nil?
         begin
-          changed
           ret = container.instance_eval &handler
-          notify_observers(:execute_response_handler, @client_id, req, container)
+          update(:execute_response_handler, req, container)
         rescue => ex
-          notify_observers(:error_execute_response_handler, @client_id, ex, req, container)
+          update(:error_execute_response_handler, ex, req, container)
           Stella.ld ex.message, ex.backtrace
         end
       end
