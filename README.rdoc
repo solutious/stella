@@ -34,6 +34,7 @@ This is an early preview of Stella. It's still missing the following features (a
     
 == Test Plan Example
 
+
 Test plans are defined in the Ruby programming language. This makes it possible to define sophisticated logic to handle responses. They also typically contain more than one usecase which is important when simulating realistic load. In this example, 65% of virtual users will execute the first usecase and 35% will execute the second.
 
     usecase 65, "Simple search" do

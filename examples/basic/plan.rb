@@ -58,7 +58,7 @@ usecase "YAML API" do
   
 end
 
-usecase 10, "Advertiser self-serve" do
+usecase 10, "Self-serve" do
   post "/listing/add" do
     desc "Add a business"
     wait 1..4 

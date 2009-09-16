@@ -139,16 +139,17 @@ module Stella
     # HTTP response status against the configured handlers. 
     # If several match, the first one is used. 
     def execute_response_handler(container, req)
-      handlers = req.response.select do |regex,handler|
+      handler = nil
+      req.response.each_pair do |regex,h|
         regex = /#{regex}/ unless regex.is_a? Regexp
         Stella.ld "HANDLER REGEX: #{regex} (#{container.status})"
-        container.status.to_s =~ regex
+        handler = h and break if container.status.to_s =~ regex
       end
       ret = nil
-      unless handlers.empty?
+      unless handler.nil?
         begin
           changed
-          ret = container.instance_eval &handlers.values.first
+          ret = container.instance_eval &handler
           notify_observers(:execute_response_handler, @client_id, req, container)
         rescue => ex
           notify_observers(:error_execute_response_handler, @client_id, ex, req, container)

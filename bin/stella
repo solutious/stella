@@ -12,9 +12,11 @@
 # Usage:
 # 
 #     $ stella -h
-#     $ stella verify 
+#     $ stella verify -p plans/basic.rb http://test.example.com/
 #     $ stella load -u 10 -t 60 http://test.example.com/
 #     $ stella load -u 10 -r 40 -p plans/basic.rb http://test.example.com/
+#
+#--
 
 STELLA_LIB_HOME = File.expand_path File.join(File.dirname(__FILE__), '..', 'lib')
 

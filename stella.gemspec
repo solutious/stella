@@ -15,10 +15,11 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'drydock',    '>= 0.6.7'
+  s.add_dependency 'drydock',    '>= 0.6.8'
   s.add_dependency 'gibbler',    '>= 0.6.2'
   s.add_dependency 'storable',   '>= 0.5.7'
   s.add_dependency 'httpclient', '>= 2.1.5'
+  s.add_dependency 'nokogiri'
   
   # = MANIFEST =
   # git ls-files

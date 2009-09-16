@@ -16,7 +16,6 @@ require 'threadify'
 require 'drydock/screen'
 
 module Stella
-  VERSION = "0.7.0.002"
   extend self
   require 'stella/version'
   require 'stella/exceptions'
