@@ -40,10 +40,10 @@
             <a href="../files/lib/stella/guidelines_rb.html">lib/stella/guidelines.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/stella/testplan/stats_rb.html">lib/stella/testplan/stats.rb</a>
+            <a href="../files/lib/stella/stats_rb.html">lib/stella/stats.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/stella/stats_rb.html">lib/stella/stats.rb</a>
+            <a href="../files/lib/stella/testplan/stats_rb.html">lib/stella/testplan/stats.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/stella/testplan/usecase_rb.html">lib/stella/testplan/usecase.rb</a>
@@ -98,7 +98,7 @@
               Module <a href="Stella/Engine.html" class="link">Stella::Engine</a><br />
               Module <a href="Stella/Guidelines.html" class="link">Stella::Guidelines</a><br />
               Module <a href="Stella/Utils.html" class="link">Stella::Utils</a><br />
-              Module <a href="Stella/Version.html" class="link">Stella::Version</a><br />
+              Module <a href="Stella/VERSION.html" class="link">Stella::VERSION</a><br />
               Class <a href="Stella/CLI.html" class="link">Stella::CLI</a><br />
               Class <a href="Stella/Client.html" class="link">Stella::Client</a><br />
               Class <a href="Stella/Config.html" class="link">Stella::Config</a><br />
@@ -107,18 +107,6 @@
               Class <a href="Stella/NoHostDefined.html" class="link">Stella::NoHostDefined</a><br />
               Class <a href="Stella/Stats.html" class="link">Stella::Stats</a><br />
               Class <a href="Stella/Testplan.html" class="link">Stella::Testplan</a><br />
-            </div>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>VERSION</td>
-                    <td>=</td>
-                    <td class='context-item-value'>&quot;0.7.0.002&quot;</td>
-                  </tr>
-                </table>
-              </div>
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
@@ -132,7 +120,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000015-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 62</span>&#x000A;62:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">debug?</span>; <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000015-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 61</span>&#x000A;61:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">debug?</span>; <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000017'>
@@ -145,7 +133,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000017-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 64</span>&#x000A;64:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disable_debug</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">1</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000017-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 63</span>&#x000A;63:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disable_debug</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">1</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000014'>
@@ -158,7 +146,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000014-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 60</span>&#x000A;60:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disable_quiet</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">1</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000014-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 59</span>&#x000A;59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disable_quiet</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">1</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000016'>
@@ -171,7 +159,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000016-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 63</span>&#x000A;63:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_debug</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">4</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000016-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 62</span>&#x000A;62:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_debug</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">4</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000013'>
@@ -184,7 +172,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000013-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 59</span>&#x000A;59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_quiet</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">0</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000013-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 58</span>&#x000A;58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_quiet</span>; <span class="ruby-ivar">@@loglev</span> = <span class="ruby-value">0</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000008'>
@@ -202,7 +190,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 50</span>&#x000A;50:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ld</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;51:     <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;D:  &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{$/}D:  &quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug?</span>&#x000A;52:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000008-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 49</span>&#x000A;49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ld</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;50:     <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;D:  &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{$/}D:  &quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debug?</span>&#x000A;51:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000007'>
@@ -220,7 +208,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 48</span>&#x000A;48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">le</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;  &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{$/}  &quot;</span>).<span class="ruby-identifier">color</span>(<span class="ruby-identifier">:red</span>); <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000007-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 47</span>&#x000A;47:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">le</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;  &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{$/}  &quot;</span>).<span class="ruby-identifier">color</span>(<span class="ruby-identifier">:red</span>); <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000002'>
@@ -238,7 +226,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000002-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 41</span>&#x000A;41:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">m</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">quiet?</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000002-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 40</span>&#x000A;40:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">msg</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@@logger</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">m</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">quiet?</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000003'>
@@ -251,7 +239,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000003-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000003-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 42</span>&#x000A;42:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li1</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000003-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 41</span>&#x000A;41:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li1</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000004'>
@@ -264,7 +252,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000004-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 43</span>&#x000A;43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li2</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">2</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000004-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 42</span>&#x000A;42:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li2</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">2</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000005'>
@@ -277,7 +265,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000005-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 44</span>&#x000A;44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li3</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">3</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000005-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 43</span>&#x000A;43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li3</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">3</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000006'>
@@ -290,7 +278,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 45</span>&#x000A;45:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li4</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">4</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000006-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 44</span>&#x000A;44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">li4</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>); <span class="ruby-identifier">li</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">4</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000009'>
@@ -303,7 +291,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 54</span>&#x000A;54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loglev</span>; <span class="ruby-ivar">@@loglev</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000009-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 53</span>&#x000A;53:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loglev</span>; <span class="ruby-ivar">@@loglev</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000010'>
@@ -316,7 +304,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 55</span>&#x000A;55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loglev=</span>(<span class="ruby-identifier">val</span>); <span class="ruby-ivar">@@loglev</span> = <span class="ruby-identifier">val</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000010-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 54</span>&#x000A;54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loglev=</span>(<span class="ruby-identifier">val</span>); <span class="ruby-ivar">@@loglev</span> = <span class="ruby-identifier">val</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000012'>
@@ -329,7 +317,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000012-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 58</span>&#x000A;58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quiet?</span>; <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000012-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 57</span>&#x000A;57:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quiet?</span>; <span class="ruby-ivar">@@loglev</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000018'>
@@ -342,7 +330,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 66</span>&#x000A;66:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">rescue</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;67:     <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>&#x000A;68:   <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;69:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">le</span> <span class="ruby-node">&quot;ERROR: #{ex.message}&quot;</span>&#x000A;70:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;71:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000018-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 65</span>&#x000A;65:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">rescue</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;66:     <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>&#x000A;67:   <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;68:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">le</span> <span class="ruby-node">&quot;ERROR: #{ex.message}&quot;</span>&#x000A;69:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;70:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000011'>
@@ -355,7 +343,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000011-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 56</span>&#x000A;56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sysinfo</span>; <span class="ruby-ivar">@@sysinfo</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000011-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 55</span>&#x000A;55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sysinfo</span>; <span class="ruby-ivar">@@sysinfo</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

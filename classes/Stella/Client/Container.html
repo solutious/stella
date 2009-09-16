@@ -90,7 +90,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000090-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000090-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 164</span>&#x000A;164:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">usecase</span>)&#x000A;165:         <span class="ruby-ivar">@usecase</span> = <span class="ruby-identifier">usecase</span>&#x000A;166:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000090-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 169</span>&#x000A;169:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">usecase</span>)&#x000A;170:         <span class="ruby-ivar">@usecase</span> = <span class="ruby-identifier">usecase</span>&#x000A;171:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
@@ -104,7 +104,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000092-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000092-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 180</span>&#x000A;180:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">body</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">content</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000092-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 185</span>&#x000A;185:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">body</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">content</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000091'>
@@ -117,7 +117,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000091-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000091-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 168</span>&#x000A;168:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">doc</span>&#x000A;169:         <span class="ruby-comment cmt"># NOTE: It's important to parse the document on every </span>&#x000A;170:         <span class="ruby-comment cmt"># request because this container is available for the</span>&#x000A;171:         <span class="ruby-comment cmt"># entire life of a usecase. </span>&#x000A;172:         <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">header</span>[<span class="ruby-value str">'Content-Type'</span>]&#x000A;173:         <span class="ruby-keyword kw">when</span> [<span class="ruby-value str">'text/html'</span>]&#x000A;174:           <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">HTML</span>(<span class="ruby-identifier">body</span>)&#x000A;175:         <span class="ruby-keyword kw">when</span> [<span class="ruby-value str">'text/yaml'</span>]&#x000A;176:           <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">body</span>)&#x000A;177:         <span class="ruby-keyword kw">end</span>&#x000A;178:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000091-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 173</span>&#x000A;173:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">doc</span>&#x000A;174:         <span class="ruby-comment cmt"># NOTE: It's important to parse the document on every </span>&#x000A;175:         <span class="ruby-comment cmt"># request because this container is available for the</span>&#x000A;176:         <span class="ruby-comment cmt"># entire life of a usecase. </span>&#x000A;177:         <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">header</span>[<span class="ruby-value str">'Content-Type'</span>]&#x000A;178:         <span class="ruby-keyword kw">when</span> [<span class="ruby-value str">'text/html'</span>]&#x000A;179:           <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">HTML</span>(<span class="ruby-identifier">body</span>)&#x000A;180:         <span class="ruby-keyword kw">when</span> [<span class="ruby-value str">'text/yaml'</span>]&#x000A;181:           <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">body</span>)&#x000A;182:         <span class="ruby-keyword kw">end</span>&#x000A;183:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000094'>
@@ -142,7 +142,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000093-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000093-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 181</span>&#x000A;181:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">headers</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">header</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000093-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 186</span>&#x000A;186:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">headers</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">header</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000099'>
@@ -155,7 +155,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000099-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000099-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 188</span>&#x000A;188:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">t</span>=<span class="ruby-value">1</span>); <span class="ruby-constant">Repeat</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">t</span>); <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000099-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 193</span>&#x000A;193:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">t</span>=<span class="ruby-value">1</span>); <span class="ruby-constant">Repeat</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">t</span>); <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000097'>
@@ -168,7 +168,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000097-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000097-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 185</span>&#x000A;185:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resource</span>(<span class="ruby-identifier">n</span>);    <span class="ruby-identifier">usecase</span>.<span class="ruby-identifier">resource</span> <span class="ruby-identifier">n</span>;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000097-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 190</span>&#x000A;190:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resource</span>(<span class="ruby-identifier">n</span>);    <span class="ruby-identifier">usecase</span>.<span class="ruby-identifier">resource</span> <span class="ruby-identifier">n</span>;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000096'>
@@ -181,7 +181,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000096-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000096-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 184</span>&#x000A;184:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">v</span>); <span class="ruby-identifier">usecase</span>.<span class="ruby-identifier">resource</span> <span class="ruby-identifier">n</span>, <span class="ruby-identifier">v</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000096-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 189</span>&#x000A;189:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">v</span>); <span class="ruby-identifier">usecase</span>.<span class="ruby-identifier">resource</span> <span class="ruby-identifier">n</span>, <span class="ruby-identifier">v</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000095'>
@@ -194,7 +194,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000095-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000095-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 183</span>&#x000A;183:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">status</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">status</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000095-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 188</span>&#x000A;188:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">status</span>; <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">status</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000098'>
@@ -207,7 +207,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000098-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000098-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 186</span>&#x000A;186:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">t</span>); <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">t</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000098-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 191</span>&#x000A;191:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">t</span>); <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">t</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
