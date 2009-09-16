@@ -1,8 +1,9 @@
 = Stella - 0.7 PREVIEW
 
-Perform load tests on your web applications with beauty and brute strength.
+<b>Perform load tests on your web applications with beauty and brute strength.</b>
 
-<i>NOTE: 0.7 release is not compatible with previous releases!</i>
+
+
 
 == Features
 
@@ -10,13 +11,14 @@ Perform load tests on your web applications with beauty and brute strength.
 * Sophisticated response handling (with automatic HTML document parsing)
 * Dynamic variable replacement 
 
+
 == PREVIEW NOTICE
 
-This is an early preview of Stella. It's still missing the following features (as of 2009-09-15):
+This is an early preview of Stella. The following features are still under development (as of 2009-09-15):
 
 * Reporting of any kind. 
-* Documentation.
 * File uploads.
+* Documentation.
 
 == Usage Example
 
@@ -27,9 +29,6 @@ This is an early preview of Stella. It's still missing the following features (a
     # Perform a load test  
     # using the same test plan. 
     $ stella load -p examples/basic/plan.rb http://stellaaahhhh.com/
-    
-    # Preview a test plan
-    $ stella preview -p examples/basic/plan.rb
     
     
 == Test Plan Example
@@ -105,11 +104,13 @@ Get it in one of the following ways:
 * Delano Mandelbaum (http://solutious.com)
 * Threadify (C) Ara T Howard (http://codeforpeople.com/)
 
+
 == Thanks 
 
 * Harm Aarts for the great test case and feedback!
 * Kalin Harvey for keeping me on track.
 * Dave L, the best intern money can't buy. 
+
 
 == License
 

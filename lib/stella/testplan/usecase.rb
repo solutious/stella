@@ -32,6 +32,11 @@ class Testplan
       r
     end
     
+    def ratio_pretty
+      r = (@ratio || 0).to_f
+      r > 1.0 ? r.to_i : (r * 100).to_i
+    end
+    
     # Reads the contents of the file <tt>path</tt> (the current working
     # directory is assumed to be the same directory containing the test plan).
     def file(path)

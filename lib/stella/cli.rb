@@ -29,16 +29,6 @@ class Stella::CLI < Drydock::Command
     end
     Stella::Engine::Load.run @testplan, opts
   end
-  
-  def preview_valid?
-    create_testplan
-  end
-  
-  def preview
-    Stella.li2 "file: #{@option.testplan} (#{@testplan.digest})"
-    Stella.li @testplan.pretty
-  end
-
 
   private
   def create_testplan
@@ -46,18 +36,12 @@ class Stella::CLI < Drydock::Command
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
     else
-      @testplan = Stella::Testplan.new
-      usecase = Stella::Testplan::Usecase.new
-      @argv.each do |uri|
-        uri = URI.parse uri
-        uri.path = '/' if uri.path.empty?
-        req = usecase.add_request :get, uri.path
-        req.wait = @option.delay if @option.delay
-      end
-      @testplan.add_usecase usecase
+      opts = {}
+      opts[:delay] = @option.delay if @option.delay
+      @testplan = Stella::Testplan.new(@argv, opts)
     end
     @testplan.check!  # raise errors, update usecase ratios
-    Stella.ld "PLANHASH: #{@testplan.digest}"
+    Stella.li2 " File: #{@option.testplan} (#{@testplan.digest})"
     true
   end
   

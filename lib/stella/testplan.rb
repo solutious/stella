@@ -7,17 +7,28 @@ class Testplan
   
   class WackyRatio < Stella::Error
   end
-
   
   attr_accessor :usecases
   attr_accessor :base_path
   attr_accessor :desc
   attr_reader :stats
   
-  def initialize
+  def initialize(uris=[], opts={})
     @desc, @usecases = "Stella's plan", []
     @testplan_current_ratio = 0
     @stats = Stella::Testplan::Stats.new
+    
+    unless uris.empty?
+      usecase = Stella::Testplan::Usecase.new
+      usecase.ratio = 1.0
+      uris.each do |uri|
+        uri = URI.parse uri
+        uri.path = '/' if uri.path.empty?
+        req = usecase.add_request :get, uri.path
+        req.wait = opts[:delay] if opts[:delay]
+      end
+      self.add_usecase usecase
+    end
   end
   
   def self.load_file(path)
@@ -74,7 +85,7 @@ class Testplan
     str << " %-50s ".att(:reverse) % [@desc]
     @usecases.each_with_index do |uc,i| 
       description = uc.desc || "Usecase ##{i+1}"
-      str << "  %s (%s)".bright % [description, uc.ratio]
+      str << "  %s (%s%%)".bright % [description, uc.ratio_pretty]
       requests = uc.requests.each do |r| 
         str << "    %-35s %s" % ["#{r.desc}:", r]
         if Stella.loglev > 2

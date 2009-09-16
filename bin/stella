@@ -81,14 +81,6 @@ class Stella::CLI::Definition
   end
   command :load => Stella::CLI
   
-  about "Preview a testplan"
-  usage "stella preview -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :p, :testplan, String, "Path to testplan" do |v|
-    raise Stella::InvalidOption, "Bad path: #{v}" unless File.exists?(v)
-    v
-  end
-  command :preview => Stella::CLI
-  
   about "Initialize Stella"
   command :init do
     Stella::Config.init
