@@ -16,12 +16,21 @@ module Stella::Engine
       opts[:users] = 1000 if opts[:users] > 1000
       
       Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.li2 "Hosts: " << opts[:hosts].join(', ')
+      Stella.li3 "Hosts: " << opts[:hosts].join(', ')
+      Stella.li2 plan.pretty
       
       packages = build_thread_package plan, opts
+      Stella.li $/, "Prepared #{packages.size} virtual users..."
       Drydock::Screen.flush
       
+      
+      Stella.li $/, "Starting test...", $/
+      Drydock::Screen.flush
+      sleep 0.2
+      
       Thread.ify packages, :threads => opts[:users] do |package|
+        # TEMPFIX. The fill in build_thread_package is creating nil elements
+        next if package.nil? 
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
@@ -42,7 +51,7 @@ module Stella::Engine
         @index, @client, @usecase = i, c, u
       end
     end
-  
+    
     def build_thread_package(plan, opts)
       packages, pointer = Array.new(opts[:users]), 0
       plan.usecases.each_with_index do |usecase,i|
@@ -78,7 +87,7 @@ module Stella::Engine
     
     def update_receive_response(client_id, usecase, meth, uri, req, params, container)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]
+      Stella.li2 '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]
     end
     
     def update_execute_response_handler(client_id, req, container)

@@ -12,13 +12,16 @@ module Stella::Engine
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
-      Stella.li "Testplan:", plan.pretty
+      Stella.li plan.pretty
       
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)
       client.enable_benchmark_mode if opts[:benchmark]
       
-      Stella.li $/, "Running:"
+      Stella.li $/, "Starting test...", $/
+      Drydock::Screen.flush
+      sleep 0.2
+      
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
         Stella.li ' %-65s '.att(:reverse).bright % [desc]

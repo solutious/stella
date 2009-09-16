@@ -41,7 +41,7 @@ class Stella::CLI < Drydock::Command
       @testplan = Stella::Testplan.new(@argv, opts)
     end
     @testplan.check!  # raise errors, update usecase ratios
-    Stella.li2 " File: #{@option.testplan} (#{@testplan.digest})"
+    Stella.li3 " File: #{@option.testplan} (#{@testplan.digest})", $/
     true
   end
   
