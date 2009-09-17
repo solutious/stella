@@ -3,11 +3,27 @@
 module Stella
 class Testplan
   
+  #
+  # Any valid Ruby syntax will do the trick:
+  #
+  #     usecase(10, "Self-serve") {
+  #       post("/listing/add", "Add a listing") {
+  #         wait 1..4 
+  #         param :name => random(8)
+  #         param :city => "Vancouver"
+  #         response(302) {
+  #           repeat 3
+  #         }
+  #       }
+  #     }
+  #
   class Usecase
     include Gibbler::Complex
+    
     attr_accessor :desc
-    attr_accessor :requests
     attr_writer :ratio
+    
+    attr_accessor :requests
     attr_accessor :resources
     attr_accessor :base_path
     

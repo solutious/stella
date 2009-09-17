@@ -15,6 +15,19 @@ set :port => 3114
 set :reload => true
 set :max_listings => 1000
 
+LISTINGS = [
+  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'  },
+  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto'  },
+  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto'  },
+  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto'  },
+  { :id => 1004, :name => 'Forever and Always Beads', :city => 'Montreal' },
+  { :id => 1005, :name => "Big Al's Flavour Country", :city => 'Montreal' },
+  { :id => 1006, :name => 'Big Time Furniture World', :city => 'Montreal' },
+  { :id => 1007, :name => 'High-End Keyboard Makers', :city => 'Montreal' }
+]
+
+set :listings => LISTINGS.clone
+
 #log = File.new("/dev/null", "a")
 #STDOUT.reopen(log)
 #STDERR.reopen(log)
@@ -100,16 +113,6 @@ get '/listings.yaml' do
   @listings.to_yaml
 end
 
-set :listings => [
-  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'  },
-  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto'  },
-  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto'  },
-  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto'  },
-  { :id => 1004, :name => 'Forever and Always Beads', :city => 'Montreal' },
-  { :id => 1005, :name => "Big Al's Flavour Country", :city => 'Montreal' },
-  { :id => 1006, :name => 'Big Time Furniture World', :city => 'Montreal' },
-  { :id => 1007, :name => 'High-End Keyboard Makers', :city => 'Montreal' }
-]
 
 before do
   @cookie = request.cookies["bff-history"]
@@ -118,6 +121,7 @@ before do
   if params[:clear] == 'true'
     @cookie[:history] = []
     @cookie[:location] = ''
+    set :listings => LISTINGS.clone
   end
   @cookie[:history].delete params[:what]
   @cookie[:history].unshift params[:what] unless blank?(params[:what])

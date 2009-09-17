@@ -18,7 +18,7 @@ usecase 65, "Simple search" do
   get "/search", "Search Results" do
     wait 2..5
     param :what  => random(:search_terms)
-    param :where => random(['Toronto', 'Montreal', 'Vancouver'])
+    param :where => random(['Toronto', 'Montreal'])
     response 200 do
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
@@ -32,7 +32,7 @@ usecase 65, "Simple search" do
   
 end
 
-usecase 10, "Self-serve" do  
+usecase 10, "Self-serve" do
   post "/listing/add", "Add a listing" do
     wait 1..4 
     param :name => random(8)
