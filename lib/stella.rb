@@ -35,6 +35,7 @@ module Stella
     
   @@logger = Drydock::Screen
   @@loglev = 1
+  @@debug  = false
   
   # Puts +msg+ to +@@logger+
   def li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
@@ -58,9 +59,9 @@ module Stella
   def enable_quiet; @@loglev = 0; end
   def disable_quiet; @@loglev = 1; end
 
-  def debug?; @@loglev > 3; end
-  def enable_debug; @@loglev = 4; end
-  def disable_debug; @@loglev = 1; end
+  def debug?; @@debug == true; end
+  def enable_debug; @@debug = true; end
+  def disable_debug; @@debug = false; end
   
   def rescue(&blk)
     blk.call

@@ -32,8 +32,8 @@ module Stella::Engine
       container.headers.all.each do |pair|
         Stella.li3 "    %s: %s" % pair
       end
-      Stella.li3 $/, "  Content:"
-      Stella.li3 container.body.empty? ? '    [empty]' : container.body
+      Stella.li4 $/, "  Content:"
+      Stella.li4 container.body.empty? ? '    [empty]' : container.body
       Stella.li2 $/
     end
     
