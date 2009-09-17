@@ -59,12 +59,12 @@ class Testplan
     
     # Reads the contents of the file <tt>path</tt> (the current working
     # directory is assumed to be the same directory containing the test plan).
-    def file(path)
+    def read(path)
       path = File.join(@base_path, path) if @base_path
       File.read(path)
     end
     
-    def list(path)
+    def read(path)
       file(path).split $/
     end
     

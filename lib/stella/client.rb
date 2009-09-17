@@ -25,6 +25,7 @@ module Stella
         counter += 1
         uri_obj = URI.parse(req.uri)
         params = prepare_params(usecase, req.params)
+        headers = prepare_headers(usecase, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         
@@ -33,7 +34,7 @@ module Stella
         
         begin
           update(:send_request, usecase, meth, uri, req, params, counter)
-          container.response = http_client.send(meth, uri, params) # booya!
+          container.response = http_client.send(meth, uri, params, headers) # booya!
           update(:receive_response, usecase, meth, uri, req, params, container)
         rescue => ex
           update(:request_error, usecase, meth, uri, req, params, ex)
@@ -85,16 +86,24 @@ module Stella
         http_client = HTTPClient.new
       end
       http_client.set_cookie_store @cookie_file.to_s
+      #http_client.redirect_uri_callback = ??
       http_client
     end
     
     def prepare_params(usecase, params)
       newparams = {}
       params.each_pair do |n,v|
+        Stella.ld "PREPARE PARAM: #{n}"
         v = usecase.instance_eval &v if v.is_a?(Proc)
         newparams[n] = v
       end
       newparams
+    end
+    
+    def prepare_headers(usecase, headers)
+      Stella.ld "PREPARE HEADERS: #{headers}"
+      headers = usecase.instance_eval &headers if headers.is_a?(Proc)
+      headers
     end
     
     # Testplan URIs can be relative or absolute. Either one can
@@ -146,8 +155,8 @@ module Stella
     def execute_response_handler(container, req)
       handler = nil
       req.response.each_pair do |regex,h|
+        Stella.ld "HANDLER REGEX: #{regex.to_s} (#{container.status})"
         regex = /#{regex}/ unless regex.is_a? Regexp
-        Stella.ld "HANDLER REGEX: #{regex} (#{container.status})"
         handler = h and break if container.status.to_s =~ regex
       end
       ret = nil

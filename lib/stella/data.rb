@@ -3,6 +3,26 @@ module Stella::Data
     
   module Helpers
     
+    def file(*args)
+      input = args.size > 1 ? args : args.first
+      Proc.new do
+        value = case input.class.to_s
+        when "String"
+          Stella.ld "FILE: #{input}"
+          path = File.exists?(input) ? input : File.join(@base_path, input)
+          Stella.ld "Creating file object: #{path}"
+          File.new(path,'r')
+        when "Proc"
+          input.call
+        else
+          input
+        end
+        raise Stella::Testplan::Usecase::UnknownResource, input if value.nil?
+        Stella.ld "FILE: #{value}"
+        value
+      end
+    end
+    
     def random(*args)
       input = args.size > 1 ? args : args.first
       Proc.new do
@@ -13,6 +33,8 @@ module Stella::Data
           input
         when "Range"
           input.to_a
+        when "Proc"
+          input.call
         when "Fixnum"
           Stella::Utils.strand( input )
         when "NilClass"
@@ -28,7 +50,6 @@ module Stella::Data
     
     def sequential(*args)
       input = args.size > 1 ? args : args.first
-      digest = input.gibbler
       Proc.new do
         value = case input.class.to_s
         when "Symbol"
@@ -38,15 +59,18 @@ module Stella::Data
           input
         when "Range"
           input.to_a
+        when "Proc"
+          input.call
         end
-        Stella.ld "SEQVALUES: #{input} #{value.inspect}"
+        digest = value.gibbler
         @sequential_offset ||= {}
         @sequential_offset[digest] ||= 0
+        Stella.ld "SEQVALUES: #{input} #{value.inspect} #{@sequential_offset[digest]}"
         if value.is_a?(Array)
-          size = value[ @sequential_offset[digest] ].size
+          size = value.size
+          @sequential_offset[digest] = 0 if @sequential_offset[digest] >= size
           value = value[ @sequential_offset[digest] ] 
           @sequential_offset[digest] += 1
-          @sequential_offset[digest] = 0 if @sequential_offset[digest] > size
         end
         Stella.ld "SELECTED: #{value}"
         value
@@ -55,7 +79,6 @@ module Stella::Data
     
     def rsequential(*args)
       input = args.size > 1 ? args : args.first
-      digest = input.gibbler
       Proc.new do
         value = case input.class.to_s
         when "Symbol"
@@ -65,15 +88,18 @@ module Stella::Data
           input
         when "Range"
           input.to_a
+        when "Proc"
+          input.call
         end
-        Stella.ld "RSEQVALUES: #{input} #{value.inspect}"
+        digest = value.gibbler
         @rsequential_offset ||= {}
         @rsequential_offset[digest] ||= value.size-1 rescue 1
+        Stella.ld "RSEQVALUES: #{input} #{value.inspect} #{@rsequential_offset[digest]}"
         if value.is_a?(Array)
-          size = value[ @rsequential_offset[digest] ].size
+          size = value.size
+          @rsequential_offset[digest] = size-1 if @rsequential_offset[digest] < 0
           value = value[ @rsequential_offset[digest] ] 
           @rsequential_offset[digest] -= 1
-          @rsequential_offset[digest] = size if @rsequential_offset[digest] < 0
         end
         Stella.ld "SELECTED: #{value}"
         value

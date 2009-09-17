@@ -61,7 +61,8 @@ module Stella::Engine
         count = case opts[:users]
         when 0..9
           if (opts[:users] % plan.usecases.size > 0) 
-            raise Stella::Testplan::WackyRatio, "User count does not evenly match usecase count"
+            msg = "User count does not evenly match usecase count"
+            raise Stella::Testplan::WackyRatio
           else
             (opts[:users] / plan.usecases.size)
           end
@@ -69,7 +70,7 @@ module Stella::Engine
           (opts[:users] * usecase.ratio).to_i
         end
         
-        Stella.ld "THREAD PACKAGE: #{usecase.desc} #{pointer} #{(pointer+count)} #{count}"
+        Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
           Stella.li2 "Creating client ##{index+1} "
@@ -101,6 +102,7 @@ module Stella::Engine
     def update_request_error(client_id, usecase, meth, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.le '  Client%-3s %-45s %s' % [client_id, desc, ex.message]
+      Stella.ld ex.backtrace
     end
 
     

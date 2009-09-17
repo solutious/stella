@@ -2,7 +2,7 @@
 
 desc "Business Finder Testplan"
 
-usecase 65, "Simple search" do
+xusecase 65, "Simple search" do
   resource :search_terms, list('search_terms.csv')
   
   get "/", "Homepage" do
@@ -36,14 +36,15 @@ usecase 10, "Self-serve" do
   post "/listing/add", "Add a listing" do
     wait 1..4 
     param :name => random(8)
-    param :city => "Vancouver"
+    param :city => sequential("Montreal", "Toronto", "Vancouver")
+    param :logo => file('logo.png')
     response 302 do
       repeat 3
     end
   end
 end
 
-usecase "Listing API" do
+xusecase "Listing API" do
   
   get '/listings.yaml', "View All" do
     response 200 do

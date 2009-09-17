@@ -25,7 +25,7 @@ module Stella::Data::HTTP
     field :content_type
     
     def has_body?
-      !@body.nil? && !@body.empty?
+      !@body.nil?
     end
     
     def initialize (method, uri_str, version="1.1", &definition)
@@ -80,18 +80,7 @@ module Stella::Data::HTTP
     # +content+ can be literal content or a file path
     def body(*args)
       return @body if args.empty?
-      content, form_param, content_type = *args
-      
-      @body.form_param = form_param if form_param
-      @body.content_type = content_type if content_type
-      
-      if File.exists?(content)
-        @body.content = File.new(content)
-        @body.content_type ||= "application/x-www-form-urlencoded"
-      else
-        @body.content = content
-      end
-      
+      @body = args.first
     end
     
     def inspect

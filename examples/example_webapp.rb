@@ -75,6 +75,10 @@ post '/listing/add' do
     if find_name(params[:name], @listings).empty?
       @listings.shift if @listings.size >= options.max_listings
       @listings << { :name => params[:name], :id => rand(100000), :city => params[:city] }
+      if params[:logo].is_a?(Hash) && params[:logo][:tempfile]
+        FileUtils.mv params[:logo][:tempfile].path, "logo-#{params[:name]}"
+      end
+      
       redirect '/listings'
     else
       status 500

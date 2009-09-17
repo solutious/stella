@@ -47,6 +47,7 @@ module Stella::Engine
     def update_request_error(client_id, usecase, meth, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.le '  Client%-3s %-45s %s' % [client_id, desc, ex.message]
+      Stella.ld ex.backtrace
     end
     
   end
