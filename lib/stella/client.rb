@@ -163,11 +163,26 @@ module Stella
       ret
     end
     
+    class ResponseError < Stella::Error
+      def initialize(k, m=nil)
+        @kind, @msg = k, m
+      end
+      def message
+        msg = "#{@kind}"
+        msg << ": #{@msg}" unless @msg.nil?
+        msg
+      end
+    end
+    
     class Container
       attr_accessor :usecase
       attr_accessor :response
       def initialize(usecase)
         @usecase = usecase
+      end
+      
+      def self.const_missing(const, *args)
+        ResponseError.new(const)
       end
       
       def doc

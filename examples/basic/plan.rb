@@ -3,6 +3,7 @@
 desc "Business Finder Testplan"
 
 usecase 65, "Simple search" do
+  resource :search_terms, list('search_terms.csv')
   
   get "/", "Homepage" do
     wait 1..5
@@ -16,8 +17,8 @@ usecase 65, "Simple search" do
   
   get "/search", "Search Results" do
     wait 2..5
-    param :what  => 'Big'
-    param :where => ''
+    param :what  => random(:search_terms)
+    param :where => random(['Toronto', 'Montreal', 'Vancouver'])
     response 200 do
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
@@ -31,15 +32,18 @@ usecase 65, "Simple search" do
   
 end
 
-usecase "YAML API" do
-  resource :preset_listing_ids, list('listing_ids.csv')
-  
-  get "/listing/:lid.yaml", "Select listing" do
-    param :lid => random(:preset_listing_ids)
-    response 200 do
-      repeat 5
+usecase 10, "Self-serve" do  
+  post "/listing/add", "Add a listing" do
+    wait 1..4 
+    param :name => random(8)
+    param :city => "Vancouver"
+    response 302 do
+      repeat 3
     end
   end
+end
+
+usecase "Listing API" do
   
   get '/listings.yaml', "View All" do
     response 200 do
@@ -49,7 +53,7 @@ usecase "YAML API" do
     end
   end
   
-  get "/listing/:lid.yaml", "Select listing" do
+  get "/listing/:lid.yaml", "Select (sequential)" do
     param :lid => rsequential(:current_listing_ids)
     response 200 do
       repeat 7
@@ -58,14 +62,3 @@ usecase "YAML API" do
   
 end
 
-usecase 10, "Self-serve" do
-  post "/listing/add" do
-    desc "Add a business"
-    wait 1..4 
-    param :name => random(8)
-    param :city => "Vancouver"
-    response 302 do
-      repeat 3
-    end
-  end
-end

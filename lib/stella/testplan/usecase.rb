@@ -11,6 +11,10 @@ class Testplan
     attr_accessor :resources
     attr_accessor :base_path
     
+    class UnknownResource < Stella::Error
+      def message; "UnknownResource: #{@obj}"; end
+    end
+    
     def initialize(&blk)
       @requests, @resources = [], {}
       instance_eval &blk unless blk.nil?
