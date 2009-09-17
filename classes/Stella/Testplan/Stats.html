@@ -45,12 +45,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000125">new</a></li>
+              <li><a href="#M000127">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000127">reset</a></li>
-              <li><a href="#M000126">total_requests</a></li>
+              <li><a href="#M000129">reset</a></li>
+              <li><a href="#M000128">total_requests</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -76,44 +76,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000125'>
-                <a name='M000125'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>new</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000125-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 9</span>&#x000A; 9:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>&#x000A;10:       <span class="ruby-ivar">@requests</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>&#x000A;11:       <span class="ruby-identifier">reset</span>&#x000A;12:     <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000127'>
+              <div class='public-class method' id='method-M000127'>
                 <a name='M000127'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>reset</span>
+                  <span class='name'>new</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000127-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 18</span>&#x000A;18:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span> &#x000A;19:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">successful</span> = <span class="ruby-value">0</span>&#x000A;20:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">failed</span> = <span class="ruby-value">0</span>&#x000A;21:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000127-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 9</span>&#x000A; 9:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>&#x000A;10:       <span class="ruby-ivar">@requests</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>&#x000A;11:       <span class="ruby-identifier">reset</span>&#x000A;12:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000126'>
-                <a name='M000126'>      </a>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000129'>
+                <a name='M000129'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reset</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000129-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 18</span>&#x000A;18:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span> &#x000A;19:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">successful</span> = <span class="ruby-value">0</span>&#x000A;20:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">failed</span> = <span class="ruby-value">0</span>&#x000A;21:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000128'>
+                <a name='M000128'>      </a>
                 <div class='synopsis'>
                   <span class='name'>total_requests</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000126-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 14</span>&#x000A;14:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total_requests</span>&#x000A;15:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">successful</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">failed</span>&#x000A;16:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000128-source'>    <span class="ruby-comment cmt"># File lib/stella/testplan/stats.rb, line 14</span>&#x000A;14:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total_requests</span>&#x000A;15:       <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">successful</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">failed</span>&#x000A;16:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Error [Stella: Your friend in performance testing.]</title>
+    <title>: Stella::Client::ResponseError [Stella: Your friend in performance testing.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -27,16 +27,16 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>Class</span>
-          Stella::Error
+          Stella::Client::ResponseError
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../files/lib/stella/exceptions_rb.html">lib/stella/exceptions.rb</a>
+            <a href="../../../files/lib/stella/client_rb.html">lib/stella/client.rb</a>
           </li>
         </ol>
         <div class='parent'>
           Parent:
-          <strong>RuntimeError</strong>
+          <strong><a href="../Error.html">Stella::Error</a></strong>
         </div>
       </div>
       <div id='content'>
@@ -45,41 +45,41 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000107">new</a></li>
+              <li><a href="#M000088">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000108">message</a></li>
+              <li><a href="#M000089">message</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000107'>
-                <a name='M000107'>      </a>
+              <div class='public-class method' id='method-M000088'>
+                <a name='M000088'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(obj=nil)</span>
+                  <span class='arguments'>(k, m=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000107-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000088-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000107-source'>   <span class="ruby-comment cmt"># File lib/stella/exceptions.rb, line 5</span>&#x000A;5:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword kw">nil</span>); <span class="ruby-ivar">@obj</span> = <span class="ruby-identifier">obj</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000088-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 167</span>&#x000A;167:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;168:         <span class="ruby-ivar">@kind</span>, <span class="ruby-ivar">@msg</span> = <span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>&#x000A;169:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000108'>
-                <a name='M000108'>      </a>
+              <div class='public-instance method' id='method-M000089'>
+                <a name='M000089'>      </a>
                 <div class='synopsis'>
                   <span class='name'>message</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000108-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000089-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000108-source'>   <span class="ruby-comment cmt"># File lib/stella/exceptions.rb, line 6</span>&#x000A;6:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>; <span class="ruby-node">&quot;#{self.class}: #{@obj}&quot;</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000089-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 170</span>&#x000A;170:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>&#x000A;171:         <span class="ruby-identifier">msg</span> = <span class="ruby-node">&quot;#{@kind}&quot;</span>&#x000A;172:         <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: #{@msg}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@msg</span>.<span class="ruby-identifier">nil?</span>&#x000A;173:         <span class="ruby-identifier">msg</span>&#x000A;174:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
