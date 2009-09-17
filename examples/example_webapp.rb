@@ -1,9 +1,6 @@
 #!/usr/bin/ruby
 
-# Use Ruby 1.8
-
 require "rubygems"
-require "rack"
 require "sinatra"
 
 require 'yaml'

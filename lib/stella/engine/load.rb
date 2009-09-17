@@ -61,7 +61,7 @@ module Stella::Engine
         count = case opts[:users]
         when 0..9
           if (opts[:users] % plan.usecases.size > 0) 
-            raise Stella::Testplan::WackyRatio, "User count does not match usecase count evenly"
+            raise Stella::Testplan::WackyRatio, "User count does not evenly match usecase count"
           else
             (opts[:users] / plan.usecases.size)
           end

@@ -36,6 +36,9 @@ class Stella::CLI < Drydock::Command
 
   private
   def create_testplan
+    unless File.exists?(@option.testplan)
+      raise Stella::InvalidOption, "Bad path: #{v}" 
+    end
     @hosts = @argv.collect { |uri|; URI.parse uri; }
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
