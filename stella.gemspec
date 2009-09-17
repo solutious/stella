@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.7.0.003"
+  s.version = "0.7.0.004"
   s.summary = "Stella: Your friend in performance testing."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -29,8 +29,10 @@
   README.rdoc
   Rakefile
   bin/stella
-  examples/basic/listing_ids.csv
   examples/basic/plan.rb
+  examples/basic/search_terms.csv
+  examples/example_webapp.rb
+  examples/exceptions/plan.rb
   lib/stella.rb
   lib/stella/cli.rb
   lib/stella/client.rb
@@ -56,7 +58,6 @@
   lib/stella/version.rb
   lib/threadify.rb
   stella.gemspec
-  support/example_webapp.rb
   support/useragents.txt
   )
 
