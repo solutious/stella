@@ -109,6 +109,7 @@ class Stella::CLI::Definition
       puts
       puts "Elapsed: %.2f seconds" % @elapsed.to_f
     end
+    exit obj.exit_code || 0
   end
   
 end

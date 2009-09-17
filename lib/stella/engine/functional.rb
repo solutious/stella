@@ -29,6 +29,8 @@ module Stella::Engine
       end
       
       Drydock::Screen.flush
+      
+      !plan.errors?
     end
     
   end

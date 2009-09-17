@@ -40,6 +40,12 @@ class Testplan
     plan
   end
   
+  # Were there any errors in any of the usecases?
+  def errors?
+    Stella.ld "TODO: tally use case errors"
+    false
+  end
+  
   def check!
     # Adjust ratios if necessary
     needy = @usecases.select { |u| u.ratio == -1 }

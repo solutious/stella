@@ -1,9 +1,11 @@
 
 
 class Stella::CLI < Drydock::Command
+  attr_accessor :exit_code
   
   def init
     @conf = Stella::Config.refresh
+    @exit_code = 0
   end
   
   def verify_valid?
@@ -14,7 +16,8 @@ class Stella::CLI < Drydock::Command
     opts = {}
     opts[:hosts] = @hosts
     opts[:benchmark] = true if @option.benchmark
-    Stella::Engine::Functional.run @testplan, opts
+    ret = Stella::Engine::Functional.run @testplan, opts
+    @exit_code = (ret ? 0 : 1)
   end
   
   def load_valid?
@@ -27,7 +30,8 @@ class Stella::CLI < Drydock::Command
     [:benchmark, :users, :repetitions, :delay, :time].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    Stella::Engine::Load.run @testplan, opts
+    ret = Stella::Engine::Load.run @testplan, opts
+    @exit_code = (ret ? 0 : 1)
   end
 
   private
