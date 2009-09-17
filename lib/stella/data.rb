@@ -1,11 +1,10 @@
 
 module Stella::Data
-  
+    
   module Helpers
     
-    
-    def random(input=nil)
-      
+    def random(*args)
+      input = args.size > 1 ? args : args.first
       Proc.new do
         value = case input.class.to_s
         when "Symbol"
@@ -19,6 +18,7 @@ module Stella::Data
         when "NilClass"
           Stella::Utils.strand( rand(100) )
         end
+        raise Stella::Testplan::Usecase::UnknownResource, input if value.nil?
         Stella.ld "RANDVALUES: #{input} #{value.inspect}"
         value = value[ rand(value.size) ] if value.is_a?(Array)
         Stella.ld "SELECTED: #{value}"
@@ -26,7 +26,8 @@ module Stella::Data
       end
     end
     
-    def sequential(input=nil)
+    def sequential(*args)
+      input = args.size > 1 ? args : args.first
       digest = input.gibbler
       Proc.new do
         value = case input.class.to_s
@@ -52,7 +53,8 @@ module Stella::Data
       end
     end
     
-    def rsequential(input=nil)
+    def rsequential(*args)
+      input = args.size > 1 ? args : args.first
       digest = input.gibbler
       Proc.new do
         value = case input.class.to_s
