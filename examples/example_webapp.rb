@@ -5,7 +5,7 @@ require "sinatra"
 
 require 'yaml'
 
-set :run => true
+set :run => $0 == __FILE__ ? true : false
 set :environment => :development
 set :dump_errors => true
 set :port => 3114
