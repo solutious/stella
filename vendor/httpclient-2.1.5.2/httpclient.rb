@@ -6,6 +6,7 @@
 # either the dual license version in 2003, or any later version.
 
 
+
 require 'uri'
 require 'stringio'
 require 'digest/sha1'
@@ -18,6 +19,7 @@ require 'httpclient/session'
 require 'httpclient/http'
 require 'httpclient/auth'
 require 'httpclient/cookie'
+require 'httpclient/stats'
 
 
 # The HTTPClient class provides several methods for accessing Web resources
@@ -296,7 +298,9 @@ class HTTPClient
   # How many times get_content and post_content follows HTTP redirect.
   # 10 by default.
   attr_accessor :follow_redirect_count
-
+  # A Timer object containing response times
+  attr_reader :timer
+  
   # Set HTTP version as a String:: 'HTTP/1.0' or 'HTTP/1.1'
   attr_proxy(:protocol_version, true)
   # Connect timeout in sec.
@@ -353,6 +357,7 @@ class HTTPClient
     @session_manager.ssl_config = @ssl_config = SSLConfig.new(self)
     @cookie_manager = WebAgent::CookieManager.new
     @follow_redirect_count = 10
+    @timer = Timer.new
     load_environment
     self.proxy = proxy if proxy
   end

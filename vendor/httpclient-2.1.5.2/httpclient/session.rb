@@ -625,7 +625,6 @@ class HTTPClient
 
     # Connect to the server
     def connect
-      p caller[0]
       site = @proxy || @dest
       retry_number = 0
       begin
@@ -667,6 +666,7 @@ class HTTPClient
     end
 
     def create_socket(site)
+      @timer.create_socket
       socket = nil
       begin
         @debug_dev << "! CONNECT TO #{site.host}:#{site.port}\n" if @debug_dev
