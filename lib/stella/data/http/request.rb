@@ -70,7 +70,7 @@ module Stella::Data::HTTP
       if definition.nil?
         @response_handler
       else
-        args << 200 if args.empty?
+        args << /.+/ if args.empty?
         args.each do |status|
           @response_handler[status] = definition
         end
