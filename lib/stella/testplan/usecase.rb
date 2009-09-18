@@ -64,8 +64,8 @@ class Testplan
       File.read(path)
     end
     
-    def read(path)
-      file(path).split $/
+    def list(path)
+      read(path).split $/
     end
     
     def add_request(meth, *args, &blk)

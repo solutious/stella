@@ -2,7 +2,6 @@
 require 'socket'
 require 'open-uri'
 require 'date'
-
 require 'timeout'
 
 module Stella
@@ -55,6 +54,22 @@ module Stella
         exit 7
       end
     end
+    
+    
+    # <tt>require</tt> a library from the vendor directory.
+    # The vendor directory should be organized such
+    # that +name+ and +version+ can be used to create
+    # the path to the library. 
+    #
+    # e.g.
+    # 
+    #     vendor/httpclient-2.1.5.2/httpclient
+    #
+    def require_vendor(name, version)
+      path = File.join("#{name}-#{version}", name)
+      require File.join(LIB_HOME, '..', 'vendor', path)
+    end
+    
     
     # Checks whether something is listening to a socket. 
     # * +host+ A hostname

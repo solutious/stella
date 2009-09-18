@@ -1,12 +1,4 @@
 
-unless defined?(STELLA_LIB_HOME)
-  STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__)
-end
-
-local_libs = %w{drydock storable sysinfo gibbler}
-local_libs.each { |dir| $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib') }
-#require 'rubygems'
-
 require 'storable'
 require 'sysinfo'
 require 'gibbler'
@@ -17,22 +9,10 @@ require 'drydock/screen'
 
 module Stella
   extend self
-  require 'stella/version'
-  require 'stella/exceptions'
-  require 'stella/utils'
-  require 'stella/stats'
-  require 'stella/mixins'
-  require 'stella/dsl'
-  require 'stella/engine'
-  require 'stella/testplan'
 
-  autoload :Utils, STELLA_LIB_HOME + "/stella/utils"
-  autoload :Data, STELLA_LIB_HOME + "/stella/data"
-  autoload :Config, STELLA_LIB_HOME + "/stella/config"
-  autoload :Client, STELLA_LIB_HOME + "/stella/client"
+  LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(LIB_HOME)
   
   @@sysinfo = SysInfo.new.freeze
-    
   @@logger = Drydock::Screen
   @@loglev = 1
   @@debug  = false
@@ -71,4 +51,11 @@ module Stella
     Stella.ld ex.backtrace
   end
 end
+
+require 'stella/version'
+require 'stella/exceptions'
+require 'stella/utils'
+
+Stella::Utils.require_glob(Stella::LIB_HOME, 'stella', '*.rb')
+Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 

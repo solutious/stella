@@ -1,6 +1,5 @@
 require "observer"
 require "tempfile"
-require 'httpclient'
 require 'nokogiri'
 
 module Stella

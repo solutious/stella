@@ -18,9 +18,9 @@
 #
 #--
 
-STELLA_LIB_HOME = File.expand_path File.join(File.dirname(__FILE__), '..', 'lib')
-
-$:.unshift STELLA_LIB_HOME  # Put our local lib in first place
+# Put our local lib in first place
+lib_dir = File.expand_path File.join(File.dirname(__FILE__), '..', 'lib')
+$:.unshift lib_dir  
 
 require 'drydock'
 require 'stella'
