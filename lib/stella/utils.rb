@@ -66,8 +66,8 @@ module Stella
     #     vendor/httpclient-2.1.5.2/httpclient
     #
     def require_vendor(name, version)
-      path = File.join("#{name}-#{version}", name)
-      require File.join(LIB_HOME, '..', 'vendor', path)
+       $: << File.join(LIB_HOME, '..', 'vendor', "#{name}-#{version}")
+       require name
     end
     
     

@@ -36,15 +36,28 @@ class Stats
 
   # Dump this Stats object with an optional additional message.
   def dump(msg = "", out=STDERR)
-    out.puts "#{msg}: #{self.to_s}"
+    out.puts "#{msg}: #{self.inspect}"
   end
 
   # Returns a common display (used by dump)
-  def to_s
-  "[#{@name}]: SUM=%0.4f, SUMSQ=%0.4f, N=%0.4f, MEAN=%0.4f, SD=%0.4f, MIN=%0.4f, MAX=%0.4f" % [@sum, @sumsq, @n, mean, sd, @min, @max]
+  def inspect
+    v = [mean, @n, @sum, @sumsq, sd, @min, @max]
+    t = %w"N=%0.4f SUM=%0.4f SUMSQ=%0.4f SD=%0.4f MIN=%0.4f MAX=%0.4f"
+    "%0.4f: " << t % v
   end
 
-
+  def to_s
+    mean.to_s
+  end
+  
+  def to_f
+    mean.to_f
+  end
+  
+  def to_i
+    mean.to_i
+  end
+  
   # Calculates and returns the mean for the data passed so far.
   def mean
     @sum / @n

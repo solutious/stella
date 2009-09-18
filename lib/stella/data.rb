@@ -11,7 +11,7 @@ module Stella::Data
           Stella.ld "FILE: #{input}"
           path = File.exists?(input) ? input : File.join(@base_path, input)
           Stella.ld "Creating file object: #{path}"
-          File.new(path,'r')
+          File.new(path)
         when "Proc"
           input.call
         else

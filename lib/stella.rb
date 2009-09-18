@@ -1,16 +1,21 @@
 
-require 'storable'
-require 'sysinfo'
-require 'gibbler'
-require 'gibbler/aliases'
 require 'ostruct'
 require 'threadify'
-require 'drydock/screen'
 
 module Stella
   extend self
 
   LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(LIB_HOME)
+  
+  %w{storable sysinfo gibbler staedler}.each do |dir|
+    $:.unshift File.join(LIB_HOME, '..', '..', dir, 'lib')
+  end
+  require 'storable'
+  require 'sysinfo'
+  require 'gibbler'
+  require 'gibbler/aliases'
+  require 'drydock/screen'
+  require 'belvedere'
   
   @@sysinfo = SysInfo.new.freeze
   @@logger = Drydock::Screen

@@ -16,28 +16,32 @@ module Stella
       @proxy = OpenStruct.new
     end
     
-    
     def execute(usecase)
       http_client = create_http_client
       container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|
         counter += 1
+        update(:prepare_request, usecase, req, counter)
+        
         uri_obj = URI.parse(req.uri)
         params = prepare_params(usecase, req.params)
         headers = prepare_headers(usecase, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         
+        unique_id = [req, params, headers, counter].gibbler
+        req_id = req.gibbler
+        
         meth = req.http_method.to_s.downcase
-        Stella.ld "#{meth}: " << "#{uri_obj.to_s} " << req.params.inspect
+        Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
         
         begin
-          update(:send_request, usecase, meth, uri, req, params, counter)
+          update(:send_request, usecase, uri, req, params, container)
           container.response = http_client.send(meth, uri, params, headers) # booya!
-          update(:receive_response, usecase, meth, uri, req, params, container)
+          update(:receive_response, usecase, uri, req, params, container)
         rescue => ex
-          update(:request_error, usecase, meth, uri, req, params, ex)
+          update(:request_error, usecase, uri, req, params, ex)
           next
         end
         
@@ -45,13 +49,14 @@ module Stella
         
         Stella.lflush
         
+        # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
           Stella.ld "REPETITION: #{counter} of #{ret.times+1}"
           redo if counter <= ret.times
         when "Stella::Client::Quit"
           Stella.ld "QUIT USECASE: #{ret.message}"
-          return
+          break
         end
       
         
@@ -66,8 +71,7 @@ module Stella
       
   private
     def update(kind, *args)
-      changed
-      notify_observers(kind, @client_id, *args)
+      changed and notify_observers(kind, @client_id, *args)
     end
   
     def run_sleeper(wait)

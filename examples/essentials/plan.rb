@@ -2,7 +2,7 @@
 
 desc "Business Finder Testplan"
 
-usecase 65, "Simple search" do
+xusecase 65, "Simple search" do
   resource :search_terms, list('search_terms.csv')
   
   get "/", "Homepage" do
@@ -18,7 +18,7 @@ usecase 65, "Simple search" do
   get "/search", "Search Results" do
     wait 2..5
     param :what  => random(:search_terms)
-    param :where => random(['2Toronto', '2Montreal'])
+    param :where => random(['Toronto', 'Montreal'])
     response 200 do
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
@@ -47,7 +47,7 @@ usecase 10, "Self-serve" do
   end
 end
 
-usecase "Listing API" do
+xusecase "Listing API" do
   
   get '/listings.yaml', "View All" do
     response 200 do
