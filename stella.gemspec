@@ -29,9 +29,11 @@
   README.rdoc
   Rakefile
   bin/stella
-  examples/basic/plan.rb
-  examples/basic/search_terms.csv
+  examples/essentials/logo.png
+  examples/essentials/plan.rb
+  examples/essentials/search_terms.csv
   examples/example_webapp.rb
+  examples/example_webapp.ru
   examples/exceptions/plan.rb
   lib/stella.rb
   lib/stella/cli.rb
@@ -42,7 +44,6 @@
   lib/stella/data/http/body.rb
   lib/stella/data/http/request.rb
   lib/stella/data/http/response.rb
-  lib/stella/dsl.rb
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load.rb
@@ -59,6 +60,18 @@
   lib/threadify.rb
   stella.gemspec
   support/useragents.txt
+  vendor/httpclient-2.1.5.2/httpclient.rb
+  vendor/httpclient-2.1.5.2/httpclient/auth.rb
+  vendor/httpclient-2.1.5.2/httpclient/cacert.p7s
+  vendor/httpclient-2.1.5.2/httpclient/cacert_sha1.p7s
+  vendor/httpclient-2.1.5.2/httpclient/connection.rb
+  vendor/httpclient-2.1.5.2/httpclient/cookie.rb
+  vendor/httpclient-2.1.5.2/httpclient/http.rb
+  vendor/httpclient-2.1.5.2/httpclient/session.rb
+  vendor/httpclient-2.1.5.2/httpclient/ssl_config.rb
+  vendor/httpclient-2.1.5.2/httpclient/stats.rb
+  vendor/httpclient-2.1.5.2/httpclient/timeout.rb
+  vendor/httpclient-2.1.5.2/httpclient/util.rb
   )
 
   

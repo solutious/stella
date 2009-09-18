@@ -81,11 +81,15 @@ module Stella::Engine
       packages
     end
     
-    def update_send_request(client_id, usecase, meth, uri, req, params, counter)
+    def update_prepare_request(client_id, usecase, req, counter)
+
+    end
+    
+    def update_send_request(client_id, usecase, uri, req, params, counter)
       
     end
     
-    def update_receive_response(client_id, usecase, meth, uri, req, params, container)
+    def update_receive_response(client_id, usecase, uri, req, params, container)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li2 '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]
     end
@@ -96,7 +100,7 @@ module Stella::Engine
     def update_error_execute_response_handler(client_id, ex, req, container)
     end
     
-    def update_request_error(client_id, usecase, meth, uri, req, params, ex)
+    def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.le '  Client%-3s %-45s %s' % [client_id, desc, ex.message]
       Stella.ld ex.backtrace

@@ -7,7 +7,7 @@ module Stella
 
   LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(LIB_HOME)
   
-  %w{storable sysinfo gibbler staedler}.each do |dir|
+  %w{storable sysinfo gibbler}.each do |dir|
     $:.unshift File.join(LIB_HOME, '..', '..', dir, 'lib')
   end
   require 'storable'
@@ -15,7 +15,6 @@ module Stella
   require 'gibbler'
   require 'gibbler/aliases'
   require 'drydock/screen'
-  require 'belvedere'
   
   @@sysinfo = SysInfo.new.freeze
   @@logger = Drydock::Screen
