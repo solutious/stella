@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Engine::Load::ThreadPackage [Stella: Your friend in performance testing.]</title>
+    <title>: Stella::Client::Quit [Stella: Your friend in performance testing.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -27,16 +27,16 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>Class</span>
-          Stella::Engine::Load::ThreadPackage
+          Stella::Client::Quit
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../../files/lib/stella/engine/load_rb.html">lib/stella/engine/load.rb</a>
+            <a href="../../../files/lib/stella/client_rb.html">lib/stella/client.rb</a>
           </li>
         </ol>
         <div class='parent'>
           Parent:
-          <strong>Object</strong>
+          <strong><a href="ResponseModifier.html">Stella::Client::ResponseModifier</a></strong>
         </div>
       </div>
       <div id='content'>
@@ -45,7 +45,7 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000062">new</a></li>
+              <li><a href="#M000113">new</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -54,17 +54,7 @@
               <div class='name-list'>
                 <table>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>client</td>
-                    <td class='context-item-value'>[RW]</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>index</td>
-                    <td class='context-item-value'>[RW]</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>usecase</td>
+                    <td class='context-item-name'>message</td>
                     <td class='context-item-value'>[RW]</td>
                     <td class='context-item-desc'></td>
                   </tr>
@@ -73,17 +63,17 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000062'>
-                <a name='M000062'>      </a>
+              <div class='public-class method' id='method-M000113'>
+                <a name='M000113'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(i, c, u)</span>
+                  <span class='arguments'>(msg=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000113-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000062-source'>    <span class="ruby-comment cmt"># File lib/stella/engine/load.rb, line 49</span>&#x000A;49:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">i</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">u</span>)&#x000A;50:         <span class="ruby-ivar">@index</span>, <span class="ruby-ivar">@client</span>, <span class="ruby-ivar">@usecase</span> = <span class="ruby-identifier">i</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">u</span>&#x000A;51:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000113-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 237</span>&#x000A;237:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;238:         <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">msg</span>&#x000A;239:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
