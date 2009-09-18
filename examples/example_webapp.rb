@@ -76,7 +76,8 @@ post '/listing/add' do
       @listings.shift if @listings.size >= options.max_listings
       @listings << { :name => params[:name], :id => rand(100000), :city => params[:city] }
       if params[:logo].is_a?(Hash) && params[:logo][:tempfile]
-        FileUtils.mv params[:logo][:tempfile].path, "logo-#{params[:name]}"
+        p params[:logo][:tempfile].class, params[:logo][:tempfile].size
+        #FileUtils.mv params[:logo][:tempfile].path, "logo-#{params[:name]}"
       end
       
       redirect '/listings'

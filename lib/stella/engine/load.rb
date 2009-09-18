@@ -7,20 +7,20 @@ module Stella::Engine
     def run(plan, opts={})
       opts = {
         :hosts        => [],
-        :users        => 1,
+        :clients        => 1,
         :time         => nil,
         :benchmark    => false,
         :repetitions  => 1
       }.merge! opts
-      opts[:users] = plan.usecases.size if opts[:users] < plan.usecases.size
-      opts[:users] = 1000 if opts[:users] > 1000
+      opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
+      opts[:clients] = 1000 if opts[:clients] > 1000
       
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li3 "Hosts: " << opts[:hosts].join(', ')
       Stella.li2 plan.pretty
       
       packages = build_thread_package plan, opts
-      Stella.li $/, "Prepared #{packages.size} virtual users..."
+      Stella.li $/, "Prepared #{packages.size} virtual clients..."
       Stella.lflush
       
       
@@ -28,7 +28,7 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
-      Thread.ify packages, :threads => opts[:users] do |package|
+      Thread.ify packages, :threads => opts[:clients] do |package|
         # TEMPFIX. The fill in build_thread_package is creating nil elements
         next if package.nil? 
         (1..opts[:repetitions]).to_a.each do |rep|
@@ -52,19 +52,19 @@ module Stella::Engine
     end
     
     def build_thread_package(plan, opts)
-      packages, pointer = Array.new(opts[:users]), 0
+      packages, pointer = Array.new(opts[:clients]), 0
       plan.usecases.each_with_index do |usecase,i|
         
-        count = case opts[:users]
+        count = case opts[:clients]
         when 0..9
-          if (opts[:users] % plan.usecases.size > 0) 
-            msg = "User count does not evenly match usecase count"
-            raise Stella::Testplan::WackyRatio
+          if (opts[:clients] % plan.usecases.size > 0) 
+            msg = "Client count does not evenly match usecase count"
+            raise Stella::Testplan::WackyRatio, msg
           else
-            (opts[:users] / plan.usecases.size)
+            (opts[:clients] / plan.usecases.size)
           end
         else
-          (opts[:users] * usecase.ratio).to_i
+          (opts[:clients] * usecase.ratio).to_i
         end
         
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"

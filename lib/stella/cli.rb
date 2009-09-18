@@ -27,7 +27,7 @@ class Stella::CLI < Drydock::Command
   def load
     opts = {}
     opts[:hosts] = @hosts
-    [:benchmark, :users, :repetitions, :delay, :time].each do |opt|
+    [:benchmark, :clients, :repetitions, :delay, :time].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     ret = Stella::Engine::Load.run @testplan, opts
