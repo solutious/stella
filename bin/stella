@@ -98,7 +98,7 @@ class Stella::CLI::Definition
   end
 
   after do |obj|  
-    Drydock::Screen.flush
+    Stella.lflush
     @elapsed = Time.now - @start
     if Stella.loglev > 1 && @elapsed > 0.1
       puts

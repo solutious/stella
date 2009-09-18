@@ -38,6 +38,7 @@ module Stella
   @@debug  = false
   
   # Puts +msg+ to +@@logger+
+  def lflush; @@logger.flush if @@logger.respond_to? :flush; end
   def li(*msg); msg.each { |m| @@logger.puts m } if !quiet? end
   def li1(*msg); li *msg if @@loglev >= 1 end
   def li2(*msg); li *msg if @@loglev >= 2 end

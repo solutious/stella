@@ -19,16 +19,14 @@ module Stella::Engine
       client.enable_benchmark_mode if opts[:benchmark]
       
       Stella.li $/, "Starting test...", $/
-      Drydock::Screen.flush
-      sleep 0.2
+      Stella.lflush
+      sleep 0.3
       
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
         Stella.li ' %-65s '.att(:reverse).bright % [desc]
         Stella.rescue { client.execute uc }
       end
-      
-      Drydock::Screen.flush
       
       !plan.errors?
     end

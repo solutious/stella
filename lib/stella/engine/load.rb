@@ -21,12 +21,12 @@ module Stella::Engine
       
       packages = build_thread_package plan, opts
       Stella.li $/, "Prepared #{packages.size} virtual users..."
-      Drydock::Screen.flush
+      Stella.lflush
       
       
       Stella.li $/, "Starting test...", $/
-      Drydock::Screen.flush
-      sleep 0.2
+      Stella.lflush
+      sleep 0.3
       
       Thread.ify packages, :threads => opts[:users] do |package|
         # TEMPFIX. The fill in build_thread_package is creating nil elements
@@ -35,11 +35,8 @@ module Stella::Engine
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
           Stella.rescue { package.client.execute package.usecase }
-          Drydock::Screen.flush
         end
       end
-      
-      Drydock::Screen.flush
       
       !plan.errors?
     end

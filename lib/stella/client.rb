@@ -43,7 +43,7 @@ module Stella
         
         ret = execute_response_handler container, req
         
-        Drydock::Screen.flush
+        Stella.lflush
         
         if ret.kind_of?(ResponseModifier)
           case ret.class.to_s
@@ -85,6 +85,7 @@ module Stella
       else
         http_client = HTTPClient.new
       end
+      http_client.debug_dev = STDOUT 
       http_client.set_cookie_store @cookie_file.to_s
       #http_client.redirect_uri_callback = ??
       http_client
