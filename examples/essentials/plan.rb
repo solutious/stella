@@ -2,7 +2,7 @@
 
 desc "Business Finder Testplan"
 
-xusecase 65, "Simple search" do
+usecase 65, "Simple search" do
   resource :search_terms, list('search_terms.csv')
   
   get "/", "Homepage" do
@@ -44,7 +44,7 @@ usecase 10, "Self-serve" do
   end
 end
 
-xusecase "Listing API" do
+usecase "Listing API" do
   
   get '/listings.yaml', "View All" do
     response 200 do
