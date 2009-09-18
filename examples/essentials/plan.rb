@@ -18,10 +18,13 @@ usecase 65, "Simple search" do
   get "/search", "Search Results" do
     wait 2..5
     param :what  => random(:search_terms)
-    param :where => random(['Toronto', 'Montreal'])
+    param :where => random(['2Toronto', '2Montreal'])
     response 200 do
       listing = doc.css('div.listing').first
       set :lid, listing['id'].match(/(\d+)/)[0]
+    end
+    response 404 do 
+      quit "No results"
     end
   end
   

@@ -42,6 +42,7 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       Stella.le ex.message
+      Stella.ld ex.backtrace
     end
     
     def update_request_error(client_id, usecase, meth, uri, req, params, ex)

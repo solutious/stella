@@ -13,11 +13,12 @@ module Stella
       @base_uri, @client_id = base_uri, client_id
       @cookie_file = Tempfile.new('stella-cookie')
       @stats = Stella::Stats.new("Client #{@client_id}")
+      @proxy = OpenStruct.new
     end
     
     
     def execute(usecase)
-      http_client = generate_http_client
+      http_client = create_http_client
       container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|
@@ -44,13 +45,15 @@ module Stella
         
         Stella.lflush
         
-        if ret.kind_of?(ResponseModifier)
-          case ret.class.to_s
-          when "Stella::Client::Repeat"
-            Stella.ld "REPETITION: #{counter} of #{ret.times+1}"
-            redo if counter <= ret.times
-          end
+        case ret.class.to_s
+        when "Stella::Client::Repeat"
+          Stella.ld "REPETITION: #{counter} of #{ret.times+1}"
+          redo if counter <= ret.times
+        when "Stella::Client::Quit"
+          Stella.ld "QUIT USECASE: #{ret.message}"
+          return
         end
+      
         
         counter = 0 # reset
         run_sleeper(req.wait) if req.wait && !benchmark?
@@ -77,14 +80,15 @@ module Stella
       sleep ms / 1000
     end
     
-    def generate_http_client
-      if @proxy
-        http_client = HTTPClient.new(@proxy.uri)
-        http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
-      else
-        http_client = HTTPClient.new
-      end
-      http_client.debug_dev = STDOUT 
+    def create_http_client
+      opts = {
+        :proxy       => @proxy.uri || nil, # a tautology for clarity
+        :agent_name  => "Stella/#{Stella::VERSION}",
+        :from        => nil
+      }
+      http_client = HTTPClient.new opts
+      http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
+      http_client.debug_dev = STDOUT if Stella.debug? && Stella.loglev > 3
       http_client.set_cookie_store @cookie_file.to_s
       #http_client.redirect_uri_callback = ??
       http_client
@@ -213,7 +217,7 @@ module Stella
       def set(n, v); usecase.resource n, v; end
       def resource(n);    usecase.resource n;    end
       def wait(t); sleep t; end
-      
+      def quit(msg=nil); Quit.new(msg); end
       def repeat(t=1); Repeat.new(t); end
     end
     
@@ -222,6 +226,12 @@ module Stella
       attr_accessor :times
       def initialize(times)
         @times = times
+      end
+    end
+    class Quit < ResponseModifier; 
+      attr_accessor :message
+      def initialize(msg=nil)
+        @message = msg
       end
     end
   end
