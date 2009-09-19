@@ -666,7 +666,6 @@ class HTTPClient
     end
 
     def create_socket(site)
-      @timer.create_socket
       socket = nil
       begin
         @debug_dev << "! CONNECT TO #{site.host}:#{site.port}\n" if @debug_dev
@@ -741,12 +740,15 @@ class HTTPClient
       end
       @next_connection = false unless @content_length
     end
-
+    
+    # Added by delano for Benelux support
+    def socket_gets_initial_line(*args); @socket.gets(*args); end
+    
     StatusParseRegexp = %r(\AHTTP/(\d+\.\d+)\s+(\d\d\d)\s*([^\r\n]+)?\r?\n\z)
     def parse_header
       timeout(@receive_timeout, ReceiveTimeoutError) do
         begin
-          initial_line = @socket.gets("\n")
+          initial_line = socket_gets_initial_line("\n")
           if initial_line.nil?
             raise KeepAliveDisconnected.new
           end

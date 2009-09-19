@@ -7,14 +7,15 @@ module Stella
 
   LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(LIB_HOME)
   
-  %w{storable sysinfo gibbler}.each do |dir|
+  %w{storable sysinfo gibbler benelux}.each do |dir|
     $:.unshift File.join(LIB_HOME, '..', '..', dir, 'lib')
   end
-  require 'storable'
   require 'sysinfo'
+  require 'drydock/screen'
+  require 'storable'
   require 'gibbler'
   require 'gibbler/aliases'
-  require 'drydock/screen'
+  require 'benelux'
   
   @@sysinfo = SysInfo.new.freeze
   @@logger = Drydock::Screen
@@ -59,7 +60,8 @@ end
 require 'stella/version'
 require 'stella/exceptions'
 require 'stella/utils'
+require 'stella/config'
 
-Stella::Utils.require_glob(Stella::LIB_HOME, 'stella', '*.rb')
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
+Stella::Utils.require_glob(Stella::LIB_HOME, 'stella', '*.rb')
 

@@ -4,7 +4,9 @@ require 'nokogiri'
 
 module Stella
   class Client
+    include Gibbler::Complex
     include Observable
+    
     attr_reader :client_id
     attr_accessor :base_uri
     attr_accessor :proxy
@@ -37,9 +39,7 @@ module Stella
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
         
         begin
-          update(:send_request, usecase, uri, req, params, container)
-          container.response = http_client.send(meth, uri, params, headers) # booya!
-          update(:receive_response, usecase, uri, req, params, container)
+          send_request http_client, usecase, meth, uri, req, params, headers, container
         rescue => ex
           update(:request_error, usecase, uri, req, params, ex)
           next
@@ -70,6 +70,12 @@ module Stella
     def benchmark?; @bm == true; end
       
   private
+    def send_request(http_client, usecase, meth, uri, req, params, headers, container)
+      update(:send_request, usecase, uri, req, params, container)
+      container.response = http_client.send(meth, uri, params, headers) # booya!
+      update(:receive_response, usecase, uri, req, params, container)
+    end
+    
     def update(kind, *args)
       changed and notify_observers(kind, @client_id, *args)
     end

@@ -2,7 +2,7 @@
 
 desc "Business Finder Testplan"
 
-xusecase 65, "Simple search" do
+usecase 65, "Simple search" do
   resource :search_terms, list('search_terms.csv')
   
   get "/", "Homepage" do
@@ -35,7 +35,7 @@ xusecase 65, "Simple search" do
   
 end
 
-usecase 10, "Self-serve" do
+xusecase 10, "Self-serve" do
   post "/listing/add", "Add a listing" do
     wait 1..4 
     param :name => random(8)

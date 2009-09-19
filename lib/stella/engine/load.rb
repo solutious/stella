@@ -81,6 +81,7 @@ module Stella::Engine
       packages
     end
     
+    
     def update_prepare_request(client_id, usecase, req, counter)
 
     end

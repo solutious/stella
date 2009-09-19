@@ -20,6 +20,7 @@ This is an early preview of Stella. The following features are still under devel
 * File uploads.
 * Documentation.
 
+
 == Usage Example
 
     # Verify a test plan is defined correctly
