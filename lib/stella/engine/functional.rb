@@ -34,7 +34,7 @@ module Stella::Engine
       # Add client timeline only once (it's okay we sort later)
       benelux_timeline += client.benelux_timeline
       
-      p benelux_timeline.sort.to_line
+      p Benelux..sort.to_line
       
       #p client.benelux_at(:execute_start).first.name
       
