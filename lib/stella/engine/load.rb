@@ -40,19 +40,22 @@ module Stella::Engine
         #package.client.benelux_timeline.each do |i|
         #  Stella.li "#{package.client.client_id}: #{i.to_f}: #{i.name}"
         #end
+        t = Benelux.thread_timeline.sort
+        dur = t.last.to_f - t.first.to_f
+        Stella.li [:thread, t.first.name, t.last.name, dur].inspect
+        Stella.lflush
       end
       
-      benelux_timeline = []
-      packages.each do |package|
-        next if package.nil? 
-        benelux_timeline += package.client.benelux_timeline
-      end
+      t = Benelux.timeline.sort
+      dur = t.last.to_f - t.first.to_f
+      Stella.li [:global, t.first.name, t.last.name, dur].inspect
+      
       prev = nil
-      Stella.li benelux_timeline.sort.collect { |obj|
-        str = "#{obj.to_f}: #{obj.name} (#{obj.same_timeline?(prev)})" 
-        prev = obj
-        str
-      }
+      #Stella.li Benelux.timeline.sort.collect { |obj|
+      #  str = "#{obj.to_f}: #{obj.name} (#{obj.same_timeline?(prev)})" 
+      #  prev = obj
+      #  str
+      #}
       !plan.errors?
     end
     

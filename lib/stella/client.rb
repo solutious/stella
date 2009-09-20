@@ -18,10 +18,8 @@ module Stella
       @proxy = OpenStruct.new
     end
     
-    def http_client() @http_client end
-      
     def execute(usecase)
-      @http_client = create_http_client
+      http_client = create_http_client
       container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|

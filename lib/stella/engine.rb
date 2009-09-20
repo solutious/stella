@@ -2,13 +2,9 @@
 
 module Stella::Engine
   
-  Benelux.add_timer Stella::Client, :execute
-  Benelux.add_timer Stella::Client, :send_request
-  Benelux.add_tally Stella::Client, :probe_header_size
-  Benelux.add_tally Stella::Client, :probe_body_size
-  
-  Benelux.add_timer HTTPClient, :do_request
-  
+  Benelux.add_timer      Stella::Client, :execute
+  Benelux.add_timer      Stella::Client, :send_request
+  Benelux.add_timer          HTTPClient, :do_request
   Benelux.add_timer HTTPClient::Session, :create_socket
   Benelux.add_timer HTTPClient::Session, :connect
   Benelux.add_timer HTTPClient::Session, :query
@@ -20,13 +16,11 @@ module Stella::Engine
     
     def update(*args)
       what, *args = args
-      Stella.ld "OBSERVER UPDATE: #{what}"
       if !respond_to?("update_#{what}")
-        Stella.ld "NO UPDATE HANDLER FOR: #{what}" 
+        Stella.ld "OBSERVER UPDATE: #{what}"
+        Stella.rescue { self.send("update_#{what}", *args) }
       else
-        Stella.rescue {
-          self.send("update_#{what}", *args) 
-        }
+        Stella.ld "NO UPDATE HANDLER FOR: #{what}" 
       end
     end
 

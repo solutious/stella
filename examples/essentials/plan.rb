@@ -35,7 +35,7 @@ usecase 65, "Simple search" do
   
 end
 
-usecase 10, "Self-serve" do
+xusecase 10, "Self-serve" do
   post "/listing/add", "Add a listing" do
     wait 1..4 
     param :name => random(8)
@@ -47,7 +47,7 @@ usecase 10, "Self-serve" do
   end
 end
 
-xusecase "Listing API" do
+usecase "Listing API" do
   
   get '/listings.yaml', "View All" do
     response 200 do
