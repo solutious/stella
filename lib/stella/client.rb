@@ -27,7 +27,6 @@ module Stella
       usecase.requests.each do |req|
         counter += 1
         update(:prepare_request, usecase, req, counter)
-        
         uri_obj = URI.parse(req.uri)
         params = prepare_params(usecase, req.params)
         headers = prepare_headers(usecase, req.headers)
@@ -39,7 +38,7 @@ module Stella
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
-        
+
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container
         rescue => ex
@@ -132,26 +131,24 @@ module Stella
     # 
     # This method creates a new URI object using the @base_uri
     # if necessary and replaces all variables with literal values.
-    # If no replacement value can be found, the variable is not touched. 
-    def build_request_uri(requri, params, container)
-      uri = ""
-      request_uri = requri.to_s
-      if requri.host.nil?
-        uri = base_uri.to_s
-        uri.gsub! /\/$/, ''  # Don't double up on the first slash
-        request_uri = '/' << request_uri unless request_uri.match(/^\//)
-      end
+    # If no replacement value can be found, the variable will remain. 
+    def build_request_uri(uri, params, container)
+      uri = URI::HTTP.build({:path => uri}) unless uri.is_a?(URI::Generic)
+      uri.scheme = base_uri.scheme if uri.scheme.nil?
+      uri.host = base_uri.host if uri.host.nil?
+      uri.port = base_uri.port if uri.port.nil?
+      uri.path ||= ''
+      uri.path.gsub! /\/$/, ''  # Don't double up on the first slash
       # We call req.uri again because we need  
       # to modify request_uri inside the loop. 
-      requri.to_s.scan(/:([a-z_]+)/i) do |instances|
+      uri.path.clone.scan(/:([a-z_]+)/i) do |instances|
         instances.each do |varname|
           val = find_replacement_value(varname, params, container)
           #Stella.ld "FOUND: #{val}"
-          request_uri.gsub! /:#{varname}/, val.to_s unless val.nil?
+          uri.path.gsub! /:#{varname}/, val.to_s unless val.nil?
         end
       end
-      uri << request_uri
-      URI.parse uri
+      uri
     end
     
     # Testplan URIs can contain variables in the form <tt>:varname</tt>. 

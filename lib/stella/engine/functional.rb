@@ -28,7 +28,7 @@ module Stella::Engine
         desc = (uc.desc || "Usecase ##{i+1}")
         Stella.li ' %-65s '.att(:reverse).bright % [desc]
         Stella.rescue { client.execute uc }
-        #benelux_timeline += client.http_client.benelux_timeline
+        benelux_timeline += client.http_client.benelux_timeline
       end
       
       # Add client timeline only once (it's okay we sort later)
