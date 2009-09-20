@@ -36,8 +36,23 @@ module Stella::Engine
           # so we clone it here so each thread is unique.
           Stella.rescue { package.client.execute package.usecase }
         end
+        
+        #package.client.benelux_timeline.each do |i|
+        #  Stella.li "#{package.client.client_id}: #{i.to_f}: #{i.name}"
+        #end
       end
       
+      benelux_timeline = []
+      packages.each do |package|
+        next if package.nil? 
+        benelux_timeline += package.client.benelux_timeline
+      end
+      prev = nil
+      Stella.li benelux_timeline.sort.collect { |obj|
+        str = "#{obj.to_f}: #{obj.name} (#{obj.same_timeline?(prev)})" 
+        prev = obj
+        str
+      }
       !plan.errors?
     end
     

@@ -4,6 +4,10 @@ module Stella::Engine
   
   Benelux.add_timer Stella::Client, :execute
   Benelux.add_timer Stella::Client, :send_request
+  Benelux.add_tally Stella::Client, :probe_header_size
+  Benelux.add_tally Stella::Client, :probe_body_size
+  
+  Benelux.add_timer HTTPClient, :do_request
   
   Benelux.add_timer HTTPClient::Session, :create_socket
   Benelux.add_timer HTTPClient::Session, :connect
@@ -13,10 +17,6 @@ module Stella::Engine
   
   module Base
     extend self
-    
-    def run
-      raise "override the run method"
-    end
     
     def update(*args)
       what, *args = args
@@ -29,6 +29,8 @@ module Stella::Engine
         }
       end
     end
+
+    def run; raise; end
     
     def update_prepare_request(*args) raise end
     def update_send_request(*args) raise end

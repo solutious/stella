@@ -35,7 +35,7 @@ usecase 65, "Simple search" do
   
 end
 
-xusecase 10, "Self-serve" do
+usecase 10, "Self-serve" do
   post "/listing/add", "Add a listing" do
     wait 1..4 
     param :name => random(8)

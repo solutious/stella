@@ -23,21 +23,24 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
+      benelux_timeline = Benelux::Timeline.new
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
         Stella.li ' %-65s '.att(:reverse).bright % [desc]
         Stella.rescue { client.execute uc }
+        #benelux_timeline += client.http_client.benelux_timeline
       end
       
-      client.benelux_timeline.each do |i|
-#        puts "#{i.name}: #{i.to_f}"
-      end
+      # Add client timeline only once (it's okay we sort later)
+      benelux_timeline += client.benelux_timeline
       
-      p client.benelux_at(:execute_start).first.name
+      p benelux_timeline.sort.to_line
       
-      p client.benelux_between(:execute_start, :execute_end)
+      #p client.benelux_at(:execute_start).first.name
       
-      #client.benelux_duration(:execute)
+      #p client.benelux_between(:execute_start, :execute_end)
+      
+      #p client.benelux_duration(:execute)
       
       !plan.errors?
     end

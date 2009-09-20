@@ -88,7 +88,7 @@ class Testplan
 
   def pretty
     str = []
-    str << " %-50s ".att(:reverse) % [@desc]
+    str << " %-66s ".att(:reverse) % [@desc]
     @usecases.each_with_index do |uc,i| 
       description = uc.desc || "Usecase ##{i+1}"
       str << "  %s (%s%%)".bright % [description, uc.ratio_pretty]
