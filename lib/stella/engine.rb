@@ -16,7 +16,7 @@ module Stella::Engine
     
     def update(*args)
       what, *args = args
-      if !respond_to?("update_#{what}")
+      if respond_to?("update_#{what}")
         Stella.ld "OBSERVER UPDATE: #{what}"
         Stella.rescue { self.send("update_#{what}", *args) }
       else
