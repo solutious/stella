@@ -28,6 +28,7 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
+      
       Thread.ify packages, :threads => opts[:clients] do |package|
         # TEMPFIX. The fill in build_thread_package is creating nil elements
         next if package.nil? 
@@ -40,15 +41,18 @@ module Stella::Engine
         #package.client.benelux_timeline.each do |i|
         #  Stella.li "#{package.client.client_id}: #{i.to_f}: #{i.name}"
         #end
-        t = Benelux.thread_timeline.sort
-        dur = t.last.to_f - t.first.to_f
-        Stella.li [:thread, t.first.name, t.last.name, dur].inspect
-        Stella.lflush
+        #t = Benelux.thread_timeline.sort
+        #dur = t.last.to_f - t.first.to_f
+        #Stella.li [:thread, t.first.name, t.last.name, dur].inspect
+        #Stella.lflush
       end
       
-      t = Benelux.timeline.sort
-      dur = t.last.to_f - t.first.to_f
-      Stella.li [:global, t.first.name, t.last.name, dur].inspect
+      #t = Benelux.timeline.sort
+      #dur = t.last.to_f - t.first.to_f
+      #Stella.li [:global, t.first.name, t.last.name, dur].inspect
+      
+      #puts Thread.list
+      #p Benelux.timeline
       
       prev = nil
       #Stella.li Benelux.timeline.sort.collect { |obj|

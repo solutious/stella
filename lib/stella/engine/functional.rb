@@ -29,8 +29,6 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      puts Benelux.thread_timeline.to_line
-        
       
       #p client.benelux_at(:execute_start).first.name
       
