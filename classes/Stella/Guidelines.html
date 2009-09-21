@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Guidelines [Stella: Your friend in performance testing.]</title>
+    <title>: Stella::Guidelines [Stella: Perform load tests on your web applications with beauty and brute strength.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -41,7 +41,7 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000071">inspect</a></li>
+              <li><a href="#M000077">inspect</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -74,17 +74,17 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000071'>
-                <a name='M000071'>      </a>
+              <div class='public-instance method' id='method-M000077'>
+                <a name='M000077'>      </a>
                 <div class='synopsis'>
                   <span class='name'>inspect</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000071-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000077-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000071-source'>    <span class="ruby-comment cmt"># File lib/stella/guidelines.rb, line 10</span>&#x000A;10:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>&#x000A;11:       <span class="ruby-identifier">all</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Guidelines</span>.<span class="ruby-identifier">constants</span>&#x000A;12:       <span class="ruby-identifier">g</span> = <span class="ruby-identifier">all</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-value str">'%s=&quot;%s&quot;'</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">c</span>, <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">c</span>)] }&#x000A;13:       <span class="ruby-value str">%q{#&lt;Stella::Guidelines:0x%s %s&gt;}</span> <span class="ruby-operator">%</span> [<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">object_id</span>, <span class="ruby-identifier">g</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)]&#x000A;14:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000077-source'>    <span class="ruby-comment cmt"># File lib/stella/guidelines.rb, line 10</span>&#x000A;10:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>&#x000A;11:       <span class="ruby-identifier">all</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Guidelines</span>.<span class="ruby-identifier">constants</span>&#x000A;12:       <span class="ruby-identifier">g</span> = <span class="ruby-identifier">all</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-value str">'%s=&quot;%s&quot;'</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">c</span>, <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">c</span>)] }&#x000A;13:       <span class="ruby-value str">%q{#&lt;Stella::Guidelines:0x%s %s&gt;}</span> <span class="ruby-operator">%</span> [<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">object_id</span>, <span class="ruby-identifier">g</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)]&#x000A;14:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
