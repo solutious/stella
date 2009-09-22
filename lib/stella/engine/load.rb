@@ -35,7 +35,9 @@ module Stella::Engine
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
-          Stella.rescue { package.client.execute package.usecase }
+          Stella::Engine::Load.rescue(package.client.client_id) { 
+            package.client.execute package.usecase 
+          }
         end
         
         #package.client.benelux_timeline.each do |i|
@@ -50,6 +52,8 @@ module Stella::Engine
       #t = Benelux.timeline.sort
       #dur = t.last.to_f - t.first.to_f
       #Stella.li [:global, t.first.name, t.last.name, dur].inspect
+      
+      p Benelux.timeline.regions :execute
       
       #puts Thread.list
       #p Benelux.timeline
@@ -129,6 +133,13 @@ module Stella::Engine
       Stella.ld ex.backtrace
     end
 
+    
+    def self.rescue(client_id, &blk)
+      blk.call
+    rescue => ex
+      Stella.le '  Client%-3s %s' % [client_id, ex.message]
+      Stella.ld ex.backtrace
+    end
     
   end
 end

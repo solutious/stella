@@ -29,12 +29,7 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      
-      #p client.benelux_at(:execute_start).first.name
-      
-      #p client.benelux_between(:execute_start, :execute_end)
-      
-      #p client.benelux_duration(:execute)
+      p Benelux.timeline.regions :execute
       
       !plan.errors?
     end
