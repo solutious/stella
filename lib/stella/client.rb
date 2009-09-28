@@ -17,6 +17,9 @@ module Stella
       @stats = Stella::Stats.new("Client #{@client_id}")
       @proxy = OpenStruct.new
     end
+    def benelux_track
+      client_id
+    end
     
     def execute(usecase)
       http_client = create_http_client

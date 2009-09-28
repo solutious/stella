@@ -3,7 +3,7 @@ module Stella::Engine
   module Load
     extend Stella::Engine::Base
     extend self
-    
+      
     def run(plan, opts={})
       opts = {
         :hosts        => [],
@@ -28,10 +28,10 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
-      
       Thread.ify packages, :threads => opts[:clients] do |package|
         # TEMPFIX. The fill in build_thread_package is creating nil elements
         next if package.nil? 
+        
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
@@ -39,34 +39,16 @@ module Stella::Engine
             package.client.execute package.usecase 
           }
         end
-        
-        #package.client.benelux_timeline.each do |i|
-        #  Stella.li "#{package.client.client_id}: #{i.to_f}: #{i.name}"
-        #end
-        #t = Benelux.thread_timeline.sort
-        #dur = t.last.to_f - t.first.to_f
-        #Stella.li [:thread, t.first.name, t.last.name, dur].inspect
-        #Stella.lflush
+      
       end
       
-      #t = Benelux.timeline.sort
-      #dur = t.last.to_f - t.first.to_f
-      #Stella.li [:global, t.first.name, t.last.name, dur].inspect
+      Benelux.timeline.regions(:execute).each do |reg|
+        puts "%s: %s: %s: %f" % [reg.track, reg.thread_id, reg.name, reg.duration]
+      end
       
-      p Benelux.timeline.regions :execute
-      
-      #puts Thread.list
-      #p Benelux.timeline
-      
-      prev = nil
-      #Stella.li Benelux.timeline.sort.collect { |obj|
-      #  str = "#{obj.to_f}: #{obj.name} (#{obj.same_timeline?(prev)})" 
-      #  prev = obj
-      #  str
-      #}
       !plan.errors?
     end
-    
+      
   protected
     class ThreadPackage
       attr_accessor :index
@@ -106,16 +88,16 @@ module Stella::Engine
       end
       packages
     end
-    
-    
+      
+      
     def update_prepare_request(client_id, usecase, req, counter)
-
+      
     end
-    
+      
     def update_send_request(client_id, usecase, uri, req, params, counter)
       
     end
-    
+      
     def update_receive_response(client_id, usecase, uri, req, params, container)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li2 '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]

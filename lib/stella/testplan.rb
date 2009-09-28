@@ -22,8 +22,9 @@ class Testplan
       usecase = Stella::Testplan::Usecase.new
       usecase.ratio = 1.0
       uris.each do |uri|
+        uri = 'http://' << uri unless uri.match /^http:\/\//i
         uri = URI.parse uri
-        uri.path = '/' if uri.path.empty?
+        uri.path = '/' if uri.path.nil? || uri.path.empty?
         req = usecase.add_request :get, uri.path
         req.wait = opts[:delay] if opts[:delay]
       end
