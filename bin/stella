@@ -59,7 +59,7 @@ class Stella::CLI::Definition
   about "Run a functional test"
   usage "stella verify http://stellaaahhhh.com/"
   usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :b, :benchmark, "Benchmark mode (ignore wait times)"
+  option :w, :nowait, "Ignore wait times"
   option :p, :testplan, String, "Path to testplan" 
   command :verify => Stella::CLI
   
@@ -68,7 +68,7 @@ class Stella::CLI::Definition
   usage "stella load http://stellaaahhhh.com:3114/"
   usage "stella load --clients=10 --repetitions=2 http://stellaaahhhh.com/"
   usage "stella load -p path/2/testplan.rb -u 100 -r 5 http://stellaaahhhh.com/"
-  option :b, :benchmark, "Benchmark mode (ignore wait times)"
+  option :w, :nowait, "Ignore wait times"
   option :c, :clients, Integer, "Number of virtual clients"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :t, :time, String, "Max duration to run test"

@@ -9,7 +9,7 @@ module Stella::Engine
         :hosts        => [],
         :clients        => 1,
         :time         => nil,
-        :benchmark    => false,
+        :nowait    => false,
         :repetitions  => 1
       }.merge! opts
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
@@ -81,7 +81,7 @@ module Stella::Engine
           Stella.li2 "Creating client ##{index+1} "
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
-          client.enable_benchmark_mode if opts[:benchmark]
+          client.enable_nowait_mode if opts[:nowait]
           ThreadPackage.new(index+1, client, usecase.clone)
         end
         pointer += count

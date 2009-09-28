@@ -66,13 +66,13 @@ module Stella
       
         
         counter = 0 # reset
-        run_sleeper(req.wait) if req.wait && !benchmark?
+        run_sleeper(req.wait) if req.wait && !nowait?
       end
     end
     
-    def enable_benchmark_mode; @bm = true; end
-    def disable_benchmark_mode; @bm = false; end
-    def benchmark?; @bm == true; end
+    def enable_nowait_mode; @nowait = true; end
+    def disable_nowait_mode; @nowait = false; end
+    def nowait?; @nowait == true; end
       
   private
     def send_request(http_client, usecase, meth, uri, req, params, headers, container)

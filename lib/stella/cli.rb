@@ -15,7 +15,7 @@ class Stella::CLI < Drydock::Command
   def verify
     opts = {}
     opts[:hosts] = @hosts
-    opts[:benchmark] = true if @option.benchmark
+    opts[:nowait] = true if @option.nowait
     ret = Stella::Engine::Functional.run @testplan, opts
     @exit_code = (ret ? 0 : 1)
   end
@@ -27,7 +27,7 @@ class Stella::CLI < Drydock::Command
   def load
     opts = {}
     opts[:hosts] = @hosts
-    [:benchmark, :clients, :repetitions, :delay, :time].each do |opt|
+    [:nowait, :clients, :repetitions, :delay, :time].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     ret = Stella::Engine::Load.run @testplan, opts

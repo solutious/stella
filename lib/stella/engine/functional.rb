@@ -7,7 +7,7 @@ module Stella::Engine
     def run(plan, opts={})
       opts = {
         :hosts        => [],
-        :benchmark    => false,
+        :nowait    => false,
         :repetitions  => 1
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
@@ -17,7 +17,7 @@ module Stella::Engine
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)
 
-      client.enable_benchmark_mode if opts[:benchmark]
+      client.enable_nowait_mode if opts[:nowait]
       
       Stella.li $/, "Starting test...", $/
       Stella.lflush
