@@ -82,7 +82,8 @@ class HTTPClient
       @timeout = nil
       @options = defined?(SSL::OP_ALL) ? SSL::OP_ALL | SSL::OP_NO_SSLv2 : nil
       @ciphers = "ALL:!ADH:!LOW:!EXP:!MD5:+SSLv2:@STRENGTH"
-      load_cacerts
+      # TODO: Load only once for all instances.
+      @cert_store = @@cacerts
     end
 
     # Sets certificate (OpenSSL::X509::Certificate) for SSL client
@@ -338,7 +339,7 @@ class HTTPClient
       @client.reset_all
     end
 
-    def load_cacerts
+    def self.load_cacerts
       [
         [DIST_CERT, 'cacert.p7s'],
         [DIST_CERT_SHA1, 'cacert_sha1.p7s']
@@ -350,14 +351,15 @@ class HTTPClient
           store = X509::Store.new
           store.add_cert(selfcert)
           if (p7.verify(nil, store, p7.data, 0))
-            set_trust_ca(file)
-            return
+            #set_trust_ca(file)
+            store.add_file(file)
+            return store
           end
         end
       end
       STDERR.puts("cacerts loading failed")
     end
-
+    
     DIST_CERT =<<__DIST_CERT__
 -----BEGIN CERTIFICATE-----
 MIID/TCCAuWgAwIBAgIBATANBgkqhkiG9w0BAQ0FADBLMQswCQYDVQQGEwJKUDER
@@ -411,7 +413,9 @@ RwRyYoHysODGvnu8VXS1hGRr2GIxeBga7dAGa2VLE/iUQ0d4lEskYU+6C4ZLyAWF
 O89dvLNRzpL10MaWCYVREks=
 -----END CERTIFICATE-----
 __DIST_CERT__
+
+
+    @@cacerts = load_cacerts
   end
-
-
+    
 end
