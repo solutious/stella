@@ -39,9 +39,9 @@ module Stella
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        unique_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
-        Benelux.add_default_tags :unique_id => unique_id[0,16]
-        params['__stella'] = unique_id[0,16]
+        stella_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
+        Benelux.add_default_tags :stella_id => stella_id[0,32]
+        params['__stella'] = stella_id[0,32]
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect

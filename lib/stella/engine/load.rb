@@ -48,11 +48,11 @@ module Stella::Engine
           }
         end
 #          Stella.li '.'
-          Benelux.update_track(package.client.gibbler_cache)
-          ranges = Benelux.timeline(package.client.gibbler_cache).ranges(:do_request)
-          ranges.each do |r|
-            #Stella.li [r.name, r.duration, r.tags[:request].short, r.tags[:unique_id]].inspect
-          end
+          #Benelux.update_track(package.client.gibbler_cache)
+          #ranges = Benelux.timeline(package.client.gibbler_cache).ranges(:do_request)
+          #ranges.each do |r|
+            #Stella.li [r.name, r.duration, r.tags[:request].short, r.tags[:stella_id]].inspect
+          #end
       end
       
       track = Benelux.known_threads.first.timeline.track
@@ -67,7 +67,10 @@ module Stella::Engine
       #Benelux.timeline(track).ranges(:execute).each do |reg|
       #  p reg
       #end
-#      p Benelux.timelines
+      Benelux.update_tracks
+      Benelux.timeline.regions(:execute).each { |r| 
+        p r.class
+      }
       !plan.errors?
     end
       
