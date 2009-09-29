@@ -61,6 +61,7 @@ require 'stella/version'
 require 'stella/exceptions'
 require 'stella/utils'
 require 'stella/config'
+require 'stella/data'
 
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 Stella::Utils.require_glob(Stella::LIB_HOME, 'stella', '*.rb')

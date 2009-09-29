@@ -1,12 +1,11 @@
 
 module Stella
 # Based on Mongrel::Stats, Copyright (c) 2005 Zed A. Shaw
-class Stats    
+class Stats < Array
 
   attr_reader :sum, :sumsq, :n, :min, :max
 
-  def initialize(name)
-    @name = name
+  def initialize
     reset
   end
   
@@ -16,13 +15,19 @@ class Stats
   
   # Resets the internal counters so you can start sampling again.
   def reset
+    self.clear
     @n, @sum, @sumsq = 0.0, 0.0, 0.0
-    @last_time = Time.new
+    @last_time = 0.0
     @min, @max = 0.0, 0.0
   end
 
   # Adds a sampling to the calculations.
   def sample(s)
+    self << s
+    update s
+  end
+  
+  def update(s)
     @sum += s
     @sumsq += s * s
     if @n == 0
@@ -33,7 +38,7 @@ class Stats
     end
     @n+=1
   end
-
+  
   # Dump this Stats object with an optional additional message.
   def dump(msg = "", out=STDERR)
     out.puts "#{msg}: #{self.inspect}"
@@ -42,26 +47,16 @@ class Stats
   # Returns a common display (used by dump)
   def inspect
     v = [mean, @n, @sum, @sumsq, sd, @min, @max]
-    t = %w"N=%0.4f SUM=%0.4f SUMSQ=%0.4f SD=%0.4f MIN=%0.4f MAX=%0.4f"
-    "%0.4f: " << t % v
+    t = %q"N=%0.4f SUM=%0.4f SUMSQ=%0.4f SD=%0.4f MIN=%0.4f MAX=%0.4f"
+    ("%0.4f: " << t) % v
   end
 
-  def to_s
-    mean.to_s
-  end
-  
-  def to_f
-    mean.to_f
-  end
-  
-  def to_i
-    mean.to_i
-  end
+  def to_s; mean.to_s; end
+  def to_f; mean.to_f; end
+  def to_i; mean.to_i; end
   
   # Calculates and returns the mean for the data passed so far.
-  def mean
-    @sum / @n
-  end
+  def mean; @sum / @n; end
 
   # Calculates the standard deviation of the data so far.
   def sd
@@ -73,21 +68,12 @@ class Stats
       return 0.0
     end
   end
-
-
-  # Adds a time delta between now and the last time you called this.  This
-  # will give you the average time between two activities.
-  #
-  # An example is:
-  #
-  #  t = Stats.new("do_stuff")
-  #  10000.times { do_stuff(); t.tick }
-  #  t.dump("time")
-  #
-  def tick
-    now = Time.now
-    sample(now - @last_time)
-    @last_time = now
+  
+  def recalculate
+    samples = self.clone
+    reset
+    samples.each { |s| sample(s) }
   end
+  
 end
 end

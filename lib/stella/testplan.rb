@@ -38,6 +38,8 @@ class Testplan
     plan.base_path = File.dirname path
     # eval so the DSL code can be executed in this namespace.
     plan.instance_eval conf
+    plan.gibbler
+    plan.freeze
     plan
   end
   
@@ -59,6 +61,10 @@ class Testplan
       msg = "Usecase ratio cannot be higher than 1.0"
       msg << " (#{@testplan_current_ratio})"
       raise WackyRatio, msg
+    end
+    @usecases.each do |uc| 
+      uc.gibbler  # make sure gibbler_cache has a value
+      uc.freeze   # make sure all clients share identical usecases
     end
   end
     

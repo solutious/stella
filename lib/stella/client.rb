@@ -4,44 +4,46 @@ require 'nokogiri'
 
 module Stella
   class Client
+    require 'stella/client/modifiers'
+    require 'stella/client/container'
+    
     include Gibbler::Complex
     include Observable
     
     attr_reader :client_id
     attr_accessor :base_uri
     attr_accessor :proxy
-    attr_reader :stats
+    
     def initialize(base_uri=nil, client_id=1)
       @base_uri, @client_id = base_uri, client_id
       @cookie_file = Tempfile.new('stella-cookie')
-      @stats = Stella::Stats.new("Client #{@client_id}")
       @proxy = OpenStruct.new
     end
-    def benelux_track
-      client_id
-    end
-    
-    def execute(usecase)
+    def execute(usecase, &stat_collector)
+      # We need to make sure the gibbler cache has a value
+      self.gibbler if self.__gibbler_cache.nil?
+      
       http_client = create_http_client
+      stats = Stella::Stats.new
       container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|
         counter += 1
         update(:prepare_request, usecase, req, counter)
         uri_obj = URI.parse(req.uri)
-        params = prepare_params(usecase, req.params)
-        headers = prepare_headers(usecase, req.headers)
+        params = prepare_params(container, req.params)
+        headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         
         unique_id = [req, params, headers, counter].gibbler
-        req_id = req.gibbler
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
 
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container
+          update(:stats, http_client, usecase, req)
         rescue => ex
           update(:request_error, usecase, uri, req, params, ex)
           next
@@ -68,6 +70,7 @@ module Stella
         counter = 0 # reset
         run_sleeper(req.wait) if req.wait && !nowait?
       end
+      stats
     end
     
     def enable_nowait_mode; @nowait = true; end
@@ -82,11 +85,11 @@ module Stella
     end
     
     def update(kind, *args)
-      changed and notify_observers(kind, @client_id, *args)
+      changed and notify_observers(kind, self.__gibbler_cache, *args)
     end
   
     def run_sleeper(wait)
-      if wait.is_a?(Range)
+      if wait.is_a?(::Range)
         ms = rand(wait.last * 1000).to_f 
         ms = wait.first if ms < wait.first
       else
@@ -109,19 +112,19 @@ module Stella
       http_client
     end
     
-    def prepare_params(usecase, params)
+    def prepare_params(container, params)
       newparams = {}
       params.each_pair do |n,v|
         Stella.ld "PREPARE PARAM: #{n}"
-        v = usecase.instance_eval &v if v.is_a?(Proc)
+        v = container.instance_eval &v if v.is_a?(Proc)
         newparams[n] = v
       end
       newparams
     end
     
-    def prepare_headers(usecase, headers)
+    def prepare_headers(container, headers)
       Stella.ld "PREPARE HEADERS: #{headers}"
-      headers = usecase.instance_eval &headers if headers.is_a?(Proc)
+      headers = container.instance_eval &headers if headers.is_a?(Proc)
       headers
     end
     
@@ -200,52 +203,5 @@ module Stella
       end
     end
     
-    class Container
-      attr_accessor :usecase
-      attr_accessor :response
-      def initialize(usecase)
-        @usecase = usecase
-      end
-      
-      def self.const_missing(const, *args)
-        ResponseError.new(const)
-      end
-      
-      def doc
-        # NOTE: It's important to parse the document on every 
-        # request because this container is available for the
-        # entire life of a usecase. 
-        case @response.header['Content-Type']
-        when ['text/html']
-          Nokogiri::HTML(body)
-        when ['text/yaml']
-          YAML.load(body)
-        end
-      end
-
-      def body; @response.body.content; end
-      def headers; @response.header; end
-        alias_method :header, :headers
-      def status; @response.status; end
-      def set(n, v); usecase.resource n, v; end
-      def resource(n);    usecase.resource n;    end
-      def wait(t); sleep t; end
-      def quit(msg=nil); Quit.new(msg); end
-      def repeat(t=1); Repeat.new(t); end
-    end
-    
-    class ResponseModifier; end
-    class Repeat < ResponseModifier; 
-      attr_accessor :times
-      def initialize(times)
-        @times = times
-      end
-    end
-    class Quit < ResponseModifier; 
-      attr_accessor :message
-      def initialize(msg=nil)
-        @message = msg
-      end
-    end
   end
 end

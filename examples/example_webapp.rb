@@ -181,7 +181,8 @@ __END__
 <style>
 .hilite { background-color: #FEE00B; font-weight: bold; }
 .footer { color: #ccc; font-weight: lighter; font-size: 80%; margin-top: 30px; }
-.footer a { color: #69c;}
+.footer a { color: #69c; }
+body { background: url('http://solutious.com/images/solutious-logo-large.png') no-repeat right;}
 </style>
 </head>
 <body>
@@ -194,7 +195,7 @@ __END__
 </em></p>
 <%= yield %>
 <div class="footer">
-A <a href="http://solutious.com/projects/stella/">Stella</a> demo by <a href="http://solutious.com/">Solutious</a>. 
+A <a href="http://solutious.com/">Solutious Inc</a> production.  
 </div>
 </body>
 </html>

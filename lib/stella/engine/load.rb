@@ -32,18 +32,31 @@ module Stella::Engine
         # TEMPFIX. The fill in build_thread_package is creating nil elements
         next if package.nil? 
         
+        Benelux.current_track package.client.gibbler
+        
         (1..opts[:repetitions]).to_a.each do |rep|
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
-          Stella::Engine::Load.rescue(package.client.client_id) { 
-            package.client.execute package.usecase 
+          Stella::Engine::Load.rescue(package.client.gibbler_cache) { 
+            stats = package.client.execute package.usecase
+            p stats
+#            process_stats package.stats, stats
           }
         end
       
       end
       
-      Benelux.timeline.regions(:execute).each do |reg|
-        puts "%s: %s: %s: %f" % [reg.track, reg.thread_id, reg.name, reg.duration]
+      track = Benelux.known_threads.first.track
+      
+      #Benelux.timeline.ranges(:do_request).each do |range|
+      #  puts "Client%s: %s: %s: %f" % [range.track, range.thread_id, range.name, range.duration]
+      #end
+      #puts Benelux.inspect
+      Benelux.timeline.regions(:connect).each do |reg|
+        #p reg
+      end
+      Benelux.timeline(track).ranges(:execute).each do |reg|
+        #p reg
       end
       
       !plan.errors?
@@ -54,6 +67,7 @@ module Stella::Engine
       attr_accessor :index
       attr_accessor :client
       attr_accessor :usecase
+      attr_accessor :stats
       def initialize(i, c, u)
         @index, @client, @usecase = i, c, u
       end
@@ -82,7 +96,7 @@ module Stella::Engine
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
           client.enable_nowait_mode if opts[:nowait]
-          ThreadPackage.new(index+1, client, usecase.clone)
+          ThreadPackage.new(index+1, client, usecase)
         end
         pointer += count
       end
@@ -100,7 +114,7 @@ module Stella::Engine
       
     def update_receive_response(client_id, usecase, uri, req, params, container)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li2 '  Client%-3s %3d %-6s %-45s %s' % [client_id, container.status, req.http_method, desc, uri]
+      Stella.li2 '  Client-%s %3d %-6s %-45s %s' % [client_id.short, container.status, req.http_method, desc, uri]
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -111,7 +125,7 @@ module Stella::Engine
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.le '  Client%-3s %-45s %s' % [client_id, desc, ex.message]
+      Stella.le '  Client-%s %-45s %s' % [client_id.short, desc, ex.message]
       Stella.ld ex.backtrace
     end
 
@@ -119,7 +133,7 @@ module Stella::Engine
     def self.rescue(client_id, &blk)
       blk.call
     rescue => ex
-      Stella.le '  Client%-3s %s' % [client_id, ex.message]
+      Stella.le '  Error in Client-%s: %s' % [client_id.short, ex.message]
       Stella.ld ex.backtrace
     end
     

@@ -84,14 +84,14 @@ module Stella::Data::HTTP
     end
     
     def inspect
-      str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
+      str = "%s %s" % [http_method, uri.to_s, http_version]
       #str << $/ + headers.join($/) unless headers.empty?
       #str << $/ + $/ + body.to_s if body
       str
     end
     
     def to_s
-      str = "%s %s HTTP/%s" % [http_method, uri.to_s, http_version]
+      str = "%s %s" % [http_method, uri.to_s, http_version]
       str
     end
     
