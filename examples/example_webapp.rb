@@ -182,7 +182,7 @@ __END__
 .hilite { background-color: #FEE00B; font-weight: bold; }
 .footer { color: #ccc; font-weight: lighter; font-size: 80%; margin-top: 30px; }
 .footer a { color: #69c; }
-body { background: url('http://solutious.com/images/solutious-logo-large.png') no-repeat right;}
+body { background: url('http://solutious.com/images/solutious-logo-large.png?1') no-repeat right;}
 </style>
 </head>
 <body>

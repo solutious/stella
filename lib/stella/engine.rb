@@ -29,7 +29,7 @@ module Stella::Engine
     def update_stats client_id, http_client, usecase, req
       #range = Thread.current.timeline.ranges(:do_request).last
       #Thread.current.stathash 
-      #Stella.li "Client-%s: %-20s-> %-20s %.4f" % [client_id.short, usecase.gibbler.short, req.gibbler.short, range.duration]
+      #Stella.li "Client-%s: %s-%s %s %.4f" % [client_id.short, usecase.gibbler.short, req.gibbler.short, req.desc, range.duration]
     end
     
     def update_prepare_request(*args) raise end

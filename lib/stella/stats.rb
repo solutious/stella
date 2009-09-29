@@ -56,7 +56,7 @@ class Stats < Array
   def to_i; mean.to_i; end
   
   # Calculates and returns the mean for the data passed so far.
-  def mean; @sum / @n; end
+  def mean; return 0.0 unless @n > 0; @sum / @n; end
 
   # Calculates the standard deviation of the data so far.
   def sd

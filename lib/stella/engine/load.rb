@@ -35,30 +35,39 @@ module Stella::Engine
         Benelux.current_track package.client.gibbler
         
         (1..opts[:repetitions]).to_a.each do |rep|
+          
+          Benelux.add_default_tags :usecase => package.usecase.gibbler_cache
+          Benelux.add_default_tags :rep =>  rep
+          
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
           Stella::Engine::Load.rescue(package.client.gibbler_cache) { 
             stats = package.client.execute package.usecase
-            p stats
+            #p stats
 #            process_stats package.stats, stats
           }
         end
-      
+#          Stella.li '.'
+          Benelux.update_track(package.client.gibbler_cache)
+          ranges = Benelux.timeline(package.client.gibbler_cache).ranges(:do_request)
+          ranges.each do |r|
+            #Stella.li [r.name, r.duration, r.tags[:request].short, r.tags[:unique_id]].inspect
+          end
       end
       
-      track = Benelux.known_threads.first.track
+      track = Benelux.known_threads.first.timeline.track
       
       #Benelux.timeline.ranges(:do_request).each do |range|
       #  puts "Client%s: %s: %s: %f" % [range.track, range.thread_id, range.name, range.duration]
       #end
       #puts Benelux.inspect
-      Benelux.timeline.regions(:connect).each do |reg|
+      #Benelux.timeline.regions(:connect).each do |reg|
         #p reg
-      end
-      Benelux.timeline(track).ranges(:execute).each do |reg|
-        #p reg
-      end
-      
+      #end
+      #Benelux.timeline(track).ranges(:execute).each do |reg|
+      #  p reg
+      #end
+#      p Benelux.timelines
       !plan.errors?
     end
       

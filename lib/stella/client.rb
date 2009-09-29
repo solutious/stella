@@ -24,19 +24,24 @@ module Stella
       self.gibbler if self.__gibbler_cache.nil?
       
       http_client = create_http_client
-      stats = Stella::Stats.new
+      stats = {}
       container = Container.new(usecase)
       counter = 0
       usecase.requests.each do |req|
         counter += 1
+        Benelux.add_default_tags :request => req.gibbler_cache
+        Benelux.add_default_tags :retry => counter
+        
+        stats[req.gibbler_cache] ||= Stella::Stats.new
         update(:prepare_request, usecase, req, counter)
         uri_obj = URI.parse(req.uri)
         params = prepare_params(container, req.params)
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        
-        unique_id = [req, params, headers, counter].gibbler
+        unique_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
+        Benelux.add_default_tags :unique_id => unique_id[0,16]
+        params['__stella'] = unique_id[0,16]
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
@@ -49,12 +54,11 @@ module Stella
           next
         end
         
-        #probe_header_size(container.response)
-        #probe_body_size(container.response)
-        
         ret = execute_response_handler container, req
         
         Stella.lflush
+        
+        run_sleeper(req.wait) if req.wait && !nowait?
         
         # TODO: consider throw/catch
         case ret.class.to_s
@@ -66,9 +70,7 @@ module Stella
           break
         end
       
-        
         counter = 0 # reset
-        run_sleeper(req.wait) if req.wait && !nowait?
       end
       stats
     end
