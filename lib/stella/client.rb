@@ -40,8 +40,8 @@ module Stella
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         stella_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
-        Benelux.add_default_tags :stella_id => stella_id[0,32]
-        params['__stella'] = stella_id[0,32]
+        Benelux.add_default_tags :stella_id => stella_id
+        params['__stella'] = stella_id
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
@@ -72,6 +72,7 @@ module Stella
       
         counter = 0 # reset
       end
+      Benelux.remove_default_tags :retry, :request, :stella_id
       stats
     end
     

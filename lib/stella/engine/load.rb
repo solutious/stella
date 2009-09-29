@@ -68,9 +68,16 @@ module Stella::Engine
       #  p reg
       #end
       Benelux.update_tracks
-      Benelux.timeline.regions(:execute).each { |r| 
-        p r.class
-      }
+      Benelux.timeline.regions(:execute).each do |region|
+        region['c79b43573675774b3ef48d688e85bbf9b3d70b59'].each do |mark|
+          p [mark.track, mark.name, mark.tags[:usecase]]
+        end
+        #p region.collect { |mark| mark.name }
+      end
+      #Benelux.timeline[:retry => 9].each do |mark|
+      #  p mark
+      #end
+      
       !plan.errors?
     end
       
