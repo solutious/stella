@@ -53,7 +53,13 @@ module Stella::Engine
           
         end
         
-        puts Benelux.current_track.stats.execute[package.usecase.gibbler_cache].first
+        puts "Usecase: #{package.usecase.gibbler_cache}"
+        Benelux.current_track.stats.each_pair do |n,s|
+          all = s.merge(package.usecase.gibbler_cache)
+          puts '%-30s  %s' % [n, all.inspect]
+        end
+        puts
+        #puts Benelux.current_track.stats.execute[package.usecase.gibbler_cache].first
         
         
         Benelux.remove_thread_tags :usecase, :rep
