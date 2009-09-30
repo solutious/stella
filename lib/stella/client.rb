@@ -37,8 +37,7 @@ module Stella
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        stella_id = [self.timeline.last.to_f, self.gibbler_cache, 
-          req, params, headers, counter].gibbler
+        stella_id = [Time.now, self.gibbler_cache, req, params, headers, counter].gibbler
         
         Benelux.add_thread_tags :request => req.gibbler_cache
         Benelux.add_thread_tags :retry => counter
@@ -67,10 +66,10 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
-          Stella.ld "REPETITION: #{counter} of #{ret.times+1}"
+          update(:repeat_request, counter, ret.times+1)
           redo if counter <= ret.times
         when "Stella::Client::Quit"
-          Stella.ld "QUIT USECASE: #{ret.message}"
+          update(:quit_usecase, ret.message)
           break
         end
       

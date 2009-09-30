@@ -2,10 +2,13 @@
 
 module Stella::Engine
   
-  Benelux.add_timer      Stella::Client, :execute
+  # These commented out timers are not very revealing.
+  #Benelux.add_timer      Stella::Client, :execute
+  #Benelux.add_timer          HTTPClient, :create_request
+  
+  # These timers are interesting from a reporting perspective.
   Benelux.add_timer      Stella::Client, :send_request
   Benelux.add_timer          HTTPClient, :do_request
-  Benelux.add_timer          HTTPClient, :create_request
   Benelux.add_timer HTTPClient::Session, :create_socket
   Benelux.add_timer HTTPClient::Session, :create_ssl_socket
   Benelux.add_timer HTTPClient::Session, :connect
@@ -27,6 +30,16 @@ module Stella::Engine
     end
 
     def run; raise; end
+    
+    
+    def update_quit_usecase client_id, msg
+      Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+    end
+    
+    
+    def update_repeat_request client_id, counter, total
+      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+    end
     
     def update_stats client_id, http_client, usecase, req
       #range = Thread.current.timeline.ranges(:do_request).last

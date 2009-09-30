@@ -50,31 +50,27 @@ module Stella::Engine
         end
         
         Benelux.remove_thread_tags :usecase
-
-        #puts Benelux.current_track.stats.execute[package.usecase.gibbler_cache].first
-        
-      end
       
+      end
       
       generate_report(plan)
       
-      #Benelux.tracks.each do |track|
-        
-      #end
-    
-      Stella.li self.timeline.ranges
+      # This will contain only the one call to generate_report
+      rep_stats = self.timeline.ranges.first
+      
+      Stella.li "Reporting time: %0.4f" % [rep_stats.duration]
       
       !plan.errors?
     end
     
     def generate_report(plan)
-      Stella.li " %-58s  %s ".att(:reverse) % [plan.desc, plan.gibbler_cache.shorter]
+      Stella.li $/, " %-68s %s  ".att(:reverse) % [plan.desc, plan.gibbler_cache.shorter]
       plan.usecases.uniq.each_with_index do |uc,i| 
         description = uc.desc || "Usecase ##{i+1}"
-        str = ' ' << " %-42s %22s ".bright.att(:reverse) << ' (%s%%)'.bright
+        str = ' ' << " %-50s  %22s ".bright.att(:reverse) << ' (%s%%)'.bright
         Stella.li str % [description, uc.gibbler_cache.shorter, uc.ratio_pretty]
         uc.requests.each do |req| 
-          Stella.li "   %-56s  %s ".bright % [req.desc, req.gibbler_cache.shorter]
+          Stella.li "   %-66s %s ".bright % [req.desc, req.gibbler_cache.shorter]
           Stella.li "    %s" % [req.to_s]
           Benelux.timeline.stats.each_pair do |n,stat|
             filter = {
@@ -82,8 +78,9 @@ module Stella::Engine
               :request => req.gibbler_cache
             }
             stats = stat[filter]
-            Stella.li '      %-30s %.4f %.4f(SD) %.4f(MIN) %.4f(MAX) %d(N)' % [n, stats.mean, stats.sd, stats.min, stats.max, stats.n]
+            Stella.li '      %-30s %.3f <= %.3f >= %.3f; %.3f(SD) %d(N)' % [n, stats.min, stats.mean, stats.max, stats.sd, stats.n]
           end
+          Stella.li $/
           #if Stella.loglev > 2
           #  [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
           #end
@@ -91,7 +88,7 @@ module Stella::Engine
       end
     end
   
-  Benelux.add_timer Stella::Engine::Load, :generate_report
+    Benelux.add_timer Stella::Engine::Load, :generate_report
   
   protected
     class ThreadPackage
@@ -122,7 +119,7 @@ module Stella::Engine
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
-          Stella.li2 "Creating client ##{index+1} "
+          Stella.li3 "Creating client ##{index+1} "
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
           client.enable_nowait_mode if opts[:nowait]
@@ -144,7 +141,7 @@ module Stella::Engine
       
     def update_receive_response(client_id, usecase, uri, req, params, headers, container)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li2 '  Client-%s %3d %-6s %-45s %s' % [client_id.short, container.status, req.http_method, desc, uri]
+      Stella.li2 '  Client-%s %3d %-6s %-45s' % [client_id.shorter, container.status, req.http_method, uri]
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -155,7 +152,7 @@ module Stella::Engine
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.le '  Client-%s %-45s %s' % [client_id.short, desc, ex.message]
+      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.ld ex.backtrace
     end
 
@@ -163,7 +160,7 @@ module Stella::Engine
     def self.rescue(client_id, &blk)
       blk.call
     rescue => ex
-      Stella.le '  Error in Client-%s: %s' % [client_id.short, ex.message]
+      Stella.le '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
       Stella.ld ex.backtrace
     end
     

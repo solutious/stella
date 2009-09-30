@@ -35,7 +35,7 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      Stella.li2 ' ' << " %-46s %16s ".att(:reverse) % [req.desc, notice]
+      Stella.li2 "  %-46s %16s ".bright % [req.desc, notice]
     end
     
     def update_send_request(client_id, usecase, uri, req, params, headers, counter)
@@ -43,16 +43,16 @@ module Stella::Engine
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, headers, container)
-      Stella.li '  %-59s %3d' % [uri, container.status]
-      Stella.li2 "  Method: " << req.http_method
-      Stella.li2 "  Params: " << params.inspect
-      Stella.li2 "  Headers: " << headers.inspect
-      Stella.li3 $/, "  Response-Headers:"
+      Stella.li '   %-59s %3d' % [uri, container.status]
+      Stella.li2 "   Method: " << req.http_method
+      Stella.li2 "   Params: " << params.inspect
+      Stella.li2 "   Headers: " << headers.inspect
+      Stella.li3 $/, "   Response-Headers:"
       container.headers.all.each do |pair|
-        Stella.li3 "    %s: %s" % pair
+        Stella.li3 "     %s: %s" % pair
       end
-      Stella.li4 $/, "  Response-Content:"
-      Stella.li4 container.body.empty? ? '    [empty]' : container.body
+      Stella.li4 $/, "   Response-Content:"
+      Stella.li4 container.body.empty? ? '     [empty]' : container.body
       Stella.li2 $/
     end
     
