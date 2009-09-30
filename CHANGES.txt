@@ -8,6 +8,7 @@ NOTE: Complete rewrite
 * New internal architecture. 
 * Improved stability and output for high thread loads. 
 * Updated test plan DSL
+* Granular reporting via Benelux
 
 
 #### 0.6.0 (2009-03-15) ###############################
