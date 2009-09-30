@@ -29,8 +29,6 @@ module Stella
       counter = 0
       usecase.requests.each do |req|
         counter += 1
-        Benelux.add_default_tags :request => req.gibbler_cache
-        Benelux.add_default_tags :retry => counter
         
         stats[req.gibbler_cache] ||= Stella::Stats.new
         update(:prepare_request, usecase, req, counter)
@@ -40,8 +38,13 @@ module Stella
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
         stella_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
-        Benelux.add_default_tags :stella_id => stella_id
+        
+        Benelux.add_thread_tags :request => req.gibbler_cache
+        Benelux.add_thread_tags :retry => counter
+        Benelux.add_thread_tags :stella_id => stella_id
+        
         params['__stella'] = stella_id
+        headers['X-Stella-ID'] = stella_id
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
@@ -72,7 +75,7 @@ module Stella
       
         counter = 0 # reset
       end
-      Benelux.remove_default_tags :retry, :request, :stella_id
+      Benelux.remove_thread_tags :retry, :request, :stella_id
       stats
     end
     
@@ -82,9 +85,9 @@ module Stella
       
   private
     def send_request(http_client, usecase, meth, uri, req, params, headers, container)
-      update(:send_request, usecase, uri, req, params, container)
+      update(:send_request, usecase, uri, req, params, headers, container)
       container.response = http_client.send(meth, uri, params, headers) # booya!
-      update(:receive_response, usecase, uri, req, params, container)
+      update(:receive_response, usecase, uri, req, params, headers, container)
     end
     
     def update(kind, *args)

@@ -36,8 +36,8 @@ module Stella::Engine
         
         (1..opts[:repetitions]).to_a.each do |rep|
           
-          Benelux.add_default_tags :usecase => package.usecase.gibbler_cache
-          Benelux.add_default_tags :rep =>  rep
+          Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
+          Benelux.add_thread_tags :rep =>  rep
           
           # We store client specific data in the usecase
           # so we clone it here so each thread is unique.
@@ -46,7 +46,12 @@ module Stella::Engine
             #p stats
 #            process_stats package.stats, stats
           }
+          Benelux.update_track
         end
+        
+        Benelux.remove_thread_tags :usecase, :rep
+        
+        
 #          Stella.li '.'
           #Benelux.update_track(package.client.gibbler_cache)
           #ranges = Benelux.timeline(package.client.gibbler_cache).ranges(:do_request)
@@ -55,7 +60,6 @@ module Stella::Engine
           #end
       end
       
-      track = Benelux.known_threads.first.timeline.track
       
       #Benelux.timeline.ranges(:do_request).each do |range|
       #  puts "Client%s: %s: %s: %f" % [range.track, range.thread_id, range.name, range.duration]
@@ -64,16 +68,16 @@ module Stella::Engine
       #Benelux.timeline.regions(:connect).each do |reg|
         #p reg
       #end
-      #Benelux.timeline(track).ranges(:execute).each do |reg|
-      #  p reg
-      #end
-      Benelux.update_tracks
-      Benelux.timeline.regions(:execute).each do |region|
-        region['c79b43573675774b3ef48d688e85bbf9b3d70b59'].each do |mark|
-          p [mark.track, mark.name, mark.tags[:usecase]]
-        end
-        #p region.collect { |mark| mark.name }
+      Benelux.timeline.ranges(:query).each do |reg|
+        p "%s %s %s %.4f" % [reg.name, reg.tags[:request], reg.tags[:stella_id], reg.duration]
       end
+      #Benelux.update_tracks
+      #Benelux.timeline['9dbd521de4dfd6257135649d78a9c0aa2dd58cfe'].each do |mark|
+      #    p [mark.track, mark.name, mark.tags[:usecase], mark.tags[:call_id]]
+      #  end
+        #p region.collect { |mark| mark.name }
+      #end
+      
       #Benelux.timeline[:retry => 9].each do |mark|
       #  p mark
       #end
@@ -127,11 +131,11 @@ module Stella::Engine
       
     end
       
-    def update_send_request(client_id, usecase, uri, req, params, counter)
+    def update_send_request(client_id, usecase, uri, req, params, headers, counter)
       
     end
       
-    def update_receive_response(client_id, usecase, uri, req, params, container)
+    def update_receive_response(client_id, usecase, uri, req, params, headers, container)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li2 '  Client-%s %3d %-6s %-45s %s' % [client_id.short, container.status, req.http_method, desc, uri]
     end

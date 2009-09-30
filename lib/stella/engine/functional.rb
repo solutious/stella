@@ -29,7 +29,7 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      p Benelux.timeline.regions :execute
+      p Benelux.timeline.ranges :execute
       
       !plan.errors?
     end
@@ -40,19 +40,20 @@ module Stella::Engine
       Stella.li2 ' ' << " %-46s %16s ".att(:reverse) % [req.desc, notice]
     end
     
-    def update_send_request(client_id, usecase, uri, req, params, counter)
+    def update_send_request(client_id, usecase, uri, req, params, headers, counter)
 
     end
     
-    def update_receive_response(client_id, usecase, uri, req, params, container)
+    def update_receive_response(client_id, usecase, uri, req, params, headers, container)
       Stella.li '  %-59s %3d' % [uri, container.status]
       Stella.li2 "  Method: " << req.http_method
       Stella.li2 "  Params: " << params.inspect
-      Stella.li3 $/, "  Headers:"
+      Stella.li2 "  Headers: " << headers.inspect
+      Stella.li3 $/, "  Response-Headers:"
       container.headers.all.each do |pair|
         Stella.li3 "    %s: %s" % pair
       end
-      Stella.li4 $/, "  Content:"
+      Stella.li4 $/, "  Response-Content:"
       Stella.li4 container.body.empty? ? '    [empty]' : container.body
       Stella.li2 $/
     end

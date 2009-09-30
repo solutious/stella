@@ -39,6 +39,7 @@ end
 
 get '/' do
   @title << " - Search"
+  p request.env['HTTP_X_STELLA_ID']
   erb :search_form
 end
 
@@ -177,6 +178,10 @@ __END__
 @@layout
 <html>
 <head>
+<!-- 
+Param: __stella: <%= params['__stella'] %>
+Header: X-Stella-ID: <%= env['HTTP_X_STELLA_ID'] %> 
+-->
 <title><%= @title %></title>
 <style>
 .hilite { background-color: #FEE00B; font-weight: bold; }
