@@ -12,7 +12,7 @@ module Stella::Engine
   Benelux.add_timer HTTPClient::Session, :query
   Benelux.add_timer HTTPClient::Session, :socket_gets_initial_line
   Benelux.add_timer HTTPClient::Session, :get_body
-  
+
   module Base
     extend self
     

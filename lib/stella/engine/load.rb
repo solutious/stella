@@ -29,14 +29,12 @@ module Stella::Engine
       sleep 0.3
       
       Thread.ify packages, :threads => opts[:clients] do |package|
-        # TEMPFIX. The fill in build_thread_package is creating nil elements
-        next if package.nil? 
-        
+
         Benelux.current_track package.client.gibbler
+        Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
         
         (1..opts[:repetitions]).to_a.each do |rep|
           
-          Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
           Benelux.add_thread_tags :rep =>  rep
           
           # We store client specific data in the usecase
@@ -45,37 +43,61 @@ module Stella::Engine
             stats = package.client.execute package.usecase
           }
           
+          Benelux.remove_thread_tags :rep
+          
           Benelux.update_track_timeline
-          #Benelux.current_track.ranges(:execute).each do |r|
-          #  a = r.duration
-          #  
-          #end
           
         end
         
-        puts "Usecase: #{package.usecase.gibbler_cache}"
-        Benelux.current_track.stats.each_pair do |n,s|
-          all = s.merge(package.usecase.gibbler_cache)
-          puts '%-30s  %s' % [n, all.inspect]
-        end
-        puts
+        Benelux.remove_thread_tags :usecase
+
         #puts Benelux.current_track.stats.execute[package.usecase.gibbler_cache].first
-        
-        
-        Benelux.remove_thread_tags :usecase, :rep
         
       end
       
       
+      generate_report(plan)
+      
+      #Benelux.tracks.each do |track|
+        
+      #end
+    
+      Stella.li self.timeline.ranges
+      
       !plan.errors?
     end
-      
+    
+    def generate_report(plan)
+      Stella.li " %-58s  %s ".att(:reverse) % [plan.desc, plan.gibbler_cache.shorter]
+      plan.usecases.uniq.each_with_index do |uc,i| 
+        description = uc.desc || "Usecase ##{i+1}"
+        str = ' ' << " %-42s %22s ".bright.att(:reverse) << ' (%s%%)'.bright
+        Stella.li str % [description, uc.gibbler_cache.shorter, uc.ratio_pretty]
+        uc.requests.each do |req| 
+          Stella.li "   %-56s  %s ".bright % [req.desc, req.gibbler_cache.shorter]
+          Stella.li "    %s" % [req.to_s]
+          Benelux.timeline.stats.each_pair do |n,stat|
+            filter = {
+              :usecase => uc.gibbler_cache,
+              :request => req.gibbler_cache
+            }
+            stats = stat[filter]
+            Stella.li '      %-30s %.4f %.4f(SD) %.4f(MIN) %.4f(MAX) %d(N)' % [n, stats.mean, stats.sd, stats.min, stats.max, stats.n]
+          end
+          #if Stella.loglev > 2
+          #  [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
+          #end
+        end
+      end
+    end
+  
+  Benelux.add_timer Stella::Engine::Load, :generate_report
+  
   protected
     class ThreadPackage
       attr_accessor :index
       attr_accessor :client
       attr_accessor :usecase
-      attr_accessor :stats
       def initialize(i, c, u)
         @index, @client, @usecase = i, c, u
       end
@@ -108,7 +130,7 @@ module Stella::Engine
         end
         pointer += count
       end
-      packages
+      packages.compact # TODO: Why one nil element sometimes?
     end
       
       
