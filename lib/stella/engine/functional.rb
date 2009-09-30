@@ -29,8 +29,6 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      p Benelux.timeline.ranges :execute
-      
       !plan.errors?
     end
     

@@ -30,14 +30,15 @@ module Stella
       usecase.requests.each do |req|
         counter += 1
         
-        stats[req.gibbler_cache] ||= Stella::Stats.new
+        stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
         uri_obj = URI.parse(req.uri)
         params = prepare_params(container, req.params)
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        stella_id = [self.timeline.last.to_f, self.gibbler_cache, req, params, headers, counter].gibbler
+        stella_id = [self.timeline.last.to_f, self.gibbler_cache, 
+          req, params, headers, counter].gibbler
         
         Benelux.add_thread_tags :request => req.gibbler_cache
         Benelux.add_thread_tags :retry => counter

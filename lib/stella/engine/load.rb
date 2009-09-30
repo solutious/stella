@@ -43,44 +43,23 @@ module Stella::Engine
           # so we clone it here so each thread is unique.
           Stella::Engine::Load.rescue(package.client.gibbler_cache) { 
             stats = package.client.execute package.usecase
-            #p stats
-#            process_stats package.stats, stats
           }
-          Benelux.update_track
+          
+          Benelux.update_track_timeline
+          #Benelux.current_track.ranges(:execute).each do |r|
+          #  a = r.duration
+          #  
+          #end
+          
         end
+        
+        puts Benelux.current_track.stats.execute[package.usecase.gibbler_cache].first
+        
         
         Benelux.remove_thread_tags :usecase, :rep
         
-        
-#          Stella.li '.'
-          #Benelux.update_track(package.client.gibbler_cache)
-          #ranges = Benelux.timeline(package.client.gibbler_cache).ranges(:do_request)
-          #ranges.each do |r|
-            #Stella.li [r.name, r.duration, r.tags[:request].short, r.tags[:stella_id]].inspect
-          #end
       end
       
-      
-      #Benelux.timeline.ranges(:do_request).each do |range|
-      #  puts "Client%s: %s: %s: %f" % [range.track, range.thread_id, range.name, range.duration]
-      #end
-      #puts Benelux.inspect
-      #Benelux.timeline.regions(:connect).each do |reg|
-        #p reg
-      #end
-      Benelux.timeline.ranges(:query).each do |reg|
-        p "%s %s %s %.4f" % [reg.name, reg.tags[:request], reg.tags[:stella_id], reg.duration]
-      end
-      #Benelux.update_tracks
-      #Benelux.timeline['9dbd521de4dfd6257135649d78a9c0aa2dd58cfe'].each do |mark|
-      #    p [mark.track, mark.name, mark.tags[:usecase], mark.tags[:call_id]]
-      #  end
-        #p region.collect { |mark| mark.name }
-      #end
-      
-      #Benelux.timeline[:retry => 9].each do |mark|
-      #  p mark
-      #end
       
       !plan.errors?
     end

@@ -952,6 +952,7 @@ private
     res = HTTP::Message.new_response(content)
     @debug_dev << "= Request\n\n" if @debug_dev
     sess = @session_manager.query(req, proxy)
+    
     res.peer_cert = sess.ssl_peer_cert
     @debug_dev << "\n\n= Response\n\n" if @debug_dev
     do_get_header(req, res, sess)

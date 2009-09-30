@@ -5,7 +5,9 @@ module Stella::Engine
   Benelux.add_timer      Stella::Client, :execute
   Benelux.add_timer      Stella::Client, :send_request
   Benelux.add_timer          HTTPClient, :do_request
+  Benelux.add_timer          HTTPClient, :create_request
   Benelux.add_timer HTTPClient::Session, :create_socket
+  Benelux.add_timer HTTPClient::Session, :create_ssl_socket
   Benelux.add_timer HTTPClient::Session, :connect
   Benelux.add_timer HTTPClient::Session, :query
   Benelux.add_timer HTTPClient::Session, :socket_gets_initial_line

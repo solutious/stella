@@ -541,7 +541,7 @@ class HTTPClient
           raise
         end
       end
-
+      
       @state = :META if @state == :WAIT
       @next_connection = nil
       @requests.push(req)
