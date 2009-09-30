@@ -25,9 +25,9 @@ class WebAgent
 
     def tail_match?(str1, str2)
       if str1.length > 0
-	str1 == str2[-str1.length..-1].to_s
+        str1 == str2[-str1.length..-1].to_s
       else
-	true
+        true
       end
     end
 
@@ -36,14 +36,14 @@ class WebAgent
       hostname = host.sub(/\.\z/, '').downcase
       case domain
       when /\d+\.\d+\.\d+\.\d+/
-	return (hostname == domainname)
+        return (hostname == domainname)
       when '.' 
-	return true
+        return true
       when /^\./
         # allows; host == rubyforge.org, domain == .rubyforge.org
-	return tail_match?(domainname, '.' + hostname)
+        return tail_match?(domainname, '.' + hostname)
       else
-	return (hostname == domainname)
+        return (hostname == domainname)
       end
     end
 
@@ -125,12 +125,12 @@ class WebAgent
     def match?(url)
       domainname = url.host
       if (!domainname ||
-	  !domain_match(domainname, @domain) ||
-	  (@path && !head_match?(@path, url.path)) ||
-	  (@secure && (url.scheme != 'https')) )
-	return false
+          !domain_match(domainname, @domain) ||
+          (@path && !head_match?(@path, url.path)) ||
+          (@secure && (url.scheme != 'https')) )
+        return false
       else
-	return true
+        return true
       end
     end
 
@@ -138,22 +138,22 @@ class WebAgent
       ret = Array.new()
       old_elem = nil
       array.each{|elem|
-	if (elem.scan(/"/).length % 2) == 0
-	  if old_elem
-	    old_elem << sep << elem
-	  else
-	    ret << elem
-	    old_elem = nil
-	  end  
-	else
-	  if old_elem
-	    old_elem << sep << elem
-	    ret << old_elem
-	    old_elem = nil
-	  else
-	    old_elem = elem.dup
-	  end
-	end
+        if (elem.scan(/"/).length % 2) == 0
+          if old_elem
+            old_elem << sep << elem
+          else
+            ret << elem
+            old_elem = nil
+          end  
+        else
+          if old_elem
+            old_elem << sep << elem
+            ret << old_elem
+            old_elem = nil
+          else
+            old_elem = elem.dup
+          end
+        end
       }
       ret
     end
@@ -166,31 +166,31 @@ class WebAgent
       cookie_elem -= [""] # del empty elements, a cookie might included ";;"
       first_elem = cookie_elem.shift
       if first_elem !~ /([^=]*)(\=(.*))?/
-	return
-	## raise ArgumentError 'invalid cookie value'
+        return
+        ## raise ArgumentError 'invalid cookie value'
       end
       @name = $1.strip
       @value = normalize_cookie_value($3)
       cookie_elem.each{|pair|
-	key, value = pair.split(/=/, 2)  ## value may nil
-	key.strip!
+        key, value = pair.split(/=/, 2)  ## value may nil
+        key.strip!
         value = normalize_cookie_value(value)
-	case key.downcase
-	when 'domain'
-	  @domain = value
-	when 'expires'
+        case key.downcase
+        when 'domain'
+          @domain = value
+        when 'expires'
           @expires = nil
-	  begin
-	    @expires = Time.parse(value).gmtime() if value
-	  rescue ArgumentError
-	  end
-	when 'path'
-	  @path = value
-	when 'secure'
-	  @secure = true  ## value may nil, but must 'true'.
-	else
-	  ## ignore
-	end
+          begin
+            @expires = Time.parse(value).gmtime() if value
+          rescue ArgumentError
+          end
+        when 'path'
+          @path = value
+        when 'secure'
+          @secure = true  ## value may nil, but must 'true'.
+        else
+          ## ignore
+        end
       }
     end
 
@@ -281,14 +281,14 @@ class WebAgent
 
     def make_cookie_str(cookie_list)
       if cookie_list.empty?
-	return nil
+        return nil
       end
 
       ret = ''
       c = cookie_list.shift
       ret += "#{c.name}=#{c.value}"
       cookie_list.each{|cookie|
-	ret += "; #{cookie.name}=#{cookie.value}"
+        ret += "; #{cookie.name}=#{cookie.value}"
       }
       return ret
     end
@@ -312,7 +312,7 @@ class WebAgent
 
     def find_cookie_info(domain, path, name)
       @cookies.find{|c|
-	c.domain == domain && c.path == path && c.name == name
+        c.domain == domain && c.path == path && c.name == name
       }
     end
     private :find_cookie_info
@@ -320,7 +320,7 @@ class WebAgent
     # not tested well; used only netscape_rule = true.
     def cookie_error(err, override)
       if !err.kind_of?(ErrorOverrideOK) || !override
-	raise err
+        raise err
       end
     end
     private :cookie_error
@@ -329,11 +329,11 @@ class WebAgent
       url = cookie.url
       name, value = cookie.name, cookie.value
       expires, domain, path = 
-	cookie.expires, cookie.domain, cookie.path
+        cookie.expires, cookie.domain, cookie.path
       secure, domain_orig, path_orig = 
-	cookie.secure?, cookie.domain_orig?, cookie.path_orig?
+        cookie.secure?, cookie.domain_orig?, cookie.path_orig?
       discard, override = 
-	cookie.discard?, cookie.override?
+        cookie.discard?, cookie.override?
 
       domainname = url.host
       domain_orig, path_orig = domain, path
@@ -341,14 +341,14 @@ class WebAgent
 
       if domain
 
-	# [DRAFT 12] s. 4.2.2 (does not apply in the case that
-	# host name is the same as domain attribute for version 0
-	# cookie)
-	# I think that this rule has almost the same effect as the
-	# tail match of [NETSCAPE].
-	if domain !~ /^\./ && domainname != domain
-	  domain = '.'+domain
-	end
+        # [DRAFT 12] s. 4.2.2 (does not apply in the case that
+        # host name is the same as domain attribute for version 0
+        # cookie)
+        # I think that this rule has almost the same effect as the
+        # tail match of [NETSCAPE].
+        if domain !~ /^\./ && domainname != domain
+          domain = '.'+domain
+        end
 
         # [NETSCAPE] rule
         if @netscape_rule
@@ -396,10 +396,10 @@ class WebAgent
       cookie.domain_orig = domain_orig
       cookie.path_orig = path_orig
       if discard || cookie.expires == nil
-	cookie.discard = true
+        cookie.discard = true
       else
-	cookie.discard = false
-	@is_saved = false
+        cookie.discard = false
+        @is_saved = false
       end
     end
 
@@ -430,17 +430,17 @@ class WebAgent
 
     def check_cookie_accept_domain(domain)
       unless domain
-	return false
+        return false
       end
       @accept_domains.each{|dom|
-	if domain_match(domain, dom)
-	  return true
-	end
+        if domain_match(domain, dom)
+          return true
+        end
       }
       @reject_domains.each{|dom|
-	if domain_match(domain, dom)
-	  return false
-	end
+        if domain_match(domain, dom)
+          return false
+        end
       }
       return true
     end
