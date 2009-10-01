@@ -13,7 +13,7 @@ module Stella::Engine
   Benelux.add_timer HTTPClient::Session, :create_ssl_socket
   Benelux.add_timer HTTPClient::Session, :connect
   Benelux.add_timer HTTPClient::Session, :query
-  Benelux.add_timer HTTPClient::Session, :socket_gets_initial_line
+  Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte
   Benelux.add_timer HTTPClient::Session, :get_body
 
   module Base
