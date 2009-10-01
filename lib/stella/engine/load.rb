@@ -28,20 +28,28 @@ module Stella::Engine
       Stella.li "Generating load...", $/
       Stella.lflush
       
-      execute_test_plan packages, opts[:repetitions]
+      begin
+        execute_test_plan packages, opts[:repetitions]
+      rescue Interrupt
+        Stella.li $/, "Stopping test...", $/
+        Stella.abort!
+      ensure
+        Stella.li "Processing statistics...", $/
+        Stella.lflush
+        generate_report plan
+
+        rep_stats = self.timeline.ranges(:build_thread_package).first    
+        Stella.li "%20s %0.4f" % ['Prep time:', rep_stats.duration]
+
+        rep_stats = self.timeline.ranges(:execute_test_plan).first    
+        Stella.li "%20s %0.4f" % ['Test time:', rep_stats.duration]
+
+        rep_stats = self.timeline.ranges(:generate_report).first    
+        Stella.li "%20s %0.4f" % ['Reporting time:', rep_stats.duration]
+        Stella.li $/
+      end
       
-      Stella.li "Processing statistics...", $/
-      Stella.lflush
-      generate_report plan
-      
-      rep_stats = self.timeline.ranges(:build_thread_package).first    
-      Stella.li "%20s %0.4f" % ['Prep time:', rep_stats.duration]
-      
-      rep_stats = self.timeline.ranges(:execute_test_plan).first    
-      Stella.li "%20s %0.4f" % ['Test time:', rep_stats.duration]
-      
-      rep_stats = self.timeline.ranges(:generate_report).first    
-      Stella.li "%20s %0.4f" % ['Reporting time:', rep_stats.duration]
+
       
       !plan.errors?
     end
@@ -57,25 +65,6 @@ module Stella::Engine
       end
     end
     
-    def execute_test_plan(packages, reps=1)
-      Thread.ify packages, :threads => packages.size do |package|
-        
-        # This thread will stay on this one track. 
-        Benelux.current_track package.client.gibbler
-        Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
-        
-        (1..reps).to_a.each do |rep|
-          Benelux.add_thread_tags :rep =>  rep
-          Stella::Engine::Load.rescue(package.client.gibbler_cache) {
-            stats = package.client.execute package.usecase
-          }
-          Benelux.remove_thread_tags :rep
-          Benelux.update_track_timeline
-        end
-        
-        Benelux.remove_thread_tags :usecase
-      end
-    end
     def calculate_usecase_clients(plan, opts)
       counts = { :total => 0 }
       plan.usecases.each_with_index do |usecase,i|
@@ -113,8 +102,33 @@ module Stella::Engine
       end
       packages.compact # TODO: Why one nil element sometimes?
     end
+    
+    def execute_test_plan(packages, reps=1)
+      Thread.ify packages, :threads => packages.size do |package|
+        
+        # This thread will stay on this one track. 
+        Benelux.current_track package.client.gibbler
+        Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
+        
+        (1..reps).to_a.each do |rep|
+          Benelux.add_thread_tags :rep =>  rep
+          Stella::Engine::Load.rescue(package.client.gibbler_cache) {
+            stats = package.client.execute package.usecase
+            break if Stella.abort?
+            print '.'
+          }
+          Benelux.remove_thread_tags :rep
+        end
+        
+        Benelux.remove_thread_tags :usecase
+      end
+      Stella.li $/
+    end
       
     def generate_report(plan)
+      Benelux.update_all_track_timelines
+      global_timeline = Benelux.timeline
+      
       Stella.li $/, " %-68s %s  ".att(:reverse) % [plan.desc, plan.gibbler_cache.shorter]
       plan.usecases.uniq.each_with_index do |uc,i| 
         description = uc.desc || "Usecase ##{i+1}"
@@ -123,7 +137,7 @@ module Stella::Engine
         uc.requests.each do |req| 
           Stella.li "   %-66s %s ".bright % [req.desc, req.gibbler_cache.shorter]
           Stella.li "    %s" % [req.to_s]
-          Benelux.timeline.stats.each_pair do |n,stat|
+          global_timeline.stats.each_pair do |n,stat|
             filter = {
               :usecase => uc.gibbler_cache,
               :request => req.gibbler_cache
@@ -132,9 +146,7 @@ module Stella::Engine
             Stella.li '      %-30s %.3f <= %.3f >= %.3f; %.3f(SD) %d(N)' % [n, stats.min, stats.mean, stats.max, stats.sd, stats.n]
           end
           Stella.li $/
-          #if Stella.loglev > 2
-          #  [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
-          #end
+          Stella.lflush
         end
       end
     end

@@ -21,6 +21,7 @@ module Stella
   @@logger = Drydock::Screen
   @@loglev = 1
   @@debug  = false
+  @@abort  = false
   
   # Puts +msg+ to +@@logger+
   def lflush; @@logger.flush if @@logger.respond_to? :flush; end
@@ -48,6 +49,11 @@ module Stella
   def debug?; @@debug == true; end
   def enable_debug; @@debug = true; end
   def disable_debug; @@debug = false; end
+  
+  def abort?
+    @@abort == true
+  end
+  def abort!() @@abort = true end
   
   def rescue(&blk)
     blk.call
