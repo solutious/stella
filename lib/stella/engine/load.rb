@@ -31,7 +31,7 @@ module Stella::Engine
       begin
         execute_test_plan packages, opts[:repetitions]
       rescue Interrupt
-        Stella.li $/, "Stopping test...", $/
+        Stella.li "Stopping test...", $/
         Stella.abort!
       ensure
         Stella.li "Processing statistics...", $/
@@ -122,7 +122,7 @@ module Stella::Engine
         
         Benelux.remove_thread_tags :usecase
       end
-      Stella.li $/
+      Stella.li $/, $/
     end
       
     def generate_report(plan)
@@ -156,11 +156,7 @@ module Stella::Engine
       
     end
       
-    def update_send_request(client_id, usecase, uri, req, params, headers, counter)
-      
-    end
-      
-    def update_receive_response(client_id, usecase, uri, req, params, headers, container)
+    def update_receive_response(client_id, usecase, uri, req, counter, container)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li2 '  Client-%s %3d %-6s %-45s' % [client_id.shorter, container.status, req.http_method, uri]
     end

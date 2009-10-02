@@ -38,21 +38,22 @@ module Stella::Engine
       Stella.li2 "  %-46s %16s ".bright % [req.desc, notice]
     end
     
-    def update_send_request(client_id, usecase, uri, req, params, headers, counter)
-
-    end
-    
-    def update_receive_response(client_id, usecase, uri, req, params, headers, container)
+    def update_receive_response(client_id, usecase, uri, req, counter, container)
       Stella.li '   %-59s %3d' % [uri, container.status]
-      Stella.li2 "   Method: " << req.http_method
-      Stella.li2 "   Params: " << params.inspect
-      Stella.li2 "   Headers: " << headers.inspect
-      Stella.li3 $/, "   Response-Headers:"
-      container.headers.all.each do |pair|
-        Stella.li3 "     %s: %s" % pair
+      
+      Stella.li2 '   ' << container.response.request.header.send(:request_line)
+      
+      Stella.li2 $/, "   Request-Headers:"
+      container.response.request.header.all.each do |pair|
+        Stella.li2 "     %s: %s" % pair
       end
-      Stella.li4 $/, "   Response-Content:"
-      Stella.li4 container.body.empty? ? '     [empty]' : container.body
+      
+      Stella.li2 $/, "   Response-Headers:"
+      container.headers.all.each do |pair|
+        Stella.li2 "     %s: %s" % pair
+      end
+      Stella.li3 $/, "   Response-Content:"
+      Stella.li3 container.body.empty? ? '     [empty]' : container.body
       Stella.li2 $/
     end
     
