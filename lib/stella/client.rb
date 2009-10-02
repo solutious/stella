@@ -143,6 +143,12 @@ module Stella
     # If no replacement value can be found, the variable will remain. 
     def build_request_uri(uri, params, container)
       uri = URI::HTTP.build({:path => uri}) unless uri.is_a?(URI::Generic)
+      
+      if uri.host.nil? && base_uri.nil?
+        Stella.abort!
+        raise NoHostDefined, uri
+      end
+      
       uri.scheme = base_uri.scheme if uri.scheme.nil?
       uri.host = base_uri.host if uri.host.nil?
       uri.port = base_uri.port if uri.port.nil?
