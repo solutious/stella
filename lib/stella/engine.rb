@@ -4,10 +4,10 @@ module Stella::Engine
   
   # These commented out timers are not very revealing.
   #Benelux.add_timer      Stella::Client, :execute
+  #Benelux.add_timer      Stella::Client, :send_request
   #Benelux.add_timer          HTTPClient, :create_request
   
   # These timers are interesting from a reporting perspective.
-  Benelux.add_timer      Stella::Client, :send_request
   Benelux.add_timer          HTTPClient, :do_request
   Benelux.add_timer HTTPClient::Session, :create_socket
   Benelux.add_timer HTTPClient::Session, :create_ssl_socket
