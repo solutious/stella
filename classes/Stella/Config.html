@@ -45,14 +45,14 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000128">blast</a></li>
-              <li><a href="#M000125">each_path</a></li>
-              <li><a href="#M000127">init</a></li>
-              <li><a href="#M000126">refresh</a></li>
+              <li><a href="#M000126">blast</a></li>
+              <li><a href="#M000123">each_path</a></li>
+              <li><a href="#M000125">init</a></li>
+              <li><a href="#M000124">refresh</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000124">default?</a></li>
+              <li><a href="#M000122">default?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -102,61 +102,61 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000128'>
-                <a name='M000128'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>blast</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000128-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 45</span>&#x000A;45:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">blast</span>&#x000A;46:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">USER_PATH</span>&#x000A;47:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Blasting #{USER_PATH}&quot;</span>&#x000A;48:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">USER_PATH</span>)&#x000A;49:     <span class="ruby-keyword kw">end</span>&#x000A;50:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;51:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Blasting #{PROJECT_PATH}&quot;</span>&#x000A;52:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">PROJECT_PATH</span>)&#x000A;53:     <span class="ruby-keyword kw">end</span>&#x000A;54:   <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000125'>
-                <a name='M000125'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>each_path</span>
-                  <span class='arguments'>(&amp;blk)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000125-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 13</span>&#x000A;13:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">each_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;14:     [<span class="ruby-constant">PROJECT_PATH</span>, <span class="ruby-constant">USER_PATH</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;15:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;Loading #{path}&quot;</span>&#x000A;16:       <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">path</span>&#x000A;17:     <span class="ruby-keyword kw">end</span>&#x000A;18:   <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000127'>
-                <a name='M000127'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>init</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000127-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 29</span>&#x000A;29:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">init</span>&#x000A;30:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">AlreadyInitialized</span>, <span class="ruby-constant">PROJECT_PATH</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;31:     <span class="ruby-identifier">dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span> <span class="ruby-constant">USER_PATH</span>&#x000A;32:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-value">0700</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">dir</span>&#x000A;33:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">USER_PATH</span>&#x000A;34:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Creating #{USER_PATH} (Add your credentials here)&quot;</span>&#x000A;35:       <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">write_to_file</span>(<span class="ruby-constant">USER_PATH</span>, <span class="ruby-constant">DEFAULT_CONFIG</span>, <span class="ruby-value str">'w'</span>, <span class="ruby-value">0600</span>)&#x000A;36:     <span class="ruby-keyword kw">end</span>&#x000A;37:     &#x000A;38:     <span class="ruby-identifier">dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;39:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-value">0700</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">dir</span>&#x000A;40:     &#x000A;41:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Creating #{PROJECT_PATH}&quot;</span>&#x000A;42:     <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">write_to_file</span>(<span class="ruby-constant">PROJECT_PATH</span>, <span class="ruby-value str">'target:'</span>, <span class="ruby-value str">'w'</span>, <span class="ruby-value">0600</span>)&#x000A;43:   <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
               <div class='public-class method' id='method-M000126'>
                 <a name='M000126'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>refresh</span>
+                  <span class='name'>blast</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000126-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 20</span>&#x000A;20:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">refresh</span>&#x000A;21:     <span class="ruby-identifier">conf</span> = {}&#x000A;22:     <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>.<span class="ruby-identifier">each_path</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> &#x000A;23:       <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span> <span class="ruby-identifier">path</span>&#x000A;24:       <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">merge!</span> <span class="ruby-identifier">tmp</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tmp</span>&#x000A;25:     <span class="ruby-keyword kw">end</span>&#x000A;26:     <span class="ruby-identifier">from_hash</span> <span class="ruby-identifier">conf</span>&#x000A;27:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000126-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 45</span>&#x000A;45:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">blast</span>&#x000A;46:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">USER_PATH</span>&#x000A;47:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Blasting #{USER_PATH}&quot;</span>&#x000A;48:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">USER_PATH</span>)&#x000A;49:     <span class="ruby-keyword kw">end</span>&#x000A;50:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;51:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Blasting #{PROJECT_PATH}&quot;</span>&#x000A;52:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">PROJECT_PATH</span>)&#x000A;53:     <span class="ruby-keyword kw">end</span>&#x000A;54:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000123'>
+                <a name='M000123'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>each_path</span>
+                  <span class='arguments'>(&amp;blk)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000123-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000123-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 13</span>&#x000A;13:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">each_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;14:     [<span class="ruby-constant">PROJECT_PATH</span>, <span class="ruby-constant">USER_PATH</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;15:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;Loading #{path}&quot;</span>&#x000A;16:       <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">path</span>&#x000A;17:     <span class="ruby-keyword kw">end</span>&#x000A;18:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000125'>
+                <a name='M000125'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>init</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000125-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 29</span>&#x000A;29:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">init</span>&#x000A;30:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">AlreadyInitialized</span>, <span class="ruby-constant">PROJECT_PATH</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;31:     <span class="ruby-identifier">dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span> <span class="ruby-constant">USER_PATH</span>&#x000A;32:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-value">0700</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">dir</span>&#x000A;33:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-constant">USER_PATH</span>&#x000A;34:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Creating #{USER_PATH} (Add your credentials here)&quot;</span>&#x000A;35:       <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">write_to_file</span>(<span class="ruby-constant">USER_PATH</span>, <span class="ruby-constant">DEFAULT_CONFIG</span>, <span class="ruby-value str">'w'</span>, <span class="ruby-value">0600</span>)&#x000A;36:     <span class="ruby-keyword kw">end</span>&#x000A;37:     &#x000A;38:     <span class="ruby-identifier">dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span> <span class="ruby-constant">PROJECT_PATH</span>&#x000A;39:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-value">0700</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">dir</span>&#x000A;40:     &#x000A;41:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Creating #{PROJECT_PATH}&quot;</span>&#x000A;42:     <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">write_to_file</span>(<span class="ruby-constant">PROJECT_PATH</span>, <span class="ruby-value str">'target:'</span>, <span class="ruby-value str">'w'</span>, <span class="ruby-value">0600</span>)&#x000A;43:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000124'>
+                <a name='M000124'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>refresh</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000124-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000124-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 20</span>&#x000A;20:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">refresh</span>&#x000A;21:     <span class="ruby-identifier">conf</span> = {}&#x000A;22:     <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>.<span class="ruby-identifier">each_path</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> &#x000A;23:       <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span> <span class="ruby-identifier">path</span>&#x000A;24:       <span class="ruby-identifier">conf</span>.<span class="ruby-identifier">merge!</span> <span class="ruby-identifier">tmp</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tmp</span>&#x000A;25:     <span class="ruby-keyword kw">end</span>&#x000A;26:     <span class="ruby-identifier">from_hash</span> <span class="ruby-identifier">conf</span>&#x000A;27:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000124'>
-                <a name='M000124'>      </a>
+              <div class='public-instance method' id='method-M000122'>
+                <a name='M000122'>      </a>
                 <div class='synopsis'>
                   <span class='name'>default?</span>
                   <span class='arguments'>()</span>
@@ -167,10 +167,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000124-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000122-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000124-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 11</span>&#x000A;11:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default?</span>; <span class="ruby-identifier">to_hash</span>.<span class="ruby-identifier">gibbler</span> <span class="ruby-operator">==</span> <span class="ruby-constant">DEFAULT_CONFIG_HASH</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000122-source'>    <span class="ruby-comment cmt"># File lib/stella/config.rb, line 11</span>&#x000A;11:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default?</span>; <span class="ruby-identifier">to_hash</span>.<span class="ruby-identifier">gibbler</span> <span class="ruby-operator">==</span> <span class="ruby-constant">DEFAULT_CONFIG_HASH</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
