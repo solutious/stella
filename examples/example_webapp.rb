@@ -39,7 +39,6 @@ end
 
 get '/' do
   @title << " - Search"
-  p request.env['HTTP_X_STELLA_ID']
   erb :search_form
 end
 
@@ -74,7 +73,11 @@ post '/listing/add' do
   else
     @listings = options.listings
     if find_name(params[:name], @listings).empty?
-      @listings.shift if @listings.size >= options.max_listings
+      # Limit the number of in memory listings, but we want to keep 
+      # the original listings so we use a slice instead of a shift.
+      if @listings.size >= options.max_listings
+        @listings.slice!(LISTINGS.size) 
+      end
       @listings << { :name => params[:name], :id => rand(100000), :city => params[:city] }
       if params[:logo].is_a?(Hash) && params[:logo][:tempfile]
         p "TODO: Fix uploads"
@@ -131,7 +134,8 @@ before do
   @cookie[:history].unshift params[:what] unless blank?(params[:what])
   @cookie[:history].pop if @cookie[:history].size > 5
   @cookie[:location] = params[:where] unless blank?(params[:where])
-  response.set_cookie "bff-history", :path => '/', :value => @cookie.to_yaml
+  response.set_cookie "bff-history", 
+    :value => @cookie.to_yaml#, :expires => Time.parse('16/02/2012')
 end
 
 helpers do
