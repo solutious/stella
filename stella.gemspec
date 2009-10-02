@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.7.0.010"
+  s.version = "0.7.0.009"
   s.summary = "Stella: Perform load tests on your web applications with beauty and brute strength."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -15,7 +15,7 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'benelux'     '>= 0.3.0'
+  s.add_dependency 'benelux'
   s.add_dependency 'drydock',    '>= 0.6.8'
   s.add_dependency 'gibbler',    '>= 0.6.3'
   s.add_dependency 'storable',   '>= 0.5.7'
@@ -30,6 +30,7 @@
   README.rdoc
   Rakefile
   bin/stella
+  examples/cookies/plan.rb
   examples/essentials/logo.png
   examples/essentials/plan.rb
   examples/essentials/search_terms.csv
