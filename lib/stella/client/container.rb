@@ -12,8 +12,11 @@ class Stella::Client
       @base_path = usecase.base_path
     end
     
-    def self.const_missing(const, *args)
-      ResponseError.new(const)
+    # This is used to handle custom exception in usecases.
+    # See examples/exceptions/plan.rb
+    #
+    def self.const_missing(custom_error)
+      ResponseError.new custom_error
     end
     
     def doc

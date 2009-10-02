@@ -115,7 +115,7 @@ module Stella::Engine
           Stella::Engine::Load.rescue(package.client.gibbler_cache) {
             stats = package.client.execute package.usecase
             break if Stella.abort?
-            print '.'
+            print '.' if Stella.loglev == 1
           }
           Benelux.remove_thread_tags :rep
         end
@@ -165,6 +165,9 @@ module Stella::Engine
     end
     
     def update_error_execute_response_handler(client_id, ex, req, container)
+      desc = "#{container.usecase.desc} > #{req.desc}"
+      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+      Stella.ld ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
