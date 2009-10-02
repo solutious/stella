@@ -780,7 +780,10 @@ module HTTP
 
     # HTTP::Message::Body:: message body.
     attr_reader :body
-
+    
+    # Response only.  Request object associated to this response. 
+    attr_accessor :request
+    
     # OpenSSL::X509::Certificate:: response only.  server certificate which is
     #                              used for retrieving the response.
     attr_accessor :peer_cert
