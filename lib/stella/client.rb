@@ -16,7 +16,7 @@ module Stella
     
     def initialize(base_uri=nil, client_id=1)
       @base_uri, @client_id = base_uri, client_id
-      @cookie_file = Tempfile.new('stella-cookie')
+      #@cookie_file = File.new("cookies-#{client_id}", 'w')
       @proxy = OpenStruct.new
     end
     def execute(usecase, &stat_collector)
@@ -50,7 +50,8 @@ module Stella
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
 
         begin
-          send_request http_client, usecase, meth, uri, req, params, headers, container
+          send_request http_client, usecase, meth, uri, req, params, headers, container, counter
+          #http_client.save_cookie_store
           update(:stats, http_client, usecase, req)
         rescue => ex
           update(:request_error, usecase, uri, req, params, ex)
@@ -84,10 +85,9 @@ module Stella
     def nowait?; @nowait == true; end
       
   private
-    def send_request(http_client, usecase, meth, uri, req, params, headers, container)
-      update(:send_request, usecase, uri, req, params, headers, container)
+    def send_request(http_client, usecase, meth, uri, req, params, headers, container, counter)
       container.response = http_client.send(meth, uri, params, headers) # booya!
-      update(:receive_response, usecase, uri, req, params, headers, container)
+      update(:receive_response, usecase, uri, req, counter, container)
     end
     
     def update(kind, *args)
@@ -113,8 +113,7 @@ module Stella
       http_client = HTTPClient.new opts
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       http_client.debug_dev = STDOUT if Stella.debug? && Stella.loglev > 3
-      http_client.set_cookie_store @cookie_file.to_s
-      #http_client.redirect_uri_callback = ??
+      #http_client.set_cookie_store @cookie_file.path
       http_client
     end
     
