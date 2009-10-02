@@ -25,7 +25,7 @@ module Stella::Engine
       
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
-        Stella.li ' %-65s '.att(:reverse).bright % [desc]
+        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{uc.gibbler_cache.shorter}) "]
         Stella.rescue { client.execute uc }
       end
       

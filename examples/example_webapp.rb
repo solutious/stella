@@ -8,7 +8,7 @@ require 'yaml'
 set :run => $0 == __FILE__ ? true : false
 set :environment => :development
 set :dump_errors => true
-set :port => 3000
+set :port => 3114
 set :reload => true
 set :max_listings => 1000
 

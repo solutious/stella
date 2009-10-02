@@ -95,12 +95,13 @@ class Testplan
 
   def pretty
     str = []
-    str << " %-60s  %s ".att(:reverse) % [@desc, self.gibbler_cache.shorter]
+    str << " %-66s  ".att(:reverse) % ["#{@desc}  (#{self.gibbler_cache.shorter})"]
     @usecases.each_with_index do |uc,i| 
-      description = uc.desc || "Usecase ##{i+1}"
-      str << (' ' << " %-42s %22s ".att(:reverse).bright << " (%s%%)".bright) % [description, uc.gibbler_cache.shorter, uc.ratio_pretty]
+      desc = uc.desc || "Usecase ##{i+1}"
+      desc += "  (#{uc.gibbler_cache.shorter}) "
+      str << (' ' << " %-61s %s%% ".att(:reverse).bright) % [desc, uc.ratio_pretty]
       requests = uc.requests.each do |r| 
-        str << "    %-56s %s".bright % [r.desc, r.gibbler_cache.shorter]
+        str << "    %-62s".bright % ["#{r.desc}  (#{r.gibbler_cache.shorter})"]
         str << "      %s" % [r]
         if Stella.loglev > 2
           [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }

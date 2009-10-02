@@ -58,7 +58,9 @@ module Stella
           next
         end
         
+        Benelux.add_thread_tags :status => container.status
         ret = execute_response_handler container, req
+        Benelux.remove_thread_tags :status
         
         Stella.lflush
         

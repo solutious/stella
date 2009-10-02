@@ -59,14 +59,14 @@
 # First you verify that the plan and application
 # are running correctly:
 #
-# $ stella verify -p examples/essentials/plan.rb http://127.0.0.1:3000/
+# $ stella verify -p examples/essentials/plan.rb http://127.0.0.1:3114/
 # 
 # The "verify" command executes the plan with a 
 # single user and provides more detailed output.
 #
 # "load" tests are run in a similar way:
 # 
-# $ stella load -c 50 -r 10 -p examples/essentials/plan.rb http://127.0.0.1:3000/
+# $ stella load -c 50 -r 10 -p examples/essentials/plan.rb http://127.0.0.1:3114/
 #
 # where "c" is the number of concurrent users and
 # "r" is the number of times to repeat the plan. 
@@ -225,7 +225,7 @@ usecase 25, "YAML API" do
     
     # We can use response blocks to affect behaviour 
     # the user. Here we specify that every virtual
-    # user should repeat this request 20 times.
+    # user should repeat this request 7 times.
     #
     response 200 do
       repeat 7

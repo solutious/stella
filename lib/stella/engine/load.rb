@@ -113,9 +113,9 @@ module Stella::Engine
         (1..reps).to_a.each do |rep|
           Benelux.add_thread_tags :rep =>  rep
           Stella::Engine::Load.rescue(package.client.gibbler_cache) {
+            print '.' if Stella.loglev == 1
             stats = package.client.execute package.usecase
             break if Stella.abort?
-            print '.' if Stella.loglev == 1
           }
           Benelux.remove_thread_tags :rep
         end
@@ -129,13 +129,22 @@ module Stella::Engine
       Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
-      Stella.li $/, " %-68s %s  ".att(:reverse) % [plan.desc, plan.gibbler_cache.shorter]
+      Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
-        description = uc.desc || "Usecase ##{i+1}"
-        str = ' ' << " %-50s  %22s ".bright.att(:reverse) << ' (%s%%)'.bright
-        Stella.li str % [description, uc.gibbler_cache.shorter, uc.ratio_pretty]
+        
+        # TODO: Create Ranges object, like Stats object
+        # global_timeline.ranges(:do_request)[:usecase => '1111']
+        # The following returns globl do_request ranges. 
+        requests = 0 #global_timeline.ranges(:do_request).size
+        
+        desc = uc.desc || "Usecase ##{i+1} "
+        desc << "  (#{uc.gibbler_cache.shorter}) "
+        str = ' ' << " %-66s %s   %d%% ".bright.att(:reverse)
+        Stella.li str % [desc, '', uc.ratio_pretty]
+        
         uc.requests.each do |req| 
-          Stella.li "   %-66s %s ".bright % [req.desc, req.gibbler_cache.shorter]
+          desc = req.desc 
+          Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.gibbler_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           global_timeline.stats.each_pair do |n,stat|
             filter = {
@@ -144,9 +153,9 @@ module Stella::Engine
             }
             stats = stat[filter]
             Stella.li '      %-30s %.3f <= %.3f >= %.3f; %.3f(SD) %d(N)' % [n, stats.min, stats.mean, stats.max, stats.sd, stats.n]
+            Stella.lflush
           end
           Stella.li $/
-          Stella.lflush
         end
       end
     end
@@ -166,12 +175,14 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       desc = "#{container.usecase.desc} > #{req.desc}"
+      Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.ld ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
+      Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.ld ex.backtrace
     end
@@ -188,6 +199,7 @@ module Stella::Engine
     Benelux.add_timer Stella::Engine::Load, :generate_report
     Benelux.add_timer Stella::Engine::Load, :build_thread_package
     Benelux.add_timer Stella::Engine::Load, :execute_test_plan
+    Benelux.add_timer Stella::Client, :execute_response_handler
   end
 end
 
