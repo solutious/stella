@@ -773,10 +773,10 @@ private
         retry_count -= 1
       end
     end
-    
     res
   end
-
+  
+  # NOTE: Not tracked by Benelux / Stella
   def do_request_async(method, uri, query, body, extheader)
     conn = Connection.new
     t = Thread.new(conn) { |tconn|
@@ -954,10 +954,10 @@ private
     res = HTTP::Message.new_response(content)
     @debug_dev << "= Request\n\n" if @debug_dev
     sess = @session_manager.query(req, proxy)
-    
     res.peer_cert = sess.ssl_peer_cert
     @debug_dev << "\n\n= Response\n\n" if @debug_dev
     do_get_header(req, res, sess)
+    res.header.size = sess.headers_bytes
     conn.push(res)
     sess.get_body do |part|
       if block
@@ -1005,6 +1005,7 @@ private
 
   def do_get_header(req, res, sess)
     res.version, res.status, res.reason, headers = sess.get_header
+    #Benelux.thread_timeline.add_count :response_header_size, res.header
     headers.each do |key, value|
       res.header.add(key, value)
     end

@@ -31,8 +31,6 @@ module Stella::Engine
       Benelux.update_all_track_timelines
       tl = Benelux.timeline
       
-      p tl.ranges(:readpartial)
-      
       !plan.errors?
     end
     

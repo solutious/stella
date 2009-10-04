@@ -126,8 +126,6 @@ module Stella::Engine
       Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
-      p global_timeline.counts
-      
       Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
         
@@ -142,14 +140,16 @@ module Stella::Engine
         Stella.li str % [desc, '', uc.ratio_pretty]
         
         uc.requests.each do |req| 
+          filter = [uc.gibbler_cache, req.gibbler_cache]
+          
+          global_timeline.counts[filter, :head].each do |c|
+            p c
+          end
+          
           desc = req.desc 
           Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.gibbler_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           global_timeline.stats.each_pair do |n,stat|
-            filter = {
-              :usecase => uc.gibbler_cache,
-              :request => req.gibbler_cache
-            }
             stats = stat[filter]
             Stella.li '      %-30s %.3f <= %.3f >= %.3f; %.3f(SD) %d(N)' % [n, stats.min, stats.mean, stats.max, stats.sd, stats.n]
             Stella.lflush

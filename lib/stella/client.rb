@@ -51,16 +51,23 @@ module Stella
 
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
-          #http_client.save_cookie_store
-          update(:stats, http_client, usecase, req)
+          
+          Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
+          Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
+          Benelux.thread_timeline.add_count :response_headers_size, container.response.header.size
+          Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
+          
+          #c = Benelux.thread_timeline.add_count(:data_received, body_size)
+          #c.add_tags :status => container.status
+          ret = execute_response_handler container, req
+          #Benelux.remove_thread_tags :status
+          
+          
+           
         rescue => ex
           update(:request_error, usecase, uri, req, params, ex)
           next
         end
-        
-        Benelux.add_thread_tags :status => container.status
-        ret = execute_response_handler container, req
-        Benelux.remove_thread_tags :status
         
         Stella.lflush
         
@@ -116,6 +123,7 @@ module Stella
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       http_client.debug_dev = STDOUT if Stella.debug? && Stella.loglev > 3
       #http_client.set_cookie_store @cookie_file.path
+      http_client.protocol_version = "HTTP/1.1"
       http_client
     end
     

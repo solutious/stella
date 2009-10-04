@@ -95,6 +95,9 @@ module HTTP
 
     # Represents HTTP message header.
     class Headers
+      # Size of Header content (original string). Set from session.headers_bytes.
+      attr_accessor :size
+      
       # HTTP version in a HTTP header.  Float.
       attr_accessor :http_version
       # Size of body.  nil when size is unknown (e.g. chunked response).
@@ -429,6 +432,8 @@ module HTTP
       # If no dev (the second argument) given, this method returns a dumped
       # String.
       def dump(header = '', dev = '')
+        #header_size = header.size
+        #body_size = 0
         if @body.is_a?(Parts)
           dev << header
           buf = ''
@@ -436,17 +441,24 @@ module HTTP
             if Message.file?(part)
               reset_pos(part)
               while !part.read(@chunk_size, buf).nil?
+                #body_size += buf.size
                 dev << buf
               end
             else
+              #body_size += part.size
               dev << part
             end
           end
         elsif @body
+          #body_size = @body.size
           dev << header + @body
         else
           dev << header
         end
+        
+        #Benelux.thread_timeline.add_count :data_sent, header_size, :type => :header
+        #Benelux.thread_timeline.add_count :data_sent, body_size, :type => :body
+        
         dev
       end
 
@@ -726,7 +738,7 @@ module HTTP
       # Returns true if the given HTTP version allows keep alive connection.
       # version:: Float
       def keep_alive_enabled?(version)
-        version >= 1.1
+        version.to_f >= 1.1
       end
 
       # Returns true if the given query (or body) has a multiple parameter.
@@ -800,6 +812,7 @@ module HTTP
     # dev needs to respond to <<.
     def dump(dev = '')
       str = header.dump + CRLF
+      body_size = body ? body.size : 0
       if header.chunked
         dev = body.dump_chunked(str, dev)
       elsif body

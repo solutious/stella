@@ -16,7 +16,7 @@ module Stella::Engine
   Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte
   Benelux.add_timer HTTPClient::Session, :get_body
   
-  Benelux.add_counter Stella::Client, :execute_response_handler
+  #Benelux.add_counter Stella::Client, :execute_response_handler
   
   module Base
     extend self
@@ -41,9 +41,6 @@ module Stella::Engine
     end
     
     def update_stats client_id, http_client, usecase, req
-      #range = Thread.current.timeline.ranges(:do_request).last
-      #Thread.current.stathash 
-      #Stella.li "Client-%s: %s-%s %s %.4f" % [client_id.short, usecase.gibbler.short, req.gibbler.short, req.desc, range.duration]
     end
     
     def update_prepare_request(*args) raise end

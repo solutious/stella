@@ -481,7 +481,10 @@ class HTTPClient
     attr_accessor :ssl_config
     attr_reader :ssl_peer_cert
     attr_accessor :test_loopback_http_response
-
+    
+    attr_reader :headers_bytes
+    attr_reader :content_bytes
+    
     def initialize(client, dest, agent_name, from)
       @client = client
       @dest = dest
@@ -512,7 +515,8 @@ class HTTPClient
       @status = nil
       @reason = nil
       @headers = []
-
+      @headers_bytes = 0
+      @content_bytes = 0
       @socket = nil
       @readbuf = nil
     end
@@ -752,6 +756,7 @@ class HTTPClient
           if initial_line.nil?
             raise KeepAliveDisconnected.new
           end
+          @headers_bytes += initial_line.size
           if StatusParseRegexp !~ initial_line
             @version = '0.9'
             @status = nil
@@ -774,6 +779,7 @@ class HTTPClient
             key, value = line.split(/\s*:\s*/, 2)
             parse_keepalive_header(key, value)
             @headers << [key, value]
+            @headers_bytes += line.size
           end
         end while (@version == '1.1' && @status == 100)
       end
@@ -811,6 +817,7 @@ class HTTPClient
         end
         if buf && buf.length > 0
           @content_length -= buf.length
+          @content_bytes += buf.length
           yield buf
         else
           @content_length = 0

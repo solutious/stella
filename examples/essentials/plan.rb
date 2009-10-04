@@ -40,17 +40,10 @@
 # 3. START THE EXAMPLE APPLICATION
 # 
 # You need to start the example web application before
-# running this testplan. You can do this in one of the
-# following ways:
+# running this testplan. You can generate the commands
+# for your local machine with this command:
 # 
-# $ ruby examples/example_webapp.rb
-#
-#     OR
-#
-# $ thin -R examples/example_webapp.ru start
-#
-# You can check that it's running by going to:
-# http://127.0.0.1:3000/
+# $ stella example
 #
 #
 # 4. RUNNING THE TEST PLAN
