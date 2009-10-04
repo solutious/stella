@@ -16,8 +16,7 @@ module Stella::Engine
       opts[:clients] = 1000 if opts[:clients] > 1000
       
       Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.li3 "Hosts: " << opts[:hosts].join(', ')
-      Stella.li2 plan.pretty
+      Stella.li3 "Hosts: " << opts[:hosts].join(', ') 
       
       counts = calculate_usecase_clients plan, opts
       

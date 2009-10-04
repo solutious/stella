@@ -12,7 +12,6 @@ module Stella::Engine
       }.merge! opts
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
-      Stella.li plan.pretty
       
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)

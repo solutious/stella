@@ -59,7 +59,12 @@ class Stella::CLI::Definition
   about "Instructions for running the example app and test"
   usage "stella example"
   command :example => Stella::CLI
-   
+  
+  about "Preview the test plan"
+  usage "stella preview [-p path/2/testplan.rb] "
+  option :p, :testplan, String, "Path to testplan" 
+  command :preview => Stella::CLI
+  
   about "Run a functional test"
   usage "stella verify http://stellaaahhhh.com/"
   usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"

@@ -104,9 +104,9 @@ usecase 65, "Simple search" do
   # homepage ("/").
   #
   get "/", "Homepage" do
-    # This tells Stella to wait between 1 and 5
+    # This tells Stella to wait between 1 and 3
     # seconds before moving to the next request.
-    wait 1..5
+    wait 1..3
   end
   
   # In this request, the user has entered a simple
@@ -120,7 +120,7 @@ usecase 65, "Simple search" do
   #     get "http://example.com:8000/search"
   #
   get "/search", "Search Results" do
-    wait 2..5
+    wait 2..3
     
     # Two URI parameters will be included with this
     # request. Notice that the values for the what 
@@ -176,7 +176,7 @@ usecase 65, "Simple search" do
   #
   get "/listing/:lid" do 
     desc "Selected listing"
-    wait 1..8       
+    wait 1..4    
   end               
   
 end
@@ -241,7 +241,6 @@ usecase 10, "Self-serve API" do
   # identical to the ones you've seen above.
   #
   post "/listing/add", "Add a listing" do
-    wait 1..4 
     param :name => random(8)
     param :city => random(['Toronto', 'Vancouver', 'Montreal'])
     param :logo => file('logo.png')
@@ -252,4 +251,4 @@ usecase 10, "Self-serve API" do
   
 end
 
-# a5689bb64829d2dc1e9ab8901223cc90c975fe3a
+# 278a014c48dd64d2f2aca0588fa281b9553e825f
