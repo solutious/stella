@@ -29,13 +29,19 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
+      Benelux.update_all_track_timelines
+      tl = Benelux.timeline
+      
+      p tl.ranges(:readpartial)
+      
       !plan.errors?
     end
     
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      Stella.li2 "  %-46s %16s ".bright % [req.desc, notice]
+      desc = "#{req.desc}  (#{req.gibbler_cache.shorter}) "
+      Stella.li2 "  %-46s %16s ".bright % [desc, notice]
     end
     
     def update_receive_response(client_id, usecase, uri, req, counter, container)
@@ -71,6 +77,14 @@ module Stella::Engine
       Stella.ld ex.backtrace
     end
     
+    def update_quit_usecase client_id, msg
+      Stella.li4 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+    end
+    
+    
+    def update_repeat_request client_id, counter, total
+      Stella.li4 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+    end
     
   end
 end

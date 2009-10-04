@@ -49,8 +49,6 @@ module Stella::Engine
         Stella.li $/
       end
       
-
-      
       !plan.errors?
     end
     
@@ -113,9 +111,9 @@ module Stella::Engine
         (1..reps).to_a.each do |rep|
           Benelux.add_thread_tags :rep =>  rep
           Stella::Engine::Load.rescue(package.client.gibbler_cache) {
+            break if Stella.abort?
             print '.' if Stella.loglev == 1
             stats = package.client.execute package.usecase
-            break if Stella.abort?
           }
           Benelux.remove_thread_tags :rep
         end
@@ -187,6 +185,14 @@ module Stella::Engine
       Stella.ld ex.backtrace
     end
 
+    def update_quit_usecase client_id, msg
+      Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+    end
+    
+    
+    def update_repeat_request client_id, counter, total
+      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+    end
     
     def self.rescue(client_id, &blk)
       blk.call

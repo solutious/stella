@@ -33,7 +33,34 @@ class Stella::CLI < Drydock::Command
     ret = Stella::Engine::Load.run @testplan, opts
     @exit_code = (ret ? 0 : 1)
   end
+  
+  def example
+    base_path = File.expand_path(File.join(Stella::LIB_HOME, '..'))
+    thin_path = File.join(base_path, 'examples', 'example_webapp.ru')
+    webrick_path = File.join(base_path, 'examples', 'example_webapp.rb')
+    tp_path = File.join(base_path, 'examples', 'essentials', 'plan.rb')
+    puts "1. Start the web app:".bright
+    puts %Q{
+    $ thin -p 3114 -R #{thin_path} start
+      OR  
+    $ ruby #{webrick_path}
+    }
+    puts "2. Check the web app in your browser".bright
+    puts %Q{
+    http://127.0.0.1:3114/
+    }
+    puts "3. Run a functional test:".bright
+    puts %Q{
+    $ stella verify -p #{tp_path} 127.0.0.1:3114
+    }
+    puts "4. Run a load test:".bright
+    puts %Q{
+    $ stella load -p #{tp_path} 127.0.0.1:3114
+    }
+  end
+  
 
+  
   private
   def create_testplan
     unless @option.testplan.nil? || File.exists?(@option.testplan)

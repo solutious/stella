@@ -15,7 +15,11 @@ module Stella::Engine
   Benelux.add_timer HTTPClient::Session, :query
   Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte
   Benelux.add_timer HTTPClient::Session, :get_body
-
+  
+  Benelux.add_counter TCPSocket, :readpartial do |args,ret|
+    ret
+  end
+  
   module Base
     extend self
     
@@ -33,12 +37,9 @@ module Stella::Engine
     
     
     def update_quit_usecase client_id, msg
-      Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
-    
     def update_repeat_request client_id, counter, total
-      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
     def update_stats client_id, http_client, usecase, req
