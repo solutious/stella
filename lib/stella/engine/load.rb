@@ -126,6 +126,8 @@ module Stella::Engine
       Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
+      p global_timeline.counts
+      
       Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
         
@@ -204,15 +206,7 @@ module Stella::Engine
     Benelux.add_timer Stella::Engine::Load, :generate_report
     Benelux.add_timer Stella::Engine::Load, :build_thread_package
     Benelux.add_timer Stella::Engine::Load, :execute_test_plan
-    Benelux.add_timer Stella::Client, :execute_response_handler
+    
   end
 end
-
-__END__
-
-
-$ stella verify -p examples/basic/plan.rb http://localhost:3114
-$ stella load -p examples/basic/plan.rb http://localhost:3114
-$ stella remote-load -p examples/basic/plan.rb http://localhost:3114
-$ stella remote-verify -p examples/basic/plan.rb http://localhost:3114
 

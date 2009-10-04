@@ -16,9 +16,7 @@ module Stella::Engine
   Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte
   Benelux.add_timer HTTPClient::Session, :get_body
   
-  Benelux.add_counter TCPSocket, :readpartial do |args,ret|
-    ret
-  end
+  Benelux.add_counter Stella::Client, :execute_response_handler
   
   module Base
     extend self
