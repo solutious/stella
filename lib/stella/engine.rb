@@ -4,7 +4,7 @@ module Stella::Engine
   
   # These commented out timers are not very revealing.
   #Benelux.add_timer      Stella::Client, :execute
-  #Benelux.add_timer      Stella::Client, :send_request
+  Benelux.add_counter      Stella::Client, :execute_response_handler
   #Benelux.add_timer          HTTPClient, :create_request
   
   # These timers are interesting from a reporting perspective.

@@ -38,6 +38,9 @@ class Stella::CLI::Definition
   
   global :A, :apikey, String, "API Key"
   global :S, :secret, String, "Secret Key"
+  global :n, :nocolor, "Disable output colors" do
+    String.disable_color
+  end
   global :q, :quiet, "Be quiet!" do
     Stella.enable_quiet
   end

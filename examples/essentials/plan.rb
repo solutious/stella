@@ -18,14 +18,14 @@
 #
 # This plan contains 3 scenarios:
 # 
-# - Simple Search (60%)
-# - YAML API (30%)
+# - Simple Search (65%)
+# - YAML API (25%)
 # - Self-serve API (10%)
 #
 # The percentages represent the relative amount 
 # of traffic to be generated for each scenario.
-# In a test with 100 virtual users, 60 would 
-# follow the Simple Search usecase, 30 the YAML
+# In a test with 100 virtual users, 65 would 
+# follow the Simple Search usecase, 25 the YAML
 # API, and 10 would following the Self-Serve API.
 #
 #

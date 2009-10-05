@@ -54,6 +54,7 @@
   lib/stella/exceptions.rb
   lib/stella/guidelines.rb
   lib/stella/mixins.rb
+  lib/stella/mixins/numeric.rb
   lib/stella/mixins/thread.rb
   lib/stella/stats.rb
   lib/stella/testplan.rb
