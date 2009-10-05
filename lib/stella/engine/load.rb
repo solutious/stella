@@ -135,8 +135,7 @@ module Stella::Engine
     def generate_report(plan)
       Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
-      Stella::Utils.write_to_file('stats.yaml', global_timeline.to_yaml, 'w', 0600)
-       
+      
       Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
         

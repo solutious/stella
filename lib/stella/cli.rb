@@ -36,8 +36,8 @@ class Stella::CLI < Drydock::Command
   
   def example
     base_path = File.expand_path(File.join(Stella::LIB_HOME, '..'))
-    thin_path = File.join(base_path, 'examples', 'example_webapp.ru')
-    webrick_path = File.join(base_path, 'examples', 'example_webapp.rb')
+    thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')
+    webrick_path = File.join(base_path, 'support', 'sample_webapp', 'app.rb')
     tp_path = File.join(base_path, 'examples', 'essentials', 'plan.rb')
     puts "1. Start the web app:".bright
     puts %Q{

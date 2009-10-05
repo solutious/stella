@@ -1,16 +1,27 @@
 #!/usr/bin/ruby
 
+# Stella Sample Web Application
+#
+# This application plays nicely with the example
+# test plans (see examples/).
+#
+# Usage:
+# 
+#     $ ruby support/sample_webapp/app.rb
+#       OR
+#     $ thin -R support/sample_webapp/config.ru -p 3114 start
+#
+
 require "rubygems"
 require "sinatra"
+require "yaml"
 
-require 'yaml'
-
-set :run => $0 == __FILE__ ? true : false
-set :environment => :development
-set :dump_errors => true
-set :port => 3114
-set :reload => true
-set :max_listings => 1000
+set :run              => ($0 == __FILE__)
+set :environment      => :development
+set :dump_errors      => true
+set :port             => 3114
+set :reload           => true
+set :max_listings     => 1000
 
 LISTINGS = [
   { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'  },
