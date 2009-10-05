@@ -37,7 +37,7 @@ module Stella
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        stella_id = [Time.now, self.gibbler_cache, req, params, headers, counter].gibbler
+        stella_id = [Time.now, self.gibbler_cache, req.gibbler_cache, params, headers, counter].gibbler
         
         Benelux.add_thread_tags :request => req.gibbler_cache
         Benelux.add_thread_tags :retry => counter

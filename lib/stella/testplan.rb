@@ -14,7 +14,7 @@ class Testplan
   attr_reader :stats
   
   def initialize(uris=[], opts={})
-    @desc, @usecases = "Stella's plan", []
+    @desc, @usecases = "Test plan", []
     @testplan_current_ratio = 0
     @stats = Stella::Testplan::Stats.new
     

@@ -48,12 +48,20 @@ module Stella::Engine
       ensure
         Stella.li "Processing statistics...", $/
         Stella.lflush
-        generate_report plan
         
-        bt = Benelux.thread_timeline
+        
+        wait_for_reporter
+        
+        generate_report plan
+
+        Benelux.reporter.force_update
+        
+        bt = Benelux.timeline
+        
         Stella.li "Overall time: "
         Stella.li "  prep: %10.2fs" % bt.ranges(:build_thread_package).first.duration
         Stella.li "  test: %10.2fs" % bt.ranges(:execute_test_plan).first.duration
+        Stella.li "  wait: %10.2fs" % bt.ranges(:wait_for_reporter).first.duration
         Stella.li "  post: %10.2fs" % bt.ranges(:generate_report).first.duration
         Stella.li $/
       end
@@ -61,7 +69,10 @@ module Stella::Engine
       !plan.errors?
     end
     
-
+    def wait_for_reporter
+      Benelux.reporter.wait
+    end
+    
   protected
     class ThreadPackage
       attr_accessor :index
@@ -128,12 +139,13 @@ module Stella::Engine
         end
         
         Benelux.remove_thread_tags :usecase
+        
       end
       Stella.li $/, $/
     end
       
     def generate_report(plan)
-      Benelux.update_all_track_timelines
+      #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
       Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
@@ -155,7 +167,7 @@ module Stella::Engine
           Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.gibbler_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           Load.timers.each do |sname|
-            stats = global_timeline.stats.group(sname)[filter]
+            stats = global_timeline.stats.send(sname)[filter]
             Stella.li ('      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)') % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
             Stella.lflush
           end
@@ -163,8 +175,9 @@ module Stella::Engine
         end
         
         Stella.li "   Sub Total:".bright
-        stats = global_timeline.stats.group(:do_request)[uc.gibbler_cache]
-        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.gibbler_cache]
+        
+        stats = global_timeline.stats.send(:do_request)[uc.gibbler_cache]
+        respgrp = global_timeline.stats.send(:execute_response_handler)[uc.gibbler_cache]
         resst = respgrp.tag_values(:status)
         statusi = []
         resst.each do |status|
@@ -172,15 +185,15 @@ module Stella::Engine
           statusi << "#{status}: #{size}"
         end
         Stella.li ('      %-30s %d (%s)') % [:requests, stats.n, statusi.join(', ')]
-      
+        
         Load.timers.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
+          stats = global_timeline.stats.send(sname)[uc.gibbler_cache]
           Stella.li ('      %-30s %.3fs %.3f(SD)') % [sname, stats.mean, stats.sd]
           Stella.lflush
         end
         
         Load.counts.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
+          stats = global_timeline.stats.send(sname)[uc.gibbler_cache]
           Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
           Stella.lflush
         end
@@ -188,8 +201,8 @@ module Stella::Engine
       end
       
       Stella.li (' ' << " %-66s ".att(:reverse)) % 'Total:'
-      stats = global_timeline.stats.group(:do_request)
-      respgrp = global_timeline.stats.group(:execute_response_handler)
+      stats = global_timeline.stats.send(:do_request)
+      respgrp = global_timeline.stats.send(:execute_response_handler)
       resst = respgrp.tag_values(:status)
       statusi = []
       resst.each do |status|
@@ -198,13 +211,13 @@ module Stella::Engine
       end
       Stella.li ('      %-30s %d (%s)') % [:requests, stats.n, statusi.join(', ')]
       Load.timers.each do |sname|
-        stats = global_timeline.stats.group(sname)
+        stats = global_timeline.stats.send(sname)
         Stella.li ('      %-30s %-.3fs     %-.3f(SD)') % [sname, stats.mean, stats.sd]
         Stella.lflush
       end
       
       Load.counts.each do |sname|
-        stats = global_timeline.stats.group(sname)
+        stats = global_timeline.stats.send(sname)
         Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
         Stella.lflush
       end
@@ -255,9 +268,10 @@ module Stella::Engine
     end
     
     
-    Benelux.add_timer Stella::Engine::Load, :generate_report
     Benelux.add_timer Stella::Engine::Load, :build_thread_package
     Benelux.add_timer Stella::Engine::Load, :execute_test_plan
+    Benelux.add_timer Stella::Engine::Load, :generate_report
+    Benelux.add_timer Stella::Engine::Load, :wait_for_reporter
     
   end
 end
