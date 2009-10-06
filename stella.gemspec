@@ -18,6 +18,7 @@
   s.add_dependency 'benelux',    '>= 0.4.0'
   s.add_dependency 'drydock',    '>= 0.6.8'
   s.add_dependency 'gibbler',    '>= 0.6.3'
+  s.add_dependency 'sysinfo',    '>= 0.7.0'
   s.add_dependency 'storable',   '>= 0.5.7'
   s.add_dependency 'httpclient', '>= 2.1.5'
   s.add_dependency 'nokogiri'
@@ -49,6 +50,7 @@
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load.rb
+  lib/stella/engine/stress.rb
   lib/stella/exceptions.rb
   lib/stella/guidelines.rb
   lib/stella/mixins.rb

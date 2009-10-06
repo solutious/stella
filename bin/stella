@@ -71,7 +71,8 @@ class Stella::CLI::Definition
   about "Run a functional test"
   usage "stella verify http://stellaaahhhh.com/"
   usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :w, :nowait, "Ignore wait times"
+  option :W, :nowait, "Ignore wait times"
+  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
   command :verify => Stella::CLI
   
