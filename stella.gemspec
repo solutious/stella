@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.7.0.012"
+  s.version = "0.7.0.013"
   s.summary = "Stella: Perform load tests on your web applications with beauty and brute strength."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -15,7 +15,7 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'benelux',    '>= 0.3.2'
+  s.add_dependency 'benelux',    '>= 0.4.0'
   s.add_dependency 'drydock',    '>= 0.6.8'
   s.add_dependency 'gibbler',    '>= 0.6.3'
   s.add_dependency 'storable',   '>= 0.5.7'
@@ -34,8 +34,6 @@
   examples/essentials/logo.png
   examples/essentials/plan.rb
   examples/essentials/search_terms.csv
-  examples/example_webapp.rb
-  examples/example_webapp.ru
   examples/exceptions/plan.rb
   lib/stella.rb
   lib/stella/cli.rb
@@ -65,6 +63,8 @@
   lib/stella/version.rb
   lib/threadify.rb
   stella.gemspec
+  support/sample_webapp/app.rb
+  support/sample_webapp/config.ru
   support/useragents.txt
   vendor/httpclient-2.1.5.2/httpclient.rb
   vendor/httpclient-2.1.5.2/httpclient/auth.rb
