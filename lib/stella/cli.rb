@@ -34,6 +34,20 @@ class Stella::CLI < Drydock::Command
     @exit_code = (ret ? 0 : 1)
   end
   
+  def stress_valid?
+    create_testplan
+  end
+  
+  def stress
+    opts = {}
+    opts[:hosts] = @hosts
+    [:clients, :repetitions, :time].each do |opt|
+      opts[opt] = @option.send(opt) unless @option.send(opt).nil?
+    end
+    ret = Stella::Engine::Stress.run @testplan, opts
+    @exit_code = (ret ? 0 : 1)
+  end
+  
   def example
     base_path = File.expand_path(File.join(Stella::LIB_HOME, '..'))
     thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')

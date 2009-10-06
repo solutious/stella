@@ -88,6 +88,17 @@ class Stella::CLI::Definition
   option :p, :testplan, String, "Path to testplan" 
   command :load => Stella::CLI
   
+  about "Run a stress test"
+  usage "stella stress http://stellaaahhhh.com/"
+  usage "stella stress http://stellaaahhhh.com:3114/"
+  usage "stella stress --clients=10 --repetitions=2 http://stellaaahhhh.com/"
+  usage "stella stress -p path/2/testplan.rb -u 100 -r 5 http://stellaaahhhh.com/"
+  option :c, :clients, Integer, "Number of virtual clients"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
+  option :t, :time, String, "Max duration to run test"
+  option :p, :testplan, String, "Path to testplan" 
+  command :stress => Stella::CLI
+  
   about "Initialize Stella configuration"
   command :init do
     Stella::Config.init
