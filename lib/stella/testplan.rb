@@ -27,6 +27,8 @@ class Testplan
         uri.path = '/' if uri.path.nil? || uri.path.empty?
         req = usecase.add_request :get, uri.path
         req.wait = opts[:delay] if opts[:delay]
+        req.gibbler
+        req.freeze
       end
       self.add_usecase usecase
     end
@@ -41,12 +43,6 @@ class Testplan
     plan.gibbler
     plan.freeze
     plan
-  end
-  
-  # Were there any errors in any of the usecases?
-  def errors?
-    Stella.ld "TODO: tally use case errors"
-    false
   end
   
   def check!

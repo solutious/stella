@@ -27,7 +27,7 @@ class Stella::CLI < Drydock::Command
   def load
     opts = {}
     opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :delay, :time].each do |opt|
+    [:nowait, :clients, :repetitions, :wait, :duration].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     ret = Stella::Engine::Load.run @testplan, opts
@@ -41,7 +41,7 @@ class Stella::CLI < Drydock::Command
   def stress
     opts = {}
     opts[:hosts] = @hosts
-    [:clients, :repetitions, :time].each do |opt|
+    [:clients, :repetitions, :duration].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     ret = Stella::Engine::Stress.run @testplan, opts
@@ -91,11 +91,11 @@ class Stella::CLI < Drydock::Command
       @testplan = Stella::Testplan.load_file @option.testplan
     else
       opts = {}
-      opts[:delay] = @option.delay if @option.delay
+      opts[:delay] = @option.wait if @option.wait
       @testplan = Stella::Testplan.new(@argv, opts)
     end
     @testplan.check!  # raise errors, update usecase ratios
-    Stella.li3 " File: #{@option.testplan} (#{@testplan.digest})", $/
+    Stella.li2 " #{@option.testplan || @testplan.desc} (#{@testplan.digest})" 
     true
   end
   

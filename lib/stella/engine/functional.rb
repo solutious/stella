@@ -31,7 +31,8 @@ module Stella::Engine
       #Benelux.update_all_track_timelines
       #tl = Benelux.timeline
       
-      !plan.errors?
+      # errors?
+      
     end
     
     

@@ -73,8 +73,6 @@ class Testplan
       req.desc = args[1] if args.size > 1 # Description is optional
       Stella.ld req
       @requests << req
-      req.gibbler
-      req.freeze
       req
     end
     def get(*args, &blk);    add_request :get,    *args, &blk; end

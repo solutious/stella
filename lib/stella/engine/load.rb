@@ -13,21 +13,22 @@ module Stella::Engine
     
     def run(plan, opts={})
       opts = {
-        :hosts        => [],
+        :hosts          => [],
         :clients        => 1,
-        :time         => nil,
-        :nowait    => false,
-        :repetitions  => 1
+        :duration       => nil,
+        :nowait         => false,
+        :repetitions    => 1
       }.merge! opts
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       opts[:clients] = 1000 if opts[:clients] > 1000
       
-      Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.li3 "Hosts: " << opts[:hosts].join(', ') 
+      Stella.li3 " Options: #{opts.inspect}"
+      Stella.li3 " Hosts: " << opts[:hosts].join(', ') 
       
-      wait_for_reporter
+      #wait_for_reporter
       
-      !plan.errors?
+      # errors?
+      
     end
     
     def wait_for_reporter

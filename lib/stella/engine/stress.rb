@@ -13,10 +13,10 @@ module Stella::Engine
     
     def run(plan, opts={})
       opts = {
-        :hosts        => [],
+        :hosts          => [],
         :clients        => 1,
-        :time         => nil,
-        :repetitions  => 1
+        :duration       => nil,
+        :repetitions    => 1
       }.merge! opts
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       opts[:clients] = 1000 if opts[:clients] > 1000
@@ -69,7 +69,7 @@ module Stella::Engine
         Stella.li $/
       end
       
-      !plan.errors?
+      # errors?
     end
     
     def wait_for_reporter
