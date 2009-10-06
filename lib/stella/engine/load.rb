@@ -52,17 +52,20 @@ module Stella::Engine
         
         wait_for_reporter
         
-        generate_report plan
-
-        Benelux.reporter.force_update
+        tt = Benelux.thread_timeline
+        test_time = tt.ranges(:execute_test_plan).first.duration
         
-        bt = Benelux.timeline
+        generate_report plan, test_time
+
+        # No need to add the main thread 
+        # stats to the global timeline. 
+        # Benelux.reporter.force_update
         
         Stella.li "Overall time: "
-        Stella.li "  prep: %10.2fs" % bt.ranges(:build_thread_package).first.duration
-        Stella.li "  test: %10.2fs" % bt.ranges(:execute_test_plan).first.duration
-        Stella.li "  wait: %10.2fs" % bt.ranges(:wait_for_reporter).first.duration
-        Stella.li "  post: %10.2fs" % bt.ranges(:generate_report).first.duration
+        Stella.li "  prep: %10.2fs" % tt.ranges(:build_thread_package).first.duration
+        Stella.li "  test: %10.2fs" % test_time
+        Stella.li "  wait: %10.2fs" % tt.ranges(:wait_for_reporter).first.duration
+        Stella.li "  post: %10.2fs" % tt.ranges(:generate_report).first.duration
         Stella.li $/
       end
       
@@ -141,10 +144,10 @@ module Stella::Engine
         Benelux.remove_thread_tags :usecase
         
       end
-      Stella.li $/, $/
+      Stella.li2 $/, $/
     end
       
-    def generate_report(plan)
+    def generate_report(plan,test_time)
       #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
@@ -167,8 +170,9 @@ module Stella::Engine
           Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.gibbler_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           Load.timers.each do |sname|
-            stats = global_timeline.stats.send(sname)[filter]
-            Stella.li ('      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)') % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
+            stats = global_timeline.stats.group(sname)[filter]
+            str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
+            Stella.li str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
             Stella.lflush
           end
           Stella.li $/
@@ -176,48 +180,59 @@ module Stella::Engine
         
         Stella.li "   Sub Total:".bright
         
-        stats = global_timeline.stats.send(:do_request)[uc.gibbler_cache]
-        respgrp = global_timeline.stats.send(:execute_response_handler)[uc.gibbler_cache]
+        stats = global_timeline.stats.group(:do_request)[uc.gibbler_cache]
+        failed = global_timeline.stats.group(:failed)[uc.gibbler_cache]
+        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.gibbler_cache]
         resst = respgrp.tag_values(:status)
         statusi = []
         resst.each do |status|
           size = respgrp[:status => status].size
           statusi << "#{status}: #{size}"
         end
-        Stella.li ('      %-30s %d (%s)') % [:requests, stats.n, statusi.join(', ')]
+        Stella.li '      %-30s %d (%s)' % ['Total requests', stats.n, statusi.join(', ')]
+        Stella.li '       %-29s %d' % [:success, stats.n - failed.n]
+        Stella.li '       %-29s %d' % [:failed, failed.n]
         
         Load.timers.each do |sname|
-          stats = global_timeline.stats.send(sname)[uc.gibbler_cache]
-          Stella.li ('      %-30s %.3fs %.3f(SD)') % [sname, stats.mean, stats.sd]
+          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
+          Stella.li '      %-30s %.3fs %.3f(SD)' % [sname, stats.mean, stats.sd]
           Stella.lflush
         end
         
         Load.counts.each do |sname|
-          stats = global_timeline.stats.send(sname)[uc.gibbler_cache]
+          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
           Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
           Stella.lflush
         end
         Stella.li $/
       end
       
-      Stella.li (' ' << " %-66s ".att(:reverse)) % 'Total:'
-      stats = global_timeline.stats.send(:do_request)
-      respgrp = global_timeline.stats.send(:execute_response_handler)
+      Stella.li ' ' << " %-66s ".att(:reverse) % 'Total:'
+      stats = global_timeline.stats.group(:do_request)
+      failed = global_timeline.stats.group(:failed)
+      respgrp = global_timeline.stats.group(:execute_response_handler)
       resst = respgrp.tag_values(:status)
       statusi = []
       resst.each do |status|
         size = respgrp[:status => status].size
-        statusi << "#{status}: #{size}"
+        statusi << [status, size]
       end
-      Stella.li ('      %-30s %d (%s)') % [:requests, stats.n, statusi.join(', ')]
+      Stella.li  '      %-30s %d' % ['Total requests', stats.n]
+      success = stats.n - failed.n
+      Stella.li  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
+      statusi.each do |pair|
+        Stella.li2 '        %-28s %s: %d' % ['', *pair]
+      end
+      Stella.li  '       %-29s %d' % [:failed, failed.n]
+      
       Load.timers.each do |sname|
-        stats = global_timeline.stats.send(sname)
-        Stella.li ('      %-30s %-.3fs     %-.3f(SD)') % [sname, stats.mean, stats.sd]
+        stats = global_timeline.stats.group(sname)
+        Stella.li '      %-30s %-.3fs     %-.3f(SD)' % [sname, stats.mean, stats.sd]
         Stella.lflush
       end
       
       Load.counts.each do |sname|
-        stats = global_timeline.stats.send(sname)
+        stats = global_timeline.stats.group(sname)
         Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
         Stella.lflush
       end
@@ -241,14 +256,14 @@ module Stella::Engine
       desc = "#{container.usecase.desc} > #{req.desc}"
       Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.ld ex.backtrace
+      Stella.li3 ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.ld ex.backtrace
+      Stella.li3 ex.backtrace
     end
 
     def update_quit_usecase client_id, msg
@@ -264,7 +279,7 @@ module Stella::Engine
       blk.call
     rescue => ex
       Stella.le '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
-      Stella.ld ex.backtrace
+      Stella.li3 ex.backtrace
     end
     
     

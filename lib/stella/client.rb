@@ -61,6 +61,7 @@ module Stella
           Benelux.remove_thread_tags :status
            
         rescue => ex
+          Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
           next
         end

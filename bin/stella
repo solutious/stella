@@ -131,11 +131,11 @@ rescue Drydock::InvalidArgument => ex
   STDERR.puts ex.message
 rescue Stella::Error => ex
   STDERR.puts ex.message
-  STDERR.puts ex.backtrace if Drydock.debug?
+  STDERR.puts ex.backtrace if Stella.loglev > 2 || Drydock.debug?
 rescue Interrupt
   puts "#{$/}Exiting... "
   exit 1
 rescue => ex
   STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
-  STDERR.puts ex.backtrace if Drydock.debug?
+  STDERR.puts ex.backtrace if Stella.loglev > 2 || Drydock.debug?
 end

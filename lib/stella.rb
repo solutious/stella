@@ -59,7 +59,7 @@ module Stella
     blk.call
   rescue => ex
     Stella.le "ERROR: #{ex.message}"
-    Stella.ld ex.backtrace
+    Stella.li3 ex.backtrace
   end
 end
 

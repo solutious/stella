@@ -65,13 +65,13 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       Stella.le ex.message
-      Stella.ld ex.backtrace
+      Stella.li3 ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.le '  Client-%s %-45s %s' % [client_id.short, desc, ex.message]
-      Stella.ld ex.backtrace
+      Stella.li3 ex.backtrace
     end
     
     def update_quit_usecase client_id, msg
