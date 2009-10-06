@@ -1,0 +1,174 @@
+require 'stella'
+
+machines do
+  
+  region :'us-east-1' do
+    ami 'ami-e348af8a'               # Alestic Debian 5.0, 32-bit (US)
+  end
+  region :'eu-west-1' do
+    ami 'ami-6ecde51a'               # Alestic Debian 5.0, 32-bit (EU)
+  end
+  
+  env :stage do
+                           
+    role :app do           
+      user :root           
+      size 'm1.small'                    
+    end                    
+                           
+    role :gen do
+      size 'm1.small'        
+    end                    
+
+  end  
+
+end
+
+
+
+commands do
+  allow :apt_get, "apt-get", :y, :q
+  allow :gem_install, "/usr/bin/gem", "install", :n, '/usr/bin', :y, :V, "--no-rdoc", "--no-ri"
+  allow :gem_sources, "/usr/bin/gem", "sources"
+  allow :gem_uninstall, "/usr/bin/gem", "uninstall", :V
+  allow :update_rubygems
+  allow :rake
+  allow :thin
+  allow :stella
+  allow :rm
+  allow :rackup_path do
+    "/usr/lib/ruby/gems/1.8/gems/stella/#{Stella::VERSION}/support/sample_webapp/config.ru"
+  end
+end
+
+routines do
+           
+  role :app do                     
+    
+    start do
+      remote do
+        thin :d, :p, 3114, :R, rackup_path, 'start'
+      end
+    end
+    
+    stop do 
+      remote do
+        thin :d, :p, 3114, :R, rackup_path, 'stop'
+      end
+    end
+    
+  end
+  
+  role :gen do
+    
+    # rudy -v -r gen verify ip-10-251-27-245.ec2.internal:3114
+    verify do
+      remote do |arg|
+        stella :v, 'verify', "#{arg.first}"
+      end
+    end
+    
+    # rudy -v -r gen stress ip-10-251-27-245.ec2.internal:3114
+    stress do
+      remote do |arg|
+        stella :v, 'stress', :c, 50, :r, 4, "#{arg.first}"
+      end
+    end
+    
+  end
+  
+  setup do                     
+    after :sysupdate, :installdeps, :install_gem
+  end                            
+                                 
+  shutdown do                                          
+  end                            
+                                 
+  reboot do                                             
+  end
+    
+  install_rubyforge do
+    remote :root do
+      gem_install 'stella', :V
+    end
+  end
+  
+  install_github do
+    remote :root do
+      gem_sources :a, "http://gems.github.com"
+      gem_install 'solutious-stella'
+    end
+  end
+
+  package_gem do
+    local do
+      rm :r, :f, 'pkg'
+      rake 'package'
+    end
+  end
+  
+  remove_rudy do
+    remote :root do
+      gem_uninstall 'stella'
+      rm :r, :f, '.stella'
+    end
+  end
+  
+  install_gem do
+    before :package_gem
+    remote :root do
+      file_upload "pkg/stella-#{Stella::VERSION}.gem", "/tmp/"
+      gem_install "/tmp/stella-#{Stella::VERSION}.gem"
+    end
+    
+  end
+  
+  installdeps do
+    remote :root do
+      gem_install "test-spec", "rspec", "camping", "fcgi", "memcache-client"
+      gem_install "mongrel"
+      gem_install "ruby-openid", :v, "2.0.4" # thin requires 2.0.x
+      gem_install "rack", "thin", "sinatra"
+    end
+  end
+  
+  install_ruby19 do
+    remote do
+      wget 'ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.1-p243.tar.bz2'
+      tar :x, :j, :v, :f, 'ruby-1.9.1-p243.tar.bz2'
+      cd 'ruby-1.9.1-p243'
+      configure '--prefix=/usr/local', '--enable-shared'
+      make
+      make 'install'
+    end
+  end
+  
+  sysupdate do
+    remote :root do                  
+      apt_get "update"             
+      apt_get "install", "libxml2-dev", "libxslt-dev"  
+      apt_get "install", "build-essential", "git-core"
+      apt_get "install", "ruby1.8-dev", "rdoc", "libzlib-ruby", "rubygems"
+      apt_get "install", "libfcgi-dev", "libfcgi-ruby1.8"
+      gem_sources :a, "http://gems.github.com"
+      mkdir :p, "/var/lib/gems/1.8/bin" # Doesn't get created, but causes Rubygems to fail
+      gem_install "builder", "session"
+      gem_install 'hoe-seattlerb'
+      gem_install 'rubygems-update', "-v=1.3.4"
+      update_rubygems
+      gem_install 'hoe'
+    end
+  end
+                           
+  
+end
+
+
+defaults do
+  zone :'us-east-1a'
+  environment :stage
+  role :app
+  color true               
+  user :root               
+end
+
