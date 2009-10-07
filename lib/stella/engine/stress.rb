@@ -27,7 +27,6 @@ module Stella::Engine
         Stress.counts += [:response_headers_size, :response_content_size]
       end
       
-      
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li3 "Hosts: " << opts[:hosts].join(', ') 
       
@@ -53,19 +52,15 @@ module Stella::Engine
         wait_for_reporter
         
         tt = Benelux.thread_timeline
-        test_time = tt.ranges(:execute_test_plan).first.duration
+        test_time = tt.stats.group(:execute_test_plan).mean
         
         generate_report plan, test_time
-
-        # No need to add the main thread 
-        # stats to the global timeline. 
-        # Benelux.reporter.force_update
         
         Stella.li "Overall time: "
-        Stella.li "  prep: %10.2fs" % tt.ranges(:build_thread_package).first.duration
+        Stella.li "  prep: %10.2fs" % tt.stats.group(:build_thread_package).mean
         Stella.li "  test: %10.2fs" % test_time
-        Stella.li "  wait: %10.2fs" % tt.ranges(:wait_for_reporter).first.duration
-        Stella.li "  post: %10.2fs" % tt.ranges(:generate_report).first.duration
+        Stella.li "  wait: %10.2fs" % tt.stats.group(:wait_for_reporter).mean
+        Stella.li "  post: %10.2fs" % tt.stats.group(:generate_report).mean
         Stella.li $/
       end
       
