@@ -1,5 +1,4 @@
 
-
 class Stella::CLI < Drydock::Command
   attr_accessor :exit_code
   
@@ -49,7 +48,7 @@ class Stella::CLI < Drydock::Command
   end
   
   def example
-    base_path = File.expand_path(File.join(Stella::LIB_HOME, '..'))
+    base_path = File.expand_path(File.join(STELLA_LIB_HOME, '..'))
     thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')
     webrick_path = File.join(base_path, 'support', 'sample_webapp', 'app.rb')
     tp_path = File.join(base_path, 'examples', 'essentials', 'plan.rb')

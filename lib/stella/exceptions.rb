@@ -10,6 +10,5 @@ module Stella
   end
   
   class NoHostDefined < Stella::Error
-  end
-  
+  end  
 end

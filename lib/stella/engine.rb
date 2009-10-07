@@ -36,7 +36,7 @@ module Stella::Engine
     
   end
 
-  Stella::Utils.require_glob(Stella::LIB_HOME, 'stella', 'engine', '*.rb')
+  Stella::Utils.require_glob(STELLA_LIB_HOME, 'stella', 'engine', '*.rb')
 
 
   # These timers are interesting from a reporting perspective.

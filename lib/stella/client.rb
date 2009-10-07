@@ -1,11 +1,14 @@
 require "observer"
-require "tempfile"
-require 'nokogiri'
+require "nokogiri"
+
+Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 module Stella
   class Client
     require 'stella/client/modifiers'
     require 'stella/client/container'
+    
+    
     
     include Gibbler::Complex
     include Observable

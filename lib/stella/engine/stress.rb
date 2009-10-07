@@ -126,11 +126,9 @@ module Stella::Engine
     
     def execute_test_plan(packages, reps=1)
       Thread.ify packages, :threads => packages.size do |package|
-        
         # This thread will stay on this one track. 
         Benelux.current_track package.client.gibbler
         Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
-        
         (1..reps).to_a.each do |rep|
           Benelux.add_thread_tags :rep =>  rep
           Stella::Engine::Stress.rescue(package.client.gibbler_cache) {

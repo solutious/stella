@@ -1,8 +1,6 @@
 
-require 'socket'
-require 'open-uri'
-require 'date'
-require 'timeout'
+require 'socket'  # Why doesn't socket work with autoload?
+autoload :Timeout, 'timeout'
 
 module Stella
   
@@ -66,10 +64,14 @@ module Stella
     #     vendor/httpclient-2.1.5.2/httpclient
     #
     def require_vendor(name, version)
-       $:.unshift File.join(LIB_HOME, '..', 'vendor', "#{name}-#{version}")
+       $:.unshift File.join(STELLA_LIB_HOME, '..', 'vendor', "#{name}-#{version}")
        require name
     end
     
+    # Same as <tt>require_vendor</tt>, but uses <tt>autoload</tt> instead.
+    def autoload_vendor(mod, name, version)
+      autoload mod, File.join(STELLA_LIB_HOME, '..', 'vendor', "#{name}-#{version}", name)
+    end
     
     # Checks whether something is listening to a socket. 
     # * +host+ A hostname
