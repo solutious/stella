@@ -31,6 +31,10 @@ end
 
 
 tryouts "Bytes" do
-  drill "1000", 1000.to_bytes, "1KB"
+  drill "1000 == 1000.00B", 1000.to_bytes, "1000.00B"
+  drill "1010", 1010.to_bytes, "1.01KB"
+  drill "1020100", (1010 ** 2).to_bytes, "1.02MB"
+  drill "1030301000", (1010 ** 3).to_bytes, "1.03GB"
+  drill "1040604010000", (1010 ** 4).to_bytes, "1.04TB"
 end
 
