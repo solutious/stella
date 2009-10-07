@@ -1,10 +1,11 @@
 
 #encoding: utf-8
-
 $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
+group "Numeric mixins"
 library :stella, 'lib'
-tryouts "Numeric mixins" do
+
+tryouts "Natural language" do
   
   drill "base == 1.hour", 1.hour, 3600
   drill "1.milliseconds", 1.milliseconds, 0.001
@@ -28,4 +29,8 @@ tryouts "Numeric mixins" do
   
 end
 
+
+tryouts "Bytes" do
+  drill "1000", 1000.to_bytes, "1KB"
+end
 

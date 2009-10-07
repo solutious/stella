@@ -10,14 +10,14 @@ class Time
     PER_HOUR = 3600.0.freeze
     PER_DAY = 86400.0.freeze
     
-    def seconds()      seconds = self             end
-    def minutes()      seconds * PER_MINUTE       end
-    def hours()        seconds * PER_HOUR          end
-    def days()         seconds * PER_DAY            end
-    def weeks()        seconds * PER_DAY * 7        end
-    def years()        seconds * PER_DAY * 365     end
-    def microseconds() seconds * PER_MICROSECOND  end
-    def milliseconds() seconds * PER_MILLISECOND  end    
+    def seconds()      seconds = self              end
+    def minutes()      seconds * PER_MINUTE         end
+    def hours()        seconds * PER_HOUR            end
+    def days()         seconds * PER_DAY              end
+    def weeks()        seconds * PER_DAY * 7          end
+    def years()        seconds * PER_DAY * 365       end
+    def microseconds() seconds * PER_MICROSECOND    end
+    def milliseconds() seconds * PER_MILLISECOND   end    
     
     # Create singular methods, like hour and day. 
     instance_methods.select.each do |plural|
@@ -25,15 +25,14 @@ class Time
       alias_method singular, plural
     end
     
-    def in_minutes()   seconds / PER_MINUTE         end
-    def in_hours()     seconds / PER_HOUR         end
-    def in_days()      seconds / PER_DAY         end
-    def in_weeks()     seconds / PER_DAY / 7      end
-    def in_years()     seconds / PER_DAY / 365      end
+    def in_minutes()   seconds / PER_MINUTE       end
+    def in_hours()     seconds / PER_HOUR       end
+    def in_days()      seconds / PER_DAY       end
+    def in_weeks()     seconds / PER_DAY / 7    end
+    def in_years()     seconds / PER_DAY / 365    end
 
     alias_method :ms, :milliseconds
     alias_method :'μs', :microseconds
-
   end
 end
 
