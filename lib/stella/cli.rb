@@ -14,7 +14,7 @@ class Stella::CLI < Drydock::Command
   def verify
     opts = {}
     opts[:hosts] = @hosts
-    opts[:nowait] = true if @option.nowait
+    opts[:nowait] = true unless @option.wait
     ret = Stella::Engine::Functional.run @testplan, opts
     @exit_code = (ret ? 0 : 1)
   end
