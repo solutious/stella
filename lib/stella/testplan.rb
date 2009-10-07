@@ -26,9 +26,7 @@ class Testplan
         uri = URI.parse uri
         uri.path = '/' if uri.path.nil? || uri.path.empty?
         req = usecase.add_request :get, uri.path
-        req.wait = opts[:delay] if opts[:delay]
-        req.gibbler
-        req.freeze
+        req.wait = opts[:wait] if opts[:wait]
       end
       self.add_usecase usecase
     end
@@ -40,8 +38,6 @@ class Testplan
     plan.base_path = File.dirname path
     # eval so the DSL code can be executed in this namespace.
     plan.instance_eval conf
-    plan.gibbler
-    plan.freeze
     plan
   end
   
@@ -58,12 +54,15 @@ class Testplan
       msg << " (#{@testplan_current_ratio})"
       raise WackyRatio, msg
     end
-    @usecases.each do |uc| 
-      uc.gibbler  # make sure gibbler_cache has a value
-      uc.freeze   # make sure all clients share identical usecases
-    end
   end
-    
+  
+  # make sure all clients share identical test plans
+  def freeze
+    @usecases.each { |uc| uc.freeze }
+    super
+    self
+  end
+  
   def usecase(*args, &blk)
     return @usecases if args.empty?
     ratio, name = nil,nil

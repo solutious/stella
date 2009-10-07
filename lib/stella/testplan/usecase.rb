@@ -68,13 +68,17 @@ class Testplan
       read(path).split $/
     end
     
+    def freeze
+      @requests.each { |r| r.freeze }
+      super
+      self
+    end
+    
     def add_request(meth, *args, &blk)
       req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args[0], &blk
       req.desc = args[1] if args.size > 1 # Description is optional
       Stella.ld req
       @requests << req
-      req.gibbler
-      req.freeze
       req
     end
     def get(*args, &blk);    add_request :get,    *args, &blk; end

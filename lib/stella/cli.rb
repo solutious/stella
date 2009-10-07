@@ -90,10 +90,11 @@ class Stella::CLI < Drydock::Command
       @testplan = Stella::Testplan.load_file @option.testplan
     else
       opts = {}
-      opts[:delay] = @option.wait if @option.wait
+      opts[:wait] = @option.wait if @option.wait
       @testplan = Stella::Testplan.new(@argv, opts)
     end
     @testplan.check!  # raise errors, update usecase ratios
+    @testplan.freeze  # cascades through usecases and requests
     Stella.li2 " #{@option.testplan || @testplan.desc} (#{@testplan.digest})" 
     true
   end
