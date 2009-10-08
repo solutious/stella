@@ -41,54 +41,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000064">run</a></li>
-              <li><a href="#M000065">wait_for_reporter</a></li>
+              <li><a href="#M000083">run</a></li>
+              <li><a href="#M000084">wait_for_reporter</a></li>
             </ol>
           </div>
           <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>counts</td>
-                    <td class='context-item-value'>[RW]</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>timers</td>
-                    <td class='context-item-value'>[RW]</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000064'>
-                <a name='M000064'>      </a>
+              <div class='public-instance method' id='method-M000083'>
+                <a name='M000083'>      </a>
                 <div class='synopsis'>
                   <span class='name'>run</span>
                   <span class='arguments'>(plan, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000083-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000064-source'>    <span class="ruby-comment cmt"># File lib/stella/engine/load.rb, line 14</span>&#x000A;14:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">plan</span>, <span class="ruby-identifier">opts</span>={})&#x000A;15:       <span class="ruby-identifier">opts</span> = {&#x000A;16:         <span class="ruby-identifier">:hosts</span>          =<span class="ruby-operator">&gt;</span> [],&#x000A;17:         <span class="ruby-identifier">:clients</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,&#x000A;18:         <span class="ruby-identifier">:duration</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span>,&#x000A;19:         <span class="ruby-identifier">:nowait</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>,&#x000A;20:         <span class="ruby-identifier">:repetitions</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>&#x000A;21:       }.<span class="ruby-identifier">merge!</span> <span class="ruby-identifier">opts</span>&#x000A;22:       <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:clients</span>] = <span class="ruby-identifier">plan</span>.<span class="ruby-identifier">usecases</span>.<span class="ruby-identifier">size</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:clients</span>] <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">plan</span>.<span class="ruby-identifier">usecases</span>.<span class="ruby-identifier">size</span>&#x000A;23:       <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:clients</span>] = <span class="ruby-value">1000</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:clients</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-value">1000</span>&#x000A;24:       &#x000A;25:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li3</span> <span class="ruby-node">&quot; Options: #{opts.inspect}&quot;</span>&#x000A;26:       <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li3</span> <span class="ruby-value str">&quot; Hosts: &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hosts</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">', '</span>) &#x000A;27:       &#x000A;28:       <span class="ruby-comment cmt">#wait_for_reporter</span>&#x000A;29:       &#x000A;30:       <span class="ruby-comment cmt"># errors?</span>&#x000A;31:       &#x000A;32:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000083-source'>    <span class="ruby-comment cmt"># File lib/stella/engine/load.rb, line 9</span>&#x000A; 9:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">plan</span>, <span class="ruby-identifier">opts</span>={})&#x000A;10:       <span class="ruby-identifier">process_options!</span> <span class="ruby-identifier">plan</span>, <span class="ruby-identifier">opts</span>&#x000A;11:       &#x000A;12:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Not implemented. Try a stress test!&quot;</span>&#x000A;13:       &#x000A;14:       <span class="ruby-comment cmt">#Tracer.on</span>&#x000A;15:       <span class="ruby-comment cmt">#Benelux.reporter.wait</span>&#x000A;16:       <span class="ruby-comment cmt">#Tracer.off</span>&#x000A;17:       &#x000A;18:       <span class="ruby-comment cmt">#Benelux.timeline</span>&#x000A;19:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000065'>
-                <a name='M000065'>      </a>
+              <div class='public-instance method' id='method-M000084'>
+                <a name='M000084'>      </a>
                 <div class='synopsis'>
                   <span class='name'>wait_for_reporter</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000084-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000065-source'>    <span class="ruby-comment cmt"># File lib/stella/engine/load.rb, line 34</span>&#x000A;34:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait_for_reporter</span>&#x000A;35:       <span class="ruby-constant">Benelux</span>.<span class="ruby-identifier">reporter</span>.<span class="ruby-identifier">wait</span>&#x000A;36:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000084-source'>    <span class="ruby-comment cmt"># File lib/stella/engine/load.rb, line 21</span>&#x000A;21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait_for_reporter</span>&#x000A;22:       <span class="ruby-constant">Benelux</span>.<span class="ruby-identifier">reporter</span>.<span class="ruby-identifier">wait</span>&#x000A;23:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
