@@ -66,9 +66,9 @@ class Stella::CLI < Drydock::Command
     puts %Q{
     $ stella verify -p #{tp_path} 127.0.0.1:3114
     }
-    puts "4. Run a load test:".bright
+    puts "4. Run a stress test:".bright
     puts %Q{
-    $ stella load -p #{tp_path} 127.0.0.1:3114
+    $ stella stress -p #{tp_path} 127.0.0.1:3114
     }
   end
   

@@ -1,3 +1,9 @@
+# Stella Test Plan - Cookies
+#
+# TO BE DOCUMENTED. 
+# 
+# If you're reading this, remind me!
+#
 desc "Maintain Your Cookies"
 
 usecase 65, "Simple search" do

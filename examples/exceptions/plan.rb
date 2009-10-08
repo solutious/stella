@@ -1,4 +1,9 @@
-
+# Stella Test Plan - Exception Handling
+#
+# TO BE DOCUMENTED. 
+# 
+# If you're reading this, remind me!
+#
 
 usecase "Exception Handling" do
   

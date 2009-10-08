@@ -5,6 +5,8 @@ module Stella::Engine
   module Base
     extend self
     
+    @@client_limit = 200
+    
     def update(*args)
       what, *args = args
       if respond_to?("update_#{what}")
@@ -15,18 +17,33 @@ module Stella::Engine
       end
     end
 
+    def process_options!(plan, opts={})
+      opts = {
+        :hosts          => [],
+        :clients        => 1,
+        :duration       => nil,
+        :nowait         => false,
+        :arrival        => nil,
+        :repetitions    => 1
+      }.merge! opts
+      
+      Stella.li3 " Options: #{opts.inspect}"
+      Stella.lflush
+      
+      opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
+      
+      if opts[:clients] > @@client_limit
+        Stella.li3 "Client limit is #{@@client_limit}"
+        opts[:clients] = @@client_limit
+      end
+      
+      Stella.li3 " Hosts: " << opts[:hosts].join(', ')
+    end
+    
     def run; raise; end
-    
-    
-    def update_quit_usecase client_id, msg
-    end
-    
-    def update_repeat_request client_id, counter, total
-    end
-    
-    def update_stats client_id, http_client, usecase, req
-    end
-    
+    def update_quit_usecase(client_id, msg) raise end
+    def update_repeat_request(client_id, counter, total) raise end
+    def update_stats(client_id, http_client, usecase, req) raise end
     def update_prepare_request(*args) raise end
     def update_send_request(*args) raise end
     def update_receive_response(*args) raise end

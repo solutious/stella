@@ -17,7 +17,7 @@
   
   s.add_dependency 'benelux',    '>= 0.4.2'
   s.add_dependency 'drydock',    '>= 0.6.8'
-  s.add_dependency 'gibbler',    '>= 0.6.3'
+  s.add_dependency 'gibbler',    '>= 0.7.0'
   s.add_dependency 'sysinfo',    '>= 0.7.0'
   s.add_dependency 'storable',   '>= 0.5.7'
   s.add_dependency 'httpclient', '>= 2.1.5'
@@ -69,6 +69,7 @@
   support/sample_webapp/app.rb
   support/sample_webapp/config.ru
   support/useragents.txt
+  tryouts/01_numeric_mixins_tryouts.rb
   vendor/httpclient-2.1.5.2/httpclient.rb
   vendor/httpclient-2.1.5.2/httpclient/auth.rb
   vendor/httpclient-2.1.5.2/httpclient/cacert.p7s

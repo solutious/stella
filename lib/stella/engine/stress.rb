@@ -12,23 +12,13 @@ module Stella::Engine
     end
     
     def run(plan, opts={})
-      opts = {
-        :hosts          => [],
-        :clients        => 1,
-        :duration       => nil,
-        :repetitions    => 1
-      }.merge! opts
-      opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
-      opts[:clients] = 1000 if opts[:clients] > 1000
+      process_options! plan, opts
       
       if Stella.loglev > 1
         Stress.timers += [:connect, :create_socket, :query, :socket_gets_first_byte, :get_body]
         Stress.counts  = [:request_header_size, :request_content_size]
         Stress.counts += [:response_headers_size, :response_content_size]
       end
-      
-      Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.li3 "Hosts: " << opts[:hosts].join(', ') 
       
       counts = calculate_usecase_clients plan, opts
       
@@ -47,7 +37,6 @@ module Stella::Engine
       ensure
         Stella.li "Processing statistics...", $/
         Stella.lflush
-        
         
         wait_for_reporter
         
