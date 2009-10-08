@@ -45,6 +45,8 @@ module Stella::Engine
         
         generate_report plan, test_time
         
+        #p Benelux.timeline
+        
         Stella.li "Overall time: "
         Stella.li "  prep: %10.2fs" % tt.stats.group(:build_thread_package).mean
         Stella.li "  test: %10.2fs" % test_time
@@ -109,24 +111,29 @@ module Stella::Engine
     end
     
     def execute_test_plan(packages, reps=1)
-      Thread.ify packages, :threads => packages.size do |package|
-        # This thread will stay on this one track. 
-        Benelux.current_track package.client.gibbler
-        Benelux.add_thread_tags :usecase => package.usecase.digest_cache
-        (1..reps).to_a.each do |rep|
-          Benelux.add_thread_tags :rep =>  rep
-          Stella::Engine::Stress.rescue(package.client.digest_cache) {
-            break if Stella.abort?
-            print '.' if Stella.loglev == 2
-            stats = package.client.execute package.usecase
-          }
-          Benelux.remove_thread_tags :rep
-          sleep 0.001
+      #Thread.ify packages, :threads => packages.size do |package|
+      threads = []
+      packages.each { |package|
+        threads << Thread.new do
+          # This thread will stay on this one track. 
+          Benelux.current_track package.client.gibbler
+          Benelux.add_thread_tags :usecase => package.usecase.digest_cache
+          (1..reps).to_a.each do |rep|
+            Benelux.add_thread_tags :rep =>  rep
+            Stella::Engine::Stress.rescue(package.client.digest_cache) {
+              break if Stella.abort?
+              print '.' if Stella.loglev == 2
+              stats = package.client.execute package.usecase
+            }
+            Benelux.remove_thread_tags :rep
+            sleep 0.001
+          end
+        
+          Benelux.remove_thread_tags :usecase
+        
         end
-        
-        Benelux.remove_thread_tags :usecase
-        
-      end
+      }
+      threads.each { |t| t.join } # wait
       Stella.li2 $/, $/
     end
       
