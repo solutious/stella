@@ -10,29 +10,43 @@ class Time
     PER_HOUR = 3600.0.freeze
     PER_DAY = 86400.0.freeze
     
-    def seconds()      seconds = self              end
+    def microseconds() seconds * PER_MICROSECOND    end
+    def milliseconds() seconds * PER_MILLISECOND   end
+    def seconds()      self                        end
     def minutes()      seconds * PER_MINUTE         end
     def hours()        seconds * PER_HOUR            end
     def days()         seconds * PER_DAY              end
     def weeks()        seconds * PER_DAY * 7          end
-    def years()        seconds * PER_DAY * 365       end
-    def microseconds() seconds * PER_MICROSECOND    end
-    def milliseconds() seconds * PER_MILLISECOND   end    
-    
-    # Create singular methods, like hour and day. 
-    instance_methods.select.each do |plural|
-      singular = plural.to_s.chop
-      alias_method singular, plural
-    end
+    def years()        seconds * PER_DAY * 365       end 
     
     def in_minutes()   seconds / PER_MINUTE       end
     def in_hours()     seconds / PER_HOUR       end
     def in_days()      seconds / PER_DAY       end
     def in_weeks()     seconds / PER_DAY / 7    end
     def in_years()     seconds / PER_DAY / 365    end
-
+      
+    ## JRuby doesn't like using instance_methods.select here. 
+    ## It could be a bug or something quirky with Attic 
+    ## (although it works in 1.8 and 1.9). The error:
+    ##  
+    ##  lib/attic.rb:32:in `select': yield called out of block (LocalJumpError)
+    ##  lib/stella/mixins/numeric.rb:24
+    ##
+    ## Create singular methods, like hour and day. 
+    # instance_methods.select.each do |plural|
+    #   singular = plural.to_s.chop
+    #   alias_method singular, plural
+    # end
+    
     alias_method :ms, :milliseconds
     alias_method :'μs', :microseconds
+    alias_method :second, :seconds
+    alias_method :minute, :minutes
+    alias_method :hour, :hours
+    alias_method :day, :days
+    alias_method :week, :weeks
+    alias_method :year, :years
+
   end
 end
 
