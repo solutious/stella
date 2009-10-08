@@ -227,7 +227,7 @@ usecase 25, "YAML API" do
   
 end
 
-usecase 10, "Self-serve API" do
+xusecase 10, "Self-serve API" do
   
   # Here is an example of using a POST request. 
   # Notice that the definition is otherwise 

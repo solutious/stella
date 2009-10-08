@@ -8,8 +8,6 @@ module Stella
     require 'stella/client/modifiers'
     require 'stella/client/container'
     
-    
-    
     include Gibbler::Complex
     include Observable
     
@@ -24,7 +22,7 @@ module Stella
     end
     def execute(usecase, &stat_collector)
       # We need to make sure the gibbler cache has a value
-      self.gibbler if self.__gibbler_cache.nil?
+      self.gibbler if self.digest_cache.nil?
       
       http_client = create_http_client
       stats = {}
@@ -40,9 +38,9 @@ module Stella
         headers = prepare_headers(container, req.headers)
         uri = build_request_uri uri_obj, params, container
         raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
-        stella_id = [Time.now, self.gibbler_cache, req.gibbler_cache, params, headers, counter].gibbler
+        stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         
-        Benelux.add_thread_tags :request => req.gibbler_cache
+        Benelux.add_thread_tags :request => req.digest_cache
         Benelux.add_thread_tags :retry => counter
         Benelux.add_thread_tags :stella_id => stella_id
         
@@ -100,7 +98,7 @@ module Stella
     end
     
     def update(kind, *args)
-      changed and notify_observers(kind, self.__gibbler_cache, *args)
+      changed and notify_observers(kind, self.digest_cache, *args)
     end
   
     def run_sleeper(wait)

@@ -84,7 +84,7 @@ module Stella::Engine
         else
           (opts[:clients] * usecase.ratio).to_i
         end
-        counts[usecase.gibbler_cache] = count
+        counts[usecase.digest_cache] = count
         counts[:total] += count
       end
       counts
@@ -93,7 +93,7 @@ module Stella::Engine
     def build_thread_package(plan, opts, counts)
       packages, pointer = Array.new(counts[:total]), 0
       plan.usecases.each do |usecase|
-        count = counts[usecase.gibbler_cache]
+        count = counts[usecase.digest_cache]
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
@@ -112,10 +112,10 @@ module Stella::Engine
       Thread.ify packages, :threads => packages.size do |package|
         # This thread will stay on this one track. 
         Benelux.current_track package.client.gibbler
-        Benelux.add_thread_tags :usecase => package.usecase.gibbler_cache
+        Benelux.add_thread_tags :usecase => package.usecase.digest_cache
         (1..reps).to_a.each do |rep|
           Benelux.add_thread_tags :rep =>  rep
-          Stella::Engine::Stress.rescue(package.client.gibbler_cache) {
+          Stella::Engine::Stress.rescue(package.client.digest_cache) {
             break if Stella.abort?
             print '.' if Stella.loglev == 2
             stats = package.client.execute package.usecase
@@ -133,7 +133,7 @@ module Stella::Engine
       #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       
-      Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.gibbler_cache.shorter})"]
+      Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.digest_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
         
         # TODO: Create Ranges object, like Stats object
@@ -142,14 +142,14 @@ module Stella::Engine
         requests = 0 #global_timeline.ranges(:do_request).size
         
         desc = uc.desc || "Usecase ##{i+1} "
-        desc << "  (#{uc.gibbler_cache.shorter}) "
+        desc << "  (#{uc.digest_cache.shorter}) "
         str = ' ' << " %-66s %s   %d%% ".bright.att(:reverse)
         Stella.li str % [desc, '', uc.ratio_pretty]
         
         uc.requests.each do |req| 
-          filter = [uc.gibbler_cache, req.gibbler_cache]
+          filter = [uc.digest_cache, req.digest_cache]
           desc = req.desc 
-          Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.gibbler_cache.shorter})"]
+          Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.digest_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           Stress.timers.each do |sname|
             stats = global_timeline.stats.group(sname)[filter]
@@ -162,9 +162,9 @@ module Stella::Engine
         
         Stella.li "   Sub Total:".bright
         
-        stats = global_timeline.stats.group(:do_request)[uc.gibbler_cache]
-        failed = global_timeline.stats.group(:failed)[uc.gibbler_cache]
-        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.gibbler_cache]
+        stats = global_timeline.stats.group(:do_request)[uc.digest_cache]
+        failed = global_timeline.stats.group(:failed)[uc.digest_cache]
+        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.digest_cache]
         resst = respgrp.tag_values(:status)
         statusi = []
         resst.each do |status|
@@ -176,13 +176,13 @@ module Stella::Engine
         Stella.li '       %-29s %d' % [:failed, failed.n]
         
         Stress.timers.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
+          stats = global_timeline.stats.group(sname)[uc.digest_cache]
           Stella.li '      %-30s %.3fs %.3f(SD)' % [sname, stats.mean, stats.sd]
           Stella.lflush
         end
         
         Stress.counts.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.gibbler_cache]
+          stats = global_timeline.stats.group(sname)[uc.digest_cache]
           Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
           Stella.lflush
         end

@@ -1,12 +1,12 @@
 
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
-%w{storable sysinfo gibbler benelux}.each do |dir|
+%w{attic storable sysinfo gibbler benelux}.each do |dir|
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 end
 
 autoload :SysInfo, 'sysinfo'
-autoload :Drydock, 'drydock/screen'
+autoload :Drydock, 'drydock'
 autoload :URI, 'uri'
 autoload :OpenStruct, 'ostruct'
 autoload :Storable, 'storable'

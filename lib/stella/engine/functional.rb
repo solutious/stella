@@ -24,7 +24,7 @@ module Stella::Engine
       
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
-        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{uc.gibbler_cache.shorter}) "]
+        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{uc.digest_cache.shorter}) "]
         Stella.rescue { client.execute uc }
       end
       
@@ -38,7 +38,7 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      desc = "#{req.desc}  (#{req.gibbler_cache.shorter}) "
+      desc = "#{req.desc}  (#{req.digest_cache.shorter}) "
       Stella.li2 "  %-46s %16s ".bright % [desc, notice]
     end
     
