@@ -153,7 +153,8 @@ module Stella::Engine
           Stella.li "   %-72s ".bright % ["#{req.desc}  (#{req.digest_cache.shorter})"]
           Stella.li "    %s" % [req.to_s]
           Stress.timers.each do |sname|
-            stats = global_timeline.stats.group(sname)[filter]
+            stats = global_timeline.stats.group(sname)[filter].merge
+#            Stella.li stats.inspect
             str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
             Stella.li str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
             Stella.lflush
@@ -163,8 +164,8 @@ module Stella::Engine
         
         Stella.li "   Sub Total:".bright
         
-        stats = global_timeline.stats.group(:do_request)[uc.digest_cache]
-        failed = global_timeline.stats.group(:failed)[uc.digest_cache]
+        stats = global_timeline.stats.group(:do_request)[uc.digest_cache].merge
+        failed = global_timeline.stats.group(:failed)[uc.digest_cache].merge
         respgrp = global_timeline.stats.group(:execute_response_handler)[uc.digest_cache]
         resst = respgrp.tag_values(:status)
         statusi = []
@@ -177,13 +178,13 @@ module Stella::Engine
         Stella.li '       %-29s %d' % [:failed, failed.n]
         
         Stress.timers.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.digest_cache]
+          stats = global_timeline.stats.group(sname)[uc.digest_cache].merge
           Stella.li '      %-30s %.3fs %.3f(SD)' % [sname, stats.mean, stats.sd]
           Stella.lflush
         end
         
         Stress.counts.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.digest_cache]
+          stats = global_timeline.stats.group(sname)[uc.digest_cache].merge
           Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
           Stella.lflush
         end
@@ -191,7 +192,7 @@ module Stella::Engine
       end
       
       Stella.li ' ' << " %-66s ".att(:reverse) % 'Total:'
-      stats = global_timeline.stats.group(:do_request)
+      stats = global_timeline.stats.group(:do_request).merge
       failed = global_timeline.stats.group(:failed)
       respgrp = global_timeline.stats.group(:execute_response_handler)
       resst = respgrp.tag_values(:status)
@@ -209,13 +210,13 @@ module Stella::Engine
       Stella.li  '       %-29s %d' % [:failed, failed.n]
       
       Stress.timers.each do |sname|
-        stats = global_timeline.stats.group(sname)
+        stats = global_timeline.stats.group(sname).merge
         Stella.li '      %-30s %-.3fs     %-.3f(SD)' % [sname, stats.mean, stats.sd]
         Stella.lflush
       end
       
       Stress.counts.each do |sname|
-        stats = global_timeline.stats.group(sname)
+        stats = global_timeline.stats.group(sname).merge
         Stella.li '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
         Stella.lflush
       end
