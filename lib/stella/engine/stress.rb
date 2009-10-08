@@ -121,6 +121,7 @@ module Stella::Engine
             stats = package.client.execute package.usecase
           }
           Benelux.remove_thread_tags :rep
+          sleep 0.001
         end
         
         Benelux.remove_thread_tags :usecase
