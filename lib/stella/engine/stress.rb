@@ -12,7 +12,7 @@ module Stella::Engine
     end
     
     def run(plan, opts={})
-      process_options! plan, opts
+      opts = process_options! plan, opts
       
       if Stella.loglev > 1
         Stress.timers += [:connect, :create_socket, :query, :socket_gets_first_byte, :get_body]

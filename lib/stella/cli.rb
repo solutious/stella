@@ -7,18 +7,6 @@ class Stella::CLI < Drydock::Command
     @exit_code = 0
   end
   
-  def verify_valid?
-    create_testplan
-  end
-  
-  def verify
-    opts = {}
-    opts[:hosts] = @hosts
-    opts[:nowait] = true unless @option.wait
-    ret = Stella::Engine::Functional.run @testplan, opts
-    @exit_code = (ret ? 0 : 1)
-  end
-  
   def load_valid?
     create_testplan
   end
@@ -29,21 +17,15 @@ class Stella::CLI < Drydock::Command
     [:nowait, :clients, :repetitions, :wait, :duration].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    ret = Stella::Engine::Load.run @testplan, opts
-    @exit_code = (ret ? 0 : 1)
-  end
-  
-  def stress_valid?
-    create_testplan
-  end
-  
-  def stress
-    opts = {}
-    opts[:hosts] = @hosts
-    [:clients, :repetitions, :duration].each do |opt|
-      opts[opt] = @option.send(opt) unless @option.send(opt).nil?
+    ret = case @alias
+    when "stress"
+      Stella::Engine::Stress.run @testplan, opts
+    when "verify"
+      Stella::Engine::Functional.run @testplan, opts
+    else
+      Stella::Engine::Load.run @testplan, opts
     end
-    ret = Stella::Engine::Stress.run @testplan, opts
+    
     @exit_code = (ret ? 0 : 1)
   end
   

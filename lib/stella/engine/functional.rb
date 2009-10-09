@@ -5,11 +5,8 @@ module Stella::Engine
     extend self
     
     def run(plan, opts={})
-      opts = {
-        :hosts        => [],
-        :nowait    => false,
-        :repetitions  => 1
-      }.merge! opts
+      opts = process_options! plan, opts
+      
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       

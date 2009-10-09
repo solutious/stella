@@ -38,6 +38,7 @@ module Stella::Engine
       end
       
       Stella.li3 " Hosts: " << opts[:hosts].join(', ')
+      opts
     end
     
     def run; raise; end

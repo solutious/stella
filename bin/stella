@@ -69,18 +69,14 @@ class Stella::CLI::Definition
   option :p, :testplan, String, "Path to testplan" 
   command :preview => Stella::CLI
   
-  about "Run a functional test"
-  usage "stella verify http://stellaaahhhh.com/"
-  usage "stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  command :verify => Stella::CLI
-  
-  about "Run a load test"
-  usage "stella load http://stellaaahhhh.com/"
-  usage "stella load http://stellaaahhhh.com:3114/"
-  usage "stella load --clients=10 --repetitions=2 http://stellaaahhhh.com/"
-  usage "stella load -p path/2/testplan.rb -u 100 -r 5 http://stellaaahhhh.com/"
+  about "Run a load or stress test or verify a test plan"
+  usage "stella load [options] URI"
+  usage "stella stress [options] URI"
+  usage "stella verify [options] URI"
+  usage "e.g. "
+  usage "   stella load -p path/2/testplan.rb -u 100 -r 50 http://stellaaahhhh.com:3114/"
+  usage "   stella stress --clients=50 --repetitions=20 http://stellaaahhhh.com/"
+  usage "   stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
   option :c, :clients, Integer, "Number of virtual clients"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :d, :duration, String, "Max duration to run test"
@@ -88,18 +84,9 @@ class Stella::CLI::Definition
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
   command :load => Stella::CLI
-  
-  about "Run a stress test"
-  usage "stella stress http://stellaaahhhh.com/"
-  usage "stella stress http://stellaaahhhh.com:3114/"
-  usage "stella stress --clients=10 --repetitions=2 http://stellaaahhhh.com/"
-  usage "stella stress -p path/2/testplan.rb -u 100 -r 5 http://stellaaahhhh.com/"
-  option :c, :clients, Integer, "Number of virtual clients"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
-  option :d, :duration, String, "Max duration to run test"
-  option :p, :testplan, String, "Path to testplan" 
-  command :stress => Stella::CLI
-  
+  command_alias :load, :verify 
+  command_alias :load, :stress 
+
   about "Initialize Stella configuration"
   command :init do
     Stella::Config.init
@@ -117,15 +104,14 @@ class Stella::CLI::Definition
   # ------------------------------------------------------------------
 
   before do |obj|
+    #puts $$
     @start = Time.now
-    Stella.enable_debug if Drydock.debug?
     if obj.global.pause
       obj.global.pause.to_i.times do |i|
-        print "Waiting for %ss" % [(obj.global.pause-i)]
+        print "Waiting for %s" % [(obj.global.pause-i)]
         sleep 1
-        print "\r" % ''
+        print "\r%30s\r" % ''  # clear line
       end
-      print "\r%30s\r" % ''
     end
   end
 
@@ -149,6 +135,8 @@ rescue Drydock::ArgError, Drydock::OptError => ex
   STDERR.puts ex.usage
 rescue Drydock::InvalidArgument => ex
   STDERR.puts ex.message
+rescue Drydock::UnknownCommand => ex
+  STDERR.puts "Unknown command: %s" % ex.name
 rescue Stella::Error => ex
   STDERR.puts ex.message
   STDERR.puts ex.backtrace if Stella.loglev > 2 || Drydock.debug?

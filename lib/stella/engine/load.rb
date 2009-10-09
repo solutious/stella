@@ -7,7 +7,7 @@ module Stella::Engine
     @threads = []
     
     def run(plan, opts={})
-      process_options! plan, opts
+      opts = process_options! plan, opts
       
       puts "Not implemented. Try a stress test!"
       
