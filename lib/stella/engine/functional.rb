@@ -15,7 +15,7 @@ module Stella::Engine
 
       client.enable_nowait_mode if opts[:nowait]
       
-      Stella.li $/, "Starting test...", $/
+      Stella.li2 $/, "Starting test...", $/
       Stella.lflush
       sleep 0.3
       
