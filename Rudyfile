@@ -1,4 +1,4 @@
-require 'stella'
+  require 'stella'
 
 machines do
   
@@ -37,7 +37,7 @@ commands do
   allow :stella
   allow :rm
   allow :rackup_path do
-    "/usr/lib/ruby/gems/1.8/gems/stella/#{Stella::VERSION}/support/sample_webapp/config.ru"
+    "/usr/lib/ruby/gems/1.8/gems/stella-#{Stella::VERSION}/support/sample_webapp/config.ru"
   end
 end
 
@@ -45,15 +45,19 @@ routines do
            
   role :app do                     
     
+    # rudy -r app -v start
     start do
       remote do
-        thin :d, :p, 3114, :R, rackup_path, 'start'
+        thin :d, :l, 'thin.log', :p, 3114, :R, rackup_path, 'start'
       end
     end
     
+    # rudy -r app -v stop
     stop do 
       remote do
-        thin :d, :p, 3114, :R, rackup_path, 'stop'
+        thin :R, rackup_path, 'stop'
+        sleep 1
+        ps 'ux'
       end
     end
     
@@ -71,7 +75,7 @@ routines do
     # rudy -v -r gen generate ip-10-251-27-245.ec2.internal:3114
     generate do
       remote do |arg|
-        stella :v, 'generate', :c, 50, :r, 4, "#{arg.first}"
+        stella :v, 'generate', :c, 200, :d, '30m', "#{arg.first}"
       end
     end
     
@@ -123,6 +127,7 @@ routines do
     
   end
   
+   
   installdeps do
     remote :root do
       gem_install "test-spec", "rspec", "camping", "fcgi", "memcache-client"
