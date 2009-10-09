@@ -49,11 +49,12 @@ module Stella::Engine
         
         #p Benelux.timeline
         
-        Stella.li "Overall time: "
-        Stella.li "  prep: %10.2fs" % tt.stats.group(:build_thread_package).mean
-        Stella.li "  test: %10.2fs" % test_time
-        Stella.li "  wait: %10.2fs" % tt.stats.group(:wait_for_reporter).mean
-        Stella.li "  post: %10.2fs" % tt.stats.group(:generate_report).mean
+        Stella.li "Summary: "
+        Stella.li "  max clients: %d" % @max_clients
+        Stella.li "  repetitions: %d" % @real_reps
+        Stella.li "    test time: %10.2fs" % test_time
+        Stella.li "    wait time: %10.2fs" % tt.stats.group(:wait_for_reporter).mean
+        Stella.li "    post time: %10.2fs" % tt.stats.group(:generate_report).mean
         Stella.li $/
       end
       
@@ -103,7 +104,7 @@ module Stella::Engine
         packages.fill(pointer, count) do |index|
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
-          client.enable_nowait_mode 
+          client.enable_nowait_mode if opts[:nowait]
           Stella.li4 "Created client #{client.digest.short}"
           ThreadPackage.new(index+1, client, usecase)
         end
@@ -120,39 +121,31 @@ module Stella::Engine
         @real_reps += 1  # Increments when duration is specified.
         Stella.li3 "*** REPETITION #{@real_reps} of #{reps} ***"
         packages.each { |package|
-          @threads << Thread.new do
-            c, uc = package.client, package.usecase
-            msg = "THREAD START: client %s: " % [c.digest.short] 
-            msg << "%s:%s (rep: %d)" % [uc.desc, uc.digest.short, @real_reps]
-            Stella.li4 $/, "======== " << msg
-            # This thread will stay on this one track. 
-            Benelux.current_track c.digest
-            Benelux.add_thread_tags :usecase => uc.digest_cache
+          if running_threads.size <= packages.size
+            @threads << Thread.new do
+              c, uc = package.client, package.usecase
+              msg = "THREAD START: client %s: " % [c.digest.short] 
+              msg << "%s:%s (rep: %d)" % [uc.desc, uc.digest.short, @real_reps]
+              Stella.li4 $/, "======== " << msg
+              # This thread will stay on this one track. 
+              Benelux.current_track c.digest
+              Benelux.add_thread_tags :usecase => uc.digest_cache
           
-            Benelux.add_thread_tags :rep =>  @real_reps
-            Stella::Engine::Load.rescue(c.digest_cache) {
-              break if Stella.abort?
-              print '.' if Stella.loglev == 2
-              stats = c.execute uc
-            }
-            Benelux.remove_thread_tags :rep
-            Benelux.remove_thread_tags :usecase
+              Benelux.add_thread_tags :rep =>  @real_reps
+              Stella::Engine::Load.rescue(c.digest_cache) {
+                break if Stella.abort?
+                print '.' if Stella.loglev == 2
+                stats = c.execute uc
+              }
+              Benelux.remove_thread_tags :rep
+              Benelux.remove_thread_tags :usecase
             
+            end
+            Stella.sleep :create_thread
           end
-          Stella.sleep :create_thread
           
           if running_threads.size > @max_clients
-            @max_clients = running_threads.size 
-          end
-          
-          # If a duration was given, we make sure 
-          # to run for only that amount of time.
-          if duration > 0
-            time_elapsed = (Time.now - time_started).to_i
-            msg = "#{time_elapsed} of #{duration} (threads: %d)" % running_threads.size
-            Stella.li3 "*** TIME ELAPSED: #{msg} ***"
-            redo if time_elapsed <= duration 
-            break if time_elapsed >= duration
+            @max_clients = running_threads.size
           end
           
           if @mode == :rolling
@@ -170,6 +163,18 @@ module Stella::Engine
           args = [running_threads.size, @max_clients]
           Stella.li3 "*** WAITING FOR %d THREADS TO FINISH (max: %d) ***" % args
           @threads.each { |t| t.join } # wait
+        end
+        
+        # If a duration was given, we make sure 
+        # to run for only that amount of time.
+        # TODO: do not redo if 
+        # time_elapsed + usecase.mean > duration
+        if duration > 0
+          time_elapsed = (Time.now - time_started).to_i
+          msg = "#{time_elapsed} of #{duration} (threads: %d)" % running_threads.size
+          Stella.li3 "*** TIME ELAPSED: #{msg} ***"
+          sleep 0.5 and redo if time_elapsed <= duration 
+          break if time_elapsed >= duration
         end
 
       }

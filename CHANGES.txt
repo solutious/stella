@@ -1,13 +1,13 @@
 STELLA, CHANGES
 
 
-#### 0.7.0 (2009-09-05) ###############################
+#### 0.7.0 (2009-10-??) ###############################
 
-NOTE: Complete rewrite
+NOTE: Complete rewrite. Features include:
 
 * New internal architecture. 
 * Improved stability and output for high thread loads. 
-* Updated configuration
+* Updated configuration syntax
 * Granular reporting via Benelux
 
 
