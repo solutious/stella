@@ -26,7 +26,13 @@ module Stella::Engine
       Stella.lflush
       packages = build_thread_package plan, opts, counts
       
-      Stella.li "Generating load...", $/
+      if opts[:duration] > 0
+        msg = "for #{opts[:duration].seconds}s"
+      else
+        msg = "for #{opts[:repetitions]} reps"
+      end
+      
+      Stella.li "Generating requests #{msg}...", $/
       Stella.lflush
       
       @mode = :rolling
