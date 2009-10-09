@@ -57,11 +57,11 @@
 # The "verify" command executes the plan with a 
 # single user and provides more detailed output.
 #
-# "stress" tests are run in a similar way:
+# And this is how you generate load:
 # 
-# $ stella stress -c 50 -r 10 -p examples/essentials/plan.rb http://127.0.0.1:3114/
+# $ stella generate -c 50 -r 10 -p examples/essentials/plan.rb http://127.0.0.1:3114/
 #
-# where "c" is the number of concurrent users and
+# where "c" is the number of concurrent clients,
 # "r" is the number of times to repeat the plan. 
 #
 # 

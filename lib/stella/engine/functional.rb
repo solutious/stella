@@ -19,9 +19,12 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
+      dig = Stella.loglev > 1 ? plan.digest_cache : plan.digest_cache.shorter
+      Stella.li " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
-        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{uc.digest_cache.shorter}) "]
+        dig = Stella.loglev > 1 ? uc.digest_cache : uc.digest_cache.shorter
+        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
         Stella.rescue { client.execute uc }
       end
       
@@ -35,7 +38,8 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      desc = "#{req.desc}  (#{req.digest_cache.shorter}) "
+      dig = Stella.loglev > 1 ? req.digest_cache : req.digest_cache.shorter
+      desc = "#{req.desc}  (#{dig}) "
       Stella.li2 "  %-46s %16s ".bright % [desc, notice]
     end
     

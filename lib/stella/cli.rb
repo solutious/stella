@@ -7,25 +7,29 @@ class Stella::CLI < Drydock::Command
     @exit_code = 0
   end
   
-  def load_valid?
+  def verify_valid?
     create_testplan
   end
   
-  def load
+  def verify
     opts = {}
     opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :wait, :duration].each do |opt|
+    opts[:nowait] = true if @option.nowait
+    ret = Stella::Engine::Functional.run @testplan, opts
+    @exit_code = (ret ? 0 : 1)
+  end
+  
+  def generate_valid?
+    create_testplan
+  end
+  
+  def generate
+    opts = {}
+    opts[:hosts] = @hosts
+    [:nowait, :clients, :repetitions, :duration].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    ret = case @alias
-    when "stress"
-      Stella::Engine::Stress.run @testplan, opts
-    when "verify"
-      Stella::Engine::Functional.run @testplan, opts
-    else
-      Stella::Engine::Load.run @testplan, opts
-    end
-    
+    ret = Stella::Engine::Load.run @testplan, opts
     @exit_code = (ret ? 0 : 1)
   end
   
@@ -44,13 +48,13 @@ class Stella::CLI < Drydock::Command
     puts %Q{
     http://127.0.0.1:3114/
     }
-    puts "3. Run a functional test:".bright
+    puts "3. Verify the testplan is correct (functional test):".bright
     puts %Q{
     $ stella verify -p #{tp_path} 127.0.0.1:3114
     }
-    puts "4. Run a stress test:".bright
+    puts "4. Generate requests (load test):".bright
     puts %Q{
-    $ stella stress -p #{tp_path} 127.0.0.1:3114
+    $ stella generate -p #{tp_path} 127.0.0.1:3114
     }
   end
   

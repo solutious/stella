@@ -50,12 +50,13 @@
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load.rb
-  lib/stella/engine/stress.rb
   lib/stella/exceptions.rb
   lib/stella/guidelines.rb
   lib/stella/mixins.rb
   lib/stella/mixins/numeric.rb
+  lib/stella/mixins/string.rb
   lib/stella/mixins/thread.rb
+  lib/stella/mixins/time.rb
   lib/stella/stats.rb
   lib/stella/testplan.rb
   lib/stella/testplan/stats.rb
@@ -69,6 +70,7 @@
   support/sample_webapp/config.ru
   support/useragents.txt
   tryouts/01_numeric_mixins_tryouts.rb
+  tryouts/12_digest_tryouts.rb
   vendor/httpclient-2.1.5.2/httpclient.rb
   vendor/httpclient-2.1.5.2/httpclient/auth.rb
   vendor/httpclient-2.1.5.2/httpclient/cacert.p7s

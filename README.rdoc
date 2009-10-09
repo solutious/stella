@@ -24,9 +24,8 @@ This is an early preview of Stella. The following features are still under devel
     # by running a single user functional test.
     $ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/
     
-    # Perform a stress test  
-    # using the same test plan. 
-    $ stella stress -p examples/basic/plan.rb http://stellaaahhhh.com/
+    # Generate requests using the same test plan. 
+    $ stella generate -p examples/basic/plan.rb http://stellaaahhhh.com/
     
     
 == Test Plan Example

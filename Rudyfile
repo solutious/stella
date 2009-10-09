@@ -68,10 +68,10 @@ routines do
       end
     end
     
-    # rudy -v -r gen stress ip-10-251-27-245.ec2.internal:3114
-    stress do
+    # rudy -v -r gen generate ip-10-251-27-245.ec2.internal:3114
+    generate do
       remote do |arg|
-        stella :v, 'stress', :c, 50, :r, 4, "#{arg.first}"
+        stella :v, 'generate', :c, 50, :r, 4, "#{arg.first}"
       end
     end
     

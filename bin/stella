@@ -64,28 +64,44 @@ class Stella::CLI::Definition
   usage "stella example"
   command :example => Stella::CLI
   
-  about "Preview the test plan"
+  about "Preview a test plan"
   usage "stella preview [-p path/2/testplan.rb] "
+  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
+  option :d, :duration, String, "Max duration to run test (ignored)"
+  option :W, :nowait, "Ignore wait times (ignored)"
+  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
   command :preview => Stella::CLI
   
-  about "Run a load or stress test or verify a test plan"
-  usage "stella load [options] URI"
-  usage "stella stress [options] URI"
-  usage "stella verify [options] URI"
+  about "Verify a test plan"
+  usage "stella verify [-p path/2/testplan.rb] URI"
+  usage "e.g."
+  usage "   $stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
+  option :d, :duration, String, "Max duration to run test (ignored)"
+  option :W, :nowait, "Ignore wait times"
+  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
+  option :p, :testplan, String, "Path to testplan" 
+  command :verify => Stella::CLI
+  
+  about "Generate requests"
+  usage "stella generate [options] URI"
+  #usage "stella load [options] URI"
+  #usage "stella stress [options] URI"
   usage "e.g. "
-  usage "   stella load -p path/2/testplan.rb -u 100 -r 50 http://stellaaahhhh.com:3114/"
-  usage "   stella stress --clients=50 --repetitions=20 http://stellaaahhhh.com/"
-  usage "   stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :c, :clients, Integer, "Number of virtual clients"
+  usage "   $ stella generate -p path/2/testplan.rb -u 100 -r 50 http://stellaaahhhh.com:3114/"
+  #usage "   $ stella stress --clients=50 --repetitions=20 http://stellaaahhhh.com/"
+  option :c, :clients, Integer, "Maximum number of virtual clients"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :d, :duration, String, "Max duration to run test"
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
-  command :load => Stella::CLI
-  command_alias :load, :verify 
-  command_alias :load, :stress 
+  command :generate => Stella::CLI
+#  command_alias :generate, :load 
+#  command_alias :generate, :stress 
 
   about "Initialize Stella configuration"
   command :init do
