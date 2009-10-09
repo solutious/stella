@@ -1,6 +1,6 @@
-# Stella Test Plan - Reading CSV Data
+# Stella Test Plan - Reading CSV Data (2009-10-08)
 #
-# TO BE DOCUMENTED. 
+# TO BE DOCUMENTED.
 # 
 # If you're reading this, remind me!
 #
@@ -22,5 +22,6 @@ usecase "Reading CSV Data" do
     param :what  => sequential(:search_terms, 0)
     param :where => sequential(:search_terms, 1)
   end
-  
 end
+
+# d93df136283f3867f462266a98675ce0b2f51b08

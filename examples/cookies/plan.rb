@@ -1,6 +1,6 @@
-# Stella Test Plan - Cookies
+# Stella Test Plan - Cookies (2009-10-08)
 #
-# TO BE DOCUMENTED. 
+# TO BE DOCUMENTED.
 # 
 # If you're reading this, remind me!
 #
@@ -22,3 +22,5 @@ usecase 65, "Simple search" do
   end
   
 end
+
+# c88c5e4e8c72e305928c8e512ca1e26baf271544

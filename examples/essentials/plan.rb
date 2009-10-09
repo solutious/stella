@@ -1,4 +1,4 @@
-# Stella Test Plan - Essentials
+# Stella Test Plan - Essentials (2009-10-08)
 # 
 #
 # 1. INTRODUCTION
@@ -244,4 +244,4 @@ usecase 10, "Self-serve API" do
   
 end
 
-# 4db1aeb3afffdd0b5c62d23a5130724ff39a5488
+# 80661e5f4c731ed905b01fdcdb52896629c7dd1e

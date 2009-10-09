@@ -24,7 +24,14 @@ module Stella::Data
     end
     
     def random(*args)
-      input, index = *args
+      if Symbol === args.first
+        input, index = *args
+      elsif Array === args.first || args.size == 1
+        input = args.first
+      else
+        input = args
+      end
+        
       Proc.new do
         if @random_value[input]
           value = @random_value[input]
@@ -61,7 +68,13 @@ module Stella::Data
     end
     
     def sequential(*args)
-      input, index = *args
+      if Symbol === args.first
+        input, index = *args
+      elsif Array === args.first || args.size == 1
+        input = args.first
+      else
+        input = args
+      end
       Proc.new do
         if @sequential_value[input]
           value = @sequential_value[input]
@@ -100,7 +113,13 @@ module Stella::Data
     end
     
     def rsequential(*args)
-      input, index = *args
+      if Symbol === args.first
+        input, index = *args
+      elsif Array === args.first || args.size == 1
+        input = args.first
+      else
+        input = args
+      end
       Proc.new do
         if @rsequential_value[input.digest]
           value = @rsequential_value[input.digest]

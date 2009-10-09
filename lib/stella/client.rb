@@ -46,8 +46,7 @@ module Stella
         Benelux.add_thread_tags :retry => counter
         Benelux.add_thread_tags :stella_id => stella_id
         
-        params['__stella'] = stella_id.short
-        headers['X-Stella-ID'] = stella_id.short
+        params['__stella'] = headers['X-Stella-ID']= stella_id[0..10]
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
