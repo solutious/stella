@@ -36,8 +36,9 @@ class Stella::CLI::Definition
   # ----------------------------------------  STELLA GLOBALS  --------
   # ------------------------------------------------------------------
   
-  global :A, :apikey, String, "API Key"
-  global :S, :secret, String, "Secret Key"
+  #global :A, :apikey, String, "API Key"
+  #global :S, :secret, String, "Secret Key"
+  global :p, :pause, Integer, "Seconds to pause before starting test"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color
   end
@@ -118,6 +119,14 @@ class Stella::CLI::Definition
   before do |obj|
     @start = Time.now
     Stella.enable_debug if Drydock.debug?
+    if obj.global.pause
+      obj.global.pause.to_i.times do |i|
+        print "Waiting for %ss" % [(obj.global.pause-i)]
+        sleep 1
+        print "\r" % ''
+      end
+      print "\r%30s\r" % ''
+    end
   end
 
   after do |obj|  
