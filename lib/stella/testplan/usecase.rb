@@ -1,4 +1,4 @@
-
+autoload :CSV, 'csv'
 
 module Stella
 class Testplan
@@ -19,13 +19,15 @@ class Testplan
   #
   class Usecase
     include Gibbler::Complex
+    extend Attic
+    
+    attic :base_path # we don't want gibbler to see this
     
     attr_accessor :desc
     attr_writer :ratio
     
     attr_accessor :requests
     attr_accessor :resources
-    attr_accessor :base_path
     
     class UnknownResource < Stella::Error
       def message; "UnknownResource: #{@obj}"; end
@@ -60,12 +62,17 @@ class Testplan
     # Reads the contents of the file <tt>path</tt> (the current working
     # directory is assumed to be the same directory containing the test plan).
     def read(path)
-      path = File.join(@base_path, path) if @base_path
+      path = File.join(base_path, path) if base_path
       File.read(path)
     end
     
     def list(path)
       read(path).split $/
+    end
+    
+    def csv(path)
+      path = File.join(base_path, path) if base_path
+      CSV.read(path)
     end
     
     def freeze

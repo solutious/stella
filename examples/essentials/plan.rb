@@ -89,7 +89,7 @@ usecase 65, "Simple search" do
   # into an array called :search_terms. The 
   # colon is Ruby's way of defining a symbol.
   #
-  resource :search_terms, list('search_terms.csv')
+  resource :search_terms, list('search_terms.txt')
   
   # Requests are defined with one of the 
   # following methods: get, post, head, delete.

@@ -31,6 +31,8 @@ module Stella
       usecase.requests.each do |req|
         counter += 1
         
+        container.reset_temp_vars
+        
         stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
         uri_obj = URI.parse(req.uri)
@@ -120,7 +122,6 @@ module Stella
       http_client = HTTPClient.new opts
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       http_client.debug_dev = STDOUT if Stella.debug? && Stella.loglev > 3
-      #http_client.set_cookie_store @cookie_file.path
       http_client.protocol_version = "HTTP/1.1"
       http_client
     end
