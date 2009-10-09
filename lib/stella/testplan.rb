@@ -17,8 +17,9 @@ class Testplan
     @desc, @usecases = "Test plan", []
     @testplan_current_ratio = 0
     @stats = Stella::Testplan::Stats.new
-    
+
     unless uris.empty?
+      uris = [uris] unless Array === uris
       usecase = Stella::Testplan::Usecase.new
       usecase.ratio = 1.0
       uris.each do |uri|
