@@ -1,2 +1,5 @@
 
-Stella::Utils.require_glob(STELLA_LIB_HOME, 'stella', 'mixins', '*.rb')
+require 'stella/mixins/time'
+require 'stella/mixins/string'
+require 'stella/mixins/numeric'
+require 'stella/mixins/thread'

@@ -5,13 +5,13 @@ module Stella::Data::HTTP
     include Gibbler::Complex
     include Stella::Data::Helpers
     
-    # A hash containing blocks to be executed depending on the HTTP response status.
-    # The hash keys are numeric HTTP Status Codes. 
-    #
-    #     200 => { ... }
-    #     304 => { ... }
-    #     500 => { ... }
-    #
+      # A hash containing blocks to be executed depending on the HTTP response status.
+      # The hash keys are numeric HTTP Status Codes. 
+      #
+      #     200 => { ... }
+      #     304 => { ... }
+      #     500 => { ... }
+      #
     attr_accessor :response_handler
     
     field :desc

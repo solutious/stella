@@ -22,6 +22,11 @@ require 'tracer'
 module Stella
   extend self
   
+  SLEEP_METRICS = {
+    :create_thread     => 0.001,
+    :check_threads     => 0.3
+  }.freeze unless defined?(SLEEP_METRICS)
+    
   @sysinfo = nil
   @logger  = Drydock::Screen
   @loglev  = 1
@@ -30,6 +35,13 @@ module Stella
   
   class << self
     attr_accessor :loglev, :logger
+  end
+  
+  def sleep(metric)
+    unless SLEEP_METRICS.has_key? metric
+      raise "unknown sleep metric: #{metric}" 
+    end
+    Kernel.sleep SLEEP_METRICS[metric]
   end
   
   # Puts +msg+ to +@logger+

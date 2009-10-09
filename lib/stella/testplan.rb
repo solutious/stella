@@ -5,9 +5,6 @@ module Stella
 class Testplan
   include Gibbler::Complex
   
-  class WackyRatio < Stella::Error
-  end
-  
   attr_accessor :usecases
   attr_accessor :base_path
   attr_accessor :desc
@@ -53,7 +50,7 @@ class Testplan
     if @testplan_current_ratio > 1.0 
       msg = "Usecase ratio cannot be higher than 1.0"
       msg << " (#{@testplan_current_ratio})"
-      raise WackyRatio, msg
+      raise Stella::WackyRatio, msg
     end
   end
   

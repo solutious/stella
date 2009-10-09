@@ -29,8 +29,10 @@ module Stella::Engine
       Stella.li "Generating load...", $/
       Stella.lflush
       
+      @mode = :rolling
+      
       begin
-        execute_test_plan packages, opts[:repetitions]
+        execute_test_plan packages, opts[:repetitions], opts[:duration]
       rescue Interrupt
         Stella.li "Stopping test...", $/
         Stella.abort!
@@ -79,7 +81,7 @@ module Stella::Engine
         when 0..9
           if (opts[:clients] % plan.usecases.size > 0) 
             msg = "Client count does not evenly match usecase count"
-            raise Stella::Testplan::WackyRatio, msg
+            raise Stella::WackyRatio, msg
           else
             (opts[:clients] / plan.usecases.size)
           end
@@ -99,10 +101,10 @@ module Stella::Engine
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
-          Stella.li3 "Creating client ##{index+1} "
           client = Stella::Client.new opts[:hosts].first, index+1
           client.add_observer(self)
           client.enable_nowait_mode 
+          Stella.li4 "Created client #{client.digest.short}"
           ThreadPackage.new(index+1, client, usecase)
         end
         pointer += count
@@ -110,33 +112,77 @@ module Stella::Engine
       packages.compact # TODO: Why one nil element sometimes?
     end
     
-    def execute_test_plan(packages, reps=1)
-      #Thread.ify packages, :threads => packages.size do |package|
-      threads = []
-      packages.each { |package|
-        threads << Thread.new do
-          # This thread will stay on this one track. 
-          Benelux.current_track package.client.gibbler
-          Benelux.add_thread_tags :usecase => package.usecase.digest_cache
-          (1..reps).to_a.each do |rep|
-            Benelux.add_thread_tags :rep =>  rep
-            Stella::Engine::Stress.rescue(package.client.digest_cache) {
+    def execute_test_plan(packages, reps=1, duration=0)
+      time_started = Time.now
+      
+      @threads, @max_clients, @real_reps = [], 0, 0
+      (1..reps).to_a.each { |rep|
+        @real_reps += 1  # Increments when duration is specified.
+        Stella.li3 "*** REPETITION #{@real_reps} of #{reps} ***"
+        packages.each { |package|
+          @threads << Thread.new do
+            c, uc = package.client, package.usecase
+            msg = "THREAD START: client %s: " % [c.digest.short] 
+            msg << "%s:%s (rep: %d)" % [uc.desc, uc.digest.short, @real_reps]
+            Stella.li4 $/, "======== " << msg
+            # This thread will stay on this one track. 
+            Benelux.current_track c.digest
+            Benelux.add_thread_tags :usecase => uc.digest_cache
+          
+            Benelux.add_thread_tags :rep =>  @real_reps
+            Stella::Engine::Stress.rescue(c.digest_cache) {
               break if Stella.abort?
               print '.' if Stella.loglev == 2
-              stats = package.client.execute package.usecase
+              stats = c.execute uc
             }
             Benelux.remove_thread_tags :rep
-            sleep 0.001
+            Benelux.remove_thread_tags :usecase
+            
           end
+          Stella.sleep :create_thread
+          
+          if running_threads.size > @max_clients
+            @max_clients = running_threads.size 
+          end
+          
+          # If a duration was given, we make sure 
+          # to run for only that amount of time.
+          if duration > 0
+            time_elapsed = (Time.now - time_started).to_i
+            msg = "#{time_elapsed} of #{duration} (threads: %d)" % running_threads.size
+            Stella.li3 "*** TIME ELAPSED: #{msg} ***"
+            redo if time_elapsed <= duration 
+            break if time_elapsed >= duration
+          end
+          
+          if @mode == :rolling
+            tries = 0
+            while (reps > 1 || duration > 0) && running_threads.size >= packages.size
+              Stella.sleep :check_threads
+              msg = "#{running_threads.size} (max: #{@max_clients})"
+              Stella.li3 "*** RUNNING THREADS: #{msg} ***"
+              (tries += 1)
+            end
+          end
+        }
         
-          Benelux.remove_thread_tags :usecase
-        
+        if @mode != :rolling && running_threads.size > 0
+          args = [running_threads.size, @max_clients]
+          Stella.li3 "*** WAITING FOR %d THREADS TO FINISH (max: %d) ***" % args
+          @threads.each { |t| t.join } # wait
         end
+
       }
-      threads.each { |t| t.join } # wait
+      
+      if @mode == :rolling && running_threads.size > 0
+        Stella.li3 "*** WAITING FOR THREADS TO FINISH ***"
+        @threads.each { |t| t.join } # wait
+      end
       Stella.li2 $/, $/
     end
-      
+    def running_threads
+      @threads.select { |t| t.status }  # non-false status are still running
+    end
     def generate_report(plan,test_time)
       #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline

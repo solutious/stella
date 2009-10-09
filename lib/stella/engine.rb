@@ -21,7 +21,7 @@ module Stella::Engine
       opts = {
         :hosts          => [],
         :clients        => 1,
-        :duration       => nil,
+        :duration       => 0,
         :nowait         => false,
         :arrival        => nil,
         :repetitions    => 1
@@ -36,6 +36,13 @@ module Stella::Engine
         Stella.li3 "Client limit is #{@@client_limit}"
         opts[:clients] = @@client_limit
       end
+      
+      # Parses 60m -> 3600. See mixins. 
+      if opts[:duration].in_seconds.nil?
+        raise Stella::WackyDuration, opts[:duration] 
+      end
+      
+      opts[:duration] = opts[:duration].in_seconds
       
       Stella.li3 " Hosts: " << opts[:hosts].join(', ')
       opts
