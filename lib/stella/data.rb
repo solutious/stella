@@ -3,6 +3,12 @@ module Stella::Data
     
   module Helpers
     
+    def resource(name)
+      Proc.new do
+        resource name 
+      end
+    end
+    
     def file(*args)
       input = args.size > 1 ? args : args.first
       Proc.new do

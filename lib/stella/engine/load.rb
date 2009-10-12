@@ -68,7 +68,7 @@ module Stella::Engine
     end
     
     def wait_for_reporter
-      Benelux.reporter.wait
+      Benelux.reporter.force_update
     end
     
   protected
@@ -179,7 +179,7 @@ module Stella::Engine
           time_elapsed = (Time.now - time_started).to_i
           msg = "#{time_elapsed} of #{duration} (threads: %d)" % running_threads.size
           Stella.li3 "*** TIME ELAPSED: #{msg} ***"
-          sleep 0.5 and redo if time_elapsed <= duration 
+          redo if time_elapsed <= duration 
           break if time_elapsed >= duration
         end
 
@@ -292,7 +292,7 @@ module Stella::Engine
       
     end
       
-    def update_receive_response(client_id, usecase, uri, req, counter, container)
+    def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li3 '  Client-%s %3d %-6s %-45s' % [client_id.shorter, container.status, req.http_method, uri]
     end

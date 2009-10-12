@@ -10,3 +10,7 @@ class String
   end
   
 end
+
+class MatchData
+  include Gibbler::String
+end

@@ -95,7 +95,7 @@ module Stella
   private
     def send_request(http_client, usecase, meth, uri, req, params, headers, container, counter)
       container.response = http_client.send(meth, uri, params, headers) # booya!
-      update(:receive_response, usecase, uri, req, counter, container)
+      update(:receive_response, usecase, uri, req, params, counter, container)
     end
     
     def update(kind, *args)

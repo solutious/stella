@@ -24,7 +24,7 @@ module Stella
   
   SLEEP_METRICS = {
     :create_thread     => 0.001,
-    :check_threads     => 0.3
+    :check_threads     => 0.0005
   }.freeze unless defined?(SLEEP_METRICS)
     
   @sysinfo = nil

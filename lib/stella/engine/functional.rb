@@ -43,10 +43,15 @@ module Stella::Engine
       Stella.li2 "  %-46s %16s ".bright % [desc, notice]
     end
     
-    def update_receive_response(client_id, usecase, uri, req, counter, container)
+    def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       Stella.li '   %-59s %3d' % [uri, container.status]
       
       Stella.li2 '   ' << container.response.request.header.send(:request_line)
+      
+      Stella.li2 $/, "   Request-Params:"
+      params.each do |pair|
+        Stella.li2 "     %s: %s" % pair
+      end
       
       Stella.li2 $/, "   Request-Headers:"
       container.response.request.header.all.each do |pair|
