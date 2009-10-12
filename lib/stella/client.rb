@@ -17,6 +17,7 @@ module Stella
     
     def initialize(base_uri=nil, client_id=1)
       @base_uri, @client_id = base_uri, client_id
+      
       #@cookie_file = File.new("cookies-#{client_id}", 'w')
       @proxy = OpenStruct.new
     end

@@ -69,7 +69,7 @@ class Stella::CLI < Drydock::Command
       raise Stella::InvalidOption, "Bad path: #{@option.testplan}" 
     end
     @hosts = @argv.collect { |uri|; 
-      uri = 'http://' << uri unless uri.match /^http:\/\//i
+      uri = 'http://' << uri unless uri.match /^https?:\/\//i
       URI.parse uri; 
     }
     if @option.testplan
