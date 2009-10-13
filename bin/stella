@@ -53,7 +53,7 @@ class Stella::CLI::Definition
     Stella.loglev += 1
   end
   global :V, :version, "Display version number" do
-    puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
+    puts "Stella version: #{Stella::VERSION}"
     exit 0
   end
 
