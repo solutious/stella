@@ -24,10 +24,12 @@ class Stella::Client
       # NOTE: It's important to parse the document on every 
       # request because this container is available for the
       # entire life of a usecase. 
-      case @response.header['Content-Type']
-      when ['text/html']
+      case (@response.header['Content-Type'] || []).first
+      when /text\/html/
         Nokogiri::HTML(body)
-      when ['text/yaml']
+      when /text\/xml/
+        Nokogiri::XML(body)
+      when /text\/yaml/
         YAML.load(body)
       end
     end
