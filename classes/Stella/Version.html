@@ -41,9 +41,9 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000128">patch</a></li>
-              <li><a href="#M000127">to_f</a></li>
-              <li><a href="#M000126">to_s</a></li>
+              <li><a href="#M000129">patch</a></li>
+              <li><a href="#M000128">to_f</a></li>
+              <li><a href="#M000127">to_s</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -69,50 +69,50 @@
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>PATCH</td>
                     <td>=</td>
-                    <td class='context-item-value'>'017'.freeze</td>
+                    <td class='context-item-value'>'018'.freeze</td>
                   </tr>
                 </table>
               </div>
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000129'>
+                <a name='M000129'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>patch</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000129-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 13</span>&#x000A;13:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">patch</span>; <span class="ruby-constant">PATCH</span>; <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
               <div class='public-class method' id='method-M000128'>
                 <a name='M000128'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>patch</span>
+                  <span class='name'>to_f</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000128-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 13</span>&#x000A;13:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">patch</span>; <span class="ruby-constant">PATCH</span>; <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000128-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 12</span>&#x000A;12:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_f</span>; <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_f</span>; <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-class method' id='method-M000127'>
                 <a name='M000127'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>to_f</span>
+                  <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000127-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 12</span>&#x000A;12:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_f</span>; <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_f</span>; <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000126'>
-                <a name='M000126'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>to_s</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000126-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 11</span>&#x000A;11:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>; [<span class="ruby-constant">MAJOR</span>, <span class="ruby-constant">MINOR</span>, <span class="ruby-constant">TINY</span>, <span class="ruby-constant">PATCH</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>); <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000127-source'>    <span class="ruby-comment cmt"># File lib/stella/version.rb, line 11</span>&#x000A;11:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>; [<span class="ruby-constant">MAJOR</span>, <span class="ruby-constant">MINOR</span>, <span class="ruby-constant">TINY</span>, <span class="ruby-constant">PATCH</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>); <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
