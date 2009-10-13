@@ -11,15 +11,11 @@ machines do
   
   env :stage do
                            
-    role :app do           
+    role :app do             
+      positions 2      
       user :root           
-      size 'm1.small'                    
+      size 'm1.small'              
     end                    
-                           
-    role :gen do
-      size 'm1.small'        
-    end                    
-
   end  
 
 end
@@ -36,6 +32,8 @@ commands do
   allow :thin
   allow :stella
   allow :rm
+  allow :ulimit
+  
   allow :rackup_path do
     "/usr/lib/ruby/gems/1.8/gems/stella-#{Stella::VERSION}/support/sample_webapp/config.ru"
   end
@@ -48,7 +46,11 @@ routines do
     # rudy -r app -v start
     start do
       remote do
-        thin :d, :l, 'thin.log', :p, 3114, :R, rackup_path, 'start'
+        ulimit :n, '30000'
+        ulimit :n
+        rm 'thin.log'
+        mkdir :p, 'stats'
+        thin :d, :l, 'thin.log', :p, 3114, :R, rackup_path, '--stats', './stats', '--max-conns', 8192, 'start'
       end
     end
     
@@ -61,10 +63,6 @@ routines do
       end
     end
     
-  end
-  
-  role :gen do
-    
     # rudy -v -r gen verify ip-10-251-27-245.ec2.internal:3114
     verify do
       remote do |arg|
@@ -75,12 +73,14 @@ routines do
     # rudy -v -r gen generate ip-10-251-27-245.ec2.internal:3114
     generate do
       remote do |arg|
-        stella :v, 'generate', :c, 200, :d, '30m', "#{arg.first}"
+        ulimit :n, '30000'
+        ulimit :n
+        stella :v, 'generate', :c, 200, :d, '10m', :W, "#{arg.first}"
       end
     end
     
   end
-  
+    
   setup do                     
     after :sysupdate, :installdeps, :install_gem
   end                            
@@ -90,7 +90,11 @@ routines do
                                  
   reboot do                                             
   end
-    
+  
+  install_netperf do
+    #ftp://ftp.netperf.org/netperf/netperf-2.4.5.tar.bz2
+  end
+  
   install_rubyforge do
     remote :root do
       gem_install 'stella', :V
@@ -155,6 +159,7 @@ routines do
       apt_get "install", "build-essential", "git-core"
       apt_get "install", "ruby1.8-dev", "rdoc", "libzlib-ruby", "rubygems"
       apt_get "install", "libfcgi-dev", "libfcgi-ruby1.8"
+      apt_get "install", "joe", "siege", "httperf"
       gem_sources :a, "http://gems.github.com"
       mkdir :p, "/var/lib/gems/1.8/bin" # Doesn't get created, but causes Rubygems to fail
       gem_install "builder", "session"

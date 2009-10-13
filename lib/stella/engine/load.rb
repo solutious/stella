@@ -13,6 +13,7 @@ module Stella::Engine
     
     def run(plan, opts={})
       opts = process_options! plan, opts
+      @threads, @max_clients, @real_reps = [], 0, 0
       
       if Stella.loglev > 1
         Load.timers += [:connect, :create_socket, :query, :socket_gets_first_byte, :get_body]
@@ -121,8 +122,7 @@ module Stella::Engine
     
     def execute_test_plan(packages, reps=1, duration=0)
       time_started = Time.now
-      
-      @threads, @max_clients, @real_reps = [], 0, 0
+
       (1..reps).to_a.each { |rep|
         @real_reps += 1  # Increments when duration is specified.
         Stella.li3 "*** REPETITION #{@real_reps} of #{reps} ***"

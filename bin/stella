@@ -39,6 +39,7 @@ class Stella::CLI::Definition
   #global :A, :apikey, String, "API Key"
   #global :S, :secret, String, "Secret Key"
   global :p, :pause, Integer, "Seconds to pause before starting test"
+  global :E, :engine, String, "Specify a load engine (experimental)"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color
   end
@@ -100,8 +101,6 @@ class Stella::CLI::Definition
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
   command :generate => Stella::CLI
-#  command_alias :generate, :load 
-#  command_alias :generate, :stress 
 
   about "Initialize Stella configuration"
   command :init do

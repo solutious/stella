@@ -29,7 +29,13 @@ class Stella::CLI < Drydock::Command
     [:nowait, :clients, :repetitions, :duration].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    ret = Stella::Engine::Load.run @testplan, opts
+    
+    case @global.engine
+    when "load2"
+      ret = Stella::Engine::Load2.run @testplan, opts
+    else 
+      ret = Stella::Engine::Load.run @testplan, opts
+    end
     @exit_code = (ret ? 0 : 1)
   end
   
