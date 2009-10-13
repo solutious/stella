@@ -52,6 +52,7 @@
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load.rb
+  lib/stella/engine/load2.rb
   lib/stella/exceptions.rb
   lib/stella/guidelines.rb
   lib/stella/mixins.rb
