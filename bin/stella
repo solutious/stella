@@ -77,7 +77,7 @@ class Stella::CLI::Definition
   about "Verify a test plan"
   usage "stella verify [-p path/2/testplan.rb] URI"
   usage "e.g."
-  usage "   $stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
+  usage "   $ stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
   option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
   option :d, :duration, String, "Max duration to run test (ignored)"
