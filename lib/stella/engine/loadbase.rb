@@ -43,6 +43,7 @@ module Stella::Engine
       rescue Interrupt
         Stella.li "Stopping test...", $/
         Stella.abort!
+        @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
       ensure
         Stella.li "Processing statistics...", $/
         Stella.lflush
