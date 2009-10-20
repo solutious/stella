@@ -24,14 +24,15 @@ set :reload           => true
 set :max_listings     => 1000
 
 LISTINGS = [
-  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'  },
-  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto'  },
-  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto'  },
-  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto'  },
-  { :id => 1004, :name => 'Forever and Always Beads', :city => 'Montreal' },
-  { :id => 1005, :name => "Big Al's Flavour Country", :city => 'Montreal' },
-  { :id => 1006, :name => 'Big Time Furniture World', :city => 'Montreal' },
-  { :id => 1007, :name => 'High-End Keyboard Makers', :city => 'Montreal' }
+  { :id => 1000, :name => 'John West Smoked Oysters', :city => 'Toronto'   },
+  { :id => 1001, :name => 'Fire Town Lightning Rods', :city => 'Toronto'   },
+  { :id => 1002, :name => 'Oversized Pen and Ink Co', :city => 'Toronto'   },
+  { :id => 1003, :name => 'The Rathzenburg Brothers', :city => 'Toronto'   },
+  { :id => 1004, :name => 'Forever and Always Beads', :city => 'Montreal'  },
+  { :id => 1005, :name => "Big Al's Flavour Country", :city => 'Montreal'  },
+  { :id => 1006, :name => 'Big Time Furniture World', :city => 'Montreal'  },
+  { :id => 1007, :name => 'High-End Keyboard Makers', :city => 'Montreal'  },
+  { :id => 1009, :name => 'Sarsaparilla Making Bros', :city => 'Lexington' }
 ]
 
 set :listings => LISTINGS.clone
@@ -60,7 +61,6 @@ get '/search/?' do
   params[:what] ||= ''
   params[:where] ||= ''
   @title << " - Search Results"
-  #sleep 0.05
   @listings = filter_name(params[:what], options.listings)
   if !blank?(params[:where])
     @listings = filter_city(params[:where], @listings)
@@ -79,7 +79,6 @@ end
 
 post '/listing/add' do
   @title = "Add a Business"
-  #sleep 0.05
   if blank?(params[:name]) || blank?(params[:city])
     status 500
     @msg = blank?(params[:city]) ? "Must specify city" : "Must specify name"
@@ -110,14 +109,12 @@ end
 
 get '/listing/:id.yaml' do 
   content_type "text/yaml"
-  #sleep 0.05
   listing = filter_id params[:id], options.listings
   listing.to_yaml
 end
 
 get '/listing/:id' do 
   @listings = filter_id(params[:id], options.listings)
-  #sleep 0.05
   redirect '/' if @listings.empty?
   @title = "Business Listing - #{@listings.first[:name]}"
   erb :listings
@@ -125,7 +122,6 @@ end
 
 get '/listings' do
   @listings = options.listings
-  #sleep 0.05
   @title = "Business Listings"
   erb :listings
 end
@@ -134,7 +130,6 @@ get '/listings.yaml' do
   content_type "text/yaml"
   @listings = options.listings
   @title = "Business Listings"
-  #sleep 0.05
   @listings.to_yaml
 end
 
@@ -148,6 +143,7 @@ before do
     @cookie[:location] = ''
     set :listings => LISTINGS.clone
   end
+  sleep 0.05 if params[:enablesleep]
   @cookie[:history].delete params[:what]
   @cookie[:history].unshift params[:what] unless blank?(params[:what])
   @cookie[:history].pop if @cookie[:history].size > 5
