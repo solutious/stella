@@ -5,7 +5,6 @@ module Stella::Engine
     extend Stella::Engine::Load
     extend self
     
-    
     def execute_test_plan(packages, reps=1,duration=0)
       Stella.li2 $/, $/
     end
