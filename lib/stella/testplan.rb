@@ -69,7 +69,7 @@ class Testplan
     ratio, name = args[0], args[1] if args[0].is_a?(Numeric)
     ratio, name = args[1], args[0] if args[0].is_a?(String)
     uc = Stella::Testplan::Usecase.new
-    uc.base_path = @base_path
+    uc.base_path = self.base_path
     uc.instance_eval &blk
     uc.ratio, uc.desc = (ratio || -1).to_f, name
     @testplan_current_ratio += uc.ratio if uc.ratio > 0
