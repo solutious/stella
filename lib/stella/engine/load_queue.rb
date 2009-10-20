@@ -18,6 +18,7 @@ module Stella::Engine
         @threads << Thread.new do
           package = pqueue.pop
           Thread.current[:real_reps] = 0
+          Thread.current[:real_uctime] = Benelux::Stats::Calculator.new
           c, uc = package.client, package.usecase
           Stella.li4 $/, "======== THREAD %s: START" % [c.digest.short]  
 
@@ -25,9 +26,10 @@ module Stella::Engine
           Benelux.current_track c.digest
           Benelux.add_thread_tags :usecase => uc.digest_cache
           
-          uctime = Benelux::Stats::Calculator.new
-          uctime.first_tick
+          Thread.current[:real_uctime].first_tick
+          prev_ptime ||= Time.now
           reps.times { |rep| 
+            break if Stella.abort?
             Thread.current[:real_reps] += 1
             args = [c.digest.short, uc.desc, uc.digest.short, Thread.current[:real_reps]]
             Stella.li4 $/, "======== THREAD %s: %s:%s (rep: %d)" % args
@@ -41,14 +43,23 @@ module Stella::Engine
             }
             Benelux.remove_thread_tags :rep
             
-            uctime.tick
+            Thread.current[:real_uctime].tick
+            time_elapsed = (Time.now - time_started).to_i
+            
+            if Stella.loglev >= 2 &&
+               Thread.current == @threads.first && 
+              (Time.now - prev_ptime).to_i >= 5
+              prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
+              args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
+              Stella.li2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
+              Stella.lflush
+            end
             
             # If a duration was given, we make sure 
             # to run for only that amount of time.
             if duration > 0
-              time_elapsed = (Time.now - time_started).to_i
-              break if (time_elapsed+uctime.mean) >= duration
-              redo if (time_elapsed+uctime.mean) <= duration
+              break if (time_elapsed+Thread.current[:real_uctime].mean) >= duration
+              redo if (time_elapsed+Thread.current[:real_uctime].mean) <= duration
             end
           }
           
