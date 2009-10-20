@@ -1,6 +1,6 @@
 
 module Stella::Engine
-  module Load2
+  module LoadPackage
     extend Stella::Engine::Base
     extend Stella::Engine::Load
     extend self
@@ -20,6 +20,7 @@ module Stella::Engine
             stats = package.client.execute package.usecase
           }
           Benelux.remove_thread_tags :rep
+          # TODO: Decrease sleep time. 
           sleep 0.001
         end
         
@@ -29,7 +30,7 @@ module Stella::Engine
       Stella.li2 $/, $/
     end
     
-    Benelux.add_timer Stella::Engine::Load2, :execute_test_plan
+    Benelux.add_timer Stella::Engine::LoadPackage, :execute_test_plan
     
   end
 end

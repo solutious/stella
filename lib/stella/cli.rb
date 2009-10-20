@@ -31,10 +31,12 @@ class Stella::CLI < Drydock::Command
     end
     
     case @global.engine
-    when "load2"
-      ret = Stella::Engine::Load2.run @testplan, opts
+    when "package"
+      ret = Stella::Engine::LoadPackage.run @testplan, opts
+    when "create" 
+      ret = Stella::Engine::LoadCreate.run @testplan, opts
     else 
-      ret = Stella::Engine::Load.run @testplan, opts
+      ret = Stella::Engine::LoadQueue.run @testplan, opts
     end
     @exit_code = (ret ? 0 : 1)
   end
