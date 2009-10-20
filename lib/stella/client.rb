@@ -56,15 +56,15 @@ module Stella
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
           
           Benelux.add_thread_tags :status => container.status
-          Benelux.timeline.add_count :request_header_size, container.response.request.header.dump.size
-          Benelux.timeline.add_count :request_content_size, container.response.request.body.content.size
-          Benelux.timeline.add_count :response_headers_size, container.response.header.dump.size
-          Benelux.timeline.add_count :response_content_size, container.response.body.content.size
+          Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
+          Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
+          Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
+          Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
           ret = execute_response_handler container, req
           Benelux.remove_thread_tags :status
            
         rescue => ex
-          Benelux.timeline.add_count :failed, 1
+          Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
           next
         end

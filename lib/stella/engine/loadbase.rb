@@ -47,11 +47,14 @@ module Stella::Engine
         Stella.li "Processing statistics...", $/
         Stella.lflush
         
+        Benelux.update_global_timeline
+
         bt = Benelux.timeline
+        tt = Benelux.thread_timeline
         
-        test_time = bt.stats.group(:execute_test_plan).mean
+        test_time = tt.stats.group(:execute_test_plan).mean
         generate_report plan, test_time
-        report_time = bt.stats.group(:generate_report).mean
+        report_time = tt.stats.group(:generate_report).mean
         
         # Here is the calcualtion for the number of
         # Benelux assets created for each request:

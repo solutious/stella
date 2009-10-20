@@ -77,7 +77,7 @@
 # Delano (@solutious.com) 
 #
 
-desc "Business Finder Testplan"
+desc "Product Finder"
 
 usecase 65, "Simple search" do
   
