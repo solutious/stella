@@ -2,7 +2,7 @@
   s.name = "stella"
   s.rubyforge_project = 'stella'
   s.version = "0.7.0.020"
-  s.summary = "Stella: Perform load tests on your web applications with beauty and brute strength."
+  s.summary = "Blame Stella for breaking your web applications."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
   s.email = "delano@solutious.com"

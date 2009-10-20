@@ -1,6 +1,6 @@
 = Stella - 0.7 PREVIEW
 
-<b>Perform load tests on your web applications with beauty and brute strength.</b>
+<b>Blame Stella for breaking your web applications.</b>
 
 == Features
 
@@ -24,8 +24,8 @@ This is an early preview of Stella. The following features are still under devel
     # by running a single user functional test.
     $ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/
     
-    # Generate requests using the same test plan. 
-    $ stella generate -p examples/basic/plan.rb http://stellaaahhhh.com/
+    # Generate load using the same test plan. 
+    $ stella generate -p examples/basic/plan.rb -c 50 http://stellaaahhhh.com/
     
     
 == Test Plan Example
@@ -47,8 +47,8 @@ Test plans are defined in the Ruby programming language. This makes it possible 
   
       get "/search", "Search Results" do
         wait 2..5
-        param :what  => 'Big Al'
-        param :where => 'Toronto'
+        param :what  => 'Sarsaparilla'
+        param :where => 'Lexington'
         response 200 do
           listing = doc.css('div.listing').first
           set :lid, listing['id'].match(/(\d+)/)[0]
@@ -99,7 +99,6 @@ Get it in one of the following ways:
 == Credits
 
 * Delano Mandelbaum (http://solutious.com)
-* Threadify (C) Ara T Howard (http://codeforpeople.com/)
 
 
 == Thanks 
