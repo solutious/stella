@@ -1005,6 +1005,8 @@ private
 
   def do_get_header(req, res, sess)
     res.version, res.status, res.reason, headers = sess.get_header
+    ## NOTE: If you re-enable, investigate whether it 
+    ## should call Benelux.timeline.add_count instead
     #Benelux.thread_timeline.add_count :response_header_size, res.header
     headers.each do |key, value|
       res.header.add(key, value)

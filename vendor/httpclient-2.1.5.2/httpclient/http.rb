@@ -456,8 +456,10 @@ module HTTP
           dev << header
         end
         
-        #Benelux.thread_timeline.add_count :data_sent, header_size, :type => :header
-        #Benelux.thread_timeline.add_count :data_sent, body_size, :type => :body
+        ## NOTE: If you re-enable, investigate whether it 
+        ## should call Benelux.timeline.add_count instead
+        ##Benelux.thread_timeline.add_count :data_sent, header_size, :type => :header
+        ##Benelux.thread_timeline.add_count :data_sent, body_size, :type => :body
         
         dev
       end

@@ -16,7 +16,7 @@ module Stella::Engine
       @threads, @max_clients, @real_reps = [], 0, 0
       
       if Stella.loglev > 1
-        Load.timers += [:connect, :create_socket, :query, :socket_gets_first_byte, :get_body]
+        Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
       end
@@ -47,14 +47,20 @@ module Stella::Engine
         Stella.li "Processing statistics...", $/
         Stella.lflush
         
-        wait_for_reporter
+        #wait_for_reporter
         
         tt = Benelux.thread_timeline
         test_time = tt.stats.group(:execute_test_plan).mean
         
         generate_report plan, test_time
         
-        #p Benelux.timeline
+        bt = Benelux.timeline
+        
+        # Here is the calcualtion for the number of
+        # Benelux assets created for each request:
+        # 
+        #     [5*2*REQ+6, 5*1*REQ+3, 13*REQ]
+        # 
         
         Stella.li "Summary: "
         Stella.li "  max clients: %d" % @max_clients
