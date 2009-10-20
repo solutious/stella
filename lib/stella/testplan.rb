@@ -4,9 +4,11 @@ require 'stella/testplan/stats'
 module Stella
 class Testplan
   include Gibbler::Complex
+  extend Attic
+  
+  attic :base_path
   
   attr_accessor :usecases
-  attr_accessor :base_path
   attr_accessor :desc
   attr_reader :stats
   
