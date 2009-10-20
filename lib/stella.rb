@@ -14,10 +14,6 @@ autoload :Gibbler, 'gibbler/aliases'
 autoload :Attic, 'attic'
 
 require 'benelux'
-require 'threadify'
-require 'tracer'
-
-
 
 module Stella
   extend self

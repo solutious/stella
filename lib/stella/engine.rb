@@ -60,12 +60,11 @@ module Stella::Engine
     def update_request_error(*args) raise end
     
   end
-
-  Stella::Utils.require_glob(STELLA_LIB_HOME, 'stella', 'engine', 'functional.rb')
-  Stella::Utils.require_glob(STELLA_LIB_HOME, 'stella', 'engine', 'load.rb')
-  Stella::Utils.require_glob(STELLA_LIB_HOME, 'stella', 'engine', 'load2.rb')
-
-
+  
+  autoload :Functional, 'stella/engine/functional'
+  autoload :Load, 'stella/engine/load'
+  autoload :Load2, 'stella/engine/load2'
+  
   # These timers are interesting from a reporting perspective.
   Benelux.add_counter    Stella::Client, :execute_response_handler
   Benelux.add_timer          HTTPClient, :do_request
