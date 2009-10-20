@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.7.0.019"
+  s.version = "0.7.0.020"
   s.summary = "Stella: Perform load tests on your web applications with beauty and brute strength."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -15,9 +15,9 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'benelux',    '>= 0.4.3'
+  s.add_dependency 'benelux',    '>= 0.4.4'
   s.add_dependency 'drydock',    '>= 0.6.8'
-  s.add_dependency 'gibbler',    '>= 0.7.0'
+  s.add_dependency 'gibbler',    '>= 0.7.1'
   s.add_dependency 'sysinfo',    '>= 0.7.0'
   s.add_dependency 'storable',   '>= 0.5.8'
   s.add_dependency 'nokogiri'
