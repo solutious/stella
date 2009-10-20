@@ -47,14 +47,11 @@ module Stella::Engine
         Stella.li "Processing statistics...", $/
         Stella.lflush
         
-        #wait_for_reporter
-        
-        tt = Benelux.thread_timeline
-        test_time = tt.stats.group(:execute_test_plan).mean
-        
-        generate_report plan, test_time
-        
         bt = Benelux.timeline
+        
+        test_time = bt.stats.group(:execute_test_plan).mean
+        generate_report plan, test_time
+        report_time = bt.stats.group(:generate_report).mean
         
         # Here is the calcualtion for the number of
         # Benelux assets created for each request:
@@ -66,16 +63,11 @@ module Stella::Engine
         Stella.li "  max clients: %d" % @max_clients
         Stella.li "  repetitions: %d" % @real_reps
         Stella.li "    test time: %10.2fs" % test_time
-        Stella.li "    wait time: %10.2fs" % tt.stats.group(:wait_for_reporter).mean
-        Stella.li "    post time: %10.2fs" % tt.stats.group(:generate_report).mean
+        Stella.li "    post time: %10.2fs" % report_time
         Stella.li $/
       end
       
       # errors?
-    end
-    
-    def wait_for_reporter
-      Benelux.reporter.force_update
     end
     
   protected
@@ -340,8 +332,7 @@ module Stella::Engine
     Benelux.add_timer Stella::Engine::Load, :build_thread_package
     Benelux.add_timer Stella::Engine::Load, :execute_test_plan
     Benelux.add_timer Stella::Engine::Load, :generate_report
-    Benelux.add_timer Stella::Engine::Load, :wait_for_reporter
-    
+        
   end
 end
 

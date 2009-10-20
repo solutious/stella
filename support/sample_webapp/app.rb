@@ -50,7 +50,7 @@ end
 
 get '/' do
   @title << " - Search"
-  sleep 0.05
+  #sleep 0.05
   erb :search_form
 end
 
@@ -60,7 +60,7 @@ get '/search/?' do
   params[:what] ||= ''
   params[:where] ||= ''
   @title << " - Search Results"
-  sleep 0.05
+  #sleep 0.05
   @listings = filter_name(params[:what], options.listings)
   if !blank?(params[:where])
     @listings = filter_city(params[:where], @listings)
@@ -79,7 +79,7 @@ end
 
 post '/listing/add' do
   @title = "Add a Business"
-  sleep 0.05
+  #sleep 0.05
   if blank?(params[:name]) || blank?(params[:city])
     status 500
     @msg = blank?(params[:city]) ? "Must specify city" : "Must specify name"
@@ -110,14 +110,14 @@ end
 
 get '/listing/:id.yaml' do 
   content_type "text/yaml"
-  sleep 0.05
+  #sleep 0.05
   listing = filter_id params[:id], options.listings
   listing.to_yaml
 end
 
 get '/listing/:id' do 
   @listings = filter_id(params[:id], options.listings)
-  sleep 0.05
+  #sleep 0.05
   redirect '/' if @listings.empty?
   @title = "Business Listing - #{@listings.first[:name]}"
   erb :listings
@@ -125,7 +125,7 @@ end
 
 get '/listings' do
   @listings = options.listings
-  sleep 0.05
+  #sleep 0.05
   @title = "Business Listings"
   erb :listings
 end
@@ -134,7 +134,7 @@ get '/listings.yaml' do
   content_type "text/yaml"
   @listings = options.listings
   @title = "Business Listings"
-  sleep 0.05
+  #sleep 0.05
   @listings.to_yaml
 end
 

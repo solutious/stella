@@ -7,7 +7,7 @@ module Stella::Engine
     
     
     def execute_test_plan(packages, reps=1,duration=0)
-      
+      require 'threadify'
       Thread.ify packages, :threads => packages.size do |package|
         # This thread will stay on this one track. 
         Benelux.current_track package.client.gibbler
@@ -29,6 +29,7 @@ module Stella::Engine
       Stella.li2 $/, $/
     end
     
+    Benelux.add_timer Stella::Engine::Load2, :execute_test_plan
     
   end
 end
