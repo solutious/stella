@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.7.0.020"
+  s.version = "0.7.1"
   s.summary = "Blame Stella for breaking your web applications."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -15,7 +15,7 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'benelux',    '>= 0.4.4'
+  s.add_dependency 'benelux',    '>= 0.5.0'
   s.add_dependency 'drydock',    '>= 0.6.8'
   s.add_dependency 'gibbler',    '>= 0.7.1'
   s.add_dependency 'sysinfo',    '>= 0.7.0'
@@ -76,6 +76,7 @@
   support/useragents.txt
   tryouts/01_numeric_mixins_tryouts.rb
   tryouts/12_digest_tryouts.rb
+  tryouts/proofs/thread_queue.rb
   vendor/httpclient-2.1.5.2/httpclient.rb
   vendor/httpclient-2.1.5.2/httpclient/auth.rb
   vendor/httpclient-2.1.5.2/httpclient/cacert.p7s
