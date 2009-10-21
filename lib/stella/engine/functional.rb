@@ -44,7 +44,9 @@ module Stella::Engine
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
-      Stella.li '   %-59s %3d' % [uri, container.status]
+      msg = '   %-59s ' % [uri]
+      msg << container.status.to_s if Stella.loglev == 1
+      Stella.li msg
       
       Stella.li2 '   ' << container.response.request.header.send(:request_line)
       
@@ -57,6 +59,8 @@ module Stella::Engine
       container.response.request.header.all.each do |pair|
         Stella.li2 "     %s: %s" % pair
       end
+      
+      Stella.li2 $/, "   Response-Status: %3d" % [container.status]
       
       Stella.li2 $/, "   Response-Headers:"
       container.headers.all.each do |pair|
