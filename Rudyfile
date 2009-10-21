@@ -3,7 +3,7 @@
 machines do
   
   region :'us-east-1' do
-    ami 'ami-e348af8a'               # Alestic Debian 5.0, 32-bit (US)
+    ami 'ami-212ccf48'               # Stella Debian 5.0, 32-bit (US)
   end
   region :'eu-west-1' do
     ami 'ami-6ecde51a'               # Alestic Debian 5.0, 32-bit (EU)
@@ -22,6 +22,12 @@ machines do
       size 'm1.large'
       ami 'ami-f0f61599'
     end
+    
+    role :demo do
+      user :root
+      size 'm1.small'
+    end
+    
   end  
   
 
@@ -40,9 +46,11 @@ commands do
   allow :stella
   allow :rm
   allow :ulimit
-  
+  allow :ruby19, "/usr/local/bin/ruby"
+  allow :gem19_install, "/usr/local/bin/gem", "install"
   allow :rackup_path do
-    "/usr/lib/ruby/gems/1.8/gems/stella-#{Stella::VERSION}/support/sample_webapp/config.ru"
+    v = [Stella::VERSION::MAJOR, Stella::VERSION::MINOR, Stella::VERSION::TINY].join('.')
+    "/usr/lib/ruby/gems/1.8/gems/stella-#{v}/support/sample_webapp/config.ru"
   end
 end
 
@@ -53,9 +61,9 @@ routines do
     # rudy -r app -v start
     start do
       remote do
-        ulimit :n, '30000'
-        ulimit :n
-        rm 'thin.log'
+        #ulimit :n, '30000'
+        #ulimit :n
+        rm :f, 'thin.log'
         mkdir :p, 'stats'
         thin :d, :l, 'thin.log', :p, 3114, :R, rackup_path, '--stats', './stats', '--max-conns', 8192, 'start'
       end
@@ -69,28 +77,33 @@ routines do
         ps 'ux'
       end
     end
-    
-    # rudy -v -r gen verify ip-10-251-27-245.ec2.internal:3114
-    verify do
-      remote do |arg|
-        stella :v, 'verify', "#{arg.first}"
-      end
-    end
-    
-    # rudy -v -r gen generate ip-10-251-27-245.ec2.internal:3114
-    generate do
-      remote do |arg|
-        ulimit :n, '30000'
-        ulimit :n
-        stella :v, 'generate', :c, 200, :d, '10m', :W, "#{arg.first}"
-      end
-    end
-    
+
   end
-    
+  
+  
+  # rudy -v -r gen verify ip-10-251-27-245.ec2.internal:3114
+  verify do
+    remote do |arg|
+      file_upload 'examples/essentials/plan.rb'
+      file_upload 'examples/essentials/search_terms.txt'
+      file_upload 'examples/essentials/logo.png'
+      stella :v, 'verify', :p, 'plan.rb', "#{arg.first}"
+    end
+  end
+  
+  # rudy -v -r gen generate ip-10-251-27-245.ec2.internal:3114
+  generate do
+    remote do |arg|
+      file_upload 'examples/essentials/plan.rb'
+      file_upload 'examples/essentials/search_terms.txt'
+      file_upload 'examples/essentials/logo.png'
+      stella :v, 'generate', :p, 'plan.rb', :c, 1, :d, '1m', :W, "#{arg.first}"
+    end
+  end
+
+
   setup do  
-    before :startup                   
-    after :sysupdate, :installdeps, :install_gem
+    after :sysupdate, :installdeps, :install_ruby19
   end                            
                                  
   shutdown do                                          
@@ -105,6 +118,7 @@ routines do
   
   install_rubyforge do
     remote :root do
+      gem19_install 'stella', :V
       gem_install 'stella', :V
     end
   end
@@ -139,6 +153,17 @@ routines do
     
   end
   
+  install_zlib do
+    remote do
+      wget "http://www.zlib.net/zlib-1.2.3.tar.gz"
+      tar :x, :z, :f, "zlib-1.2.3.tar.gz"
+      cd "zlib-1.2.3"
+      configure '--prefix=/usr/local'
+      make
+      make "install"
+    end
+  end
+  
   installdeps do
     remote :root do
       gem_install "test-spec", "rspec", "camping", "fcgi", "memcache-client"
@@ -148,12 +173,23 @@ routines do
     end
   end
   
-  install_ruby19 do
+  install_jruby do
     remote do
-      wget 'ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.1-p243.tar.bz2'
+      #wget 'http://jruby.kenai.com/downloads/1.4.0RC2/jruby-bin-1.4.0RC2.tar.gz'
+      #tar :x, :z, :f, 'jruby-bin-1.4.0RC2.tar.gz'
+      mv 'jruby-1.4.0RC2', '/usr/jruby'
+    end
+  end
+  
+  install_ruby19 do
+    before :install_zlib
+    remote do
+      apt_get "install", "libssl-dev", "libreadline5-dev", "zlib1g-dev"
+      #wget 'ftp://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.1-p243.tar.bz2'
+      rm :r, :f, 'ruby-1.9.1-p243'
       tar :x, :j, :v, :f, 'ruby-1.9.1-p243.tar.bz2'
       cd 'ruby-1.9.1-p243'
-      configure '--prefix=/usr/local', '--enable-shared'
+      configure '--prefix=/usr/local'
       make
       make 'install'
     end
