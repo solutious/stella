@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.rdoc [Stella: Perform load tests on your web applications with beauty and brute strength.]</title>
+    <title>File: README.rdoc [Blame Stella for breaking your web applications.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2009-10-13 09:05:53 -0400</span>
+          <span class='datetime'>2009-10-21 12:12:27 -0400</span>
         </div>
       </div>
       <div id='content'>
@@ -39,8 +39,8 @@
           <div id='description'>
             <h1><a href="../classes/Stella.html">Stella</a> - 0.7 PREVIEW</h1>
             <p>
-            <b>Perform load tests on your web applications with beauty and brute
-            strength.</b>
+            <b>Blame <a href="../classes/Stella.html">Stella</a> for breaking your web
+            applications.</b>
             </p>
             <h2>Features</h2>
             <ul>
@@ -71,7 +71,7 @@
             </li>
             </ul>
             <h2>Usage Example</h2>
-            <pre># Verify a test plan is defined correctly&#x000A;# by running a single user functional test.&#x000A;$ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Generate requests using the same test plan.&#x000A;$ stella generate -p examples/basic/plan.rb http://stellaaahhhh.com/</pre>
+            <pre># Verify a test plan is defined correctly&#x000A;# by running a single user functional test.&#x000A;$ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Generate load using the same test plan.&#x000A;$ stella generate -p examples/basic/plan.rb -c 50 http://stellaaahhhh.com/</pre>
             <h2>Test Plan Example</h2>
             <p>
             Test plans are defined in the Ruby programming language. This makes it
@@ -80,7 +80,7 @@
             realistic load. In this example, 65% of virtual users will execute the
             first usecase and 35% will execute the second.
             </p>
-            <pre>usecase 65, &quot;Simple search&quot; do&#x000A;&#x000A;  get &quot;/&quot;, &quot;Homepage&quot; do&#x000A;    wait 1..5&#x000A;    response 200 do&#x000A;      status                       # =&gt; 200&#x000A;      headers['Content-Type']      # =&gt; ['text/html']&#x000A;      body                         # =&gt; &lt;html&gt;...&#x000A;      doc                          # =&gt; Nokigiri::HTML::Document&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/search&quot;, &quot;Search Results&quot; do&#x000A;    wait 2..5&#x000A;    param :what  =&gt; 'Big Al'&#x000A;    param :where =&gt; 'Toronto'&#x000A;    response 200 do&#x000A;      listing = doc.css('div.listing').first&#x000A;      set :lid, listing['id'].match(/(\d+)/)[0]&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/listing/:lid&quot; do           # URIs can contain variables.&#x000A;    desc &quot;Selected listing&quot;        # This one will be replaced by&#x000A;    wait 1..8                      # the one stored in the previous&#x000A;  end                              # request.&#x000A;&#x000A;end&#x000A;&#x000A;usecase 35, &quot;YAML API&quot; do&#x000A;&#x000A;  resource :listing_ids, list('ids.csv')&#x000A;&#x000A;  get &quot;/listing/:lid.yaml&quot; do&#x000A;    desc &quot;Select listing&quot;&#x000A;    param :lid =&gt; random(:listing_ids)&#x000A;    response 200 do&#x000A;      repeat 5&#x000A;    end&#x000A;  end&#x000A;&#x000A;end</pre>
+            <pre>usecase 65, &quot;Simple search&quot; do&#x000A;&#x000A;  get &quot;/&quot;, &quot;Homepage&quot; do&#x000A;    wait 1..5&#x000A;    response 200 do&#x000A;      status                       # =&gt; 200&#x000A;      headers['Content-Type']      # =&gt; ['text/html']&#x000A;      body                         # =&gt; &lt;html&gt;...&#x000A;      doc                          # =&gt; Nokigiri::HTML::Document&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/search&quot;, &quot;Search Results&quot; do&#x000A;    wait 2..5&#x000A;    param :what  =&gt; 'Sarsaparilla'&#x000A;    param :where =&gt; 'Lexington'&#x000A;    response 200 do&#x000A;      listing = doc.css('div.listing').first&#x000A;      set :lid, listing['id'].match(/(\d+)/)[0]&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get &quot;/listing/:lid&quot; do           # URIs can contain variables.&#x000A;    desc &quot;Selected listing&quot;        # This one will be replaced by&#x000A;    wait 1..8                      # the one stored in the previous&#x000A;  end                              # request.&#x000A;&#x000A;end&#x000A;&#x000A;usecase 35, &quot;YAML API&quot; do&#x000A;&#x000A;  resource :listing_ids, list('ids.csv')&#x000A;&#x000A;  get &quot;/listing/:lid.yaml&quot; do&#x000A;    desc &quot;Select listing&quot;&#x000A;    param :lid =&gt; random(:listing_ids)&#x000A;    response 200 do&#x000A;      repeat 5&#x000A;    end&#x000A;  end&#x000A;&#x000A;end</pre>
             <p>
             See examples/ for more.
             </p>
@@ -107,10 +107,6 @@
             <h2>Credits</h2>
             <ul>
             <li>Delano Mandelbaum (<a href="http://solutious.com">solutious.com</a>)
-            
-            </li>
-            <li><a href="../classes/Threadify.html">Threadify</a> (C) Ara T Howard (<a
-            href="http://codeforpeople.com/">codeforpeople.com/</a>)
             
             </li>
             </ul>

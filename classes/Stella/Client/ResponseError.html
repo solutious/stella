@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Client::ResponseError [Stella: Perform load tests on your web applications with beauty and brute strength.]</title>
+    <title>: Stella::Client::ResponseError [Blame Stella for breaking your web applications.]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,41 +45,41 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000150">new</a></li>
+              <li><a href="#M000159">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000151">message</a></li>
+              <li><a href="#M000160">message</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000150'>
-                <a name='M000150'>      </a>
+              <div class='public-class method' id='method-M000159'>
+                <a name='M000159'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(k, m=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000150-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000159-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000150-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 216</span>&#x000A;216:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;217:         <span class="ruby-ivar">@kind</span>, <span class="ruby-ivar">@msg</span> = <span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>&#x000A;218:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000159-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 216</span>&#x000A;216:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;217:         <span class="ruby-ivar">@kind</span>, <span class="ruby-ivar">@msg</span> = <span class="ruby-identifier">k</span>, <span class="ruby-identifier">m</span>&#x000A;218:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000151'>
-                <a name='M000151'>      </a>
+              <div class='public-instance method' id='method-M000160'>
+                <a name='M000160'>      </a>
                 <div class='synopsis'>
                   <span class='name'>message</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000151-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000160-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000151-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 219</span>&#x000A;219:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>&#x000A;220:         <span class="ruby-identifier">msg</span> = <span class="ruby-node">&quot;#{@kind}&quot;</span>&#x000A;221:         <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: #{@msg}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@msg</span>.<span class="ruby-identifier">nil?</span>&#x000A;222:         <span class="ruby-identifier">msg</span>&#x000A;223:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000160-source'>     <span class="ruby-comment cmt"># File lib/stella/client.rb, line 219</span>&#x000A;219:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>&#x000A;220:         <span class="ruby-identifier">msg</span> = <span class="ruby-node">&quot;#{@kind}&quot;</span>&#x000A;221:         <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: #{@msg}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@msg</span>.<span class="ruby-identifier">nil?</span>&#x000A;222:         <span class="ruby-identifier">msg</span>&#x000A;223:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
