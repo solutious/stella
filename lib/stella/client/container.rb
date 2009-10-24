@@ -3,6 +3,7 @@
 class Stella::Client
   
   class Container
+    MUTEX = Mutex.new
     
     attr_accessor :usecase
     attr_accessor :response
@@ -11,6 +12,34 @@ class Stella::Client
       @usecase, @resources = usecase, {}
       @base_path = usecase.base_path
       @random_value = {}
+    end
+    
+    @sequential_offset = {}
+    @rsequential_offset = {}
+    class << self
+      def sequential_offset(resid, max)
+        MUTEX.synchronize do
+          @sequential_offset[resid] ||= -1  
+          if @sequential_offset[resid] >= max
+            @sequential_offset[resid] = 0 
+          else
+            @sequential_offset[resid] += 1
+          end
+          @sequential_offset[resid]
+        end
+      end
+      
+      def rsequential_offset(resid, max)
+        MUTEX.synchronize do
+          @rsequential_offset[resid] ||= max+1
+          if @rsequential_offset[resid] <= 0
+            @rsequential_offset[resid] = max
+          else
+            @rsequential_offset[resid] -= 1
+          end
+          @rsequential_offset[resid]
+        end
+      end
     end
     
     # This is used to handle custom exception in usecases.

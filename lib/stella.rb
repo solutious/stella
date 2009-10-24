@@ -52,7 +52,9 @@ module Stella
   def le(*msg); @logger.puts "  " << msg.join("#{$/}  ").color(:red); end
   # Puts +msg+ to +@logger+ if +Rudy.debug?+ returns true
   def ld(*msg)
-    @logger.puts "D:  " << msg.join("#{$/}D:  ") if debug?
+    if debug?
+      @logger.puts "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+    end
   end
   
   def sysinfo

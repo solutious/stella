@@ -20,7 +20,7 @@ machines do
     role :gen do
       user :root
       size 'm1.large'
-      ami 'ami-f0f61599'
+      ami 'ami-7133d018'
     end
     
     role :demo do
@@ -175,8 +175,8 @@ routines do
   
   install_jruby do
     remote do
-      #wget 'http://jruby.kenai.com/downloads/1.4.0RC2/jruby-bin-1.4.0RC2.tar.gz'
-      #tar :x, :z, :f, 'jruby-bin-1.4.0RC2.tar.gz'
+      wget 'http://jruby.kenai.com/downloads/1.4.0RC2/jruby-bin-1.4.0RC2.tar.gz'
+      tar :x, :z, :f, 'jruby-bin-1.4.0RC2.tar.gz'
       mv 'jruby-1.4.0RC2', '/usr/jruby'
     end
   end

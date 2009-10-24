@@ -129,7 +129,7 @@ module Stella
     def prepare_params(container, params)
       newparams = {}
       params.each_pair do |n,v|
-        Stella.ld "PREPARE PARAM: #{n}"
+        #Stella.ld "PREPARE PARAM: #{n}"
         v = container.instance_eval &v if v.is_a?(Proc)
         newparams[n] = v
       end
@@ -137,7 +137,7 @@ module Stella
     end
     
     def prepare_headers(container, headers)
-      Stella.ld "PREPARE HEADERS: #{headers}"
+      #Stella.ld "PREPARE HEADERS: #{headers}"
       headers = container.instance_eval &headers if headers.is_a?(Proc)
       headers
     end

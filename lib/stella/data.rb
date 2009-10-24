@@ -73,6 +73,106 @@ module Stella::Data
       end
     end
     
+    ###
+    ### Disabled b/c it doesn't work anymore since a  
+    ### new Container is created for every repetition. 
+    ###
+    ##def sequential(*args)
+    ##  if Symbol === args.first
+    ##    input, index = *args
+    ##  elsif Array === args.first || args.size == 1
+    ##    input = args.first
+    ##  else
+    ##    input = args
+    ##  end
+    ##  Proc.new do
+    ##    if @sequential_value[input]
+    ##      value = @sequential_value[input]
+    ##    else
+    ##      value = case input.class.to_s
+    ##      when "Symbol"
+    ##        ret = resource(input)
+    ##        ret
+    ##      when "Array"
+    ##        input
+    ##      when "Range"
+    ##        input.to_a
+    ##      when "Proc"
+    ##        input.call
+    ##      end
+    ##      digest = value.object_id
+    ##      @sequential_offset ||= {}
+    ##      @sequential_offset[digest] ||= 0
+    ##      Stella.ld "SEQVALUES: #{@sequential_offset.object_id} #{value.inspect} #{@sequential_offset[digest]}"
+    ##      if value.is_a?(Array)
+    ##        size = value.size
+    ##        @sequential_offset[digest] = 0 if @sequential_offset[digest] >= size
+    ##        value = value[ @sequential_offset[digest] ] 
+    ##        Stella.li "WHAY: #{value} (#{@sequential_offset[digest]})"
+    ##        @sequential_offset[digest] += 1
+    ##      end
+    ##      Stella.ld "SELECTED: #{value}"
+    ##      @sequential_value[input] = value
+    ##    end
+    ##    # The resource may be an Array of Arrays (e.g. a CSV file)
+    ##    if value.is_a?(Array) && !index.nil?
+    ##      value = value[ index ] 
+    ##      Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
+    ##    end
+    ##    value
+    ##  end
+    ##end
+    ##
+    ##def rsequential(*args)
+    ##  if Symbol === args.first
+    ##    input, index = *args
+    ##  elsif Array === args.first || args.size == 1
+    ##    input = args.first
+    ##  else
+    ##    input = args
+    ##  end
+    ##  Proc.new do
+    ##    if @rsequential_value[input.digest]
+    ##      value = @rsequential_value[input.digest]
+    ##    else
+    ##      value = case input.class.to_s
+    ##      when "Symbol"
+    ##        ret = resource(input)
+    ##        ret
+    ##      when "Array"
+    ##        input
+    ##      when "Range"
+    ##        input.to_a
+    ##      when "Proc"
+    ##        input.call
+    ##      end
+    ##      digest = value.object_id
+    ##      @rsequential_offset ||= {}
+    ##      Stella.ld "RSEQVALUES: #{input} #{value.inspect}"
+    ##      if value.is_a?(Array)
+    ##        size = value.size
+    ##        @rsequential_offset[digest] ||= size-1 
+    ##        @rsequential_offset[digest] = size-1 if @rsequential_offset[digest] < 0
+    ##        value = value[ @rsequential_offset[digest] ] 
+    ##        @rsequential_offset[digest] -= 1
+    ##      end
+    ##      Stella.ld "SELECTED: #{value}"
+    ##      @rsequential_value[input.digest] = value
+    ##    end
+    ##    
+    ##    # The resource may be an Array of Arrays (e.g. a CSV file)
+    ##    if value.is_a?(Array) && !index.nil?
+    ##      value = value[ index ] 
+    ##      Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
+    ##    end
+    ##    
+    ##    value
+    ##  end
+    ##end
+    
+    
+    
+    # NOTE: This is global across all users
     def sequential(*args)
       if Symbol === args.first
         input, index = *args
@@ -96,17 +196,13 @@ module Stella::Data
           when "Proc"
             input.call
           end
-          digest = value.gibbler
-          @sequential_offset ||= {}
-          @sequential_offset[digest] ||= 0
-          Stella.ld "SEQVALUES: #{input} #{value.inspect} #{@sequential_offset[digest]}"
+          digest = value.object_id
           if value.is_a?(Array)
-            size = value.size
-            @sequential_offset[digest] = 0 if @sequential_offset[digest] >= size
-            value = value[ @sequential_offset[digest] ] 
-            @sequential_offset[digest] += 1
+            index = Container.sequential_offset(digest, value.size-1)
+            value = value[ index ] 
           end
-          Stella.ld "SELECTED: #{value}"
+          Stella.ld "SELECTED(SEQ): #{value} #{index} #{input} #{digest}"
+          # I think this needs to be updated for global_sequential:
           @sequential_value[input] = value
         end
         # The resource may be an Array of Arrays (e.g. a CSV file)
@@ -118,6 +214,7 @@ module Stella::Data
       end
     end
     
+    # NOTE: This is global across all users
     def rsequential(*args)
       if Symbol === args.first
         input, index = *args
@@ -141,17 +238,13 @@ module Stella::Data
           when "Proc"
             input.call
           end
-          digest = value.gibbler
-          @rsequential_offset ||= {}
-          @rsequential_offset[digest] ||= value.size-1 rescue 1
-          Stella.ld "RSEQVALUES: #{input} #{value.inspect} #{@rsequential_offset[digest]}"
+          digest = value.object_id
           if value.is_a?(Array)
-            size = value.size
-            @rsequential_offset[digest] = size-1 if @rsequential_offset[digest] < 0
-            value = value[ @rsequential_offset[digest] ] 
-            @rsequential_offset[digest] -= 1
+            index = Container.rsequential_offset(digest, value.size-1)
+            value = value[ index ] 
           end
-          Stella.ld "SELECTED: #{value}"
+          Stella.ld "SELECTED(RSEQ): #{value} #{index} #{input} #{digest}"
+          # I think this needs to be updated for global_rsequential:
           @rsequential_value[input.digest] = value
         end
         
@@ -164,7 +257,6 @@ module Stella::Data
         value
       end
     end
-    
   end
       
 end
