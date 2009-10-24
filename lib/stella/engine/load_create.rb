@@ -7,6 +7,8 @@ module Stella::Engine
     
     
     def execute_test_plan(packages, reps=1, duration=0)
+      @mode = :rolling
+      
       time_started = Time.now
 
       (1..reps).to_a.each { |rep|

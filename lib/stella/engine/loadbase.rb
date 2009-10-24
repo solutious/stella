@@ -36,8 +36,6 @@ module Stella::Engine
       Stella.li "Generating requests #{msg}...", $/
       Stella.lflush
       
-      @mode = :rolling
-      
       begin
         execute_test_plan packages, opts[:repetitions], opts[:duration]
       rescue Interrupt
@@ -49,7 +47,7 @@ module Stella::Engine
         Stella.lflush
         
         Benelux.update_global_timeline
-
+        
         bt = Benelux.timeline
         tt = Benelux.thread_timeline
         

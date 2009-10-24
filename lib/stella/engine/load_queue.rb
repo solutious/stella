@@ -4,7 +4,7 @@ module Stella::Engine
     extend Stella::Engine::Base
     extend Stella::Engine::Load
     extend self
-    
+    ROTATE_TIMELINE = 15
     def execute_test_plan(packages, reps=1,duration=0)
       time_started = Time.now
       
@@ -46,13 +46,15 @@ module Stella::Engine
             Thread.current[:real_uctime].tick
             time_elapsed = (Time.now - time_started).to_i
             
-            if Stella.loglev >= 2 &&
-               Thread.current == @threads.first && 
-              (Time.now - prev_ptime).to_i >= 5
+            if (Time.now - prev_ptime).to_i >= ROTATE_TIMELINE
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
-              args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
-              Stella.li2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
-              Stella.lflush
+              if Stella.loglev >= 2 && Thread.current == @threads.first 
+                args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
+                Stella.li2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
+                Stella.lflush
+              end
+              
+              Thread.current.rotate_timeline
             end
             
             # If a duration was given, we make sure 
