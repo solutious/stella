@@ -54,20 +54,33 @@ module Stella
 
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
-          
-          Benelux.add_thread_tags :status => container.status
-          Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
-          Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
-          Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
-          Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
-          ret = execute_response_handler container, req
-          Benelux.remove_thread_tags :status
-           
         rescue => ex
           Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
           next
         end
+        
+        Benelux.add_thread_tags :status => container.status
+        Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
+        Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
+        Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
+        Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
+        
+        ret = nil
+        begin 
+          handler = find_response_handler container, req
+          if handler.nil?
+            if container.status >= 400
+              Benelux.thread_timeline.add_count :failed, 1 
+            end
+          else
+            ret = execute_response_handler handler, container, req
+          end
+        rescue => ex
+          next
+        end
+        
+        Benelux.remove_thread_tags :status
         
         Stella.lflush
         
@@ -191,14 +204,20 @@ module Stella
     
     # Find the appropriate response handler by executing the
     # HTTP response status against the configured handlers. 
-    # If several match, the first one is used. 
-    def execute_response_handler(container, req)
+    # If several match, the first one is returned.
+    def find_response_handler(container, req)
       handler = nil
       req.response.each_pair do |regex,h|
         Stella.ld "HANDLER REGEX: #{regex.to_s} (#{container.status})"
         regex = /#{regex}/ unless regex.is_a? Regexp
         handler = h and break if container.status.to_s =~ regex
       end
+      handler
+    end
+    
+    
+    def execute_response_handler(handler, container, req)
+      return if handler.nil?
       ret = nil
       unless handler.nil?
         begin
