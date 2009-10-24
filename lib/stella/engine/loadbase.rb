@@ -229,7 +229,8 @@ module Stella::Engine
       
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li3 '  Client-%s %3d %-6s %-45s' % [client_id.shorter, container.status, req.http_method, uri]
+      args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
+      Stella.li3 '  Client-%s %3d %-6s %s %s' % args
     end
     
     def update_execute_response_handler(client_id, req, container)

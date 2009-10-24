@@ -1,6 +1,12 @@
 STELLA, CHANGES
 
 
+#### 0.7.2 (2009-10-??) ###############################
+
+* CHANGE: sequential and rsequential resourcing is now global
+  across all clients. 
+
+
 #### 0.7.1 (2009-10-21) ###############################
 
 NOTE: Complete rewrite. Features include:
