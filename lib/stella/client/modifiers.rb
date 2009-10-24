@@ -15,5 +15,6 @@ class Stella::Client
       @message = msg
     end
   end
+  class Fail < Quit; end
   
 end

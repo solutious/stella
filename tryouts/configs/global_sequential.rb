@@ -14,4 +14,5 @@ usecase "Global Sequential" do
     param :b => rsequential([66,55,44])
     param :c => rsequential([99,88,77])
   end
+  
 end

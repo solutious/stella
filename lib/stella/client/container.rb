@@ -84,6 +84,7 @@ class Stella::Client
     def set(n, v); @resources[n] = v; end
     def wait(t); sleep t; end
     def quit(msg=nil); Quit.new(msg); end
+    def fail(msg=nil); Fail.new(msg); end
     def repeat(t=1); Repeat.new(t); end
   end
   

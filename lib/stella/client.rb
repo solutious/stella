@@ -51,36 +51,22 @@ module Stella
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
-
+        
+        ret = nil
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
+          Benelux.add_thread_tags :status => container.status
+          Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
+          Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
+          Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
+          Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
+          ret = execute_response_handler container, req
         rescue => ex
           Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
+          Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next
         end
-        
-        Benelux.add_thread_tags :status => container.status
-        Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
-        Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
-        Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
-        Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
-        
-        ret = nil
-        begin 
-          handler = find_response_handler container, req
-          if handler.nil?
-            if container.status >= 400
-              Benelux.thread_timeline.add_count :failed, 1 
-            end
-          else
-            ret = execute_response_handler handler, container, req
-          end
-        rescue => ex
-          next
-        end
-        
-        Benelux.remove_thread_tags :status
         
         Stella.lflush
         
@@ -89,13 +75,20 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
+          Benelux.remove_thread_tags :status
           update(:repeat_request, counter, ret.times+1)
           redo if counter <= ret.times
         when "Stella::Client::Quit"
+          Benelux.remove_thread_tags :status
           update(:quit_usecase, ret.message)
           break
+        when "Stella::Client::Fail"  
+          Benelux.thread_timeline.add_count :failed, 1
+          update(:fail_request, ret.message)
         end
-      
+        
+        Benelux.remove_thread_tags :status
+        
         counter = 0 # reset
       end
       Benelux.remove_thread_tags :retry, :request, :stella_id
@@ -216,17 +209,19 @@ module Stella
     end
     
     
-    def execute_response_handler(handler, container, req)
-      return if handler.nil?
+    def execute_response_handler(container, req)
       ret = nil
-      unless handler.nil?
-        begin
-          ret = container.instance_eval &handler
-          update(:execute_response_handler, req, container)
-        rescue => ex
-          update(:error_execute_response_handler, ex, req, container)
-          Stella.ld ex.message, ex.backtrace
-        end
+      handler = find_response_handler container, req
+      if handler.nil?
+        Benelux.thread_timeline.add_count :failed, 1 if container.status >= 400
+        return
+      end
+      begin
+        ret = container.instance_eval &handler
+        update(:execute_response_handler, req, container)
+      rescue => ex
+        update(:error_execute_response_handler, ex, req, container)
+        Stella.ld ex.message, ex.backtrace
       end
       ret
     end
