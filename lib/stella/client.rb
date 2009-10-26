@@ -36,11 +36,11 @@ module Stella
         
         stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
-        uri_obj = URI.parse(req.uri)
+        
         params = prepare_params(container, req.params)
         headers = prepare_headers(container, req.headers)
-        uri = build_request_uri uri_obj, params, container
-        raise NoHostDefined, uri_obj if uri.host.nil? || uri.host.empty?
+        uri = build_request_uri req.uri, params, container
+        raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         
         Benelux.add_thread_tags :request => req.digest_cache
@@ -50,7 +50,7 @@ module Stella
         params['__stella'] = headers['X-Stella-ID']= stella_id[0..10]
         
         meth = req.http_method.to_s.downcase
-        Stella.ld "#{req.http_method}: " << "#{uri_obj.to_s} " << params.inspect
+        Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
         
         ret = nil
         begin
@@ -157,7 +157,16 @@ module Stella
     # if necessary and replaces all variables with literal values.
     # If no replacement value can be found, the variable will remain. 
     def build_request_uri(uri, params, container)
-      uri = URI::HTTP.build({:path => uri}) unless uri.is_a?(URI::Generic)
+      # We call uri.clone b/c we modify uri. 
+      uri.clone.scan(/:([a-z_]+)/i) do |instances|
+        instances.each do |varname|
+          val = find_replacement_value(varname, params, container)
+          #Stella.ld "FOUND: #{val}"
+          uri.gsub! /:#{varname}/, val.to_s unless val.nil?
+        end
+      end
+      
+      uri = URI.parse(uri)
       
       if uri.host.nil? && base_uri.nil?
         Stella.abort!
@@ -169,15 +178,7 @@ module Stella
       uri.port = base_uri.port if uri.port.nil?
       uri.path ||= ''
       uri.path.gsub! /\/$/, ''  # Don't double up on the first slash
-      # We call req.uri again because we need  
-      # to modify request_uri inside the loop. 
-      uri.path.clone.scan(/:([a-z_]+)/i) do |instances|
-        instances.each do |varname|
-          val = find_replacement_value(varname, params, container)
-          #Stella.ld "FOUND: #{val}"
-          uri.path.gsub! /:#{varname}/, val.to_s unless val.nil?
-        end
-      end
+      
       uri
     end
     
@@ -190,7 +191,9 @@ module Stella
       #Stella.ld "REPLACE: #{name}"
       #Stella.ld "PARAMS: #{params.inspect}"
       #Stella.ld "IVARS: #{container.instance_variables}"
-      value = params[name.to_sym] 
+      if params.has_key?(name.to_sym)
+        value = params.delete name.to_sym
+      end
       value = container.resource name.to_sym if value.nil?
       value
     end 
