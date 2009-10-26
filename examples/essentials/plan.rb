@@ -214,7 +214,7 @@ usecase 25, "YAML API" do
     # vuser will have its own copy of the Array and
     # iterate through it independently.
     #
-    param :lid => rsequential(:listing_ids)
+    param :lid => sequential(:listing_ids)
     
     # We can use response blocks to affect behaviour 
     # the user. Here we specify that every virtual

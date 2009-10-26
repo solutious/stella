@@ -182,8 +182,8 @@ module Stella::Data
         input = args
       end
       Proc.new do
-        if @sequential_value[input]
-          value = @sequential_value[input]
+        if @sequential_value[input.object_id]
+          value = @sequential_value[input.object_id]
         else
           value = case input.class.to_s
           when "Symbol"
@@ -203,7 +203,7 @@ module Stella::Data
           end
           Stella.ld "SELECTED(SEQ): #{value} #{index} #{input} #{digest}"
           # I think this needs to be updated for global_sequential:
-          @sequential_value[input] = value
+          @sequential_value[input.object_id] = value
         end
         # The resource may be an Array of Arrays (e.g. a CSV file)
         if value.is_a?(Array) && !index.nil?
@@ -215,48 +215,49 @@ module Stella::Data
     end
     
     # NOTE: This is global across all users
-    def rsequential(*args)
-      if Symbol === args.first
-        input, index = *args
-      elsif Array === args.first || args.size == 1
-        input = args.first
-      else
-        input = args
-      end
-      Proc.new do
-        if @rsequential_value[input.digest]
-          value = @rsequential_value[input.digest]
-        else
-          value = case input.class.to_s
-          when "Symbol"
-            ret = resource(input)
-            ret
-          when "Array"
-            input
-          when "Range"
-            input.to_a
-          when "Proc"
-            input.call
-          end
-          digest = value.object_id
-          if value.is_a?(Array)
-            index = Container.rsequential_offset(digest, value.size-1)
-            value = value[ index ] 
-          end
-          Stella.ld "SELECTED(RSEQ): #{value} #{index} #{input} #{digest}"
-          # I think this needs to be updated for global_rsequential:
-          @rsequential_value[input.digest] = value
-        end
-        
-        # The resource may be an Array of Arrays (e.g. a CSV file)
-        if value.is_a?(Array) && !index.nil?
-          value = value[ index ] 
-          Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
-        end
-        
-        value
-      end
-    end
+    ## TODO: Broken??
+    ##def rsequential(*args)
+    ##  if Symbol === args.first
+    ##    input, index = *args
+    ##  elsif Array === args.first || args.size == 1
+    ##    input = args.first
+    ##  else
+    ##    input = args
+    ##  end
+    ##  Proc.new do
+    ##    if @rsequential_value[input.object_id]
+    ##      value = @rsequential_value[input.object_id]
+    ##    else
+    ##      value = case input.class.to_s
+    ##      when "Symbol"
+    ##        ret = resource(input)
+    ##        ret
+    ##      when "Array"
+    ##        input
+    ##      when "Range"
+    ##        input.to_a
+    ##      when "Proc"
+    ##        input.call
+    ##      end
+    ##      digest = value.object_id
+    ##      if value.is_a?(Array)
+    ##        index = Container.rsequential_offset(digest, value.size-1)
+    ##        value = value[ index ] 
+    ##      end
+    ##      Stella.ld "SELECTED(RSEQ): #{value} #{index} #{input} #{digest}"
+    ##      # I think this needs to be updated for global_rsequential:
+    ##      @rsequential_value[input.object_id] = value
+    ##    end
+    ##    
+    ##    # The resource may be an Array of Arrays (e.g. a CSV file)
+    ##    if value.is_a?(Array) && !index.nil?
+    ##      value = value[ index ] 
+    ##      Stella.ld "SELECTED INDEX: #{index} #{value.inspect} #{input} #{digest}"
+    ##    end
+    ##    
+    ##    value
+    ##  end
+    ##end
   end
       
 end
