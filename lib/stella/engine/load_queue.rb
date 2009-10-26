@@ -74,17 +74,16 @@ module Stella::Engine
       data_dumper = Thread.new do
         prev_ptime = Time.now
         loop do
-          Stella.li '!'
           break if Stella.abort?
           break if @threads.select { |t| (!t.nil? && t.status) }.empty?
-          if (Time.now - prev_ptime).to_i >= (ROTATE_TIMELINE * 1)
+          if (Time.now - prev_ptime).to_i >= (ROTATE_TIMELINE * 4)
             Benelux.update_global_timeline
             Stella.li $/, [:logger, (Time.now - prev_ptime).to_i, Benelux.timeline.size].inspect
             prev_ptime = Time.now
             ##TODO: Dump to file
             ##Benelux.timeline.clear
           end
-          sleep ROTATE_TIMELINE
+          sleep 5
         end
         
       end

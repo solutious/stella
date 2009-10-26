@@ -44,30 +44,36 @@ module Stella::Engine
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
-      msg = ' %6s %-54s ' % [req.http_method, uri]
+      msg = '   %s %-54s ' % [req.http_method, uri]
       msg << container.status.to_s if Stella.loglev == 1
       Stella.li msg
       
-      Stella.li2 '   ' << container.response.request.header.send(:request_line)
-      
-      Stella.li2 $/, "   Request-Params:"
-      params.each do |pair|
-        Stella.li2 "     %s: %s" % pair
+      unless req.http_method == 'POST'
+        Stella.li2 $/, "   Params:"
+        params.each do |pair|
+          Stella.li2 "   %s: %s" % pair
+        end
       end
       
-      Stella.li2 $/, "   Request-Headers:"
+      Stella.li2 $/, '   ' << container.response.request.header.send(:request_line)
+      
       container.response.request.header.all.each do |pair|
-        Stella.li2 "     %s: %s" % pair
+        Stella.li2 "   %s: %s" % pair
       end
       
-      Stella.li2 $/, "   Response-Status: %3d" % [container.status]
+      if req.http_method == 'POST'
+        cont = container.response.request.body.content
+        if String === cont
+          Stella.li2 ('   ' << cont.split($/).join("#{$/}    "))
+        end
+      end
       
-      Stella.li2 $/, "   Response-Headers:"
+      resh = container.response.header
+      Stella.li2 $/, '   HTTP/%s %3d %s' % [resh.http_version, resh.status_code, resh.reason_phrase]
       container.headers.all.each do |pair|
-        Stella.li2 "     %s: %s" % pair
+        Stella.li2 "   %s: %s" % pair
       end
-      Stella.li3 $/, "   Response-Content:"
-      Stella.li3 container.body.empty? ? '     [empty]' : container.body
+      Stella.li3 container.body.empty? ? '   [empty]' : container.body
       Stella.li2 $/
     end
     
