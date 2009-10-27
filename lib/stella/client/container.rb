@@ -8,7 +8,10 @@ class Stella::Client
     attr_accessor :usecase
     attr_accessor :response
     attr_reader :resources
-    def initialize(usecase)
+    attr_reader :client_id
+    
+    def initialize(client_id, usecase)
+      @client_id = client_id
       @usecase, @resources = usecase, {}
       @base_path = usecase.base_path
       @random_value = {}

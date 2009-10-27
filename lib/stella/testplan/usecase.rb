@@ -67,7 +67,7 @@ class Testplan
       Stella.ld "READING FILE: #{path}"
       File.read(path)
     end
-    
+      
     def list(path)
       read(path).split $/
     end

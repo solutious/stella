@@ -27,7 +27,7 @@ module Stella
       
       http_client = create_http_client
       stats = {}
-      container = Container.new(usecase)
+      container = Container.new(self.digest_cache, usecase)
       counter = 0
       usecase.requests.each do |req|
         counter += 1
@@ -144,6 +144,7 @@ module Stella
     
     def prepare_resources(container, resources)
       h = prepare_runtime_hash container, resources
+      # p [container.client_id.shorter, h]
       container.resources.merge! h
     end
     
@@ -152,6 +153,7 @@ module Stella
       newh = {}
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
+        
         v = container.instance_eval &v if v.is_a?(Proc)
         newh[n] = v 
       end
