@@ -7,6 +7,7 @@ class Testplan
   extend Attic
   
   attic :base_path
+  attic :plan_path
   
   attr_accessor :usecases
   attr_accessor :desc
@@ -36,6 +37,7 @@ class Testplan
     conf = File.read path
     plan = Stella::Testplan.new
     plan.base_path = File.dirname path
+    plan.plan_path = path
     # eval so the DSL code can be executed in this namespace.
     plan.instance_eval conf, path 
     plan
@@ -71,6 +73,7 @@ class Testplan
     ratio, name = args[1], args[0] if args[0].is_a?(String)
     uc = Stella::Testplan::Usecase.new
     uc.base_path = self.base_path
+    uc.plan_path = self.plan_path
     uc.instance_eval &blk
     uc.ratio, uc.desc = (ratio || -1).to_f, name
     @testplan_current_ratio += uc.ratio if uc.ratio > 0

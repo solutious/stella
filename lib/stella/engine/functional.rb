@@ -63,6 +63,14 @@ module Stella::Engine
         cont = container.response.request.body.content
         if String === cont
           Stella.li2 ('   ' << cont.split($/).join("#{$/}    "))
+        elsif HTTP::Message::Body::Parts === cont
+          cont.parts.each do |part|
+            if File === part
+              Stella.li2 "<#{part.path}>"
+            else
+              Stella.li2 part
+            end
+          end
         end
       end
       

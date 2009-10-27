@@ -22,6 +22,7 @@ class Testplan
     extend Attic
     
     attic :base_path # we don't want gibbler to see this
+    attic :plan_path
     
     attr_accessor :desc
     attr_writer :ratio
