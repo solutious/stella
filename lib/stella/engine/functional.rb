@@ -44,7 +44,7 @@ module Stella::Engine
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
-      msg = '   %s %-54s ' % [req.http_method, uri]
+      msg = '  %-6s %-53s ' % [req.http_method, uri]
       msg << container.status.to_s if Stella.loglev == 1
       Stella.li msg
       

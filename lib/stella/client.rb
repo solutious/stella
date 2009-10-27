@@ -37,8 +37,11 @@ module Stella
         stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
         
+        prepare_resources(container, req.resources)
+        
         params = prepare_params(container, req.params)
         headers = prepare_headers(container, req.headers)
+        
         uri = build_request_uri req.uri, params, container
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
@@ -132,21 +135,23 @@ module Stella
       http_client
     end
     
-    def prepare_params(container, params)
-      newparams = {}
-      params.each_pair do |n,v|
-        #Stella.ld "PREPARE PARAM: #{n}"
-        v = container.instance_eval &v if v.is_a?(Proc)
-        newparams[n] = v
-      end
-      newparams
+    def prepare_resources(container, resources)
+      h = prepare_runtime_hash container, resources
+      container.resources.merge! h
     end
     
-    def prepare_headers(container, headers)
+    # Process resource values from the request object
+    def prepare_runtime_hash(container, hashobj)
+      newh = {}
       #Stella.ld "PREPARE HEADERS: #{headers}"
-      headers = container.instance_eval &headers if headers.is_a?(Proc)
-      headers
+      hashobj.each_pair do |n,v|
+        v = container.instance_eval &v if v.is_a?(Proc)
+        newh[n] = v 
+      end
+      newh
     end
+    alias_method :prepare_headers, :prepare_runtime_hash
+    alias_method :prepare_params, :prepare_runtime_hash
     
     # Testplan URIs can be relative or absolute. Either one can
     # contain variables in the form <tt>:varname</tt>, as in:

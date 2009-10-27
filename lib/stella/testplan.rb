@@ -37,7 +37,7 @@ class Testplan
     plan = Stella::Testplan.new
     plan.base_path = File.dirname path
     # eval so the DSL code can be executed in this namespace.
-    plan.instance_eval conf
+    plan.instance_eval conf, path 
     plan
   end
   

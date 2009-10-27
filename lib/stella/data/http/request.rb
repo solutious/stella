@@ -32,6 +32,7 @@ module Stella::Data::HTTP
       @uri = uri_str
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
+      @resources = {}
       @wait = 0
       @desc = "Request"
       @body = Stella::Data::HTTP::Body.new
@@ -59,6 +60,14 @@ module Stella::Data::HTTP
       @headers
     end
     alias_method :header, :headers
+    
+    # Set a resource key value pair in the get, post block.
+    # These will be process later in Stella::Client
+    def set(*args)
+      @resources.merge! args.first unless args.empty?
+      @resources
+    end
+    alias_method :resources, :set
     
     def params(*args)
       @params.merge! args.first unless args.empty?
