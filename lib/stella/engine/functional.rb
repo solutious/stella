@@ -90,7 +90,7 @@ module Stella::Engine
     end
     
     def update_quit_usecase client_id, msg
-      Stella.li4 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+      Stella.li "  QUIT   %s" % [msg]
     end
     
     

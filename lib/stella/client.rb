@@ -37,6 +37,8 @@ module Stella
         stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
         
+        # This is for the values that were "set"
+        # in the part before the response body.
         prepare_resources(container, req.resources)
         
         params = prepare_params(container, req.params)
@@ -59,10 +61,15 @@ module Stella
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
           Benelux.add_thread_tags :status => container.status
-          Benelux.thread_timeline.add_count :request_header_size, container.response.request.header.dump.size
-          Benelux.thread_timeline.add_count :request_content_size, container.response.request.body.content.size
-          Benelux.thread_timeline.add_count :response_headers_size, container.response.header.dump.size
-          Benelux.thread_timeline.add_count :response_content_size, container.response.body.content.size
+          res = container.response
+          [
+            [:request_header_size, res.request.header.dump.size],
+            [:request_content_size, res.request.body.content.size],
+            [:response_headers_size, res.header.dump.size],
+            [:response_content_size, res.body.content.size]
+          ].each do |att|
+            Benelux.thread_timeline.add_count att[0], att[1]
+          end
           ret = execute_response_handler container, req
         rescue => ex
           Benelux.thread_timeline.add_count :failed, 1
