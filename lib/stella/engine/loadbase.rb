@@ -130,6 +130,11 @@ module Stella::Engine
     def generate_report(plan,test_time)
       #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
+      global_stats = global_timeline.stats.group(:do_request).merge
+      if global_stats.n == 0
+        Stella.ld "No stats"
+        return
+      end
       
       Stella.li $/, " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.digest_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
@@ -189,7 +194,7 @@ module Stella::Engine
       end
       
       Stella.li ' ' << " %-66s ".att(:reverse) % 'Total:'
-      stats = global_timeline.stats.group(:do_request).merge
+      
       failed = global_timeline.stats.group(:failed)
       respgrp = global_timeline.stats.group(:execute_response_handler)
       resst = respgrp.tag_values(:status)
@@ -198,8 +203,8 @@ module Stella::Engine
         size = respgrp[:status => status].size
         statusi << [status, size]
       end
-      Stella.li  '      %-30s %d' % ['Total requests', stats.n]
-      success = stats.n - failed.n
+      Stella.li  '      %-30s %d' % ['Total requests', global_stats.n]
+      success = global_stats.n - failed.n
       Stella.li  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
       statusi.each do |pair|
         Stella.li2 '        %-28s %s: %d' % ['', *pair]
@@ -229,6 +234,7 @@ module Stella::Engine
       desc = "#{usecase.desc} > #{req.desc}"
       args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
       Stella.li3 '  Client-%s %3d %-6s %s %s' % args
+      Stella.ld '  Client-%s %3d %s' % [client_id.shorter, container.status, container.body]
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -238,14 +244,14 @@ module Stella::Engine
       desc = "#{container.usecase.desc} > #{req.desc}"
       Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.li3 ex.backtrace
+      Stella.li ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.li $/ if Stella.loglev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.li3 ex.backtrace
+      Stella.li ex.backtrace
     end
 
     def update_quit_usecase client_id, msg
