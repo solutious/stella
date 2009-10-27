@@ -48,11 +48,9 @@ module Stella::Engine
       msg << container.status.to_s if Stella.loglev == 1
       Stella.li msg
       
-      unless req.http_method == 'POST'
-        Stella.li2 $/, "   Params:"
-        params.each do |pair|
-          Stella.li2 "   %s: %s" % pair
-        end
+      Stella.li2 $/, "   Params:"
+      params.each do |pair|
+        Stella.li2 "     %s: %s" % pair
       end
       
       Stella.li2 $/, '   ' << container.response.request.header.send(:request_line)
