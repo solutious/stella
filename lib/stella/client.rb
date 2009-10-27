@@ -172,7 +172,7 @@ module Stella
       # We call uri.clone b/c we modify uri. 
       uri.clone.scan(/:([a-z_]+)/i) do |instances|
         instances.each do |varname|
-          val = find_replacement_value(varname, params, container)
+          val = find_replacement_value(varname, params, container, base_uri)
           #Stella.ld "FOUND: #{val}"
           uri.gsub! /:#{varname}/, val.to_s unless val.nil?
         end
@@ -198,12 +198,14 @@ module Stella
     # This method looks at the request parameters and then at the 
     # usecase's resource hash for a replacement value. 
     # If not found, returns nil. 
-    def find_replacement_value(name, params, container)
+    def find_replacement_value(name, params, container, base_uri)
       value = nil
       #Stella.ld "REPLACE: #{name}"
       #Stella.ld "PARAMS: #{params.inspect}"
       #Stella.ld "IVARS: #{container.instance_variables}"
-      if params.has_key?(name.to_sym)
+      if name.to_sym == :HOSTNAME && !base_uri.nil?
+        value = base_uri.host 
+      elsif params.has_key?(name.to_sym)
         value = params.delete name.to_sym
       end
       value = container.resource name.to_sym if value.nil?

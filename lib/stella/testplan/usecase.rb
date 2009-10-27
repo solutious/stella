@@ -63,6 +63,7 @@ class Testplan
     # directory is assumed to be the same directory containing the test plan).
     def read(path)
       path = File.join(base_path, path) if base_path
+      Stella.ld "READING FILE: #{path}"
       File.read(path)
     end
     
@@ -72,6 +73,7 @@ class Testplan
     
     def csv(path)
       path = File.join(base_path, path) if base_path
+      Stella.ld "READING CSV: #{path}"
       CSV.read(path)
     end
     

@@ -58,6 +58,7 @@ class Testplan
   
   # make sure all clients share identical test plans
   def freeze
+    Stella.ld "FREEZE TESTPLAN: #{desc}"
     @usecases.each { |uc| uc.freeze }
     super
     self

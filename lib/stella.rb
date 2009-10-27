@@ -54,6 +54,7 @@ module Stella
   def ld(*msg)
     if debug?
       @logger.puts "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+      Stella.lflush
     end
   end
   
