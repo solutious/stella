@@ -9,6 +9,32 @@ module Stella::Data
       end
     end
     
+    # Can include glob
+    #
+    # e.g.
+    #    random_file('avatar*')
+    def random_file(*args)
+      input = args.size > 1 ? args : args.first
+      Proc.new do
+        value = case input.class.to_s
+        when "String"
+          Stella.ld "FILE: #{input}"
+          path = File.exists?(input) ? input : File.join(@base_path, input)
+          files = Dir.glob(path)
+          path = files[ rand(files.size) ]
+          Stella.ld "Creating file object: #{path}"
+          File.new(path)
+        when "Proc"
+          input.call
+        else
+          input
+        end
+        raise Stella::Testplan::Usecase::UnknownResource, input if value.nil?
+        Stella.ld "FILE: #{value}"
+        value
+      end
+    end
+    
     def file(*args)
       input = args.size > 1 ? args : args.first
       Proc.new do
