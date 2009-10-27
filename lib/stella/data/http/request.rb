@@ -56,7 +56,10 @@ module Stella::Data::HTTP
     alias_method :sleep, :wait
     
     def headers(*args)
-      @headers.merge! args.first unless args.empty?
+      unless args.empty?
+        h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
+        @headers.merge! h unless h.empty?
+      end
       @headers
     end
     alias_method :header, :headers
@@ -64,13 +67,19 @@ module Stella::Data::HTTP
     # Set a resource key value pair in the get, post block.
     # These will be process later in Stella::Client
     def set(*args)
-      @resources.merge! args.first unless args.empty?
+      unless args.empty?
+        h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
+        @resources.merge! h unless h.empty?
+      end
       @resources
     end
     alias_method :resources, :set
     
     def params(*args)
-      @params.merge! args.first unless args.empty?
+      unless args.empty?
+        h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
+        @params.merge! h unless h.empty?
+      end
       @params
     end
     alias_method :param, :params

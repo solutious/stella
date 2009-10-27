@@ -81,7 +81,10 @@ class Stella::Client
     def headers; @response.header; end
       alias_method :header, :headers
     def status; @response.status; end
-    def set(n, v); @resources[n] = v; end
+    def set(*args)
+      h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
+      @resources.merge! h
+    end
     def wait(t); sleep t; end
     def quit(msg=nil); Quit.new(msg); end
     def fail(msg=nil); Fail.new(msg); end
