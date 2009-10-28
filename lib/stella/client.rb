@@ -65,7 +65,7 @@ module Stella
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
         
-        ret = nil
+        ret, asset_duration = nil, 0
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
           Benelux.add_thread_tags :status => container.status
@@ -79,6 +79,16 @@ module Stella
             Benelux.thread_timeline.add_count att[0], att[1]
           end
           ret = execute_response_handler container, req
+          
+          asset_start = Time.now
+          container.assets.each do |uri|
+            Benelux.add_thread_tags :asset => uri
+            a = http_client.get uri
+            Stella.li3 "   FETCH ASSET: #{uri} #{a.status}"
+            Benelux.remove_thread_tags :asset
+          end
+          asset_duration = Time.now - asset_start
+          
         rescue => ex
           Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
@@ -88,7 +98,12 @@ module Stella
         
         Stella.lflush
         
-        run_sleeper(req.wait) if req.wait && !nowait?
+        # The time it took to download the assets can
+        # be removed from the specified wait time. 
+        if req.wait > 0 && !nowait? && (req.wait - asset_duration > 0)
+          Stella.ld "WAIT ADJUSTED FROM %.1f TO: %.1f" % [req.wait, (req.wait - asset_duration)]
+          run_sleeper(req.wait - asset_duration)
+        end
         
         # TODO: consider throw/catch
         case ret.class.to_s

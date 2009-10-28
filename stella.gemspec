@@ -76,6 +76,8 @@
   support/useragents.txt
   tryouts/01_numeric_mixins_tryouts.rb
   tryouts/12_digest_tryouts.rb
+  tryouts/configs/failed_requests.rb
+  tryouts/configs/global_sequential.rb
   tryouts/proofs/thread_queue.rb
   vendor/httpclient-2.1.5.2/httpclient.rb
   vendor/httpclient-2.1.5.2/httpclient/auth.rb

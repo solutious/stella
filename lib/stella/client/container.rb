@@ -9,11 +9,13 @@ class Stella::Client
     attr_accessor :response
     attr_reader :resources
     attr_reader :client_id
+    attr_reader :assets
     
     def initialize(client_id, usecase)
       @client_id = client_id
       @usecase, @resources = usecase, {}
       @base_path = usecase.base_path
+      @assets = []
       @random_value = {}
     end
     
@@ -50,6 +52,10 @@ class Stella::Client
     #
     def self.const_missing(custom_error)
       ResponseError.new custom_error
+    end
+    
+    def fetch(*args)
+      @assets.push *args.flatten
     end
     
     def parse_template(t)

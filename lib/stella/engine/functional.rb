@@ -79,7 +79,7 @@ module Stella::Engine
       container.headers.all.each do |pair|
         Stella.li2 "   %s: %s" % pair
       end
-      Stella.li3 container.body.empty? ? '   [empty]' : container.body
+      Stella.li4 container.body.empty? ? '   [empty]' : container.body
       Stella.li2 $/
     end
     
