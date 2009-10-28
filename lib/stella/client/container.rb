@@ -68,6 +68,8 @@ class Stella::Client
         Nokogiri::XML(body)
       when /text\/yaml/
         YAML.load(body)
+      when /application\/json/
+        JSON.load(body)
       end
     end
     

@@ -11,6 +11,7 @@ STELLA, CHANGES
 * ADDED: Support for HTTP Basic authentication
 * ADDED: Templating for resources parameters and headers. 
 * ADDED: Built-in variable :HOSTNAME can be overriden by CLI argument. 
+* ADDED: Automatic JSON parsing in response blocks (as 'doc')
 
 
 #### 0.7.1 (2009-10-21) ###############################
