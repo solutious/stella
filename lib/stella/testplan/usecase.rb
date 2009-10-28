@@ -21,11 +21,16 @@ class Testplan
     include Gibbler::Complex
     extend Attic
     
+    class Auth < Struct.new(:kind, :user, :pass)
+      include Gibbler::Complex
+    end
+    
     attic :base_path # we don't want gibbler to see this
     attic :plan_path
     
     attr_accessor :desc
     attr_writer :ratio
+    attr_reader :http_auth
     
     attr_accessor :requests
     attr_accessor :resources
@@ -82,6 +87,11 @@ class Testplan
       @requests.each { |r| r.freeze }
       super
       self
+    end
+    
+    def auth(user, pass=nil, kind=:basic)
+      @http_auth ||= Auth.new
+      @http_auth.user, @http_auth.pass, @http_auth.kind = user, pass, kind
     end
     
     def add_request(meth, *args, &blk)

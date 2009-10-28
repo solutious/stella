@@ -766,13 +766,13 @@ private
           do_get_block(req, proxy, conn, &block)
         end
         res = conn.pop
-        res.request = req
         break
-      rescue RetryableResponse
+      rescue RetryableResponse => ex
         res = conn.pop
         retry_count -= 1
       end
     end
+    res.request = req unless res.nil?
     res
   end
   

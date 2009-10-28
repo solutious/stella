@@ -101,6 +101,9 @@ class Testplan
       desc = uc.desc || "Usecase ##{i+1}"
       desc += "  (#{dig}) "
       str << (' ' << " %-61s %s%% ".att(:reverse).bright) % [desc, uc.ratio_pretty]
+      unless uc.http_auth.nil?
+        str << '    Auth: %s (%s/%s)' % uc.http_auth.values
+      end
       requests = uc.requests.each do |r| 
         dig = long ? r.digest_cache : r.digest_cache.shorter
         str << "    %-62s".bright % ["#{r.desc}  (#{dig})"]

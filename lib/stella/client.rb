@@ -45,6 +45,14 @@ module Stella
         headers = prepare_headers(container, req.headers)
         
         uri = build_request_uri req.uri, params, container
+        if usecase.http_auth
+          # TODO: The first arg is domain and can include a URI path. 
+          #       Are there cases where this is important?
+          domain = '%s://%s%s' % [uri.scheme, uri.host, '/'] #File.dirname(uri.path)
+          user, pass = usecase.http_auth.user, usecase.http_auth.pass
+          Stella.li2 "  AUTH   (#{usecase.http_auth.kind}) #{domain} (#{user}/#{pass})"
+          http_client.set_auth(domain, user, pass)
+        end
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         
@@ -139,6 +147,7 @@ module Stella
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       http_client.debug_dev = STDOUT if Stella.debug? && Stella.loglev > 3
       http_client.protocol_version = "HTTP/1.1"
+      http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE
       http_client
     end
     
