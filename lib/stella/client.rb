@@ -164,7 +164,9 @@ module Stella
       hashobj.each_pair do |n,v|
         
         v = container.instance_eval &v if v.is_a?(Proc)
-        newh[n] = v 
+        v = container.parse_template v if String === v
+        
+        newh[n] = v
       end
       newh
     end

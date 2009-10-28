@@ -8,6 +8,9 @@ STELLA, CHANGES
 * ADDED: Assume HTTP response codes >= 400 are failed requests 
   unless a response block is defined for that status in which 
   case the block must return fail. 
+* ADDED: Support for HTTP Basic authentication
+* ADDED: Templating for resources parameters and headers. 
+* ADDED: Built-in variable :HOSTNAME can be overriden by CLI argument. 
 
 
 #### 0.7.1 (2009-10-21) ###############################

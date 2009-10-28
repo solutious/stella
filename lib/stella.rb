@@ -12,6 +12,7 @@ autoload :OpenStruct, 'ostruct'
 autoload :Storable, 'storable'
 autoload :Gibbler, 'gibbler/aliases'
 autoload :Attic, 'attic'
+autoload :ERB, 'erb'
 
 require 'benelux'
 
