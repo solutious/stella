@@ -100,6 +100,7 @@ class Stella::CLI::Definition
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
+  option :'disable-templates', "Disable template parsing"
   command :generate => Stella::CLI
 
   about "Initialize Stella configuration"

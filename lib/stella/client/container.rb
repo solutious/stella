@@ -59,8 +59,13 @@ class Stella::Client
     end
     
     def parse_template(t)
+      # ERB BUG?: Under heavy threading, some calls
+      # produce the error:
+      # wrong number of arguments(1 for 0)
       template = ERB.new(t)
       v = template.result(binding)  
+    rescue 
+      t
     end
     
     def doc

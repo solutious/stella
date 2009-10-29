@@ -110,7 +110,9 @@ module Stella::Engine
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
-          client = Stella::Client.new opts[:hosts].first, index+1
+          copts = {}
+          copts[:parse_templates] = false if opts[:'disable-templates']
+          client = Stella::Client.new opts[:hosts].first, index+1, copts
           client.add_observer(self)
           client.enable_nowait_mode if opts[:nowait]
           Stella.li4 "Created client #{client.digest.short}"

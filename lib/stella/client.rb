@@ -15,9 +15,12 @@ module Stella
     attr_accessor :base_uri
     attr_accessor :proxy
     
-    def initialize(base_uri=nil, client_id=1)
+    def initialize(base_uri=nil, client_id=1, opts={})
+      opts = {
+        :parse_templates => true
+      }.merge! opts
+      @opts = opts
       @base_uri, @client_id = base_uri, client_id
-      
       #@cookie_file = File.new("cookies-#{client_id}", 'w')
       @proxy = OpenStruct.new
     end
@@ -171,21 +174,28 @@ module Stella
       container.resources.merge! h
     end
     
+    def prepare_params(container, hashobj)
+      prepare_runtime_hash container, hashobj do |v|
+        v = URI.encode(v) if String === v
+      end
+    end
+    
     # Process resource values from the request object
-    def prepare_runtime_hash(container, hashobj)
+    def prepare_runtime_hash(container, hashobj, &extra)
       newh = {}
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
-        
         v = container.instance_eval &v if v.is_a?(Proc)
-        v = container.parse_template v if String === v
-        
+        if @opts[:parse_templates]
+          v = container.parse_template v if String === v
+        end
+        v = extra.call(v) unless extra.nil?
         newh[n] = v
       end
       newh
     end
     alias_method :prepare_headers, :prepare_runtime_hash
-    alias_method :prepare_params, :prepare_runtime_hash
+    
     
     # Testplan URIs can be relative or absolute. Either one can
     # contain variables in the form <tt>:varname</tt>, as in:
