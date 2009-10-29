@@ -19,6 +19,9 @@ module Stella::Engine
       Stella.lflush
       sleep 0.3
       
+      # Identify this thread to Benelux
+      Benelux.current_track :functional 
+      
       dig = Stella.loglev > 1 ? plan.digest_cache : plan.digest_cache.shorter
       Stella.li " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
@@ -28,11 +31,8 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      #Benelux.update_all_track_timelines
-      #tl = Benelux.timeline
-      
-      # errors?
-      
+      tl = Benelux.thread_timeline
+      tl.stats.group(:failed).merge.n == 0
     end
     
     

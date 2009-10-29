@@ -36,6 +36,8 @@ module Stella::Engine
       Stella.li "Generating requests #{msg}...", $/
       Stella.lflush
       
+      bt = Benelux.timeline
+      
       begin
         execute_test_plan packages, opts[:repetitions], opts[:duration]
       rescue Interrupt
@@ -48,7 +50,6 @@ module Stella::Engine
         
         Benelux.update_global_timeline
         
-        bt = Benelux.timeline
         tt = Benelux.thread_timeline
         
         test_time = tt.stats.group(:execute_test_plan).mean
@@ -69,7 +70,7 @@ module Stella::Engine
         Stella.li $/
       end
       
-      # errors?
+      bt.stats.group(:failed).merge.n == 0
     end
     
   protected

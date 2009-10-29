@@ -11,7 +11,7 @@ usecase "Exception Handling" do
     param :what  => 'No Such Listing'
     param :where => random(['Toronto', 'Montreal', 'Vancouver'])
     response 404 do
-      raise NoSearchResults
+      fail "No results"
     end
   end
   

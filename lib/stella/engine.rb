@@ -16,7 +16,11 @@ module Stella::Engine
         Stella.ld "NO UPDATE HANDLER FOR: #{what}" 
       end
     end
-
+    
+    def runid
+      
+    end
+    
     def process_options!(plan, opts={})
       opts = {
         :hosts          => [],
