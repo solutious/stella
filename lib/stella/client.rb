@@ -174,12 +174,6 @@ module Stella
       container.resources.merge! h
     end
     
-    def prepare_params(container, hashobj)
-      prepare_runtime_hash container, hashobj do |v|
-        v = URI.encode(v) if String === v
-      end
-    end
-    
     # Process resource values from the request object
     def prepare_runtime_hash(container, hashobj, &extra)
       newh = {}
@@ -195,7 +189,7 @@ module Stella
       newh
     end
     alias_method :prepare_headers, :prepare_runtime_hash
-    
+    alias_method :prepare_params, :prepare_runtime_hash
     
     # Testplan URIs can be relative or absolute. Either one can
     # contain variables in the form <tt>:varname</tt>, as in:
