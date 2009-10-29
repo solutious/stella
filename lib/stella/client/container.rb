@@ -59,7 +59,7 @@ class Stella::Client
     end
     
     def parse_template(t)
-      template = ERB.new t
+      template = ERB.new(t)
       v = template.result(binding)  
     end
     

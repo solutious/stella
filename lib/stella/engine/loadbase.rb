@@ -270,7 +270,6 @@ module Stella::Engine
       blk.call
     rescue => ex
       Stella.le '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
-      Stella.li3 ex.backtrace
     end
     
     Benelux.add_timer Stella::Engine::Load, :build_thread_package

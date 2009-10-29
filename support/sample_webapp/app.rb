@@ -93,7 +93,6 @@ post '/listing/add' do
       end
       @listings << { :name => params[:name], :id => rand(100000), :city => params[:city] }
       if params[:logo].is_a?(Hash) && params[:logo][:tempfile]
-        p "TODO: Fix uploads"
         #p params[:logo]
         #FileUtils.mv params[:logo][:tempfile].path, "logo-#{params[:name]}"
       end
