@@ -101,9 +101,12 @@ module Stella::Engine
       Stella.li "  QUIT   %s" % [msg]
     end
     
+    def update_fail_request client_id, msg
+      Stella.li "  FAILED   %s" % [msg]
+    end
     
     def update_repeat_request client_id, counter, total
-      Stella.li4 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
   end

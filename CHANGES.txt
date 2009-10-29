@@ -5,6 +5,8 @@ STELLA, CHANGES
 
 * FIXED: bin/stella exits with 1 if any request fails. 
 * CHANGE: sequential and rsequential resourcing is now global
+* ADDED: Automatic form parsing for html pages
+* ADDED: Container now has params and headers from the request
   across all clients. 
 * ADDED: Assume HTTP response codes >= 400 are failed requests 
   unless a response block is defined for that status in which 

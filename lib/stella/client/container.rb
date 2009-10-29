@@ -5,20 +5,6 @@ class Stella::Client
   class Container
     MUTEX = Mutex.new
     
-    attr_accessor :usecase
-    attr_accessor :response
-    attr_reader :resources
-    attr_reader :client_id
-    attr_reader :assets
-    
-    def initialize(client_id, usecase)
-      @client_id = client_id
-      @usecase, @resources = usecase, {}
-      @base_path = usecase.base_path
-      @assets = []
-      @random_value = {}
-    end
-    
     @sequential_offset = {}
     @rsequential_offset = {}
     class << self
@@ -54,6 +40,43 @@ class Stella::Client
       ResponseError.new custom_error
     end
     
+    
+    attr_accessor :usecase
+    attr_accessor :params
+    attr_accessor :headers
+    attr_accessor :response
+    attr_reader :resources
+    attr_reader :client_id
+    attr_reader :assets
+    
+    def initialize(client_id, usecase)
+      @client_id = client_id
+      @usecase, @resources = usecase, {}
+      @base_path = usecase.base_path
+      @assets = []
+      @random_value = {}
+    end
+    
+    def params(key=nil)
+      key.nil? ? @params : @params[key]
+    end
+    alias_method :param, :params
+    
+    def headers(key=nil)
+      key.nil? ? @headers : @headers[key]
+    end
+    alias_method :header, :headers
+    
+    # This is intended to be called in between requests.
+    def reset_temp_vars
+      @random_value = {}
+      @sequential_value = {}
+      @rsequential_value = {}
+      @doc, @forms, @assets = nil, nil, []
+    end
+    
+    
+    
     def fetch(*args)
       @assets.push *args.flatten
     end
@@ -69,10 +92,11 @@ class Stella::Client
     end
     
     def doc
+      return @doc unless @doc.nil?
       # NOTE: It's important to parse the document on every 
       # request because this container is available for the
       # entire life of a usecase. 
-      case (@response.header['Content-Type'] || []).first
+      @doc = case (@response.header['Content-Type'] || []).first
       when /text\/html/
         Nokogiri::HTML(body)
       when /text\/xml/
@@ -84,18 +108,48 @@ class Stella::Client
       end
     end
     
+    class Form < Hash
+      def fields(key)
+        self['input'] ||= {}
+        self['input'][key]
+      end
+      alias_method :field, :fields
+      class << self
+        # Create an instance from a Nokogiri::HTML::Document
+        def from_doc(doc)
+          f = new
+          doc.each { |n,v| f[n] = v }
+          f['input'] = {}
+          (doc.css('input') || []).each do |input|
+            f['input'][input['name']] = input['value']
+          end
+          f
+        end
+      end
+      
+    end
+    
+    def forms(fid=nil)
+      if @forms.nil? && Nokogiri::HTML::Document === doc
+        @forms, index = {}, 0
+        (doc.css('form') || []).each do |html|
+          name = html['id'] || html['name'] || html['class']
+          Stella.ld [:form, name, index].inspect
+          # Store the form by the name and index in the document
+          @forms[name] = @forms[index] = Form.from_doc(html)
+          index += 1
+        end
+      end
+      (fid.nil? ? @forms : @forms[fid])
+    end
+    alias_method :form, :forms
+    
     # Return a resource from the usecase or from this 
     # container (in that order).
     def resource(n)
       return @usecase.resource(n) if @usecase.resources.has_key? n
       return @resources[n] if @resources.has_key? n
       nil
-    end
-
-    def reset_temp_vars
-      @random_value = {}
-      @sequential_value = {}
-      @rsequential_value = {}
     end
     
     def body; @response.body.content; end

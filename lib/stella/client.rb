@@ -47,7 +47,10 @@ module Stella
         params = prepare_params(container, req.params)
         headers = prepare_headers(container, req.headers)
         
+        container.params, container.headers = params, headers
+        
         uri = build_request_uri req.uri, params, container
+        
         if usecase.http_auth
           # TODO: The first arg is domain and can include a URI path. 
           #       Are there cases where this is important?
@@ -200,16 +203,17 @@ module Stella
     # if necessary and replaces all variables with literal values.
     # If no replacement value can be found, the variable will remain. 
     def build_request_uri(uri, params, container)
+      newuri = uri.clone  # don't modify uri template
       # We call uri.clone b/c we modify uri. 
-      uri.clone.scan(/:([a-z_]+)/i) do |instances|
+      uri.scan(/:([a-z_]+)/i) do |instances|
         instances.each do |varname|
           val = find_replacement_value(varname, params, container, base_uri)
           #Stella.ld "FOUND: #{val}"
-          uri.gsub! /:#{varname}/, val.to_s unless val.nil?
+          newuri.gsub! /:#{varname}/, val.to_s unless val.nil?
         end
       end
       
-      uri = URI.parse(uri)
+      uri = URI.parse(newuri)
       
       if uri.host.nil? && base_uri.nil?
         Stella.abort!
