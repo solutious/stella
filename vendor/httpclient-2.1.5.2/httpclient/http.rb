@@ -771,12 +771,13 @@ module HTTP
         end
       end
 
+      
       def escape_query(query) # :nodoc:
         query.collect { |attr, value|
           if value.respond_to?(:read)
             value = value.read
           end
-          escape(attr.to_s) << '=' << escape(value.to_s)
+          URI.escape(attr.to_s) << '=' << URI.escape(value.to_s)
         }.join('&')
       end
 

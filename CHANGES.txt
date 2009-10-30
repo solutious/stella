@@ -1,7 +1,11 @@
 STELLA, CHANGES
 
+* TODO : httpclient/http.rb:785: warning: regexp match /.../n against to UTF-8 string
+
+
 #### 0.7.3 (2009-10-30) ###############################
 
+* FIXED: warning: regexp match /.../n against to UTF-8 string
 * ADDED: Arrival rate
 * ADDED: Added HTTP auth per request
 

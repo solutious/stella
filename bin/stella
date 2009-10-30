@@ -73,6 +73,7 @@ class Stella::CLI::Definition
   option :W, :nowait, "Ignore wait times (ignored)"
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
+  option :a, :arrival, Float, "Arrival rate (ignored)"
   command :preview => Stella::CLI
   
   about "Verify a test plan"
@@ -85,6 +86,7 @@ class Stella::CLI::Definition
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
+  option :a, :arrival, Float, "Arrival rate (ignored)"
   command :verify => Stella::CLI
   
   about "Generate requests"
