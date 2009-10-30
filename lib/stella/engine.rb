@@ -5,7 +5,7 @@ module Stella::Engine
   module Base
     extend self
     
-    @@client_limit = 200
+    @@client_limit = 1000
     
     def update(*args)
       what, *args = args

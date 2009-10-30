@@ -23,6 +23,7 @@ module Stella::Data::HTTP
     field :http_method
     field :http_version
     field :content_type
+    field :http_auth
     
     def has_body?
       !@body.nil?
@@ -37,6 +38,11 @@ module Stella::Data::HTTP
       @desc = "Request"
       @body = Stella::Data::HTTP::Body.new
       instance_eval &definition unless definition.nil?
+    end
+    
+    def auth(user=nil, pass=nil, kind=:basic)
+      @http_auth ||= Stella::Testplan::Usecase::Auth.new
+      @http_auth.user, @http_auth.pass, @http_auth.kind = user, pass, kind
     end
     
     def desc(*args)

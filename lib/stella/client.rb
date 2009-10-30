@@ -51,14 +51,17 @@ module Stella
         
         uri = build_request_uri req.uri, params, container
         
-        if usecase.http_auth
+        if http_auth = usecase.http_auth || req.http_auth
           # TODO: The first arg is domain and can include a URI path. 
           #       Are there cases where this is important?
           domain = '%s://%s%s' % [uri.scheme, uri.host, '/'] #File.dirname(uri.path)
-          user, pass = usecase.http_auth.user, usecase.http_auth.pass
-          Stella.li2 "  AUTH   (#{usecase.http_auth.kind}) #{domain} (#{user}/#{pass})"
+          user, pass = http_auth.user, http_auth.pass
+          user = container.instance_eval &user if Proc === user
+          pass = container.instance_eval &pass if Proc === pass
+          Stella.li2 "  AUTH   (#{http_auth.kind}) #{domain} (#{user}/#{pass})"
           http_client.set_auth(domain, user, pass)
         end
+        
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
         stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         

@@ -19,6 +19,7 @@ class Testplan
   #
   class Usecase
     include Gibbler::Complex
+    include Stella::Data::Helpers
     extend Attic
     
     class Auth < Struct.new(:kind, :user, :pass)
