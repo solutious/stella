@@ -15,7 +15,7 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      if Stella.loglev > 1
+      if Stella.loglev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
@@ -39,7 +39,7 @@ module Stella::Engine
       bt = Benelux.timeline
       
       begin
-        execute_test_plan packages, opts[:repetitions], opts[:duration]
+        execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
         Stella.li "Stopping test...", $/
         Stella.abort!
@@ -210,7 +210,7 @@ module Stella::Engine
       success = global_stats.n - failed.n
       Stella.li  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
       statusi.each do |pair|
-        Stella.li2 '        %-28s %s: %d' % ['', *pair]
+        Stella.li3 '        %-28s %s: %d' % ['', *pair]
       end
       Stella.li  '       %-29s %d' % [:failed, failed.n]
       
@@ -236,7 +236,7 @@ module Stella::Engine
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       desc = "#{usecase.desc} > #{req.desc}"
       args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
-      Stella.li3 '  Client-%s %3d %-6s %s %s' % args
+      Stella.li2 '  Client-%s %3d %-6s %s %s' % args
       Stella.ld '  Client-%s %3d %s' % [client_id.shorter, container.status, container.body]
     end
     
@@ -258,15 +258,15 @@ module Stella::Engine
     end
 
     def update_quit_usecase client_id, msg
-      Stella.li3 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+      Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
     def update_fail_request client_id, msg
-      Stella.li3 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
+      Stella.li2 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
     end
     
     def update_repeat_request client_id, counter, total
-      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+      Stella.li2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
     def self.rescue(client_id, &blk)

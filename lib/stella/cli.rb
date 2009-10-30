@@ -26,7 +26,7 @@ class Stella::CLI < Drydock::Command
   def generate
     opts = {}
     opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :duration, :'disable-templates'].each do |opt|
+    [:nowait, :clients, :repetitions, :duration, :arrival, :'disable-templates'].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     

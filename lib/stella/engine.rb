@@ -37,7 +37,7 @@ module Stella::Engine
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       
       if opts[:clients] > @@client_limit
-        Stella.li3 "Client limit is #{@@client_limit}"
+        Stella.li2 "Client limit is #{@@client_limit}"
         opts[:clients] = @@client_limit
       end
       

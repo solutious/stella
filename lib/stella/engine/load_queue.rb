@@ -5,7 +5,7 @@ module Stella::Engine
     extend Stella::Engine::Load
     extend self
     ROTATE_TIMELINE = 15
-    def execute_test_plan(packages, reps=1,duration=0)
+    def execute_test_plan(packages, reps=1,duration=0,arrival=nil)
       time_started = Time.now
       
       pqueue = Queue.new
@@ -38,7 +38,7 @@ module Stella::Engine
             #Stella.li [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
             Stella::Engine::Load.rescue(c.digest_cache) {
               break if Stella.abort?
-              print '.' if Stella.loglev == 2
+              print '.' if Stella.loglev == 1
               stats = c.execute uc
             }
             Benelux.remove_thread_tags :rep
@@ -68,6 +68,13 @@ module Stella::Engine
           Benelux.remove_thread_tags :usecase
           
           pqueue << package  # return the package to the queue
+        end
+        
+        unless arrival.nil?
+          # Create 1 second / users per second 
+          args = [1/arrival, @threads.size, packages.size]
+          Stella.li2 $/, "======== ARRIVAL (%s): %s of %s" % args
+          sleep 1/arrival
         end
       }
       
