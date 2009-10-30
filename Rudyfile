@@ -150,7 +150,7 @@ routines do
       file_upload "pkg/stella-#{Stella::VERSION}.gem", "/tmp/"
       gem_install "/tmp/stella-#{Stella::VERSION}.gem"
     end
-    
+
   end
   
   install_zlib do
