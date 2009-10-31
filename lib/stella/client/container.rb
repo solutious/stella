@@ -290,7 +290,7 @@ class Stella::Client
           end
           digest = value.object_id
           if value.is_a?(Array)
-            index = Container.sequential_offset(digest, value.size-1)
+            index = Stella::Client::Container.sequential_offset(digest, value.size-1)
             value = value[ index ] 
           end
           Stella.ld "SELECTED(SEQ): #{value} #{index} #{input} #{digest}"
