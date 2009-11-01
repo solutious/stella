@@ -42,33 +42,20 @@
   lib/stella/cli.rb
   lib/stella/client.rb
   lib/stella/client/container.rb
-  lib/stella/client/modifiers.rb
-  lib/stella/config.rb
+  lib/stella/common.rb
   lib/stella/data.rb
+  lib/stella/data/dumper.rb
   lib/stella/data/http.rb
-  lib/stella/data/http/body.rb
-  lib/stella/data/http/request.rb
-  lib/stella/data/http/response.rb
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load_create.rb
   lib/stella/engine/load_package.rb
   lib/stella/engine/load_queue.rb
   lib/stella/engine/loadbase.rb
-  lib/stella/exceptions.rb
   lib/stella/guidelines.rb
-  lib/stella/mixins.rb
-  lib/stella/mixins/numeric.rb
-  lib/stella/mixins/string.rb
-  lib/stella/mixins/thread.rb
-  lib/stella/mixins/time.rb
-  lib/stella/stats.rb
   lib/stella/testplan.rb
-  lib/stella/testplan/stats.rb
-  lib/stella/testplan/usecase.rb
   lib/stella/utils.rb
   lib/stella/utils/httputil.rb
-  lib/stella/version.rb
   lib/threadify.rb
   stella.gemspec
   support/sample_webapp/app.rb
