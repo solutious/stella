@@ -7,6 +7,7 @@ module Stella
       attr_accessor :lev
       
       def initialize(output=STDOUT)
+        output &&= File.open(output) if output.kind_of? String
         @output = output
         @mutex, @buffer = Mutex.new, StringIO.new
         @lev, @offset = 0, 1
