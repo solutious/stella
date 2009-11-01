@@ -3,39 +3,51 @@
 module Stella
   module Data
     
-    module Logger
-      @mutex = Mutex.new
-      @output = StringIO.new
-      @offset = 0
-      @lev = 1
-            
-      class << self
-        attr_accessor :lev
-        
-        def print(*msg)
-          @mutex.synchronize do
-            @output.print *msg
-          end
+    class BaseLogger
+      attr_accessor :lev
+      
+      def initialize(output=STDOUT)
+        @output = output
+        @mutex, @buffer = Mutex.new, StringIO.new
+        @lev, @offset = 0, 1
+      end
+    
+      def flush
+        @mutex.synchronize do
+          #return if @offset == @output.tell
+          @buffer.seek @offset
+          @output.puts @buffer.read unless @buffer.eof?
+          @offset = @buffer.tell
         end
+      end
+      
+      def quiet?()        @lev == 0    end
+      def enable_quiet()  @lev =  0    end
+      def disable_quiet() @lev =  1    end
+    
+    end
+    
+    class SyncLogger < BaseLogger
+      def print_sync(level, *msg)
+        return unless level <= @lev
+        @mutex.synchronize { @buffer.print *msg }
+      end
 
-        def puts(*msg)
-          @mutex.synchronize do
-            @output.puts *msg
-          end
-        end
+      def puts_sync(level, *msg)
+        return unless level <= @lev
+        @mutex.synchronize { @buffer.puts *msg }
+      end
+    end
+    
+    class Logger < BaseLogger
+      def print(level, *msg)
+        return unless level <= @lev
+        @buffer.print *msg
+      end
 
-        def flush
-          @mutex.synchronize do
-            #return if @offset == @output.tell
-            @output.seek @offset
-            STDOUT.puts @output.read unless @output.eof?
-            @offset = @output.tell
-          end
-        end
-        
-        def quiet?()        @lev == 0    end
-        def enable_quiet()  @lev =  0    end
-        def disable_quiet() @lev =  1    end
+      def puts(level, *msg)
+        return unless level <= @lev
+        @buffer.puts *msg
       end
     end
     

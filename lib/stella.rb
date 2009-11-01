@@ -49,11 +49,11 @@ module Stella
   
   # Puts +msg+ to +@logger+
   def lflush; log.flush if log.respond_to? :flush; end
-  def li(*msg); msg.each { |m| log.puts m } if !log.quiet? end
-  def li1(*msg); li *msg if log.lev >= 1 end
-  def li2(*msg); li *msg if log.lev >= 2 end
-  def li3(*msg); li *msg if log.lev >= 3 end
-  def li4(*msg); li *msg if log.lev >= 4 end
+  def li(*msg);  log.puts 1, *msg end
+  def li1(*msg); log.puts 1, *msg end
+  def li2(*msg); log.puts 2, *msg end
+  def li3(*msg); log.puts 3, *msg end
+  def li4(*msg); log.puts 4, *msg end
   
   # Puts +msg+ to +@logger+ with "ERROR: " prepended
   def le(*msg); log.puts "  " << msg.join("#{$/}  ").color(:red); end
@@ -94,7 +94,7 @@ module Stella
   autoload :Client, 'stella/client'
   
   @sysinfo = nil
-  @log     = Stella::Data::Logger
+  @log     = Stella::Data::Logger.new
   @debug   = false
   @abort   = false
   @datalogger = nil
