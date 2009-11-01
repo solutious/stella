@@ -19,7 +19,7 @@ module Stella::Engine
           Benelux.add_thread_tags :rep =>  rep
           Stella::Engine::Load.rescue(package.client.digest_cache) {
             break if Stella.abort?
-            print '.' if Stella.loglev == 2
+            print '.' if Stella.log.lev == 2
             stats = package.client.execute package.usecase
           }
           Benelux.remove_thread_tags :rep

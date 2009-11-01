@@ -108,7 +108,7 @@ class Testplan
         dig = long ? r.digest_cache : r.digest_cache.shorter
         str << "    %-62s".bright % ["#{r.desc}  (#{dig})"]
         str << "      %s" % [r]
-        if Stella.loglev > 2
+        if Stella.log.lev > 2
           [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
         end
       end

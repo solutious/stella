@@ -28,7 +28,7 @@ module Stella::Engine
               Benelux.add_thread_tags :rep =>  @real_reps
               Stella::Engine::Load.rescue(c.digest_cache) {
                 break if Stella.abort?
-                print '.' if Stella.loglev == 2
+                print '.' if Stella.log.lev == 2
                 stats = c.execute uc
               }
               Benelux.remove_thread_tags :rep

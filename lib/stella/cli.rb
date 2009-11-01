@@ -68,7 +68,7 @@ class Stella::CLI < Drydock::Command
   
   def preview
     create_testplan
-    Stella.li @testplan.pretty(Stella.loglev > 1)
+    Stella.li @testplan.pretty(Stella.log.lev > 1)
   end
   
   private

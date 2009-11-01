@@ -18,7 +18,7 @@ module Stella::Engine
       Stella.datalogger = Logger.new Stella::Data::Dumper.log_dir('requests')
       Stella.datalogger << "Started at #{Time.now.to_i}"
       
-      if Stella.loglev > 2
+      if Stella.log.lev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
@@ -250,14 +250,14 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       desc = "#{container.usecase.desc} > #{req.desc}"
-      Stella.li $/ if Stella.loglev == 1
+      Stella.li $/ if Stella.log.lev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.li ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li $/ if Stella.loglev == 1
+      Stella.li $/ if Stella.log.lev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.li ex.backtrace
     end

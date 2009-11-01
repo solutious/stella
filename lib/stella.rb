@@ -26,11 +26,6 @@ module Stella
     :check_threads     => 0.0005
   }.freeze unless defined?(SLEEP_METRICS)
   
-  class << self
-    attr_accessor :loglev, :logger
-    attr_accessor :datalogger
-  end
-  
   def sleep(metric)
     unless SLEEP_METRICS.has_key? metric
       raise "unknown sleep metric: #{metric}" 
@@ -39,19 +34,19 @@ module Stella
   end
   
   # Puts +msg+ to +@logger+
-  def lflush; @logger.flush if @logger.respond_to? :flush; end
-  def li(*msg); msg.each { |m| @logger.puts m } if !quiet? end
-  def li1(*msg); li *msg if @loglev >= 1 end
-  def li2(*msg); li *msg if @loglev >= 2 end
-  def li3(*msg); li *msg if @loglev >= 3 end
-  def li4(*msg); li *msg if @loglev >= 4 end
+  def lflush; log.flush if log.respond_to? :flush; end
+  def li(*msg); msg.each { |m| log.puts m } if !log.quiet? end
+  def li1(*msg); li *msg if log.lev >= 1 end
+  def li2(*msg); li *msg if log.lev >= 2 end
+  def li3(*msg); li *msg if log.lev >= 3 end
+  def li4(*msg); li *msg if log.lev >= 4 end
   
   # Puts +msg+ to +@logger+ with "ERROR: " prepended
-  def le(*msg); @logger.puts "  " << msg.join("#{$/}  ").color(:red); end
+  def le(*msg); log.puts "  " << msg.join("#{$/}  ").color(:red); end
   # Puts +msg+ to +@logger+ if +Rudy.debug?+ returns true
   def ld(*msg)
     if debug?
-      @logger.puts "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+      @log.puts "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
       Stella.lflush
     end
   end
@@ -61,10 +56,6 @@ module Stella
     @sysinfo 
   end
   
-  def quiet?()        @loglev == 0    end
-  def enable_quiet()  @loglev =  0    end
-  def disable_quiet() @loglev =  1    end
-
   def debug?()        @debug == true  end
   def enable_debug()  @debug =  true  end
   def disable_debug() @debug =  false end
@@ -80,6 +71,7 @@ module Stella
   end
   
   require 'stella/exceptions'
+  require 'stella/mixins'
   
   autoload :VERSION, 'stella/version'
   autoload :Utils, 'stella/utils'
@@ -89,15 +81,16 @@ module Stella
   autoload :Engine, 'stella/engine'
   autoload :Client, 'stella/client'
   
-  require 'stella/mixins'
-  
-  
   @sysinfo = nil
-  @logger  = Stella::Data::Logger
-  @loglev  = 1
+  @log     = Stella::Data::Logger
   @debug   = false
   @abort   = false
   @datalogger = nil
+  
+  class << self
+    attr_accessor :log
+    attr_accessor :datalogger
+  end
   
 end
 

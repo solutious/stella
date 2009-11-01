@@ -22,11 +22,11 @@ module Stella::Engine
       # Identify this thread to Benelux
       Benelux.current_track :functional 
       
-      dig = Stella.loglev > 1 ? plan.digest_cache : plan.digest_cache.shorter
+      dig = Stella.log.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
       Stella.li " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
-        dig = Stella.loglev > 1 ? uc.digest_cache : uc.digest_cache.shorter
+        dig = Stella.log.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
         Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
         Stella.rescue { client.execute uc }
       end
@@ -38,14 +38,14 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      dig = Stella.loglev > 1 ? req.digest_cache : req.digest_cache.shorter
+      dig = Stella.log.lev > 1 ? req.digest_cache : req.digest_cache.shorter
       desc = "#{req.desc}  (#{dig}) "
       Stella.li2 "  %-46s %16s ".bright % [desc, notice]
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       msg = '  %-6s %-53s ' % [req.http_method, uri]
-      msg << container.status.to_s if Stella.loglev == 1
+      msg << container.status.to_s if Stella.log.lev == 1
       Stella.li msg
       
       Stella.li2 $/, "   Params:"

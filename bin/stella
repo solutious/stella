@@ -51,7 +51,7 @@ class Stella::CLI::Definition
     Stella.enable_debug
   end
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
-    Stella.loglev += 1
+    Stella.log.lev += 1
   end
   global :V, :version, "Display version number" do
     puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
@@ -137,7 +137,7 @@ class Stella::CLI::Definition
   after do |obj|  
     Stella.lflush
     @elapsed = Time.now - @start
-    if Stella.loglev > 1 && @elapsed > 0.1
+    if Stella.log.lev > 1 && @elapsed > 0.1
       puts
       puts "Elapsed: %.2f seconds" % @elapsed.to_f
     end
@@ -158,11 +158,11 @@ rescue Drydock::UnknownCommand => ex
   STDERR.puts "Unknown command: %s" % ex.name
 rescue Stella::Error => ex
   STDERR.puts ex.message
-  STDERR.puts ex.backtrace if Stella.loglev > 2 || Drydock.debug?
+  STDERR.puts ex.backtrace if Stella.log.lev > 2 || Stella.debug?
 rescue Interrupt
-  puts "#{$/}Exiting... "
+  puts $/, "Exiting... "
   exit 1
 rescue => ex
   STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
-  STDERR.puts ex.backtrace if Stella.loglev > 2 || Drydock.debug?
+  STDERR.puts ex.backtrace if Stella.log.lev > 2 || Stella.debug?
 end

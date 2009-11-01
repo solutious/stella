@@ -38,7 +38,7 @@ module Stella::Engine
             #Stella.li [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
             Stella::Engine::Load.rescue(c.digest_cache) {
               break if Stella.abort?
-              print '.' if Stella.loglev == 1
+              print '.' if Stella.log.lev == 1
               stats = c.execute uc
             }
             Benelux.remove_thread_tags :rep
@@ -48,7 +48,7 @@ module Stella::Engine
             
             if (Time.now - prev_ptime).to_i >= ROTATE_TIMELINE
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
-              if Stella.loglev >= 2 && Thread.current == @threads.first 
+              if Stella.log.lev >= 2 && Thread.current == @threads.first 
                 args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
                 Stella.li2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
                 Stella.lflush
