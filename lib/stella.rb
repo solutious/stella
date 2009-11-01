@@ -1,9 +1,9 @@
 
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
-%w{attic hexoid storable sysinfo gibbler benelux}.each do |dir|
-  $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
-end
+#%w{attic hexoid storable sysinfo gibbler benelux}.each do |dir|
+#  $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
+#end
 
 autoload :SysInfo, 'sysinfo'
 autoload :Drydock, 'drydock'
@@ -19,19 +19,16 @@ require 'benelux'
 module Stella
   extend self
   
+  START_TIME = Time.now.freeze
+  
   SLEEP_METRICS = {
     :create_thread     => 0.001,
     :check_threads     => 0.0005
   }.freeze unless defined?(SLEEP_METRICS)
-    
-  @sysinfo = nil
-  @logger  = Drydock::Screen
-  @loglev  = 1
-  @debug   = false
-  @abort   = false
   
   class << self
     attr_accessor :loglev, :logger
+    attr_accessor :datalogger
   end
   
   def sleep(metric)
@@ -93,6 +90,15 @@ module Stella
   autoload :Client, 'stella/client'
   
   require 'stella/mixins'
+  
+  
+  @sysinfo = nil
+  @logger  = Stella::Data::Logger
+  @loglev  = 1
+  @debug   = false
+  @abort   = false
+  @datalogger = nil
+  
 end
 
 

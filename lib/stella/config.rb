@@ -53,6 +53,9 @@ class Stella::Config < Storable
     end
   end
  
+  def self.project_dir
+    File.join(Dir.pwd, DIR_NAME)
+  end
   
   private 
   

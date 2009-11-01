@@ -78,28 +78,14 @@ module Stella::Engine
         end
       }
       
-      data_dumper = Thread.new do
-        prev_ptime = Time.now
-        loop do
-          break if Stella.abort?
-          break if @threads.select { |t| (!t.nil? && t.status) }.empty?
-          if (Time.now - prev_ptime).to_i >= (ROTATE_TIMELINE * 4)
-            Benelux.update_global_timeline
-            Stella.li $/, [:logger, (Time.now - prev_ptime).to_i, Benelux.timeline.size].inspect
-            prev_ptime = Time.now
-            ##TODO: Dump to file
-            ##Benelux.timeline.clear
-          end
-          sleep 5
-        end
-        
-      end
-      data_dumper.join
+      Stella::Data::Dumper.start
       
       repscalc = Benelux::Stats::Calculator.new
       @threads.each { |t| t.join } # wait
       @threads.each { |t| repscalc.sample(t[:real_reps]) }
       @real_reps = repscalc.mean.to_i
+      
+      Stella::Data::Dumper.stop
       
       #Stella.li "*** REPETITION #{@real_reps} of #{reps} ***"
       

@@ -15,6 +15,9 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
+      Stella.datalogger = Logger.new Stella::Data::Dumper.log_dir('requests')
+      Stella.datalogger << "Started at #{Time.now.to_i}"
+      
       if Stella.loglev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
         Load.counts  = [:request_header_size, :request_content_size]
@@ -69,6 +72,8 @@ module Stella::Engine
         Stella.li "    post time: %10.2fs" % report_time
         Stella.li $/
       end
+      
+      Stella.datalogger << "Ended at #{Time.now.to_i}"
       
       bt.stats.group(:failed).merge.n == 0
     end
@@ -230,7 +235,7 @@ module Stella::Engine
     
     
     def update_prepare_request(client_id, usecase, req, counter)
-      
+     
     end
       
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
@@ -258,6 +263,7 @@ module Stella::Engine
     end
 
     def update_quit_usecase client_id, msg
+
       Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
