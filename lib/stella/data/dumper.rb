@@ -7,12 +7,21 @@ module Stella
       attr_accessor :lev
       
       def initialize(output=STDOUT)
-        output &&= File.open(output) if output.kind_of? String
-        @output = output
         @mutex, @buffer = Mutex.new, StringIO.new
         @lev, @offset = 0, 1
+        self.output = output
       end
-    
+      
+      def output=(o)
+        @mutex.synchronize do
+          if o.kind_of? String
+            String.disable_color
+            o = File.open(o, File::CREAT|File::TRUNC|File::RDWR, 0644)
+          end
+          @output = o
+        end
+      end
+      
       def flush
         @mutex.synchronize do
           #return if @offset == @output.tell
