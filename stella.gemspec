@@ -44,8 +44,8 @@
   lib/stella/client/container.rb
   lib/stella/common.rb
   lib/stella/data.rb
-  lib/stella/data/dumper.rb
   lib/stella/data/http.rb
+  lib/stella/data/logger.rb
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load_create.rb
