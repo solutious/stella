@@ -1,9 +1,9 @@
 
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
-#%w{attic hexoid storable sysinfo gibbler benelux}.each do |dir|
-#  $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
-#end
+%w{attic hexoid storable sysinfo gibbler benelux}.each do |dir|
+  $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
+end
 
 autoload :SysInfo, 'sysinfo'
 autoload :Drydock, 'drydock'
@@ -59,10 +59,9 @@ module Stella
   def le(*msg); log.puts "  " << msg.join("#{$/}  ").color(:red); end
   # Puts +msg+ to +@logger+ if +Rudy.debug?+ returns true
   def ld(*msg)
-    if debug?
-      @log.puts "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
-      Stella.lflush
-    end
+    return unless debug?
+    @log.puts 1, "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+    Stella.lflush
   end
   
   def sysinfo
@@ -94,14 +93,17 @@ module Stella
   autoload :Client, 'stella/client'
   
   @sysinfo = nil
-  @log     = Stella::Data::Logger.new
+  @log     = Stella::Data::SyncLogger.new
   @debug   = false
   @abort   = false
-  @datalogger = nil
+  @quiet   = false
   
+  def quiet?()        @quiet == true  end
+  def enable_quiet()  @quiet = true   end
+  def disable_quiet() @quiet = false  end
+    
   class << self
     attr_accessor :log
-    attr_accessor :datalogger
   end
   
 end

@@ -4,7 +4,7 @@ module Stella::Engine
     extend Stella::Engine::Base
     extend Stella::Engine::Load
     extend self
-    ROTATE_TIMELINE = 15
+    ROTATE_TIMELINE = 5
     def execute_test_plan(packages, reps=1,duration=0,arrival=nil)
       time_started = Time.now
       
@@ -78,14 +78,10 @@ module Stella::Engine
         end
       }
       
-      Stella::Data::Dumper.start
-      
       repscalc = Benelux::Stats::Calculator.new
       @threads.each { |t| t.join } # wait
       @threads.each { |t| repscalc.sample(t[:real_reps]) }
       @real_reps = repscalc.mean.to_i
-      
-      Stella::Data::Dumper.stop
       
       #Stella.li "*** REPETITION #{@real_reps} of #{reps} ***"
       

@@ -39,6 +39,7 @@ class Stella::CLI::Definition
   #global :A, :apikey, String, "API Key"
   #global :S, :secret, String, "Secret Key"
   global :o, :output, String, "Write output to the given file" do |v|
+    String.disable_color
     Stella.log.output = v
   end
   global :p, :pause, Integer, "Seconds to pause before starting test"

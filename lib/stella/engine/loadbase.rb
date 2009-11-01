@@ -6,6 +6,7 @@ module Stella::Engine
     
     @timers = [:do_request]
     @counts = [:response_content_size]
+    @reqlog = nil
     
     class << self
       attr_accessor :timers, :counts
@@ -15,8 +16,8 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      Stella.datalogger = Logger.new Stella::Data::Dumper.log_dir('requests')
-      Stella.datalogger << "Started at #{Time.now.to_i}"
+      @reqlog = Stella::Data::Dumper.new Stella::Data.log_dir('requests')
+      @reqlog.puts 1, "START: #{Time.now.to_i}"
       
       if Stella.log.lev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
@@ -26,8 +27,9 @@ module Stella::Engine
       
       counts = calculate_usecase_clients plan, opts
       
-      Stella.li $/, "Preparing #{counts[:total]} virtual clients...", $/
-      Stella.lflush
+      
+      puts "Preparing #{counts[:total]} virtual clients..." if !Stella.quiet?
+      
       packages = build_thread_package plan, opts, counts
       
       if opts[:duration] > 0
@@ -36,44 +38,51 @@ module Stella::Engine
         msg = "for #{opts[:repetitions]} reps"
       end
       
-      Stella.li "Generating requests #{msg}...", $/
-      Stella.lflush
+      puts "Generating requests #{msg}..." if !Stella.quiet?
       
       bt = Benelux.timeline
       
-      begin
-        execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
-      rescue Interrupt
-        Stella.li "Stopping test...", $/
-        Stella.abort!
-        @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
-      ensure
-        Stella.li "Processing statistics...", $/
-        Stella.lflush
-        
+      @reqlog.start do 
         Benelux.update_global_timeline
-        
-        tt = Benelux.thread_timeline
-        
-        test_time = tt.stats.group(:execute_test_plan).mean
-        generate_report plan, test_time
-        report_time = tt.stats.group(:generate_report).mean
-        
-        # Here is the calcualtion for the number of
-        # Benelux assets created for each request:
-        # 
-        #     [5*2*REQ+6, 5*1*REQ+3, 13*REQ]
-        # 
-        
-        Stella.li "Summary: "
-        Stella.li "  max clients: %d" % @max_clients
-        Stella.li "  repetitions: %d" % @real_reps
-        Stella.li "    test time: %10.2fs" % test_time
-        Stella.li "    post time: %10.2fs" % report_time
-        Stella.li $/
+        puts [:logger, Benelux.timeline.size].inspect
       end
       
-      Stella.datalogger << "Ended at #{Time.now.to_i}"
+      execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
+      
+    rescue Interrupt
+      puts $/, "Stopping test..." if !Stella.quiet?
+      Stella.abort!
+      @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
+    ensure
+      puts $/, "Processing statistics..." if !Stella.quiet?
+      
+      @reqlog.stop
+      
+      Benelux.update_global_timeline
+      
+      tt = Benelux.thread_timeline
+      
+      test_time = tt.stats.group(:execute_test_plan).mean
+      generate_report plan, test_time
+      report_time = tt.stats.group(:generate_report).mean
+      
+      # Here is the calcualtion for the number of
+      # Benelux assets created for each request:
+      # 
+      #     [5*2*REQ+6, 5*1*REQ+3, 13*REQ]
+      # 
+      
+      summary = ["Summary: "]
+      summary << "  max clients: %d" % @max_clients
+      summary << "  repetitions: %d" % @real_reps
+      summary << "    test time: %10.2fs" % test_time
+      summary << "    post time: %10.2fs" % report_time
+      summary << $/
+      
+      puts summary if !Stella.quiet?
+      
+      @reqlog.puts 1, "END: #{Time.now.to_i}"
+      @reqlog.close
       
       bt.stats.group(:failed).merge.n == 0
     end
@@ -241,7 +250,9 @@ module Stella::Engine
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       desc = "#{usecase.desc} > #{req.desc}"
       args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
-      Stella.li2 '  Client-%s %3d %-6s %s %s' % args
+      msg = '  Client-%s %3d %-6s %s %s' % args
+      Benelux.thread_timeline.add_message msg
+      Stella.li2 msg
       Stella.ld '  Client-%s %3d %s' % [client_id.shorter, container.status, container.body]
     end
     

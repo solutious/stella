@@ -29,7 +29,6 @@ class Stella::CLI < Drydock::Command
     [:nowait, :clients, :repetitions, :duration, :arrival, :'disable-templates'].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    
     case @global.engine
     when "package"
       ret = Stella::Engine::LoadPackage.run @testplan, opts
