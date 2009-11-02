@@ -118,7 +118,7 @@ module Stella
           Benelux.remove_thread_tags :status
           break
         when "Stella::Client::Fail"  
-          update(:fail_request, ret.message, req, container)
+          update(:fail_request, ret.message, req.uri, container)
         end
         
         Benelux.remove_thread_tags :status
@@ -266,7 +266,7 @@ module Stella
       handler = find_response_handler container, req
       if handler.nil?
         if container.status >= 400
-          update(:fail_request, "No handler for #{container.status}", req, container) 
+          update(:fail_request, "No handler", req.uri, container) 
         end
         return
       end

@@ -21,9 +21,8 @@ module Stella::Engine
       @failog = Stella::Logger.new log_path(plan, 'failed')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
       
-      Stella.stdout.add_template :preparing,   'Plan %s with %d clients...'
-      Stella.stdout.add_template :status,   '%s...'
-      Stella.stdout.add_template :nstatus,  "#{$/}%s..."
+      Stella.stdout.add_template :head, '%s: %s'
+      Stella.stdout.add_template :status,  "#{$/}%s..."
       Stella.stdout.add_template :dsummary, '%20s: %8d'
       Stella.stdout.add_template :fsummary, '%20s: %8.2f'
       
@@ -33,7 +32,8 @@ module Stella::Engine
       @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages
+        @reqlog.info Benelux.timeline.messages.rfilter(:failed => true)
+        @failog.info Benelux.timeline.messages.filter(:failed => true)
         @reqlog.clear and @failog.clear
         Benelux.timeline.clear
       end
@@ -46,23 +46,25 @@ module Stella::Engine
       
       counts = calculate_usecase_clients plan, opts
       
-      Stella.stdout.preparing plan.digest.short, counts[:total]
-      
       @sumlog.head 'RUNID', runid(plan)
       
       packages = build_thread_package plan, opts, counts
       
       if opts[:duration] > 0
-        msg = "for #{opts[:duration].seconds}s"
+        timing = "#{opts[:duration].seconds.to_i} seconds"
       else
-        msg = "for #{opts[:repetitions]} reps"
+        timing = "#{opts[:repetitions]} repetitions"
       end
       
-      Stella.stdout.status "Generating requests #{msg}"
+      Stella.stdout.head plan.desc, plan.digest.short
+      Stella.stdout.head 'Clients', counts[:total]
+      Stella.stdout.head 'Limit', timing
+      
       @dumper.start
       
       begin 
         @sumlog.head "START", Time.now.to_s
+        Stella.stdout.status "Running" 
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
         Stella.stdout.nstatus "Stopping test"
@@ -77,7 +79,7 @@ module Stella::Engine
       
       @dumper.stop
       
-      Stella.stdout.nstatus "Processing statistics" 
+      Stella.stdout.status "Processing" 
       
       Benelux.update_global_timeline
       
@@ -304,7 +306,8 @@ module Stella::Engine
     
     def update_fail_request client_id, msg, req, container
       Benelux.thread_timeline.add_count :failed, 1
-      @failog.request container.unique_id, msg
+      msg = [container.unique_id, container.status, req, msg]
+      Benelux.thread_timeline.add_message msg.join('; '), :failed => true
     end
     
     def update_repeat_request client_id, counter, total
