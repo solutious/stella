@@ -189,7 +189,7 @@ module Stella::Data
     ##        size = value.size
     ##        @sequential_offset[digest] = 0 if @sequential_offset[digest] >= size
     ##        value = value[ @sequential_offset[digest] ] 
-    ##        Stella.li "WHAY: #{value} (#{@sequential_offset[digest]})"
+    ##        Stella.stdout.info "WHAY: #{value} (#{@sequential_offset[digest]})"
     ##        @sequential_offset[digest] += 1
     ##      end
     ##      Stella.ld "SELECTED: #{value}"

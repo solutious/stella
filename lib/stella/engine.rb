@@ -44,13 +44,12 @@ module Stella::Engine
         :repetitions    => 1
       }.merge! opts
       
-      Stella.li3 " Options: #{opts.inspect}"
-      Stella.lflush
+      Stella.stdout.info2 " Options: #{opts.inspect}"
       
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       
       if opts[:clients] > @@client_limit
-        Stella.li2 "Client limit is #{@@client_limit}"
+        Stella.stdout.info2 "Client limit is #{@@client_limit}"
         opts[:clients] = @@client_limit
       end
       
@@ -61,7 +60,7 @@ module Stella::Engine
       
       opts[:duration] = opts[:duration].in_seconds
       
-      Stella.li3 " Hosts: " << opts[:hosts].join(', ')
+      Stella.stdout.info3 " Hosts: " << opts[:hosts].join(', ')
       opts
     end
     

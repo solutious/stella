@@ -30,38 +30,42 @@ module Stella
   end
 end
 
+
+module Stella
+  class Error < RuntimeError
+    def initialize(obj=nil); @obj = obj; end
+    def message; @obj; end
+  end
+  class WackyRatio < Stella::Error; end
+  class WackyDuration < Stella::Error; end
+  class InvalidOption < Stella::Error; end
+  class NoHostDefined < Stella::Error; end
+end
+
+
 module Stella
   extend self
   
+  require 'stella/logger'
+  
   START_TIME = Time.now.freeze
   
-  SLEEP_METRICS = {
-    :create_thread     => 0.001,
-    :check_threads     => 0.0005
-  }.freeze unless defined?(SLEEP_METRICS)
   
-  def sleep(metric)
-    unless SLEEP_METRICS.has_key? metric
-      raise "unknown sleep metric: #{metric}" 
-    end
-    Kernel.sleep SLEEP_METRICS[metric]
+  @sysinfo = nil
+  @debug   = false
+  @abort   = false
+  @quiet   = false
+  @log     = Stella::SyncLogger.new
+  @stdout  = Stella::Logger.new STDOUT
+    
+  class << self
+    attr_accessor :log, :stdout
   end
-  
-  # Puts +msg+ to +@logger+
-  def lflush; log.flush if log.respond_to? :flush; end
-  def li(*msg);  log.info *msg end
-  def li1(*msg); log.info *msg end
-  def li2(*msg); log.puts 2, *msg end
-  def li3(*msg); log.puts 3, *msg end
-  def li4(*msg); log.puts 4, *msg end
-  
-  # Puts +msg+ to +@logger+ with "ERROR: " prepended
-  def le(*msg); log.puts "  " << msg.join("#{$/}  ").color(:red); end
-  # Puts +msg+ to +@logger+ if +Rudy.debug?+ returns true
+
+  def le(*msg); stdout.info "  " << msg.join("#{$/}  ").color(:red); end
   def ld(*msg)
-    return unless debug?
-    @log.info "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
-    Stella.lflush
+    return unless Stella.debug?
+    Stella.stdout.info "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
   end
   
   def sysinfo
@@ -76,11 +80,15 @@ module Stella
   def abort?()        @abort == true  end
   def abort!()        @abort =  true  end
   
+  def quiet?()        @quiet == true  end
+  def enable_quiet()  @quiet = true   end
+  def disable_quiet() @quiet = false  end
+    
   def rescue(&blk)
     blk.call
   rescue => ex
-    Stella.le "ERROR: #{ex.message}"
-    Stella.li3 ex.backtrace
+    Stella.stdout.info "ERROR: #{ex.message}"
+    Stella.stdout.info ex.backtrace
   end
   
   require 'stella/common'
@@ -92,21 +100,11 @@ module Stella
   autoload :Engine, 'stella/engine'
   autoload :Client, 'stella/client'
   
-  @sysinfo = nil
-  @log     = Stella::Data::SyncLogger.new
-  @debug   = false
-  @abort   = false
-  @quiet   = false
-  
-  def quiet?()        @quiet == true  end
-  def enable_quiet()  @quiet = true   end
-  def disable_quiet() @quiet = false  end
-    
-  class << self
-    attr_accessor :log
-  end
-  
 end
+
+Stella.stdout.lev = Stella.quiet? ? 0 : 1
+Stella.stdout.autoflush!
+
 
 
 

@@ -139,11 +139,9 @@ class Stella::CLI::Definition
   end
 
   after do |obj|  
-    Stella.lflush
     @elapsed = Time.now - @start
-    if Stella.log.lev > 1 && @elapsed > 0.1
-      puts
-      puts "Elapsed: %.2f seconds" % @elapsed.to_f
+    if @elapsed > 0.1
+      Stella.stdout.puts 2, "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
     end
     code = obj.exit_code if obj.respond_to? :exit_code
     exit code ||= 0

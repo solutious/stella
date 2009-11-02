@@ -17,12 +17,15 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      reqlog = Stella::Data::Logger.new log_path(plan, 'requests')
-      failog = Stella::Data::Logger.new log_path(plan, 'failed')
-      sumlog = Stella::Data::Logger.new log_path(plan, 'summary')
+      reqlog = Stella::Logger.new log_path(plan, 'requests')
+      failog = Stella::Logger.new log_path(plan, 'failed')
+      sumlog = Stella::Logger.new log_path(plan, 'summary')
+      
+      Stella.stdout.add_template :status, '%s...'
+      Stella.stdout.add_template :dsummary, '%20s: %8d'
+      Stella.stdout.add_template :fsummary, '%20s: %8.2f'
       
       sumlog.add_template :head, '%10s: %s'
-      sumlog.head 'RUNID', runid(plan)
       
       @dumper = Stella::Hand.new(15, 2) do
         Benelux.update_global_timeline
@@ -40,8 +43,8 @@ module Stella::Engine
       
       counts = calculate_usecase_clients plan, opts
       
-      
-      puts "Preparing #{counts[:total]} virtual clients..." if !Stella.quiet?
+      Stella.stdout.status "Preparing #{counts[:total]} virtual clients..."
+      sumlog.head 'RUNID', runid(plan)
       
       packages = build_thread_package plan, opts, counts
       
@@ -51,14 +54,14 @@ module Stella::Engine
         msg = "for #{opts[:repetitions]} reps"
       end
       
-      puts "Generating requests #{msg}..." if !Stella.quiet?
+      Stella.stdout.status "Generating requests #{msg}..."
       @dumper.start
       
       begin 
         sumlog.head "START", Time.now.to_s
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
-        puts $/, "Stopping test..." if !Stella.quiet?
+        Stella.stdout.status "#{$/}Stopping test..."
         Stella.abort!
         @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
       rescue => ex
@@ -70,7 +73,7 @@ module Stella::Engine
       
       @dumper.stop
       
-      puts $/, "Processing statistics..." if !Stella.quiet?
+      Stella.stdout.status "#{$/}Processing statistics..." 
       
       Benelux.update_global_timeline
       
@@ -90,16 +93,13 @@ module Stella::Engine
       failed = bt.stats.group(:failed).merge
       total = bt.stats.group(:do_request).merge
       
-      unless Stella.quiet?
-        puts "Summary: ", 
-             ("  successful req: %8d" % total.n),
-             ("      failed req: %8d" % failed.n),
-             ("     max clients: %8d" % @max_clients),
-             ("     repetitions: %8d" % @real_reps),
-             ("       test time: %8.2fs" % test_time),
-             ("  reporting time: %8.2fs" % report_time),
-             $/
-      end
+      Stella.stdout.info "Summary: "
+      Stella.stdout.dsummary 'successful req', total.n
+      Stella.stdout.dsummary "failed req", failed.n
+      Stella.stdout.dsummary "max clients", @max_clients
+      Stella.stdout.dsummary "repetitions", @real_reps
+      Stella.stdout.fsummary "test time", test_time
+      Stella.stdout.fsummary "reporting time", report_time
       
       failed.n == 0
     end
@@ -146,7 +146,7 @@ module Stella::Engine
           client = Stella::Client.new opts[:hosts].first, index+1, copts
           client.add_observer(self)
           client.enable_nowait_mode if opts[:nowait]
-          Stella.li4 "Created client #{client.digest.short}"
+          Stella.stdout.info4 "Created client #{client.digest.short}"
           ThreadPackage.new(index+1, client, usecase)
         end
         pointer += count
@@ -190,7 +190,7 @@ module Stella::Engine
           sumlog.info "    %s" % [req.to_s]
           Load.timers.each do |sname|
             stats = global_timeline.stats.group(sname)[filter].merge
-#            Stella.li stats.inspect
+#            Stella.stdout.info stats.inspect
             str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
             sumlog.info str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
             sumlog.flush
@@ -278,35 +278,36 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       desc = "#{container.usecase.desc} > #{req.desc}"
-      Stella.li $/ if Stella.log.lev == 1
+      Stella.stdout.info $/ if Stella.log.lev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.li ex.backtrace
+      Stella.stdout.info ex.backtrace
     end
     
     def update_request_error(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.li $/ if Stella.log.lev == 1
-      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.li ex.backtrace
+      Stella.stdout.info $/ if Stella.log.lev == 1
+      Stella.stdout.info '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+      Stella.stdout.info ex.backtrace
     end
 
     def update_quit_usecase client_id, msg
 
-      Stella.li2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+      Stella.stdout.info2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
     def update_fail_request client_id, msg
-      Stella.li2 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
+      Stella.stdout.info2 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
     end
     
     def update_repeat_request client_id, counter, total
-      Stella.li2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+      Stella.stdout.info2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
     def self.rescue(client_id, &blk)
       blk.call
     rescue => ex
-      Stella.le '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
+      Stella.stdout.info '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
+      puts ex.backtrace
     end
     
     Benelux.add_timer Stella::Engine::Load, :build_thread_package

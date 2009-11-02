@@ -3,25 +3,6 @@
 $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
 
-module Stella
-  class Error < RuntimeError
-    def initialize(obj=nil); @obj = obj; end
-    def message; "#{self.class}: #{@obj}"; end
-  end
-  
-  class WackyRatio < Stella::Error
-  end
-  
-  class WackyDuration < Stella::Error
-  end
-  
-  class InvalidOption < Stella::Error
-  end
-  
-  class NoHostDefined < Stella::Error
-  end  
-end
-
 
 # Assumes Time::Units and Numeric mixins are available. 
 
@@ -173,24 +154,24 @@ class Stella::Config < Storable
     dir = File.dirname USER_PATH
     Dir.mkdir(dir, 0700) unless File.exists? dir
     unless File.exists? USER_PATH
-      Stella.li "Creating #{USER_PATH} (Add your credentials here)"
+      Stella.stdout.info "Creating #{USER_PATH} (Add your credentials here)"
       Stella::Utils.write_to_file(USER_PATH, DEFAULT_CONFIG, 'w', 0600)
     end
     
     dir = File.dirname PROJECT_PATH
     Dir.mkdir(dir, 0700) unless File.exists? dir
     
-    Stella.li "Creating #{PROJECT_PATH}"
+    Stella.stdout.info "Creating #{PROJECT_PATH}"
     Stella::Utils.write_to_file(PROJECT_PATH, 'target:', 'w', 0600)
   end
   
   def self.blast
     if File.exists? USER_PATH
-      Stella.li "Blasting #{USER_PATH}"
+      Stella.stdout.info "Blasting #{USER_PATH}"
       FileUtils.rm_rf File.dirname(USER_PATH)
     end
     if File.exists? PROJECT_PATH
-      Stella.li "Blasting #{PROJECT_PATH}"
+      Stella.stdout.info "Blasting #{PROJECT_PATH}"
       FileUtils.rm_rf File.dirname(PROJECT_PATH)
     end
   end

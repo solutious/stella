@@ -5,7 +5,6 @@ module Stella::Engine
     extend Stella::Engine::Load
     extend self
     
-    
     def execute_test_plan(packages, reps=1,duration=0)
       require 'threadify'
       
@@ -23,14 +22,14 @@ module Stella::Engine
             stats = package.client.execute package.usecase
           }
           Benelux.remove_thread_tags :rep
-          Stella.sleep :check_threads
+          Stella.sleep CHECK_THREAD_SLEEP
         end
         
         Benelux.remove_thread_tags :usecase
         
       end
       
-      Stella.li2 $/, $/
+      Stella.stdout.info2 $/, $/
     end
     
     Benelux.add_timer Stella::Engine::LoadPackage, :execute_test_plan

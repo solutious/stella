@@ -58,7 +58,7 @@ module Stella
           user, pass = http_auth.user, http_auth.pass
           user = container.instance_eval &user if Proc === user
           pass = container.instance_eval &pass if Proc === pass
-          Stella.li3 "  AUTH   (#{http_auth.kind}) #{domain} (#{user}/#{pass})"
+          Stella.stdout.puts 3, "  AUTH   (#{http_auth.kind}) #{domain} (#{user}/#{pass})"
           http_client.set_auth(domain, user, pass)
         end
         
@@ -94,7 +94,7 @@ module Stella
           container.assets.each do |uri|
             Benelux.add_thread_tags :asset => uri
             a = http_client.get uri
-            Stella.li3 "   FETCH ASSET: #{uri} #{a.status}"
+            Stella.stdout.info3 "   FETCH ASSET: #{uri} #{a.status}"
             Benelux.remove_thread_tags :asset
           end
           asset_duration = Time.now - asset_start
@@ -105,8 +105,6 @@ module Stella
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next
         end
-        
-        Stella.lflush
         
         run_sleeper(req.wait, asset_duration) if req.wait != 0 && !nowait?
         

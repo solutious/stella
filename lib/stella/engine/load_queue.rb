@@ -20,7 +20,7 @@ module Stella::Engine
           Thread.current[:real_reps] = 0
           Thread.current[:real_uctime] = Benelux::Stats::Calculator.new
           c, uc = package.client, package.usecase
-          Stella.li4 $/, "======== THREAD %s: START" % [c.digest.short]  
+          Stella.stdout.info4 $/, "======== THREAD %s: START" % [c.digest.short]  
 
           # This thread will stay on this one track. 
           Benelux.current_track c.digest
@@ -32,13 +32,13 @@ module Stella::Engine
             break if Stella.abort?
             Thread.current[:real_reps] += 1
             args = [c.digest.short, uc.desc, uc.digest.short, Thread.current[:real_reps]]
-            Stella.li4 $/, "======== THREAD %s: %s:%s (rep: %d)" % args
+            Stella.stdout.info4 $/, "======== THREAD %s: %s:%s (rep: %d)" % args
             
             Benelux.add_thread_tags :rep =>  rep
-            #Stella.li [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
+            #Stella.stdout.info [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
             Stella::Engine::Load.rescue(c.digest_cache) {
               break if Stella.abort?
-              print '.' if Stella.log.lev == 1
+              Stella.stdout.print 1, '.'
               stats = c.execute uc
             }
             Benelux.remove_thread_tags :rep
@@ -50,8 +50,7 @@ module Stella::Engine
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
               if Stella.log.lev >= 2 && Thread.current == @threads.first 
                 args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
-                Stella.li2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
-                Stella.lflush
+                Stella.stdout.info2 $/, "REAL UC TIME: %ds (reps: %d): %.4fs %.4f(SD)" % args
               end
               
               Thread.current.rotate_timeline
@@ -73,7 +72,7 @@ module Stella::Engine
         unless arrival.nil?
           # Create 1 second / users per second 
           args = [1/arrival, @threads.size, packages.size]
-          Stella.li2 $/, "======== ARRIVAL (%s): %s of %s" % args
+          Stella.stdout.info2 $/, "======== ARRIVAL (%s): %s of %s" % args
           sleep 1/arrival
         end
       }
@@ -83,9 +82,9 @@ module Stella::Engine
       @threads.each { |t| repscalc.sample(t[:real_reps]) }
       @real_reps = repscalc.mean.to_i
       
-      #Stella.li "*** REPETITION #{@real_reps} of #{reps} ***"
+      #Stella.stdout.info "*** REPETITION #{@real_reps} of #{reps} ***"
       
-      Stella.li2 $/, $/
+      Stella.stdout.info2 $/, $/
     end
     
     Benelux.add_timer Stella::Engine::LoadQueue, :execute_test_plan

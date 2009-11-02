@@ -67,7 +67,7 @@ class Stella::CLI < Drydock::Command
   
   def preview
     create_testplan
-    Stella.li @testplan.pretty(Stella.log.lev > 1)
+    Stella.stdout.info @testplan.pretty(Stella.log.lev > 1)
   end
   
   private
@@ -88,7 +88,7 @@ class Stella::CLI < Drydock::Command
     end
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests
-    Stella.li2 " #{@option.testplan || @testplan.desc} (#{@testplan.digest})" 
+    Stella.stdout.info2 " #{@option.testplan || @testplan.desc} (#{@testplan.digest})" 
     true
   end
   

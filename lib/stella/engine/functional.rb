@@ -8,26 +8,25 @@ module Stella::Engine
       opts = process_options! plan, opts
       
       Stella.ld "OPTIONS: #{opts.inspect}"
-      Stella.li2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
+      Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       
       client = Stella::Client.new opts[:hosts].first
       client.add_observer(self)
 
       client.enable_nowait_mode if opts[:nowait]
       
-      Stella.li2 $/, "Starting test...", $/
-      Stella.lflush
+      Stella.stdout.info2 $/, "Starting test...", $/
       sleep 0.3
       
       # Identify this thread to Benelux
       Benelux.current_track :functional 
       
       dig = Stella.log.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
-      Stella.li " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
+      Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
         dig = Stella.log.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
-        Stella.li ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
+        Stella.stdout.info ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
         Stella.rescue { client.execute uc }
       end
       
@@ -40,47 +39,47 @@ module Stella::Engine
       notice = "repeat: #{counter-1}" if counter > 1
       dig = Stella.log.lev > 1 ? req.digest_cache : req.digest_cache.shorter
       desc = "#{req.desc}  (#{dig}) "
-      Stella.li2 "  %-46s %16s ".bright % [desc, notice]
+      Stella.stdout.info2 "  %-46s %16s ".bright % [desc, notice]
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
       msg = '  %-6s %-53s ' % [req.http_method, uri]
       msg << container.status.to_s if Stella.log.lev == 1
-      Stella.li msg
+      Stella.stdout.info msg
       
-      Stella.li2 $/, "   Params:"
+      Stella.stdout.info2 $/, "   Params:"
       params.each do |pair|
-        Stella.li2 "     %s: %s" % pair
+        Stella.stdout.info2 "     %s: %s" % pair
       end
       
-      Stella.li2 $/, '   ' << container.response.request.header.send(:request_line)
+      Stella.stdout.info2 $/, '   ' << container.response.request.header.send(:request_line)
       
       container.response.request.header.all.each do |pair|
-        Stella.li2 "   %s: %s" % pair
+        Stella.stdout.info2 "   %s: %s" % pair
       end
       
       if req.http_method == 'POST'
         cont = container.response.request.body.content
         if String === cont
-          Stella.li2 ('   ' << cont.split($/).join("#{$/}    "))
+          Stella.stdout.info2 ('   ' << cont.split($/).join("#{$/}    "))
         elsif HTTP::Message::Body::Parts === cont
           cont.parts.each do |part|
             if File === part
-              Stella.li2 "<#{part.path}>"
+              Stella.stdout.info2 "<#{part.path}>"
             else
-              Stella.li2 part
+              Stella.stdout.info2 part
             end
           end
         end
       end
       
       resh = container.response.header
-      Stella.li2 $/, '   HTTP/%s %3d %s' % [resh.http_version, resh.status_code, resh.reason_phrase]
+      Stella.stdout.info2 $/, '   HTTP/%s %3d %s' % [resh.http_version, resh.status_code, resh.reason_phrase]
       container.headers.all.each do |pair|
-        Stella.li2 "   %s: %s" % pair
+        Stella.stdout.info2 "   %s: %s" % pair
       end
-      Stella.li4 container.body.empty? ? '   [empty]' : container.body
-      Stella.li2 $/
+      Stella.stdout.info4 container.body.empty? ? '   [empty]' : container.body
+      Stella.stdout.info2 $/
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -98,15 +97,15 @@ module Stella::Engine
     end
     
     def update_quit_usecase client_id, msg
-      Stella.li "  QUIT   %s" % [msg]
+      Stella.stdout.info "  QUIT   %s" % [msg]
     end
     
     def update_fail_request client_id, msg
-      Stella.li "  FAILED   %s" % [msg]
+      Stella.stdout.info "  FAILED   %s" % [msg]
     end
     
     def update_repeat_request client_id, counter, total
-      Stella.li3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
+      Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
   end
