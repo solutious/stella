@@ -22,7 +22,8 @@ module Stella::Engine
       Stella.stdout.info "Logging to #{d}", $/
       
       if Stella.sysinfo.os == :unix
-        FileUtils.ln_s d, latest, :force => true
+        File.unlink latest if File.exists? latest
+        FileUtils.ln_s File.basename(d), latest, :force => true
       end
       
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
