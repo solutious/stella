@@ -113,6 +113,9 @@ module Stella::Engine
       Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
+    def update_authenticate client_id, usecase, req, kind, domain, user, pass
+      Stella.stdout.info "  AUTH   (#{kind}) #{domain} (#{user}/#{pass})"
+    end
   end
 end
 

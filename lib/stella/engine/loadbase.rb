@@ -22,6 +22,7 @@ module Stella::Engine
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
       @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
+      @authlog = Stella::Logger.new log_path(plan, 'requests-auth')
       
       @syslog = Stella::Logger.new log_path(plan, 'sysinfo')
       @syslog.info(Stella.sysinfo.dump(:yaml)) and @syslog.close
@@ -41,9 +42,10 @@ module Stella::Engine
       @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.rfilter(:exception => true)
-        @failog.info Benelux.timeline.messages.filter(:exception => true)
-        @reqlog.clear and @failog.clear
+        @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
+        @failog.info Benelux.timeline.messages.filter(:kind => :exception)
+        @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
+        @reqlog.clear and @failog.clear and @authlog.clear
         Benelux.timeline.clear
       end
       
@@ -295,7 +297,9 @@ module Stella::Engine
         '%s=%s' % el 
       }.compact.join('&') # remove skipped params
       args << container.unique_id[0,10]
-      Benelux.thread_timeline.add_message args.join('; '), :status => container.status
+      Benelux.thread_timeline.add_message args.join('; '), 
+       :status => container.status,
+       :kind => :request
       #args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
       #Stella.ld '  Client-%s %3d %-6s %s %s' % args
     end
@@ -321,26 +325,34 @@ module Stella::Engine
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :quit, 1
       args.push ['QUIT', container.status, req, msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :exception => true
+      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
     def update_request_fail client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
       args.push ['FAIL', container.status, req, msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :exception => true
+      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
     def update_request_error client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :error, 1
       args.push ['ERROR', container.status, req, msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :exception => true
+      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
     def update_request_repeat client_id, counter, total, req, container
       Stella.stdout.info2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
+    
+    def update_authenticate client_id, usecase, req, kind, domain, user, pass
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
+      args.push usecase.digest.shorter, req.digest.shorter
+      args.push 'AUTH', kind, domain, user, pass
+      Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
+    end
+    
     
     def self.rescue(client_id, &blk)
       blk.call
