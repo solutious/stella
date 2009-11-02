@@ -110,17 +110,17 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
-          update(:request_repeat, counter, ret.times+1, req.uri, container)
+          update(:request_repeat, counter, ret.times+1, uri, container)
           Benelux.remove_thread_tags :status
           redo if counter <= ret.times
         when "Stella::Client::Quit"
-          update(:usecase_quit, ret.message, req.uri, container)
+          update(:usecase_quit, ret.message, uri, container)
           Benelux.remove_thread_tags :status
           break
         when "Stella::Client::Fail"  
-          update(:request_fail, ret.message, req.uri, container)
+          update(:request_fail, ret.message, uri, container)
         when "Stella::Client::Error"  
-          update(:request_error, ret.message, req.uri, container)
+          update(:request_error, ret.message, uri, container)
         end
         
         Benelux.remove_thread_tags :status

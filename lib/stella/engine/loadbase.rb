@@ -17,7 +17,13 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      Stella.stdout.info "Logging to #{log_dir(plan)}", $/
+      d = log_dir(plan)
+      latest = File.join(File.dirname(d), 'latest')
+      Stella.stdout.info "Logging to #{d}", $/
+      
+      if Stella.sysinfo.os == :unix
+        FileUtils.ln_s d, latest, :force => true
+      end
       
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
       @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
@@ -352,7 +358,6 @@ module Stella::Engine
       args.push 'AUTH', kind, domain, user, pass
       Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
     end
-    
     
     def self.rescue(client_id, &blk)
       blk.call
