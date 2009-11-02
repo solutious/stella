@@ -21,13 +21,14 @@ module Stella::Engine
       @failog = Stella::Logger.new log_path(plan, 'failed')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
       
-      Stella.stdout.add_template :status, '%s...'
+      Stella.stdout.add_template :status,   '%s...'
+      Stella.stdout.add_template :nstatus,  "#{$/}%s..."
       Stella.stdout.add_template :dsummary, '%20s: %8d'
       Stella.stdout.add_template :fsummary, '%20s: %8.2f'
       
       @sumlog.add_template :head, '%10s: %s'
       
-      @dumper = Stella::Hand.new(15, 2) do
+      @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages
@@ -43,7 +44,7 @@ module Stella::Engine
       
       counts = calculate_usecase_clients plan, opts
       
-      Stella.stdout.status "Preparing #{counts[:total]} virtual clients..."
+      Stella.stdout.status "Preparing #{counts[:total]} virtual clients"
       @sumlog.head 'RUNID', runid(plan)
       
       packages = build_thread_package plan, opts, counts
@@ -54,14 +55,14 @@ module Stella::Engine
         msg = "for #{opts[:repetitions]} reps"
       end
       
-      Stella.stdout.status "Generating requests #{msg}..."
+      Stella.stdout.status "Generating requests #{msg}"
       @dumper.start
       
       begin 
         @sumlog.head "START", Time.now.to_s
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
-        Stella.stdout.status "#{$/}Stopping test..."
+        Stella.stdout.nstatus "Stopping test"
         Stella.abort!
         @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
       rescue => ex
@@ -73,7 +74,7 @@ module Stella::Engine
       
       @dumper.stop
       
-      Stella.stdout.status "#{$/}Processing statistics..." 
+      Stella.stdout.nstatus "Processing statistics" 
       
       Benelux.update_global_timeline
       
@@ -100,6 +101,9 @@ module Stella::Engine
       Stella.stdout.dsummary "repetitions", @real_reps
       Stella.stdout.fsummary "test time", test_time
       Stella.stdout.fsummary "reporting time", report_time
+      
+      # DNE:
+      #p [@real_reps, total.n]
       
       failed.n == 0
     end
@@ -241,7 +245,7 @@ module Stella::Engine
       success = global_stats.n - failed.n
       @sumlog.info  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
       statusi.each do |pair|
-        @sumlog.info3, '        %-28s %s: %d' % ['', *pair]
+        @sumlog.info3 '        %-28s %s: %d' % ['', *pair]
       end
       @sumlog.info  '       %-29s %d' % [:failed, failed.n]
       

@@ -3,7 +3,10 @@
 module Stella
 
   class Logger
-
+    @@disable = false
+    def self.disable!()  @@disable = true  end
+    def self.disable?()  @@disable == true end
+    
     attr_accessor :lev
     attr_reader :templates
     
@@ -31,12 +34,12 @@ module Stella
     end
     
     def print(level, *msg)
-      return unless level <= @lev
+      return if level > @lev || Logger.disable?
       @buffer.print *msg
       flush if autoflush?
     end
     def puts(level, *msg)
-      return unless level <= @lev
+      return if level > @lev || Logger.disable?
       @buffer.puts *msg
       flush if autoflush?
     end
@@ -106,7 +109,7 @@ module Stella
   # Must call flush to send to output. 
   class SyncLogger < Logger
     def print(level, *msg)
-      return unless level <= @lev
+      return if level > @lev || Logger.disable?
       @mutex.synchronize { 
         @buffer.print *msg 
         flush if autoflush?
@@ -115,7 +118,7 @@ module Stella
 
     def puts(level, *msg)
       #Stella.ld [level, @lev, msg]
-      return unless level <= @lev
+      return if level > @lev || Logger.disable?
       @mutex.synchronize { 
         @buffer.puts *msg 
         flush if autoflush?
