@@ -17,9 +17,18 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
+      Stella.stdout.info "Logging to #{log_dir(plan)}", $/
+      
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
-      @failog = Stella::Logger.new log_path(plan, 'failed')
+      @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
+      
+      @syslog = Stella::Logger.new log_path(plan, 'sysinfo')
+      @syslog.info(Stella.sysinfo.dump(:yaml)) and @syslog.close
+      
+      @plalog = Stella::Logger.new log_path(plan, 'plan')
+      @plalog.info(plan.pretty.noansi) and @plalog.close
+      
       
       Stella.stdout.add_template :head, '%s: %s'
       Stella.stdout.add_template :status,  "#{$/}%s..."
@@ -32,8 +41,8 @@ module Stella::Engine
       @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.rfilter(:failed => true)
-        @failog.info Benelux.timeline.messages.filter(:failed => true)
+        @reqlog.info Benelux.timeline.messages.rfilter(:unhandled => true)
+        @failog.info Benelux.timeline.messages.filter(:unhandled => true)
         @reqlog.clear and @failog.clear
         Benelux.timeline.clear
       end
@@ -66,6 +75,7 @@ module Stella::Engine
         @sumlog.head "START", Time.now.to_s
         Stella.stdout.status "Running" 
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
+        Stella.stdout.info "Done" 
       rescue Interrupt
         Stella.stdout.nstatus "Stopping test"
         Stella.abort!
@@ -272,11 +282,19 @@ module Stella::Engine
      
     end
       
-    def update_receive_response(client_id, usecase, uri, req, params, counter, container)
-      args = [Time.now.to_f, Stella.sysinfo.hostname, usecase.digest.shorter, req.digest.shorter]
+    def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
+      args.push usecase.digest.shorter, req.digest.shorter
       args.push container.status, uri
-      args << params.to_a.collect { |el| '%s=%s' % el }.join('&')
-      args << container.unique_id
+      args << params.to_a.collect { |el| 
+        next if el[0].to_s == '__stella'
+        '%s=%s' % [el[0], el[1].to_s] 
+      }.compact.join('&') # remove skipped params
+      args << headers.to_a.collect { |el|
+        next if el[0].to_s == 'X-Stella-ID'
+        '%s=%s' % el 
+      }.compact.join('&') # remove skipped params
+      args << container.unique_id[0,10]
       Benelux.thread_timeline.add_message args.join('; '), :status => container.status
       #args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
       #Stella.ld '  Client-%s %3d %-6s %s %s' % args
@@ -299,18 +317,21 @@ module Stella::Engine
       Stella.stdout.info ex.backtrace
     end
 
-    def update_quit_usecase client_id, msg
-
-      Stella.stdout.info2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
+    def update_quit_usecase client_id, msg, req, container
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
+      Benelux.thread_timeline.add_count :quit, 1
+      args.push ['QUIT', container.status, req, msg, container.unique_id[0,10]]
+      Benelux.thread_timeline.add_message args.join('; '), :unhandled => true
     end
     
     def update_fail_request client_id, msg, req, container
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
-      msg = [container.unique_id, container.status, req, msg]
-      Benelux.thread_timeline.add_message msg.join('; '), :failed => true
+      args.push ['FAIL', container.status, req, msg, container.unique_id[0,10]]
+      Benelux.thread_timeline.add_message args.join('; '), :unhandled => true
     end
     
-    def update_repeat_request client_id, counter, total
+    def update_repeat_request client_id, counter, total, req, container
       Stella.stdout.info2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     

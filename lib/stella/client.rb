@@ -110,11 +110,11 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
-          update(:repeat_request, counter, ret.times+1)
+          update(:repeat_request, counter, ret.times+1, req.uri, container)
           Benelux.remove_thread_tags :status
           redo if counter <= ret.times
         when "Stella::Client::Quit"
-          update(:quit_usecase, ret.message)
+          update(:quit_usecase, ret.message, req.uri, container)
           Benelux.remove_thread_tags :status
           break
         when "Stella::Client::Fail"  
@@ -136,7 +136,7 @@ module Stella
   private
     def send_request(http_client, usecase, meth, uri, req, params, headers, container, counter)
       container.response = http_client.send(meth, uri, params, headers) # booya!
-      update(:receive_response, usecase, uri, req, params, counter, container)
+      update(:receive_response, usecase, uri, req, params, headers, counter, container)
     end
     
     def update(kind, *args)

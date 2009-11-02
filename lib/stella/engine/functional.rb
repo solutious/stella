@@ -42,7 +42,7 @@ module Stella::Engine
       Stella.stdout.info2 "  %-46s %16s ".bright % [desc, notice]
     end
     
-    def update_receive_response(client_id, usecase, uri, req, params, counter, container)
+    def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       msg = '  %-6s %-53s ' % [req.http_method, uri]
       msg << container.status.to_s if Stella.log.lev == 1
       Stella.stdout.info msg
@@ -96,7 +96,7 @@ module Stella::Engine
       Stella.ld ex.backtrace
     end
     
-    def update_quit_usecase client_id, msg
+    def update_quit_usecase client_id, msg, req, container
       Stella.stdout.info "  QUIT   %s" % [msg]
     end
     
@@ -105,7 +105,7 @@ module Stella::Engine
       Stella.stdout.info "  FAILED   %s" % [msg]
     end
     
-    def update_repeat_request client_id, counter, total
+    def update_repeat_request client_id, counter, total, req, container
       Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
