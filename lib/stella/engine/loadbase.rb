@@ -41,8 +41,8 @@ module Stella::Engine
       @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.rfilter(:unhandled => true)
-        @failog.info Benelux.timeline.messages.filter(:unhandled => true)
+        @reqlog.info Benelux.timeline.messages.rfilter(:exception => true)
+        @failog.info Benelux.timeline.messages.filter(:exception => true)
         @reqlog.clear and @failog.clear
         Benelux.timeline.clear
       end
@@ -310,28 +310,35 @@ module Stella::Engine
       Stella.stdout.info ex.backtrace
     end
     
-    def update_request_error(client_id, usecase, uri, req, params, ex)
+    def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.stdout.info $/ if Stella.log.lev == 1
       Stella.stdout.info '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.stdout.info ex.backtrace
     end
 
-    def update_quit_usecase client_id, msg, req, container
+    def update_usecase_quit client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :quit, 1
       args.push ['QUIT', container.status, req, msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :unhandled => true
+      Benelux.thread_timeline.add_message args.join('; '), :exception => true
     end
     
-    def update_fail_request client_id, msg, req, container
+    def update_request_fail client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
       args.push ['FAIL', container.status, req, msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :unhandled => true
+      Benelux.thread_timeline.add_message args.join('; '), :exception => true
     end
     
-    def update_repeat_request client_id, counter, total, req, container
+    def update_request_error client_id, msg, req, container
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
+      Benelux.thread_timeline.add_count :error, 1
+      args.push ['ERROR', container.status, req, msg, container.unique_id[0,10]]
+      Benelux.thread_timeline.add_message args.join('; '), :exception => true
+    end
+    
+    def update_request_repeat client_id, counter, total, req, container
       Stella.stdout.info2 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     

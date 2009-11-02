@@ -100,7 +100,7 @@ module Stella
           asset_duration = Time.now - asset_start
           
         rescue => ex
-          update(:request_error, usecase, uri, req, params, ex)
+          update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next
         end
@@ -110,15 +110,17 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
-          update(:repeat_request, counter, ret.times+1, req.uri, container)
+          update(:request_repeat, counter, ret.times+1, req.uri, container)
           Benelux.remove_thread_tags :status
           redo if counter <= ret.times
         when "Stella::Client::Quit"
-          update(:quit_usecase, ret.message, req.uri, container)
+          update(:usecase_quit, ret.message, req.uri, container)
           Benelux.remove_thread_tags :status
           break
         when "Stella::Client::Fail"  
-          update(:fail_request, ret.message, req.uri, container)
+          update(:request_fail, ret.message, req.uri, container)
+        when "Stella::Client::Error"  
+          update(:request_error, ret.message, req.uri, container)
         end
         
         Benelux.remove_thread_tags :status
@@ -266,7 +268,7 @@ module Stella
       handler = find_response_handler container, req
       if handler.nil?
         if container.status >= 400
-          update(:fail_request, "No handler", req.uri, container) 
+          update(:request_fail, "No handler", req.uri, container) 
         end
         return
       end
@@ -297,19 +299,20 @@ end
 
 class Stella::Client
   
-  class ResponseModifier; end
+  class ResponseModifier
+    attr_accessor :message
+    def initialize(msg=nil)
+      @message = msg
+    end 
+  end
   class Repeat < ResponseModifier; 
     attr_accessor :times
     def initialize(times)
       @times = times
     end
   end
-  class Quit < ResponseModifier; 
-    attr_accessor :message
-    def initialize(msg=nil)
-      @message = msg
-    end
-  end
+  class Quit < ResponseModifier; end
   class Fail < Quit; end
+  class Error < Quit; end
   
 end

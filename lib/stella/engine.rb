@@ -23,8 +23,8 @@ module Stella::Engine
     
     def log_dir(plan, file=nil)
       stamp = "#{plan.digest.short}-"
-      stamp << Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
-      #stamp << "STAMP"
+      #stamp << Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
+      stamp << "STAMP"
       l = File.join Stella::Config.project_dir, 'log', stamp
       FileUtils.mkdir_p l unless File.exists? l
       l
@@ -65,8 +65,8 @@ module Stella::Engine
     end
     
     def run; raise; end
-    def update_quit_usecase(client_id, msg) raise end
-    def update_repeat_request(client_id, counter, total) raise end
+    def update_usecase_quit(client_id, msg) raise end
+    def update_request_repeat(client_id, counter, total) raise end
     def update_stats(client_id, http_client, usecase, req) raise end
     def update_prepare_request(*args) raise end
     def update_send_request(*args) raise end
@@ -74,6 +74,8 @@ module Stella::Engine
     def update_execute_response_handler(*args) raise end
     def update_error_execute_response_handler(*args) raise end
     def update_request_error(*args) raise end
+    def request_unhandled_exception(*args) raise end
+    def update_request_fail(*args) raise end
     
   end
   

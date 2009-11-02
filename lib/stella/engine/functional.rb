@@ -90,22 +90,26 @@ module Stella::Engine
       Stella.ld ex.backtrace
     end
     
-    def update_request_error(client_id, usecase, uri, req, params, ex)
+    def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.le '  Client-%s %-45s %s' % [client_id.short, desc, ex.message]
       Stella.ld ex.backtrace
     end
     
-    def update_quit_usecase client_id, msg, req, container
+    def update_usecase_quit client_id, msg, req, container
       Stella.stdout.info "  QUIT   %s" % [msg]
     end
     
-    def update_fail_request client_id, msg, req, container
+    def update_request_fail client_id, msg, req, container
       Benelux.thread_timeline.add_count :failed, 1
       Stella.stdout.info "  FAILED   %s" % [msg]
     end
     
-    def update_repeat_request client_id, counter, total, req, container
+    def update_request_error client_id, msg, req, container
+      Stella.stdout.info "  ERROR   %s" % [msg]
+    end
+    
+    def update_request_repeat client_id, counter, total, req, container
       Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
