@@ -63,14 +63,14 @@ module Stella
         end
         
         raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
-        stella_id = [Time.now, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
+        stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         
         Benelux.add_thread_tags :request => req.digest_cache
         Benelux.add_thread_tags :retry => counter
         Benelux.add_thread_tags :stella_id => stella_id
         
-        container.unique_id = stella_id[0..10]
-        params['__stella'] = headers['X-Stella-ID'] = container.unique_id
+        container.unique_id = stella_id
+        params['__stella'] = headers['X-Stella-ID'] = container.unique_id[0..10]
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
@@ -100,7 +100,6 @@ module Stella
           asset_duration = Time.now - asset_start
           
         rescue => ex
-          Benelux.thread_timeline.add_count :failed, 1
           update(:request_error, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next
@@ -111,16 +110,15 @@ module Stella
         # TODO: consider throw/catch
         case ret.class.to_s
         when "Stella::Client::Repeat"
-          Benelux.remove_thread_tags :status
           update(:repeat_request, counter, ret.times+1)
+          Benelux.remove_thread_tags :status
           redo if counter <= ret.times
         when "Stella::Client::Quit"
-          Benelux.remove_thread_tags :status
           update(:quit_usecase, ret.message)
+          Benelux.remove_thread_tags :status
           break
         when "Stella::Client::Fail"  
-          Benelux.thread_timeline.add_count :failed, 1
-          update(:fail_request, ret.message)
+          update(:fail_request, ret.message, req, container)
         end
         
         Benelux.remove_thread_tags :status
@@ -267,7 +265,9 @@ module Stella
       ret = nil
       handler = find_response_handler container, req
       if handler.nil?
-        Benelux.thread_timeline.add_count :failed, 1 if container.status >= 400
+        if container.status >= 400
+          update(:fail_request, "No handler for #{container.status}", req, container) 
+        end
         return
       end
       begin

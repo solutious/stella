@@ -21,12 +21,14 @@ module Stella::Engine
       @failog = Stella::Logger.new log_path(plan, 'failed')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
       
+      Stella.stdout.add_template :preparing,   'Plan %s with %d clients...'
       Stella.stdout.add_template :status,   '%s...'
       Stella.stdout.add_template :nstatus,  "#{$/}%s..."
       Stella.stdout.add_template :dsummary, '%20s: %8d'
       Stella.stdout.add_template :fsummary, '%20s: %8.2f'
       
       @sumlog.add_template :head, '%10s: %s'
+      @failog.add_template :request, '%s %s'
       
       @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
@@ -44,7 +46,8 @@ module Stella::Engine
       
       counts = calculate_usecase_clients plan, opts
       
-      Stella.stdout.status "Preparing #{counts[:total]} virtual clients"
+      Stella.stdout.preparing plan.digest.short, counts[:total]
+      
       @sumlog.head 'RUNID', runid(plan)
       
       packages = build_thread_package plan, opts, counts
@@ -299,8 +302,9 @@ module Stella::Engine
       Stella.stdout.info2 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
-    def update_fail_request client_id, msg
-      Stella.stdout.info2 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
+    def update_fail_request client_id, msg, req, container
+      Benelux.thread_timeline.add_count :failed, 1
+      @failog.request container.unique_id, msg
     end
     
     def update_repeat_request client_id, counter, total

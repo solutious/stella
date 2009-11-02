@@ -100,7 +100,8 @@ module Stella::Engine
       Stella.stdout.info "  QUIT   %s" % [msg]
     end
     
-    def update_fail_request client_id, msg
+    def update_fail_request client_id, msg, req, container
+      Benelux.thread_timeline.add_count :failed, 1
       Stella.stdout.info "  FAILED   %s" % [msg]
     end
     
