@@ -264,7 +264,7 @@ module Stella::Engine
     end
       
     def update_receive_response(client_id, usecase, uri, req, params, counter, container)
-      args = [Time.now.to_f, Stella.sysinfo.hostname, usecase.digest.short, req.digest.short]
+      args = [Time.now.to_f, Stella.sysinfo.hostname, usecase.digest.shorter, req.digest.shorter]
       args.push container.status, uri
       args << params.to_a.collect { |el| '%s=%s' % el }.join('&')
       args << container.unique_id
