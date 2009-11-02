@@ -5,11 +5,21 @@ module Stella
     
     class Logger
       attr_accessor :lev
+      attr_reader :templates
       
       def initialize(output=STDOUT)
         @mutex, @buffer = Mutex.new, StringIO.new
         @lev, @offset = 1, 0
+        @templates = {}
         self.output = output
+      end
+      
+      def add_template(name, str)
+        @templates[name] = str
+      end
+      
+      def template(name)
+        @templates[name]
       end
       
       def print(level, *msg)
@@ -19,6 +29,21 @@ module Stella
       def puts(level, *msg)
         return unless level <= @lev
         @buffer.puts *msg
+      end
+      
+      def info(*msg)  puts 1, *msg end
+      def warn(*msg)  puts 2, *msg end
+      
+      def tinfo(templ, *args)
+        info template(templ) % args
+      end
+      
+      def twarn(templ, *args)
+        warn template(templ) % args
+      end
+      
+      def method_missing(meth, *args)
+        tinfo meth, *args
       end
       
       def output=(o)
@@ -34,9 +59,11 @@ module Stella
         @mutex.synchronize do
           #return if @offset == @output.tell
           @buffer.seek @offset
-          @output.puts @buffer.read unless @buffer.eof?
+          @output.puts @buffer.readlines unless @buffer.eof?
           @offset = @buffer.tell
+          @output.flush
         end
+        true
       end
       
       def path
@@ -44,6 +71,7 @@ module Stella
       end
       
       def clear
+        flush
         @mutex.synchronize do
           @buffer.rewind
           @offset = 0
@@ -71,35 +99,6 @@ module Stella
         @mutex.synchronize { @buffer.puts *msg }
       end
     end
-    
-    class Dumper
-      FREQUENCY = Stella::Engine::LoadQueue::ROTATE_TIMELINE
-      SLEEP = 2
-      attr_accessor :force_stop
-      attr_reader :dthread
-      
-      def stop()  
-        @force_stop = true  
-        @dthread.join
-      end
-      def stop?() @force_stop == true end
-      
-      # Execute yield every FREQUENCY seconds.
-      def start(&blk)
-        @dthread = Thread.new do
-          prev_ptime = Time.now
-          loop do
-            break if Stella.abort? || stop?
-            if (Time.now - prev_ptime).to_i >= FREQUENCY
-              blk.call
-              prev_ptime = Time.now
-            end
-            sleep SLEEP
-          end
 
-        end
-      end
-      
-    end
   end
 end

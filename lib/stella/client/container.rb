@@ -45,6 +45,7 @@ class Stella::Client
     attr_accessor :params
     attr_accessor :headers
     attr_accessor :response
+    attr_accessor :unique_id
     attr_reader :resources
     attr_reader :client_id
     attr_reader :assets

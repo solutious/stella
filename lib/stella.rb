@@ -49,8 +49,8 @@ module Stella
   
   # Puts +msg+ to +@logger+
   def lflush; log.flush if log.respond_to? :flush; end
-  def li(*msg);  log.puts 1, *msg end
-  def li1(*msg); log.puts 1, *msg end
+  def li(*msg);  log.info *msg end
+  def li1(*msg); log.info *msg end
   def li2(*msg); log.puts 2, *msg end
   def li3(*msg); log.puts 3, *msg end
   def li4(*msg); log.puts 4, *msg end
@@ -60,7 +60,7 @@ module Stella
   # Puts +msg+ to +@logger+ if +Rudy.debug?+ returns true
   def ld(*msg)
     return unless debug?
-    @log.puts 1, "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+    @log.info "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
     Stella.lflush
   end
   

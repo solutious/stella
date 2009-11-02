@@ -17,8 +17,21 @@ module Stella::Engine
       end
     end
     
-    def runid
-      
+    def runid(plan)
+      [Stella::START_TIME.digest, plan.digest].digest
+    end
+    
+    def log_dir(plan, file=nil)
+      #stamp = Stella::START_TIME.strftime("%Y%m%d-%H%M%S")
+      stamp = "STAMP"
+      stamp << '-' << plan.digest.short
+      l = File.join Stella::Config.project_dir, 'log', stamp
+      FileUtils.mkdir_p l unless File.exists? l
+      l
+    end
+    
+    def log_path(plan, file)
+      File.join log_dir(plan), file
     end
     
     def process_options!(plan, opts={})

@@ -5,7 +5,7 @@ Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 module Stella
   class Client
-    require 'stella/client/modifiers'
+    
     require 'stella/client/container'
     
     include Gibbler::Complex
@@ -69,7 +69,8 @@ module Stella
         Benelux.add_thread_tags :retry => counter
         Benelux.add_thread_tags :stella_id => stella_id
         
-        params['__stella'] = headers['X-Stella-ID']= stella_id[0..10]
+        container.unique_id = stella_id[0..10]
+        params['__stella'] = headers['X-Stella-ID'] = container.unique_id
         
         meth = req.http_method.to_s.downcase
         Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect

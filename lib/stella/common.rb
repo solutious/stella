@@ -231,3 +231,39 @@ CONF
 end
 
 
+
+module Stella
+  class Hand
+    attr_accessor :force_stop
+    attr_reader :dthread
+    
+    def initialize(freq=4, rest=1, &routine)
+      @freq, @rest, @routine = freq, rest, routine
+    end
+  
+    def stop()  
+      @force_stop = true  
+      @dthread.join
+      @routine.call
+    end
+    def stop?() @force_stop == true end
+  
+    # Execute yield every FREQUENCY seconds.
+    def start
+      @dthread ||= Thread.new do
+        prev_ptime = Time.now
+        loop do
+          break if Stella.abort? || stop?
+          if (Time.now - prev_ptime).to_i >= @freq
+            @routine.call
+            prev_ptime = Time.now
+          end
+          sleep @rest
+        end
+      end
+      @dthread.abort_on_exception = true
+    end
+  end
+end
+
+
