@@ -23,8 +23,8 @@ module Stella::Engine
     
     def log_dir(plan, file=nil)
       stamp = "#{plan.digest.short}-"
-      #stamp << Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
-      stamp << "STAMP"
+      stamp << Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
+      #stamp << "STAMP"
       l = File.join Stella::Config.project_dir, 'log', stamp
       FileUtils.mkdir_p l unless File.exists? l
       l
