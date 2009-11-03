@@ -45,7 +45,6 @@
   lib/stella/common.rb
   lib/stella/data.rb
   lib/stella/data/http.rb
-  lib/stella/data/logger.rb
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load_create.rb
@@ -53,6 +52,7 @@
   lib/stella/engine/load_queue.rb
   lib/stella/engine/loadbase.rb
   lib/stella/guidelines.rb
+  lib/stella/logger.rb
   lib/stella/testplan.rb
   lib/stella/utils.rb
   lib/stella/utils/httputil.rb
