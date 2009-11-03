@@ -127,10 +127,11 @@ module Stella::Data
           end
           digest = value.object_id
           if value.is_a?(Array)
-            index = Stella::Client::Container.sequential_offset(digest, value.size-1)
-            value = value[ index ] 
+            idx = Stella::Client::Container.sequential_offset(digest, value.size-1)
+            value = value[ idx ] 
+            Stella.ld "SELECTED(SEQ): #{value} #{idx} #{input} #{digest}"
           end
-          Stella.ld "SELECTED(SEQ): #{value} #{index} #{input} #{digest}"
+          
           # I think this needs to be updated for global_sequential:
           @sequential_value[input.object_id] = value
         end

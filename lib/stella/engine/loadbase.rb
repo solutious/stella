@@ -294,7 +294,7 @@ module Stella::Engine
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push usecase.digest.shorter, req.digest.shorter
-      args.push req.http_method, uri, container.status
+      args.push req.http_method, container.status, uri
       args << params.to_a.collect { |el| 
         next if el[0].to_s == '__stella'
         '%s=%s' % [el[0], el[1].to_s] 

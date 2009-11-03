@@ -88,7 +88,8 @@ class Stella::Client
       # wrong number of arguments(1 for 0)
       template = ERB.new(t)
       v = template.result(binding)  
-    rescue 
+    rescue => ex
+      Stella.ld ex.message, ex.backtrace
       t
     end
     
