@@ -23,7 +23,7 @@ module Stella::Engine
       
       if Stella.sysinfo.os == :unix
         File.unlink latest if File.exists? latest
-        FileUtils.ln_s File.basename(d), latest, :force => true
+        FileUtils.ln_sf File.basename(d), latest
       end
       
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
@@ -294,7 +294,7 @@ module Stella::Engine
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push usecase.digest.shorter, req.digest.shorter
-      args.push container.status, uri
+      args.push req.http_method, uri, container.status
       args << params.to_a.collect { |el| 
         next if el[0].to_s == '__stella'
         '%s=%s' % [el[0], el[1].to_s] 
@@ -331,21 +331,21 @@ module Stella::Engine
     def update_usecase_quit client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :quit, 1
-      args.push ['QUIT', container.status, req, msg, container.unique_id[0,10]]
+      args.push [req, container.status, 'QUIT', msg, container.unique_id[0,10]]
       Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
     def update_request_fail client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
-      args.push ['FAIL', container.status, req, msg, container.unique_id[0,10]]
+      args.push [req, container.status, 'FAIL', msg, container.unique_id[0,10]]
       Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
     def update_request_error client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :error, 1
-      args.push ['ERROR', container.status, req, msg, container.unique_id[0,10]]
+      args.push [req, container.status, 'ERROR', msg, container.unique_id[0,10]]
       Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
     end
     
