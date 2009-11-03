@@ -46,14 +46,15 @@ module Stella::Engine
       @sumlog.add_template :head, '%10s: %s'
       @failog.add_template :request, '%s %s'
       
-      @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
+      @dumper = Stella::Hand.new(5.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
-        Benelux.timeline.clear
+        #generate_runtime_report(plan)
+        #Benelux.timeline.clear
       end
       
       if Stella.log.lev > 2
@@ -142,6 +143,7 @@ module Stella::Engine
       end
     end
     
+
     def calculate_usecase_clients(plan, opts)
       counts = { :total => 0 }
       plan.usecases.each_with_index do |usecase,i|
@@ -189,6 +191,26 @@ module Stella::Engine
     def running_threads
       @threads.select { |t| t.status }  # non-false status are still running
     end
+    
+    def generate_runtime_report(plan)
+      gt = Benelux.timeline
+      gstats = gt.stats.group(:do_request).merge
+      
+      plan.usecases.uniq.each_with_index do |uc,i| 
+        uc.requests.each do |req| 
+          filter = [uc.digest_cache, req.digest_cache]
+
+          Load.timers.each do |sname|
+            stats = gt.stats.group(sname)[filter].merge
+            #Stella.stdout.info stats.inspect
+            puts [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n].join('; ')
+          end
+          
+        end
+      end
+      
+    end
+        
     def generate_report(sumlog,plan,test_time)
       #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
