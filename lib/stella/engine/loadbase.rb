@@ -38,7 +38,8 @@ module Stella::Engine
       @plalog.info(plan.pretty.noansi) and @plalog.close
       
       
-      Stella.stdout.add_template :head, '%s: %s'
+      Stella.stdout.add_template :head1, '%s (%s)'
+      Stella.stdout.add_template :head2, '  %s: %s'
       Stella.stdout.add_template :status,  "#{$/}%s..."
       Stella.stdout.add_template :dsummary, '%20s: %8d'
       Stella.stdout.add_template :fsummary, '%20s: %8.2f'
@@ -66,6 +67,7 @@ module Stella::Engine
       counts = calculate_usecase_clients plan, opts
       
       @sumlog.head 'RUNID', runid(plan)
+      @sumlog.head 'OPTIONS', opts.inspect
       
       packages = build_thread_package plan, opts, counts
       
@@ -75,9 +77,9 @@ module Stella::Engine
         timing = "#{opts[:repetitions]} repetitions"
       end
       
-      Stella.stdout.head plan.desc, plan.digest.short
-      Stella.stdout.head 'Clients', counts[:total]
-      Stella.stdout.head 'Limit', timing
+      Stella.stdout.head1 plan.desc, plan.digest.short
+      Stella.stdout.head2 'Clients', counts[:total]
+      Stella.stdout.head2 'Limit', timing
       
       @dumper.start
       
