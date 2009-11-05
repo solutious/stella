@@ -57,9 +57,11 @@ class Stella::CLI::Definition
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
     Stella.log.lev += 1
   end
+  global :'disable-stats', "Disable stat collection"
   global :'disable-logging', "Disable all logging" do
     Stella::Logger.disable!
   end
+  global :'disable-templates', "Disable template parsing"
   global :V, :version, "Display version number" do
     puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
     exit 0
@@ -110,7 +112,6 @@ class Stella::CLI::Definition
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
   option :a, :arrival, Float, "Arrival rate (new clients per second)"
-  option :'disable-templates', "Disable template parsing"
   command :generate => Stella::CLI
 
   about "Initialize Stella configuration"

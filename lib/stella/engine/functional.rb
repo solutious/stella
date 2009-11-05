@@ -47,9 +47,9 @@ module Stella::Engine
       msg << container.status.to_s if Stella.log.lev == 1
       Stella.stdout.info msg
       
-      Stella.stdout.info2 $/, "   Params:"
+      Stella.stdout.info $/, "   Params:"
       params.each do |pair|
-        Stella.stdout.info2 "     %s: %s" % pair
+        Stella.stdout.info "     %s: %s" % pair
       end
       
       Stella.stdout.info2 $/, '   ' << container.response.request.header.send(:request_line)

@@ -25,7 +25,7 @@ module Stella::Engine
         File.unlink latest if File.exists? latest
         FileUtils.ln_sf File.basename(d), latest
       end
-      
+
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
       @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
@@ -47,7 +47,7 @@ module Stella::Engine
       @sumlog.add_template :head, '%10s: %s'
       @failog.add_template :request, '%s %s'
       
-      @dumper = Stella::Hand.new(5.seconds, 2.seconds) do
+      @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
         Benelux.update_global_timeline
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
@@ -55,7 +55,7 @@ module Stella::Engine
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
         #generate_runtime_report(plan)
-        #Benelux.timeline.clear
+        Benelux.timeline.clear if opts[:"disable-stats"]
       end
       
       if Stella.log.lev > 2

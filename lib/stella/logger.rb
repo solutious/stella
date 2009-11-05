@@ -41,6 +41,7 @@ module Stella
       true
     end
     def puts(level, *msg)
+
       return if level > @lev || Logger.disabled?
       @buffer.puts *msg
       flush if autoflush?
