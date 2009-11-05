@@ -4,7 +4,7 @@ STELLA, CHANGES
 
 * ADDED: Logging to file
 * ADDED: Global variables via --var
-
+* ADDED: Using naive CSV parsing via quickcsv (CSV lib is slooow for large files)
 
 #### 0.7.3 (2009-10-30) ###############################
 

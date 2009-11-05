@@ -208,6 +208,17 @@ class Testplan
       CSV.read(path)
     end
     
+    def quickcsv(path)
+      path = File.join(base_path, path) if base_path
+      Stella.ld "READING CSV(QUICK): #{path}"
+      ar = []
+      File.readlines(path).each do |l|
+        l.strip!
+        ar << l.split(',')
+      end
+      ar
+    end
+    
     def freeze
       @requests.each { |r| r.freeze }
       super
