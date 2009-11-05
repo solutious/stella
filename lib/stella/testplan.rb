@@ -5,6 +5,20 @@ class Testplan
   include Gibbler::Complex
   extend Attic
   
+  @file_cache = {}
+  
+  class << self
+    attr_reader :file_cache
+    def readlines path
+      if @file_cache.has_key?(path)
+        Stella.ld "FILE CACHE HIT: #{path}"
+        return @file_cache[path]
+      end
+      Stella.ld "FILE CACHE LOAD: #{path}"
+      @file_cache[path] = File.readlines(path)
+    end
+  end
+  
   attic :base_path
   attic :plan_path
   
@@ -195,24 +209,26 @@ class Testplan
     def read(path)
       path = File.join(base_path, path) if base_path
       Stella.ld "READING FILE: #{path}"
-      File.read(path)
+      Stella::Testplan.readlines path
     end
       
     def list(path)
-      read(path).split $/
+      read(path).collect { |line| line.strip }
     end
     
     def csv(path)
       path = File.join(base_path, path) if base_path
       Stella.ld "READING CSV: #{path}"
-      CSV.read(path)
+      file = Stella::Testplan.readlines path
+      CSV.parse file.join
     end
     
     def quickcsv(path)
       path = File.join(base_path, path) if base_path
       Stella.ld "READING CSV(QUICK): #{path}"
       ar = []
-      File.readlines(path).each do |l|
+      file = Stella::Testplan.readlines path
+      file.each do |l|
         l.strip!
         ar << l.split(',')
       end
