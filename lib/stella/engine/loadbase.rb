@@ -52,6 +52,7 @@ module Stella::Engine
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
+        @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
         #generate_runtime_report(plan)
@@ -382,6 +383,13 @@ module Stella::Engine
       args.push usecase.digest.shorter, req.digest.shorter
       args.push 'AUTH', kind, domain, user, pass
       Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
+    end
+    
+    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
+      Benelux.thread_timeline.add_count :failed, 1
+      args.push [uri, 'TOUT', container.unique_id[0,10]]
+      Benelux.thread_timeline.add_message args.join('; '), :kind => :timeout
     end
     
     def self.rescue(client_id, &blk)

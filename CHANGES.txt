@@ -2,9 +2,11 @@ STELLA, CHANGES
 
 #### 0.7.4 (2009-11-??) ###############################
 
+* FIXED: Proper handling for timeout errors
 * ADDED: Logging to file
 * ADDED: Global variables via --var
 * ADDED: Using naive CSV parsing via quickcsv (CSV lib is slooow for large files)
+
 
 #### 0.7.3 (2009-10-30) ###############################
 

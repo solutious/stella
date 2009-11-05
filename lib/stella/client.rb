@@ -78,6 +78,7 @@ module Stella
         ret, asset_duration = nil, 0
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
+          update(:receive_response, usecase, uri, req, params, headers, counter, container)
           Benelux.add_thread_tags :status => container.status
           res = container.response
           [
@@ -98,7 +99,8 @@ module Stella
             Benelux.remove_thread_tags :asset
           end
           asset_duration = Time.now - asset_start
-          
+        rescue HTTPClient::ConnectTimeoutError => ex
+          update(:request_timeout, usecase, uri, req, params, headers, counter, container)
         rescue => ex
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
@@ -136,9 +138,9 @@ module Stella
     def nowait?; @nowait == true; end
       
   private
+    # We use a method so we can time it with Benelux
     def send_request(http_client, usecase, meth, uri, req, params, headers, container, counter)
       container.response = http_client.send(meth, uri, params, headers) # booya!
-      update(:receive_response, usecase, uri, req, params, headers, counter, container)
     end
     
     def update(kind, *args)
