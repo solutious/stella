@@ -102,6 +102,7 @@ module Stella
         rescue HTTPClient::ConnectTimeoutError => ex
           update(:request_timeout, usecase, uri, req, params, headers, counter, container)
         rescue => ex
+          #p "111111111111111111111111#{ex.class}: #{ex.message}"
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next
