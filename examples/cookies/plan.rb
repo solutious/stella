@@ -7,7 +7,6 @@
 desc "Maintain Your Cookies"
 
 usecase 65, "Simple search" do
-  
   get "/", "Homepage"
   
   get "/search", "Search Results" do

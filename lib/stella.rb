@@ -50,7 +50,7 @@ module Stella
   
   START_TIME = Time.now.freeze
   
-  
+  @globals = {}
   @sysinfo = nil
   @debug   = false
   @abort   = false
@@ -83,7 +83,12 @@ module Stella
   def quiet?()        @quiet == true  end
   def enable_quiet()  @quiet = true   end
   def disable_quiet() @quiet = false  end
-    
+  
+  def add_global(n,v)
+    Stella.ld "SETGLOBAL: #{n}=#{v}"
+    @globals[n.strip] = v.strip
+  end
+  
   def rescue(&blk)
     blk.call
   rescue => ex
