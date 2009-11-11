@@ -1,10 +1,10 @@
 STELLA, CHANGES
 
-#### 0.7.4 (2009-11-??) ###############################
+#### 0.7.4 (2009-11-11) ###############################
 
 * FIXED: Proper handling for timeout errors
 * CHANGE: Log directory is now YYYYMMDD-HH-mm-ss-SHA1
-* ADDED: Logging to file
+* ADDED: Logging to .stella/log
 * ADDED: Global variables via --var
 * ADDED: Using naive CSV parsing via quickcsv (CSV lib is slooow for large files)
 * ADDED: Testplan file cache (load a file only once)
