@@ -125,11 +125,15 @@ end
 
 class Stella::Config < Storable
   include Gibbler::Complex
-
+  
   field :source
   field :apikey
   field :secret
-    
+  
+  field :redis_host
+  field :redis_port
+  field :redis_pass
+  
    # Returns true when the current config matches the default config
   def default?; to_hash.gibbler == DEFAULT_CONFIG_HASH; end
   
@@ -146,7 +150,8 @@ class Stella::Config < Storable
       tmp = YAML.load_file path
       conf.merge! tmp if tmp
     end
-    from_hash conf
+    a = from_hash conf
+    a || new
   end
   
   def self.init

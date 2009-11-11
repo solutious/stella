@@ -47,17 +47,7 @@ module Stella::Engine
       @sumlog.add_template :head, '%10s: %s'
       @failog.add_template :request, '%s %s'
       
-      @dumper = Stella::Hand.new(15.seconds, 2.seconds) do
-        Benelux.update_global_timeline
-        #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
-        @failog.info Benelux.timeline.messages.filter(:kind => :exception)
-        @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
-        @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
-        @reqlog.clear and @failog.clear and @authlog.clear
-        #generate_runtime_report(plan)
-        Benelux.timeline.clear if opts[:"disable-stats"]
-      end
+      @dumper = prepare_dumper(plan, opts)
       
       if Stella.log.lev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
@@ -146,7 +136,21 @@ module Stella::Engine
       end
     end
     
+    def prepare_dumper(plan, opts)
+      Stella::Hand.new(15.seconds, 2.seconds) do
+        Benelux.update_global_timeline
+        #reqlog.info [Time.now, Benelux.timeline.size].inspect
+        @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
+        @failog.info Benelux.timeline.messages.filter(:kind => :exception)
+        @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
+        @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
+        @reqlog.clear and @failog.clear and @authlog.clear
+        #generate_runtime_report(plan)
+        Benelux.timeline.clear if opts[:"disable-stats"]
+      end
 
+    end
+    
     def calculate_usecase_clients(plan, opts)
       counts = { :total => 0 }
       plan.usecases.each_with_index do |usecase,i|

@@ -18,7 +18,7 @@ module Stella::Engine
     end
     
     def runid(plan)
-      [Stella::START_TIME.digest, plan.digest].digest
+      [Stella.sysinfo.user, Stella::START_TIME.to_s, plan.digest].digest
     end
     
     def log_dir(plan, file=nil)
@@ -84,6 +84,7 @@ module Stella::Engine
   autoload :LoadPackage, 'stella/engine/load_package'
   autoload :LoadCreate, 'stella/engine/load_create'
   autoload :LoadQueue, 'stella/engine/load_queue'
+  autoload :LoadRedis, 'stella/engine/load_redis'
   
   # These timers are interesting from a reporting perspective.
   Benelux.add_counter    Stella::Client, :execute_response_handler

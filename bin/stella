@@ -79,6 +79,10 @@ class Stella::CLI::Definition
   usage "stella example"
   command :example => Stella::CLI
   
+  about "View Stella configuration"
+  usage "stella config"
+  command :config => Stella::CLI
+  
   about "Preview a test plan"
   usage "stella preview [-p path/2/testplan.rb] "
   option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"

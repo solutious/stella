@@ -7,12 +7,17 @@ class Stella::CLI < Drydock::Command
     @exit_code = 0
   end
   
+  def config
+    puts @conf.to_yaml
+  end
+  
   def verify_valid?
     create_testplan
   end
   
   def verify
     opts = {}
+    opts.merge! @conf.to_hash
     opts[:hosts] = @hosts
     opts[:nowait] = true if @option.nowait
     ret = Stella::Engine::Functional.run @testplan, opts
@@ -25,6 +30,7 @@ class Stella::CLI < Drydock::Command
   
   def generate
     opts = {}
+    opts.merge! @conf.to_hash
     opts[:hosts] = @hosts
     [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
@@ -37,6 +43,8 @@ class Stella::CLI < Drydock::Command
       ret = Stella::Engine::LoadPackage.run @testplan, opts
     when "create" 
       ret = Stella::Engine::LoadCreate.run @testplan, opts
+    when "redis" 
+      ret = Stella::Engine::LoadRedis.run @testplan, opts
     else 
       ret = Stella::Engine::LoadQueue.run @testplan, opts
     end
