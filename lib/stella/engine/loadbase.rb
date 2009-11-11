@@ -49,7 +49,7 @@ module Stella::Engine
       
       @dumper = prepare_dumper(plan, opts)
       
-      if Stella.log.lev > 2
+      if Stella.stdout.lev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
@@ -85,7 +85,7 @@ module Stella::Engine
         @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
       rescue => ex
         STDERR.puts "Unhandled exception: #{ex.message}"
-        STDERR.puts ex.backtrace if Stella.debug? || Stella.log.lev >= 3
+        STDERR.puts ex.backtrace if Stella.debug? || Stella.stdout.lev >= 3
       end
       
       @sumlog.head "END", Time.now.to_s
@@ -336,8 +336,9 @@ module Stella::Engine
       Benelux.thread_timeline.add_message args.join('; '), 
        :status => container.status,
        :kind => :request
-      #args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
-      #Stella.ld '  Client-%s %3d %-6s %s %s' % args
+      args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
+      Stella.stdout.info2 '  Client-%s %3d %-6s %s %s' % args
+            
     end
     
     def update_execute_response_handler(client_id, req, container)
@@ -345,14 +346,14 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       desc = "#{container.usecase.desc} > #{req.desc}"
-      Stella.stdout.info $/ if Stella.log.lev == 1
+      Stella.stdout.info $/ if Stella.stdout.lev == 1
       Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.stdout.info ex.backtrace
     end
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.stdout.info $/ if Stella.log.lev == 1
+      Stella.stdout.info $/ if Stella.stdout.lev == 1
       Stella.stdout.info '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       Stella.stdout.info ex.backtrace
     end

@@ -17,7 +17,6 @@ class Stella::CLI < Drydock::Command
   
   def verify
     opts = {}
-    opts.merge! @conf.to_hash
     opts[:hosts] = @hosts
     opts[:nowait] = true if @option.nowait
     ret = Stella::Engine::Functional.run @testplan, opts
@@ -30,7 +29,6 @@ class Stella::CLI < Drydock::Command
   
   def generate
     opts = {}
-    opts.merge! @conf.to_hash
     opts[:hosts] = @hosts
     [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
@@ -78,7 +76,7 @@ class Stella::CLI < Drydock::Command
   
   def preview
     create_testplan
-    Stella.stdout.info @testplan.pretty(Stella.log.lev > 1)
+    Stella.stdout.info @testplan.pretty(Stella.stdout.lev > 1)
   end
   
   private

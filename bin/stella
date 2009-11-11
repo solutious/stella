@@ -60,7 +60,7 @@ class Stella::CLI::Definition
     Stella.enable_debug
   end
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
-    Stella.log.lev += 1
+    Stella.stdout.lev += 1
   end
   global :'disable-stats', "Disable stat collection"
   global :'disable-logging', "Disable all logging" do
@@ -172,11 +172,11 @@ rescue Drydock::UnknownCommand => ex
   STDERR.puts "Unknown command: %s" % ex.name
 rescue Stella::Error => ex
   STDERR.puts ex.message
-  STDERR.puts ex.backtrace if Stella.log.lev > 2 || Stella.debug?
+  STDERR.puts ex.backtrace if Stella.stdout.lev > 2 || Stella.debug?
 rescue Interrupt
   puts $/, "Exiting... "
   exit 1
 rescue => ex
   STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
-  STDERR.puts ex.backtrace if Stella.log.lev > 2 || Stella.debug?
+  STDERR.puts ex.backtrace if Stella.stdout.lev > 2 || Stella.debug?
 end

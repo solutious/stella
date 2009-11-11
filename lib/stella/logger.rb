@@ -40,8 +40,12 @@ module Stella
       flush if autoflush?
       true
     end
+    def print!(level, msg)
+      return unless @lev == level
+      print level, msg
+    end
+    
     def puts(level, *msg)
-
       return if level > @lev || Logger.disabled?
       @buffer.puts *msg
       flush if autoflush?

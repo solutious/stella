@@ -21,11 +21,11 @@ module Stella::Engine
       # Identify this thread to Benelux
       Benelux.current_track :functional 
       
-      dig = Stella.log.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
+      dig = Stella.stdout.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
       Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
         desc = (uc.desc || "Usecase ##{i+1}")
-        dig = Stella.log.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
+        dig = Stella.stdout.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
         Stella.stdout.info ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
         Stella.rescue { client.execute uc }
       end
@@ -37,19 +37,19 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      dig = Stella.log.lev > 1 ? req.digest_cache : req.digest_cache.shorter
+      dig = Stella.stdout.lev > 1 ? req.digest_cache : req.digest_cache.shorter
       desc = "#{req.desc}  (#{dig}) "
       Stella.stdout.info2 "  %-46s %16s ".bright % [desc, notice]
     end
     
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       msg = '  %-6s %-53s ' % [req.http_method, uri]
-      msg << container.status.to_s if Stella.log.lev == 1
+      msg << container.status.to_s if Stella.stdout.lev == 1
       Stella.stdout.info msg
       
-      Stella.stdout.info $/, "   Params:"
+      Stella.stdout.info2 $/, "   Params:"
       params.each do |pair|
-        Stella.stdout.info "     %s: %s" % pair
+        Stella.stdout.info2 "     %s: %s" % pair
       end
       
       Stella.stdout.info2 $/, '   ' << container.response.request.header.send(:request_line)
@@ -61,13 +61,13 @@ module Stella::Engine
       if req.http_method == 'POST'
         cont = container.response.request.body.content
         if String === cont
-          Stella.stdout.info2 ('   ' << cont.split($/).join("#{$/}    "))
+          Stella.stdout.info3 ('   ' << cont.split($/).join("#{$/}    "))
         elsif HTTP::Message::Body::Parts === cont
           cont.parts.each do |part|
             if File === part
-              Stella.stdout.info2 "<#{part.path}>"
+              Stella.stdout.info3 "<#{part.path}>"
             else
-              Stella.stdout.info2 part
+              Stella.stdout.info3 part
             end
           end
         end
@@ -78,7 +78,7 @@ module Stella::Engine
       container.headers.all.each do |pair|
         Stella.stdout.info2 "   %s: %s" % pair
       end
-      Stella.stdout.info4 container.body.empty? ? '   [empty]' : container.body
+      Stella.stdout.info3 container.body.empty? ? '   [empty]' : container.body
       Stella.stdout.info2 $/
     end
     
