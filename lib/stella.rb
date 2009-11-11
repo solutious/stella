@@ -10,10 +10,10 @@ autoload :Drydock, 'drydock'
 autoload :URI, 'uri'
 autoload :OpenStruct, 'ostruct'
 autoload :Storable, 'storable'
-autoload :Gibbler, 'gibbler/aliases'
 autoload :Attic, 'attic'
 autoload :ERB, 'erb'
 
+require 'gibbler/aliases'  # important for run time digests and freezes
 require 'benelux'
 
 module Stella
@@ -21,8 +21,8 @@ module Stella
     unless defined?(MAJOR)
       MAJOR = 0.freeze
       MINOR = 7.freeze
-      TINY  = 3.freeze
-      PATCH = '006'.freeze 
+      TINY  = 4.freeze
+      PATCH = '001'.freeze 
     end
     def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
     def self.to_f; self.to_s.to_f; end

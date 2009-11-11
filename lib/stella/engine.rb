@@ -18,7 +18,9 @@ module Stella::Engine
     end
     
     def runid(plan)
-      [Stella.sysinfo.user, Stella::START_TIME.to_s, plan.digest].digest
+      args = [Stella.sysinfo.hostname, Stella.sysinfo.user]
+      args.push Stella::START_TIME, plan
+      args.digest
     end
     
     def log_dir(plan, file=nil)
