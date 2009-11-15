@@ -41,8 +41,6 @@ class Stella::CLI < Drydock::Command
       ret = Stella::Engine::LoadPackage.run @testplan, opts
     when "create" 
       ret = Stella::Engine::LoadCreate.run @testplan, opts
-    when "redis" 
-      ret = Stella::Engine::LoadRedis.run @testplan, opts
     else 
       ret = Stella::Engine::LoadQueue.run @testplan, opts
     end

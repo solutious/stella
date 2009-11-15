@@ -358,8 +358,8 @@ module Stella::Engine
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
       Stella.stdout.info $/ if Stella.stdout.lev == 1
-      Stella.stdout.info '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.stdout.info ex.backtrace
+      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+      Stella.ld ex.backtrace
     end
 
     def update_usecase_quit client_id, msg, req, container
@@ -383,7 +383,9 @@ module Stella::Engine
       Benelux.thread_timeline.add_count :error, 1
       args.push [req, container.status, 'ERROR', msg, container.unique_id[0,10]]
       Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
-      Stella.stdout.info3 '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+      if Stella.stdout.lev >= 3
+        Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+      end
     end
     
     def update_request_repeat client_id, counter, total, req, container
@@ -407,8 +409,8 @@ module Stella::Engine
     def self.rescue(client_id, &blk)
       blk.call
     rescue => ex
-      Stella.stdout.info '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
-      puts ex.backtrace
+      Stella.le '  Error in Client-%s: %s' % [client_id.shorter, ex.message]
+      Stella.ld ex.backtrace
     end
     
     Benelux.add_timer Stella::Engine::Load, :build_thread_package

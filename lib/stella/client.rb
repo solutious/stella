@@ -40,42 +40,48 @@ module Stella
         stats ||= Benelux::Stats.new
         update(:prepare_request, usecase, req, counter)
         
-        # This is for the values that were "set"
-        # in the part before the response body.
-        prepare_resources(container, req.resources)
+        begin
+          # This is for the values that were "set"
+          # in the part before the response body.
+          prepare_resources(container, req.resources)
         
-        params = prepare_params(container, req.params)
-        headers = prepare_headers(container, req.headers)
+          params = prepare_params(container, req.params)
+          headers = prepare_headers(container, req.headers)
         
-        container.params, container.headers = params, headers
+          container.params, container.headers = params, headers
         
-        uri = build_request_uri req.uri, params, container
+          uri = build_request_uri req.uri, params, container
         
-        if http_auth = usecase.http_auth || req.http_auth
-          # TODO: The first arg is domain and can include a URI path. 
-          #       Are there cases where this is important?
-          domain = '%s://%s%s' % [uri.scheme, uri.host, '/'] #File.dirname(uri.path)
-          user, pass = http_auth.user, http_auth.pass
-          user = container.instance_eval &user if Proc === user
-          pass = container.instance_eval &pass if Proc === pass
-          update(:authenticate, usecase, req, http_auth.kind, domain, user, pass)
-          http_client.set_auth(domain, user, pass)
+          if http_auth = usecase.http_auth || req.http_auth
+            # TODO: The first arg is domain and can include a URI path. 
+            #       Are there cases where this is important?
+            domain = '%s://%s%s' % [uri.scheme, uri.host, '/'] #File.dirname(uri.path)
+            user, pass = http_auth.user, http_auth.pass
+            user = container.instance_eval &user if Proc === user
+            pass = container.instance_eval &pass if Proc === pass
+            update(:authenticate, usecase, req, http_auth.kind, domain, user, pass)
+            http_client.set_auth(domain, user, pass)
+          end
+        
+          raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
+          stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
+        
+          Benelux.add_thread_tags :request => req.digest_cache
+          Benelux.add_thread_tags :retry => counter
+          Benelux.add_thread_tags :stella_id => stella_id
+        
+          container.unique_id = stella_id
+          params['__stella'] = headers['X-Stella-ID'] = container.unique_id[0..10]
+        
+          meth = req.http_method.to_s.downcase
+          Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
+        
+          ret, asset_duration = nil, 0
+        rescue => ex
+          update(:request_unhandled_exception, usecase, uri, req, params, ex)
+          next
         end
         
-        raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
-        stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
-        
-        Benelux.add_thread_tags :request => req.digest_cache
-        Benelux.add_thread_tags :retry => counter
-        Benelux.add_thread_tags :stella_id => stella_id
-        
-        container.unique_id = stella_id
-        params['__stella'] = headers['X-Stella-ID'] = container.unique_id[0..10]
-        
-        meth = req.http_method.to_s.downcase
-        Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
-        
-        ret, asset_duration = nil, 0
         begin
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
           update(:receive_response, usecase, uri, req, params, headers, counter, container)
@@ -102,7 +108,6 @@ module Stella
         rescue HTTPClient::ConnectTimeoutError => ex
           update(:request_timeout, usecase, uri, req, params, headers, counter, container)
         rescue => ex
-          #p "111111111111111111111111#{ex.class}: #{ex.message}"
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           next

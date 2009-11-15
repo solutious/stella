@@ -65,7 +65,8 @@ module Stella
   def le(*msg); stdout.info "  " << msg.join("#{$/}  ").color(:red); end
   def ld(*msg)
     return unless Stella.debug?
-    Stella.stdout.info "D(#{Thread.current.object_id}):  " << msg.join("#{$/}D:  ")
+    prefix = "D(#{Thread.current.object_id}):  "
+    Stella.stdout.info "#{prefix}" << msg.join("#{$/}#{prefix}")
   end
   
   def sysinfo
@@ -92,8 +93,8 @@ module Stella
   def rescue(&blk)
     blk.call
   rescue => ex
-    Stella.stdout.info "ERROR: #{ex.message}"
-    Stella.stdout.info ex.backtrace
+    Stella.le "ERROR: #{ex.message}"
+    Stella.ld ex.backtrace
   end
   
   require 'stella/common'

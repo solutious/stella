@@ -1,5 +1,9 @@
 STELLA, CHANGES
 
+#### 0.7.5 (2009-11-??) ###############################
+
+* FIXED: Correctly capture exceptions in Client
+
 #### 0.7.4 (2009-11-11) ###############################
 
 * FIXED: Proper handling for timeout errors
