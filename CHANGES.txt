@@ -3,6 +3,7 @@ STELLA, CHANGES
 #### 0.7.5 (2009-11-??) ###############################
 
 * FIXED: Correctly capture exceptions in Client
+* CHANGE: Do not include testplan, usecase, or request descriptions in digest calculation
 
 #### 0.7.4 (2009-11-11) ###############################
 

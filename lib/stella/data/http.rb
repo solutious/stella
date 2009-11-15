@@ -14,7 +14,7 @@ module Stella::Data::HTTP
       #
     attr_accessor :response_handler
     
-    field :desc
+    field :description
     field :header 
     field :uri
     field :wait
@@ -24,6 +24,8 @@ module Stella::Data::HTTP
     field :http_version
     field :content_type
     field :http_auth
+    
+    attic :description
     
     def has_body?
       !@body.nil?
@@ -35,7 +37,7 @@ module Stella::Data::HTTP
       @headers, @params, @response_handler = {}, {}, {}
       @resources = {}
       @wait = 0
-      @desc = "Request"
+      self.description = "Request"
       instance_eval &definition unless definition.nil?
     end
     
@@ -45,8 +47,8 @@ module Stella::Data::HTTP
     end
     
     def desc(*args)
-      @desc = args.first unless args.empty?
-      @desc
+      self.description = args.first unless args.empty?
+      self.description
     end
     
     def content_type(*args)

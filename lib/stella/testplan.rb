@@ -1,4 +1,5 @@
 autoload :CSV, 'csv'
+#Gibbler.enable_debug
 
 module Stella
 class Testplan
@@ -21,13 +22,14 @@ class Testplan
   
   attic :base_path
   attic :plan_path
+  attic :description
   
   attr_accessor :usecases
-  attr_accessor :desc
   attr_reader :stats
   
   def initialize(uris=[], opts={})
-    @desc, @usecases = "Test plan", []
+    self.description = "Test plan"
+    @usecases = []
     @testplan_current_ratio = 0
     @stats = Stella::Testplan::Stats.new
 
@@ -62,8 +64,6 @@ class Testplan
     needy.each do |u|
       u.ratio = (remaining_ratio / needy.size).to_f
     end
-    # Give usecases a name if necessary
-    @usecases.each_with_index { |uc,i| uc.desc ||= "Usecase ##{i+1}" }
     if @testplan_current_ratio > 1.0 
       msg = "Usecase ratio cannot be higher than 1.0"
       msg << " (#{@testplan_current_ratio})"
@@ -73,45 +73,49 @@ class Testplan
   
   # make sure all clients share identical test plans
   def freeze
-    Stella.ld "FREEZE TESTPLAN: #{desc}"
+    Stella.ld "FREEZE TESTPLAN: #{self.description}"
     @usecases.each { |uc| uc.freeze }
     super
     self
   end
   
   def usecase(*args, &blk)
-    return @usecases if args.empty?
+    return @usecases if args.empty? && blk.nil?
     ratio, name = nil,nil
-    ratio, name = args[0], args[1] if args[0].is_a?(Numeric)
-    ratio, name = args[1], args[0] if args[0].is_a?(String)
+    unless args.empty?
+      ratio, name = args[0], args[1] if args[0].is_a?(Numeric)
+      ratio, name = args[1], args[0] if args[0].is_a?(String)
+    end
     uc = Stella::Testplan::Usecase.new
     uc.base_path = self.base_path
     uc.plan_path = self.plan_path
     uc.instance_eval &blk
-    uc.ratio, uc.desc = (ratio || -1).to_f, name
+    uc.ratio = (ratio || -1).to_f
+    uc.description = name unless name.nil?
     @testplan_current_ratio += uc.ratio if uc.ratio > 0
     add_usecase uc
   end
   def xusecase(*args, &blk); Stella.ld "Skipping usecase"; end
   
   def add_usecase(uc)
-    Stella.ld "Usecase: #{uc.desc}"
+    Stella.ld "Usecase: #{uc.description}"
     @usecases << uc
     uc
   end
   
+  # for DSL use-only (otherwise use: self.description)
   def desc(*args)
-    @desc = args.first unless args.empty?
-    @desc
+    self.description = args.first unless args.empty?
+    self.description
   end
 
   def pretty(long=false)
     str = []
     dig = long ? self.digest_cache : self.digest_cache.shorter
-    str << " %-66s  ".att(:reverse) % ["#{@desc}  (#{dig})"]
+    str << " %-66s  ".att(:reverse) % ["#{self.description}  (#{dig})"]
     @usecases.each_with_index do |uc,i| 
       dig = long ? uc.digest_cache : uc.digest_cache.shorter
-      desc = uc.desc || "Usecase ##{i+1}"
+      desc = uc.description || "Usecase ##{i+1}"
       desc += "  (#{dig}) "
       str << (' ' << " %-61s %s%% ".att(:reverse).bright) % [desc, uc.ratio_pretty]
       unless uc.http_auth.nil?
@@ -119,7 +123,7 @@ class Testplan
       end
       requests = uc.requests.each do |r| 
         dig = long ? r.digest_cache : r.digest_cache.shorter
-        str << "    %-62s".bright % ["#{r.desc}  (#{dig})"]
+        str << "    %-62s".bright % ["#{r.description}  (#{dig})"]
         str << "      %s" % [r]
         if Stella.stdout.lev > 2
           [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
@@ -166,8 +170,9 @@ class Testplan
     
     attic :base_path # we don't want gibbler to see this
     attic :plan_path
+    attic :description
     
-    attr_accessor :desc
+    
     attr_writer :ratio
     attr_reader :http_auth
     
@@ -184,8 +189,8 @@ class Testplan
     end
     
     def desc(*args)
-      @desc = args.first unless args.empty?
-      @desc
+      self.description = args.first unless args.empty?
+      self.description
     end
     
     def resource(name, value=nil)
@@ -248,7 +253,7 @@ class Testplan
     
     def add_request(meth, *args, &blk)
       req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args[0], &blk
-      req.desc = args[1] if args.size > 1 # Description is optional
+      req.description = args[1] if args.size > 1 # Description is optional
       Stella.ld req
       @requests << req
       req
