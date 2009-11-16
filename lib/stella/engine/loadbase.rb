@@ -7,9 +7,10 @@ module Stella::Engine
     @timers = [:do_request]
     @counts = [:response_content_size]
     @reqlog = nil
+    @logdir = nil
     
     class << self
-      attr_accessor :timers, :counts
+      attr_accessor :timers, :counts, :logdir
     end
     
     def run(plan, opts={})
@@ -17,13 +18,13 @@ module Stella::Engine
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      d = log_dir(plan)
-      latest = File.join(File.dirname(d), 'latest')
-      Stella.stdout.info "Logging to #{d}", $/
+      @logdir = log_dir(plan)
+      latest = File.join(File.dirname(@logdir), 'latest')
+      Stella.stdout.info "Logging to #{@logdir}", $/
       
       if Stella.sysinfo.os == :unix
         File.unlink latest if File.exists? latest
-        FileUtils.ln_sf File.basename(d), latest
+        FileUtils.ln_sf File.basename(@logdir), latest
       end
 
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
@@ -125,6 +126,8 @@ module Stella::Engine
       Stella.stdout.info File.read(@sumlog.path)
       # DNE:
       #p [@real_reps, total.n]
+      
+      Stella.stdout.info $/, "Log dir: #{@logdir}"
       
       failed.n == 0
     end

@@ -1,5 +1,6 @@
 STELLA, CHANGES
 
+
 #### 0.7.5 (2009-11-??) ###############################
 
 * FIXED: Correctly capture exceptions in Client
@@ -7,6 +8,7 @@ STELLA, CHANGES
 * CHANGE: Do not include testplan, usecase, or request descriptions in digest calculation
 * CHANGE: Use 6 digit digest in log directory names
 * ADDED: Support for $perlstyle variables in config
+* ADDED: Print log dir below summary report
 
 
 #### 0.7.4 (2009-11-11) ###############################
