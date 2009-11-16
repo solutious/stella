@@ -38,7 +38,7 @@ module Stella::Engine
             #Stella.stdout.info [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
             Stella::Engine::Load.rescue(c.digest_cache) {
               break if Stella.abort?
-              Stella.stdout.print! 2, '.'
+              print '.' if Stella.stdout.lev == 2
               stats = c.execute uc
             }
             Benelux.remove_thread_tags :rep

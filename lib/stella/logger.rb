@@ -40,10 +40,6 @@ module Stella
       flush if autoflush?
       true
     end
-    def print!(level, msg)
-      return unless @lev == level
-      print level, msg
-    end
     
     def puts(level, *msg)
       return if level > @lev || Logger.disabled?
@@ -83,6 +79,7 @@ module Stella
       end
     end
     
+    # TODO: There's a big when using print (no newline)
     def flush
       return if Logger.disabled?
       @mutex.synchronize do
