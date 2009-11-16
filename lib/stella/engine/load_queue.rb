@@ -24,8 +24,8 @@ module Stella::Engine
 
           # This thread will stay on this one track. 
           Benelux.current_track c.digest
-          Benelux.add_thread_tags :usecase => uc.digest_cache
           
+          Benelux.add_thread_tags :usecase => uc.digest_cache
           Thread.current[:real_uctime].first_tick
           prev_ptime ||= Time.now
           reps.times { |rep| 

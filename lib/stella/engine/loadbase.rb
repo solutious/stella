@@ -224,13 +224,14 @@ module Stella::Engine
     end
         
     def generate_report(sumlog,plan,test_time)
-      #Benelux.update_all_track_timelines
       global_timeline = Benelux.timeline
       global_stats = global_timeline.stats.group(:do_request).merge
       if global_stats.n == 0
         Stella.ld "No stats"
         return
       end
+      
+      
       
       @sumlog.info " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.digest_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
