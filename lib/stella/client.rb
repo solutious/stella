@@ -215,14 +215,13 @@ module Stella
     def build_request_uri(uri, params, container)
       newuri = uri.clone  # don't modify uri template
       # We call uri.clone b/c we modify uri. 
-      uri.scan(/:([a-z_]+)/i) do |instances|
-        instances.each do |varname|
-          val = find_replacement_value(varname, params, container, base_uri)
-          #Stella.ld "FOUND: #{val}"
-          newuri.gsub! /:#{varname}/, val.to_s unless val.nil?
-        end
+      uri.scan(/([:\$])([a-z_]+)/i) do |inst|
+        val = find_replacement_value(inst[1], params, container, base_uri)
+        Stella.ld "FOUND VAR: #{inst[0]}#{inst[1]} (value: #{val})"
+        re = Regexp.new "\\#{inst[0]}#{inst[1]}"
+        newuri.gsub! re, val.to_s unless val.nil?
       end
-      
+
       uri = URI.parse(newuri)
       
       if uri.host.nil? && base_uri.nil?
