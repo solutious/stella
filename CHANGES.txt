@@ -7,6 +7,7 @@ STELLA, CHANGES
 * FIXED: Issue with printing the dot (.) for the start of every usecase
 * CHANGE: Do not include testplan, usecase, or request descriptions in digest calculation
 * CHANGE: Use 6 digit digest in log directory names
+* CHANGE: Client aborts usecase on unhandled exceptions
 * ADDED: Support for $perlstyle variables in config
 * ADDED: Print log dir below summary report
 

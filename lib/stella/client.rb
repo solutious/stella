@@ -79,7 +79,9 @@ module Stella
           ret, asset_duration = nil, 0
         rescue => ex
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
-          next
+          update(:usecase_error, ex.message, uri, container)
+          Benelux.remove_thread_tags :status, :retry, :request, :stella_id
+          break
         end
         
         begin
@@ -107,6 +109,7 @@ module Stella
           asset_duration = Time.now - asset_start
         rescue HTTPClient::ConnectTimeoutError => ex
           update(:request_timeout, usecase, uri, req, params, headers, counter, container)
+          Benelux.remove_thread_tags :status, :retry, :request, :stella_id
         rescue => ex
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
