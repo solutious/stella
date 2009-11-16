@@ -5,6 +5,7 @@ STELLA, CHANGES
 
 * FIXED: Correctly capture exceptions in Client
 * FIXED: Issue with printing the dot (.) for the start of every usecase
+* FIXED: Stats samples not cleared between background calculations
 * CHANGE: Do not include testplan, usecase, or request descriptions in digest calculation
 * CHANGE: Use 6 digit digest in log directory names
 * CHANGE: Client aborts usecase on unhandled exceptions

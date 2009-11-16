@@ -79,7 +79,7 @@ module Stella::Engine
         @optlog.head "START", Time.now.to_s
         Stella.stdout.status "Running" 
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
-        Stella.stdout.info "Done" 
+        Stella.stdout.info $/, "Done" 
       rescue Interrupt
         Stella.stdout.nstatus "Stopping test"
         Stella.abort!
@@ -144,15 +144,17 @@ module Stella::Engine
     
     def prepare_dumper(plan, opts)
       Stella::Hand.new(15.seconds, 2.seconds) do
-        Benelux.update_global_timeline
-        #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
-        @failog.info Benelux.timeline.messages.filter(:kind => :exception)
-        @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
-        @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
-        @reqlog.clear and @failog.clear and @authlog.clear
-        #generate_runtime_report(plan)
-        Benelux.timeline.clear if opts[:"disable-stats"]
+        unless opts[:"disable-stats"]
+          Benelux.update_global_timeline
+          #reqlog.info [Time.now, Benelux.timeline.size].inspect
+          @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
+          @failog.info Benelux.timeline.messages.filter(:kind => :exception)
+          @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
+          @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
+          @reqlog.clear and @failog.clear and @authlog.clear
+          #generate_runtime_report(plan)
+        end
+        Benelux.timeline.clear
       end
 
     end
@@ -352,16 +354,22 @@ module Stella::Engine
     
     def update_error_execute_response_handler(client_id, ex, req, container)
       desc = "#{container.usecase.desc} > #{req.desc}"
-      Stella.stdout.info $/ if Stella.stdout.lev == 1
-      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.stdout.info ex.backtrace
+      if Stella.stdout.lev == 2
+        Stella.stdout.print 2, '.'.color(:red)
+      else
+        Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+        Stella.ld ex.backtrace
+      end
     end
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       desc = "#{usecase.desc} > #{req.desc}"
-      Stella.stdout.info $/ if Stella.stdout.lev == 1
-      Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
-      Stella.ld ex.backtrace
+      if Stella.stdout.lev == 2
+        Stella.stdout.print 2, '.'.color(:red)
+      else
+        Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+        Stella.ld ex.backtrace
+      end
     end
 
     def update_usecase_quit client_id, msg, req, container
