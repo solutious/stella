@@ -1,7 +1,7 @@
 STELLA, CHANGES
 
 
-#### 0.7.5 (2009-11-??) ###############################
+#### 0.7.5 (2009-11-16) ###############################
 
 * FIXED: Correctly capture exceptions in Client
 * FIXED: Issue with printing the dot (.) for the start of every usecase
