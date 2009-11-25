@@ -38,6 +38,7 @@
   examples/essentials/plan.rb
   examples/essentials/search_terms.txt
   examples/exceptions/plan.rb
+  lib/proc_source.rb
   lib/stella.rb
   lib/stella/cli.rb
   lib/stella/client.rb
