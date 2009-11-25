@@ -5,7 +5,7 @@ require 'hanna/rdoctask'
 require 'rake/testtask'
 require 'shoulda/tasks'
 require 'rake/runtest'
-require 'monkeyspecdoc'  # http://jgre.org/2008/09/03/monkeyspecdoc/
+#require 'monkeyspecdoc'  # http://jgre.org/2008/09/03/monkeyspecdoc/
 require 'fileutils'
 include FileUtils
  
