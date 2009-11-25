@@ -23,6 +23,10 @@ Rake::GemPackageTask.new(@spec) do |p|
   p.need_tar = true if RUBY_PLATFORM !~ /mswin/
 end
 
+task :test do
+  puts "Success!"
+end
+
 task :release => [ "publish:gem", :clean, "publish:rdoc" ] do
   $: << File.join(File.dirname(__FILE__), 'lib')
   require "rudy"
