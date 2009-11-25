@@ -113,7 +113,7 @@ class HTTPClient
       command = nil
       if res.status == HTTP::Status::UNAUTHORIZED
         if challenge = parse_authentication_header(res, 'www-authenticate')
-          uri = req.header.request_uri
+          uri = req.header.create_request_uri
           challenge.each do |scheme, param_str|
             @authenticator.each do |auth|
               if scheme.downcase == auth.scheme.downcase
@@ -240,7 +240,7 @@ class HTTPClient
     # * child page of challengeable(got *Authenticate before) uri and,
     # * child page of defined credential
     def get(req)
-      target_uri = req.header.request_uri
+      target_uri = req.header.create_request_uri
       return nil unless @challengeable.find { |uri, ok|
         Util.uri_part_of(target_uri, uri) and ok
       }
@@ -292,7 +292,7 @@ class HTTPClient
     # * child page of challengeable(got *Authenticate before) uri and,
     # * child page of defined credential
     def get(req)
-      target_uri = req.header.request_uri
+      target_uri = req.header.create_request_uri
       param = Util.hash_find_value(@challenge) { |uri, v|
         Util.uri_part_of(target_uri, uri)
       }
@@ -301,8 +301,8 @@ class HTTPClient
         Util.uri_part_of(target_uri, uri)
       }
       return nil unless user
-      uri = req.header.request_uri
-      calc_cred(req.header.request_method, uri, user, passwd, param)
+      path = req.header.create_request_path
+      calc_cred(req.header.request_method, path, user, passwd, param)
     end
 
     # Challenge handler: remember URL and challenge token for response.
@@ -317,9 +317,9 @@ class HTTPClient
     # http://tools.assembla.com/breakout/wiki/DigestForSoap
     # Thanks!
     # supported algorithm: MD5 only for now
-    def calc_cred(method, uri, user, passwd, param)
+    def calc_cred(method, path, user, passwd, param)
       a_1 = "#{user}:#{param['realm']}:#{passwd}"
-      a_2 = "#{method}:#{uri.path}"
+      a_2 = "#{method}:#{path}"
       nonce = param['nonce']
       cnonce = generate_cnonce()
       @nonce_count += 1
@@ -334,7 +334,7 @@ class HTTPClient
       header << "username=\"#{user}\""
       header << "realm=\"#{param['realm']}\""
       header << "nonce=\"#{nonce}\""
-      header << "uri=\"#{uri.path}\""
+      header << "uri=\"#{path}\""
       header << "cnonce=\"#{cnonce}\""
       header << "nc=#{'%08x' % @nonce_count}"
       header << "qop=\"#{param['qop']}\""
@@ -407,7 +407,7 @@ class HTTPClient
     # See ruby/ntlm for negotiation state transition.
     def get(req)
       return nil unless NTLMEnabled
-      target_uri = req.header.request_uri
+      target_uri = req.header.create_request_uri
       domain_uri, param = @challenge.find { |uri, v|
         Util.uri_part_of(target_uri, uri)
       }
@@ -482,7 +482,7 @@ class HTTPClient
     # See win32/sspi for negotiation state transition.
     def get(req)
       return nil unless SSPIEnabled
-      target_uri = req.header.request_uri
+      target_uri = req.header.create_request_uri
       domain_uri, param = @challenge.find { |uri, v|
         Util.uri_part_of(target_uri, uri)
       }

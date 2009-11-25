@@ -86,6 +86,7 @@ module Stella::Engine
   autoload :LoadPackage, 'stella/engine/load_package'
   autoload :LoadCreate, 'stella/engine/load_create'
   autoload :LoadQueue, 'stella/engine/load_queue'
+  autoload :LoadEventMachine, 'stella/engine/load_em'
   
   # These timers are interesting from a reporting perspective.
   Benelux.add_counter    Stella::Client, :execute_response_handler

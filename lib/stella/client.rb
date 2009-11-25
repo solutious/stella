@@ -1,5 +1,6 @@
 require "observer"
 require "nokogiri"
+require 'pp'
 
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
@@ -51,11 +52,12 @@ module Stella
           container.params, container.headers = params, headers
         
           uri = build_request_uri req.uri, params, container
-        
+          
           if http_auth = usecase.http_auth || req.http_auth
             # TODO: The first arg is domain and can include a URI path. 
             #       Are there cases where this is important?
-            domain = '%s://%s%s' % [uri.scheme, uri.host, '/'] #File.dirname(uri.path)
+            domain = '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, req.uri] 
+            Stella.ld "DOMAIN " << domain
             user, pass = http_auth.user, http_auth.pass
             user = container.instance_eval &user if Proc === user
             pass = container.instance_eval &pass if Proc === pass
@@ -72,7 +74,7 @@ module Stella
         
           container.unique_id = stella_id
           params['__stella'] = headers['X-Stella-ID'] = container.unique_id[0..10]
-        
+          
           meth = req.http_method.to_s.downcase
           Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
         
@@ -178,7 +180,7 @@ module Stella
       }
       http_client = HTTPClient.new opts
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
-      http_client.debug_dev = STDOUT if Stella.debug? && Stella.stdout.lev > 3
+      http_client.debug_dev = STDOUT if Stella.debug? 
       http_client.protocol_version = "HTTP/1.1"
       http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE
       http_client

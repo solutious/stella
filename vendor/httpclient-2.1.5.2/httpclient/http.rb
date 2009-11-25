@@ -287,7 +287,17 @@ module HTTP
       def [](key)
         get(key).collect { |item| item[1] }
       end
-
+      
+      def create_request_uri
+        path = create_request_path
+        r = "#{ @request_uri.scheme }://#{ @request_uri.host }:#{ @request_uri.port }#{ path }"
+        URI.parse r
+      end
+      
+      def create_request_path
+        create_query_uri(@request_uri, @request_query)
+      end
+      
     private
 
       def request_line
@@ -379,7 +389,7 @@ module HTTP
             query_str = Message.create_query_part_str(query)
           end
         end
-        if query_str
+        if !query_str.nil? && !query_str.empty?
           path += "?#{query_str}"
         end
         path

@@ -1,6 +1,12 @@
 STELLA, CHANGES
 
 
+#### 0.7.6 (2009-11-24) ###############################
+
+* FIXED: httpclient fix: use full request URI (i.e. path and query string) in authentication (NOTE: SSPINegotiateAuth and NegotiateAuth not tested)
+* FIXED: Use request URI in authentication domain
+
+
 #### 0.7.5 (2009-11-16) ###############################
 
 * FIXED: Correctly capture exceptions in Client
