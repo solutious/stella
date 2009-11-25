@@ -36,14 +36,19 @@ class Stella::CLI < Drydock::Command
     [:'disable-templates', :'disable-stats'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
+    
     case @global.engine
     when "package"
       ret = Stella::Engine::LoadPackage.run @testplan, opts
     when "create" 
       ret = Stella::Engine::LoadCreate.run @testplan, opts
+    when "em" 
+      ret = Stella::Engine::LoadEventMachine.run @testplan, opts
     else 
       ret = Stella::Engine::LoadQueue.run @testplan, opts
     end
+    Stella.ld "ENGINE: #{@global.engine}: #{ret.class}"
+    
     @exit_code = (ret ? 0 : 1)
   end
   

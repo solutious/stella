@@ -3,7 +3,6 @@
 $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
 
-
 # Assumes Time::Units and Numeric mixins are available. 
 
 class String
@@ -25,6 +24,14 @@ class Thread
   extend Attic
   attic :stats
 end
+
+# Fix for eventmachine in Ruby 1.9
+class Thread
+  unless method_defined? :kill!
+    def kill!(*args) kill( *args) end
+  end
+end
+
 
 class Time
   module Units
