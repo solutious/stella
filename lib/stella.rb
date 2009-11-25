@@ -15,6 +15,7 @@ autoload :ERB, 'erb'
 
 require 'gibbler/aliases'  # important for run time digests and freezes
 require 'benelux'
+require 'proc_source'
 
 module Stella
   module VERSION

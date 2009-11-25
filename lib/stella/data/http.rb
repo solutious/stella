@@ -98,7 +98,9 @@ module Stella::Data::HTTP
         args << /.+/ if args.empty?
         args.each do |status|
           @response_handler[status] = definition
+          p [status, definition.inspect]
         end
+        
       end
     end
     

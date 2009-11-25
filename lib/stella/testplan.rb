@@ -125,8 +125,12 @@ class Testplan
         dig = long ? r.digest_cache : r.digest_cache.shorter
         str << "    %-62s".bright % ["#{r.description}  (#{dig})"]
         str << "      %s" % [r]
-        if Stella.stdout.lev > 2
+        if Stella.stdout.lev > 1
           [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
+        
+          r.response_handler.each do |status,proc|
+            str << "      response: %s%s" % [status, proc.source.split($/).join("#{$/}    ")]
+          end
         end
       end
     end

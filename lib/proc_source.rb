@@ -3,7 +3,7 @@ require 'irb/ruby-lex'
 #SCRIPT_LINES__ = {} unless defined? SCRIPT_LINES__
 
 class ProcString < String
-  attr_accessor :file, :line, :arity, :kind
+  attr_accessor :file, :lines, :arity, :kind
   def to_proc
     result = eval("proc #{self}")
     result.source = self
@@ -23,43 +23,52 @@ module ProcSource
   
   def self.find(filename, start_line=0, block_only=true)
     lines, lexer = nil, nil
-    retried = false
+    retried = 0
     loop do
       lines = get_lines(filename, start_line)
+      if !line_has_open?(lines.join) && start_line >= 0
+        start_line -= 1 and retried +=1 and redo 
+      end
       lexer = RubyLex.new
       lexer.set_input(StringIO.new(lines.join))
-      if !retried && !line_has_open?(lexer)
-        start_line -= 1 and retried = true and redo 
-      end
       break
     end
     stoken, etoken, nesting = nil, nil, 0
     while token = lexer.token
+      n = token.instance_variable_get(:@name)
+#        p [:parser, nesting, token.class, n]
       if RubyToken::TkIDENTIFIER === token
-        #p token.instance_variable_get(:@name)
+        #p n
       elsif RubyToken::TkDO === token ||
-            RubyToken::TkfLBRACE === token
+            RubyToken::TkfLBRACE === token 
         nesting += 1
         stoken = token if nesting == 1
       elsif RubyToken::TkBITOR === token && stoken
         
       elsif RubyToken::TkEND === token ||
             RubyToken::TkRBRACE === token
-        etoken = token if nesting == 1
+        if nesting == 1
+          etoken = token 
+          break
+        end
         nesting -= 1
       elsif RubyToken::TkNL === token && stoken && etoken
-        break if nesting == 0
+        break if nesting <= 0
       else
         #p token
       end
     end
+    #puts lines if etoken.nil?
     lines = lines[stoken.line_no-1 .. etoken.line_no-1]
+    
     # Remove the crud before the block definition. 
     if block_only
       spaces = lines.last.match(/^\s+/)[0] rescue ''
       lines[0] = spaces << lines[0][stoken.char_no .. -1]
     end
     ps = ProcString.new lines.join
+    ps.file, ps.lines = filename, start_line .. start_line+etoken.line_no-1
+    
     ps
   end
   
@@ -67,14 +76,18 @@ module ProcSource
   #
   # Ruby 1.9 returns an incorrect line number
   # when a block is specified with do/end. It
-  # is off by one. This hack simply looks for 
-  # a "do" on the first line.
+  # happens b/c the line number returned by 
+  # Ruby 1.9 is based on the first line in the
+  # block which contains a token (i.e. not a
+  # new line or comment etc...). 
   #
   # NOTE: This won't work in cases where the 
   # incorrect line also contains a "do". 
   #
-  def self.line_has_open?(lexer)
+  def self.line_has_open?(str)
     return true unless RUBY_VERSION >= '1.9'
+    lexer = RubyLex.new
+    lexer.set_input(StringIO.new(str))
     success = false
     while token = lexer.token
       case token
