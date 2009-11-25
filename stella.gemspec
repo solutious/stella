@@ -48,6 +48,7 @@
   lib/stella/engine.rb
   lib/stella/engine/functional.rb
   lib/stella/engine/load_create.rb
+  lib/stella/engine/load_em.rb
   lib/stella/engine/load_package.rb
   lib/stella/engine/load_queue.rb
   lib/stella/engine/loadbase.rb
