@@ -16,6 +16,24 @@ class ProcString < String
   end
 end
 
+class RubyToken::Token
+  
+    # These EXPR_BEG tokens don't have associated end tags
+  FAKIES = [RubyToken::TkWHEN, RubyToken::TkELSIF, RubyToken::TkTHEN]
+  
+  def open_tag?
+    return false if @name.nil? || get_props.nil?
+    get_props[1] == (RubyToken::EXPR_BEG || RubyToken::TkfLBRACE === self) &&
+          self.class.to_s !~ /_MOD/  && # ignore onliner if, unless, etc...
+          !FAKIES.member?(self.class)
+  end
+  
+  def get_props
+    RubyToken::TkReading2Token[@name]
+  end
+  
+end
+
 # Based heavily on code from http://github.com/imedo/background
 # Big thanks to the imedo dev team!
 #
@@ -36,29 +54,26 @@ module ProcSource
     stoken, etoken, nesting = nil, nil, 0
     while token = lexer.token
       n = token.instance_variable_get(:@name)
-#        p [:parser, nesting, token.class, n]
       if RubyToken::TkIDENTIFIER === token
         #p n
-      elsif RubyToken::TkDO === token ||
-            RubyToken::TkfLBRACE === token 
+      elsif token.open_tag?
         nesting += 1
         stoken = token if nesting == 1
-      elsif RubyToken::TkBITOR === token && stoken
-        
-      elsif RubyToken::TkEND === token ||
-            RubyToken::TkRBRACE === token
+      elsif RubyToken::TkEND === token || RubyToken::TkRBRACE === token
         if nesting == 1
           etoken = token 
           break
         end
         nesting -= 1
+      elsif RubyToken::TkBITOR === token && stoken
+        #nothing
       elsif RubyToken::TkNL === token && stoken && etoken
         break if nesting <= 0
       else
         #p token
       end
     end
-    #puts lines if etoken.nil?
+#     puts lines if etoken.nil?
     lines = lines[stoken.line_no-1 .. etoken.line_no-1]
     
     # Remove the crud before the block definition. 
@@ -160,10 +175,10 @@ if $0 == __FILE__
 
   a = Proc.new() { |a|
     puts { "Hello Rudy" }
-}
+    }
 
 b = Proc.new() do |a|
-    puts {"Hello Rudy"}
+    puts {"Hello Rudy"} if true
   end
   
   puts a.source
