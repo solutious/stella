@@ -2,7 +2,7 @@ autoload :CSV, 'csv'
 #Gibbler.enable_debug
 
 module Stella
-class Testplan
+class Testplan < Storable
   include Gibbler::Complex
   extend Attic
   
@@ -24,8 +24,11 @@ class Testplan
   attic :plan_path
   attic :description
   
-  attr_accessor :usecases
-  attr_reader :stats
+  field :id do |val|
+    self.gibbler
+  end
+  field :usecases 
+  field :description 
   
   def initialize(uris=[], opts={})
     self.description = "Test plan"
@@ -109,6 +112,8 @@ class Testplan
     self.description
   end
 
+    
+    
   def pretty(long=false)
     str = []
     dig = long ? self.digest_cache : self.digest_cache.shorter
@@ -127,7 +132,7 @@ class Testplan
         str << "      %s" % [r]
         if Stella.stdout.lev > 1
           [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
-        
+          str << '       %s: %s' % ['params', r.params.inspect] 
           r.response_handler.each do |status,proc|
             str << "      response: %s%s" % [status, proc.source.split($/).join("#{$/}    ")]
           end
@@ -163,7 +168,7 @@ class Testplan
   #       }
   #     }
   #
-  class Usecase
+  class Usecase < Storable
     include Gibbler::Complex
     include Stella::Data::Helpers
     extend Attic
@@ -176,12 +181,15 @@ class Testplan
     attic :plan_path
     attic :description
     
+    field :id do |val|
+      self.gibbler
+    end
+    field :description
+    field :ratio
+    field :http_auth
     
-    attr_writer :ratio
-    attr_reader :http_auth
-    
-    attr_accessor :requests
-    attr_accessor :resources
+    field :requests
+    field :resources
     
     class UnknownResource < Stella::Error
       def message; "UnknownResource: #{@obj}"; end

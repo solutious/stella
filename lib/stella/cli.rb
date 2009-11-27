@@ -79,7 +79,11 @@ class Stella::CLI < Drydock::Command
   
   def preview
     create_testplan
-    Stella.stdout.info @testplan.pretty(Stella.stdout.lev > 1)
+    if @global.format == 'json'
+      Stella.stdout.info @testplan.to_json
+    else
+      Stella.stdout.info @testplan.pretty(Stella.stdout.lev > 1)
+    end
   end
   
   private

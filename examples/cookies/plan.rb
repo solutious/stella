@@ -10,7 +10,7 @@ usecase 65, "Simple search" do
   get "/", "Homepage"
   
   get "/search", "Search Results" do
-    param :what  => random(['Big', 'Beads'])
+    param :what  => "<%= random(['Big', 'Beads']) %>"
     param :where => 'Toronto'
   end
   

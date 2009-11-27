@@ -4,15 +4,12 @@ module Stella::Data::HTTP
   class Request < Storable
     include Gibbler::Complex
     include Stella::Data::Helpers
-    
-      # A hash containing blocks to be executed depending on the HTTP response status.
-      # The hash keys are numeric HTTP Status Codes. 
-      #
-      #     200 => { ... }
-      #     304 => { ... }
-      #     500 => { ... }
-      #
-    attr_accessor :response_handler
+      
+    attic :description
+      
+    field :id do |val|
+      self.gibbler
+    end
     
     field :description
     field :header 
@@ -25,7 +22,21 @@ module Stella::Data::HTTP
     field :content_type
     field :http_auth
     
-    attic :description
+      # A hash containing blocks to be executed depending on the HTTP response status.
+      # The hash keys are numeric HTTP Status Codes. 
+      #
+      #     200 => { ... }
+      #     304 => { ... }
+      #     500 => { ... }
+      #
+    field :response_handler do |procs|
+      a = {}
+      procs.each_pair { |n,v| 
+        a[n] = (Proc === v) ? v.source : v 
+      }
+      a
+    end
+    
     
     def has_body?
       !@body.nil?
@@ -98,9 +109,7 @@ module Stella::Data::HTTP
         args << /.+/ if args.empty?
         args.each do |status|
           @response_handler[status] = definition
-          p [status, definition.inspect]
         end
-        
       end
     end
     
