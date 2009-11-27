@@ -4,15 +4,13 @@ require 'irb/ruby-lex'
 
 class ProcString < String
   attr_accessor :file, :lines, :arity, :kind
-  def to_proc
-    result = eval("proc #{self}")
+  def to_proc(kind="proc")
+    result = eval("#{kind} #{self}")
     result.source = self
     result
   end
   def to_lambda
-    result = eval("lambda #{self}")
-    result.source = self
-    result
+    to_proc "lamda"
   end
 end
 
@@ -23,9 +21,10 @@ class RubyToken::Token
   
   def open_tag?
     return false if @name.nil? || get_props.nil?
-    get_props[1] == (RubyToken::EXPR_BEG || RubyToken::TkfLBRACE === self) &&
+    a = (get_props[1] == RubyToken::EXPR_BEG) &&
           self.class.to_s !~ /_MOD/  && # ignore onliner if, unless, etc...
-          !FAKIES.member?(self.class)
+          !FAKIES.member?(self.class)  
+    a 
   end
   
   def get_props
@@ -44,6 +43,7 @@ module ProcSource
     retried = 0
     loop do
       lines = get_lines(filename, start_line)
+      #p [start_line, lines[0]]
       if !line_has_open?(lines.join) && start_line >= 0
         start_line -= 1 and retried +=1 and redo 
       end
@@ -54,9 +54,10 @@ module ProcSource
     stoken, etoken, nesting = nil, nil, 0
     while token = lexer.token
       n = token.instance_variable_get(:@name)
+      
       if RubyToken::TkIDENTIFIER === token
-        #p n
-      elsif token.open_tag?
+        #nothing
+      elsif token.open_tag? || RubyToken::TkfLBRACE === token
         nesting += 1
         stoken = token if nesting == 1
       elsif RubyToken::TkEND === token || RubyToken::TkRBRACE === token
@@ -110,6 +111,15 @@ module ProcSource
         break
       when RubyToken::TkDO
         success = true
+      when RubyToken::TkCONSTANT
+        if token.instance_variable_get(:@name) == "Proc" &&
+           lexer.token.is_a?(RubyToken::TkDOT)
+          method = lexer.token
+          if method.is_a?(RubyToken::TkIDENTIFIER) &&
+             method.instance_variable_get(:@name) == "new"
+            success = true
+          end
+        end
       end
     end
     success
@@ -169,24 +179,24 @@ if $0 == __FILE__
     @blk = blk
   end
 
-  store do |a|
-    puts "Hello Rudy"
+  store do |blk|
+    puts "Hello Rudy1"
   end
 
   a = Proc.new() { |a|
-    puts { "Hello Rudy" }
-    }
-
-b = Proc.new() do |a|
-    puts {"Hello Rudy"} if true
+    puts  "Hello Rudy2" 
+  }
+ 
+  b = Proc.new() do |b|
+    puts { "Hello Rudy3" } if true
   end
   
-  puts a.source
-  puts b.source
-  puts @blk.source
+  puts @blk.inspect, @blk.source
+  puts [a.inspect, a.source]
+  puts b.inspect, b.source
   
   proc = @blk.source.to_proc
-  proc.call
+  proc.call(1)
 end
 
 
