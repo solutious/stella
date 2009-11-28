@@ -7,6 +7,7 @@ STELLA, CHANGES
 * ADDED: Stella::Testplan#to_json
 * ADDED: Stella::Data::Helpers#read_file
 * ADDED: Stella::Data::Helpers#resequential
+* ADDED: Stella::Data::Helpers#path
 
 
 #### 0.7.6 (2009-11-24) ###############################

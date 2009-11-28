@@ -50,6 +50,13 @@ module Stella::Data
       end
     end
     
+    def path(*args)
+      input = File.join *args
+      Proc.new do
+        File.exists?(input) ? input : File.join(@base_path, input)
+      end
+    end
+    
     def file(*args)
       input = args.size > 1 ? args : args.first
       Proc.new do
