@@ -6,6 +6,7 @@ STELLA, CHANGES
 * CHANGE: Removed Stella::Testplan::Stats
 * ADDED: Stella::Testplan#to_json
 * ADDED: Stella::Data::Helpers#read_file
+* ADDED: Stella::Data::Helpers#resequential
 
 
 #### 0.7.6 (2009-11-24) ###############################

@@ -19,18 +19,18 @@ class Stella::Client
           @sequential_offset[resid]
         end
       end
-      ## TODO: BROKEN?
-      ##def rsequential_offset(resid, max)
-      ##  MUTEX.synchronize do
-      ##    @rsequential_offset[resid] ||= max+1
-      ##    if @rsequential_offset[resid] <= 0
-      ##      @rsequential_offset[resid] = max
-      ##    else
-      ##      @rsequential_offset[resid] -= 1
-      ##    end
-      ##    @rsequential_offset[resid]
-      ##  end
-      ##end
+      
+      def rsequential_offset(resid, max)
+        MUTEX.synchronize do
+          @rsequential_offset[resid] ||= max+1
+          if @rsequential_offset[resid] <= 0
+            @rsequential_offset[resid] = max
+          else
+            @rsequential_offset[resid] -= 1
+          end
+          @rsequential_offset[resid]
+        end
+      end
     end
     
     # This is used to handle custom exception in usecases.
