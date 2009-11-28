@@ -1,6 +1,28 @@
-
+# Stella Test Plan - Dynamic Data (2009-11-28)
+#
+#
+# 1. START THE EXAMPLE APPLICATION
+# 
+# This test plan is written to work with the
+# example application that ships with Stella. 
+# See:
+#
+# $ stella example
+#
+#
+# 2. RUNNING THE TEST PLAN
+#
+# $ stella verify -p examples/dynamic/plan.rb http://127.0.0.1:3114/
+# 
+# $ stella generate -c 2 -r 2 -p examples/dynamic/plan.rb http://127.0.0.1:3114/
+#
 usecase "Dynamic Data" do
   
+  # HTTP Authentication (Basic or Digest)
+  #auth :user, :password
+  
+  # Retrieve a list of listings and store
+  # them in a resource called listing_ids.
   get '/listings.yaml', "Get Listings" do
     response 200 do
       listings = doc.collect! { |l|; l[:id]; }
@@ -8,14 +30,16 @@ usecase "Dynamic Data" do
     end
   end
   
-  xget "/listing/:lid.yaml", "Sequential" do
+  # Access each listing page in the order
+  get "/listing/:lid.yaml", "Sequential" do
     param :lid => sequential(:listing_ids)
     response 200 do
       repeat 5
     end
   end
   
-  xget "/listing/:lid.yaml", "Reverse Sequential" do
+  # Access each listing page in reverse order
+  get "/listing/:lid.yaml", "Reverse Sequential" do
     param :lid => rsequential(:listing_ids)
     
     response 200 do
@@ -23,9 +47,9 @@ usecase "Dynamic Data" do
     end
   end
  
+  # Access listing pages in random order
   get "/listing/:lid.yaml", "Random" do
     param :lid => random(:listing_ids)
-    param :path => path('hello.txt')
     response 200 do
       repeat 5
     end
