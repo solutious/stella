@@ -1,5 +1,12 @@
 STELLA, CHANGES
 
+#### 0.7.7 (2009-11-??) ###############################
+
+* FIXED: JSON parse error when nil body 
+* CHANGE: Removed Stella::Testplan::Stats
+* ADDED: Stella::Testplan#to_json
+* ADDED: Stella::Data::Helpers#read_file
+
 
 #### 0.7.6 (2009-11-24) ###############################
 
