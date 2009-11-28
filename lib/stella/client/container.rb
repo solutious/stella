@@ -95,6 +95,7 @@ class Stella::Client
     
     def doc
       return @doc unless @doc.nil?
+      return nil if body.nil? || body.empty?
       # NOTE: It's important to parse the document on every 
       # request because this container is available for the
       # entire life of a usecase. 
