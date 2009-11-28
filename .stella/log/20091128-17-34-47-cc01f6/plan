@@ -1,0 +1,31 @@
+ Test plan  (cc01f6)                                                 
+  Dynamic Data  (a5246b)                                        100% 
+    Get Listings  (ff7e03)                                        
+      GET /listings.yaml
+      wait: 0
+       params: {}
+      response: 200    do
+          listings = doc.collect! { |l|; l[:id]; }
+          set :listing_ids, listings
+        end
+    Sequential  (2df81a)                                          
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Proc:0x000001016c33f0@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:135>}
+      response: 200    do
+          repeat 5
+        end
+    Reverse Sequential  (2df81a)                                  
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Proc:0x000001016c2c48@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:178>}
+      response: 200    do
+          repeat 5
+        end
+    Random  (2df81a)                                              
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Proc:0x000001016c24d8@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:90>}
+      response: 200    do
+          repeat 5
+        end

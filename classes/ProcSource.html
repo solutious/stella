@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: ProcSource [Blame Stella for breaking your web applications.]</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          ProcSource
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../files/lib/proc_source_rb.html">lib/proc_source.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            Based heavily on code from <a
+            href="http://github.com/imedo/background">github.com/imedo/background</a>
+            Big thanks to the imedo dev team!
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000246">find</a></li>
+              <li><a href="#M000248">get_lines</a></li>
+              <li><a href="#M000247">line_has_open?</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='method public-class' id='method-M000246'>
+                <a name='M000246'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>find</span>
+                  <span class='arguments'>(filename, start_line=0, block_only=true)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000246-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000246-source'>    <span class="ruby-comment cmt"># File lib/proc_source.rb, line 41</span>&#x000A;41:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">start_line</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">block_only</span>=<span class="ruby-keyword kw">true</span>)&#x000A;42:     <span class="ruby-identifier">lines</span>, <span class="ruby-identifier">lexer</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>&#x000A;43:     <span class="ruby-identifier">retried</span> = <span class="ruby-value">0</span>&#x000A;44:     <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>&#x000A;45:       <span class="ruby-identifier">lines</span> = <span class="ruby-identifier">get_lines</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">start_line</span>)&#x000A;46:       <span class="ruby-comment cmt">#p [start_line, lines[0]]</span>&#x000A;47:       <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">line_has_open?</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">start_line</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>&#x000A;48:         <span class="ruby-identifier">start_line</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">retried</span> <span class="ruby-operator">+=</span><span class="ruby-value">1</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">redo</span> &#x000A;49:       <span class="ruby-keyword kw">end</span>&#x000A;50:       <span class="ruby-identifier">lexer</span> = <span class="ruby-constant">RubyLex</span>.<span class="ruby-identifier">new</span>&#x000A;51:       <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">set_input</span>(<span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>))&#x000A;52:       <span class="ruby-keyword kw">break</span>&#x000A;53:     <span class="ruby-keyword kw">end</span>&#x000A;54:     <span class="ruby-identifier">stoken</span>, <span class="ruby-identifier">etoken</span>, <span class="ruby-identifier">nesting</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>&#x000A;55:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">token</span> = <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">token</span>&#x000A;56:       <span class="ruby-identifier">n</span> = <span class="ruby-identifier">token</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">:@name</span>)&#x000A;57:       &#x000A;58:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkIDENTIFIER</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span>&#x000A;59:         <span class="ruby-comment cmt">#nothing</span>&#x000A;60:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">token</span>.<span class="ruby-identifier">open_tag?</span> <span class="ruby-operator">||</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkfLBRACE</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span>&#x000A;61:         <span class="ruby-identifier">nesting</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;62:         <span class="ruby-identifier">stoken</span> = <span class="ruby-identifier">token</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">nesting</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>&#x000A;63:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkEND</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span> <span class="ruby-operator">||</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkRBRACE</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span>&#x000A;64:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">nesting</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>&#x000A;65:           <span class="ruby-identifier">etoken</span> = <span class="ruby-identifier">token</span> &#x000A;66:           <span class="ruby-keyword kw">break</span>&#x000A;67:         <span class="ruby-keyword kw">end</span>&#x000A;68:         <span class="ruby-identifier">nesting</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>&#x000A;69:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkBITOR</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">stoken</span>&#x000A;70:         <span class="ruby-comment cmt">#nothing</span>&#x000A;71:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkNL</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">stoken</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">etoken</span>&#x000A;72:         <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">nesting</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">0</span>&#x000A;73:       <span class="ruby-keyword kw">else</span>&#x000A;74:         <span class="ruby-comment cmt">#p token</span>&#x000A;75:       <span class="ruby-keyword kw">end</span>&#x000A;76:     <span class="ruby-keyword kw">end</span>&#x000A;77: <span class="ruby-comment cmt">#     puts lines if etoken.nil?</span>&#x000A;78:     <span class="ruby-identifier">lines</span> = <span class="ruby-identifier">lines</span>[<span class="ruby-identifier">stoken</span>.<span class="ruby-identifier">line_no</span><span class="ruby-operator">-</span><span class="ruby-value">1</span> <span class="ruby-operator">..</span> <span class="ruby-identifier">etoken</span>.<span class="ruby-identifier">line_no</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>]&#x000A;79:     &#x000A;80:     <span class="ruby-comment cmt"># Remove the crud before the block definition. </span>&#x000A;81:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_only</span>&#x000A;82:       <span class="ruby-identifier">spaces</span> = <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^\s+/</span>)[<span class="ruby-value">0</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">''</span>&#x000A;83:       <span class="ruby-identifier">lines</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">spaces</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">lines</span>[<span class="ruby-value">0</span>][<span class="ruby-identifier">stoken</span>.<span class="ruby-identifier">char_no</span> <span class="ruby-operator">..</span> <span class="ruby-value">-1</span>]&#x000A;84:     <span class="ruby-keyword kw">end</span>&#x000A;85:     <span class="ruby-identifier">ps</span> = <span class="ruby-constant">ProcString</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>&#x000A;86:     <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">file</span>, <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">lines</span> = <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">start_line</span> <span class="ruby-operator">..</span> <span class="ruby-identifier">start_line</span><span class="ruby-operator">+</span><span class="ruby-identifier">etoken</span>.<span class="ruby-identifier">line_no</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>&#x000A;87:     &#x000A;88:     <span class="ruby-identifier">ps</span>&#x000A;89:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000248'>
+                <a name='M000248'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get_lines</span>
+                  <span class='arguments'>(filename, start_line = 0)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000248-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000248-source'>     <span class="ruby-comment cmt"># File lib/proc_source.rb, line 129</span>&#x000A;129:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_lines</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">start_line</span> = <span class="ruby-value">0</span>)&#x000A;130:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">filename</span>&#x000A;131:       <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>&#x000A;132:         <span class="ruby-keyword kw">nil</span>&#x000A;133:       <span class="ruby-comment cmt">## NOTE: IRB AND EVAL LINES NOT TESTED</span>&#x000A;134:       <span class="ruby-comment cmt">### special &quot;(irb)&quot; descriptor?</span>&#x000A;135:       <span class="ruby-comment cmt">##when &quot;(irb)&quot;</span>&#x000A;136:       <span class="ruby-comment cmt">##  IRB.conf[:MAIN_CONTEXT].io.line(start_line .. -2)</span>&#x000A;137:       <span class="ruby-comment cmt">### special &quot;(eval...)&quot; descriptor?</span>&#x000A;138:       <span class="ruby-comment cmt">##when /^\(eval.+\)$/</span>&#x000A;139:       <span class="ruby-comment cmt">##  EVAL_LINES__[filename][start_line .. -2]</span>&#x000A;140:       <span class="ruby-comment cmt"># regular file</span>&#x000A;141:       <span class="ruby-keyword kw">else</span>&#x000A;142:         <span class="ruby-comment cmt"># Ruby already parsed this file? (see disclaimer above)</span>&#x000A;143:         <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">SCRIPT_LINES__</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">SCRIPT_LINES__</span>[<span class="ruby-identifier">filename</span>]&#x000A;144:           <span class="ruby-constant">SCRIPT_LINES__</span>[<span class="ruby-identifier">filename</span>][(<span class="ruby-identifier">start_line</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">..</span> <span class="ruby-value">-1</span>]&#x000A;145:         <span class="ruby-comment cmt"># If the file exists we're going to try reading it in</span>&#x000A;146:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">filename</span>)&#x000A;147:           <span class="ruby-keyword kw">begin</span>&#x000A;148:             <span class="ruby-constant">File</span>.<span class="ruby-identifier">readlines</span>(<span class="ruby-identifier">filename</span>)[(<span class="ruby-identifier">start_line</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">..</span> <span class="ruby-value">-1</span>]&#x000A;149:           <span class="ruby-keyword kw">rescue</span>&#x000A;150:             <span class="ruby-keyword kw">nil</span>&#x000A;151:           <span class="ruby-keyword kw">end</span>&#x000A;152:         <span class="ruby-keyword kw">end</span>&#x000A;153:     <span class="ruby-keyword kw">end</span>&#x000A;154:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000247'>
+                <a name='M000247'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>line_has_open?</span>
+                  <span class='arguments'>(str)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  A hack for Ruby 1.9, otherwise returns true.
+                  </p>
+                  <p>
+                  Ruby 1.9 returns an incorrect line number when a block is specified with
+                  do/end. It happens b/c the line number returned by Ruby 1.9 is based on the
+                  first line in the block which contains a token (i.e. not a new line or
+                  comment etc...).
+                  </p>
+                  <p>
+                  NOTE: This won&#8217;t work in cases where the incorrect line also contains
+                  a &#8220;do&#8221;.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000247-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000247-source'>     <span class="ruby-comment cmt"># File lib/proc_source.rb, line 103</span>&#x000A;103:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">line_has_open?</span>(<span class="ruby-identifier">str</span>)&#x000A;104:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value str">'1.9'</span>&#x000A;105:     <span class="ruby-identifier">lexer</span> = <span class="ruby-constant">RubyLex</span>.<span class="ruby-identifier">new</span>&#x000A;106:     <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">set_input</span>(<span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>))&#x000A;107:     <span class="ruby-identifier">success</span> = <span class="ruby-keyword kw">false</span>&#x000A;108:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">token</span> = <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">token</span>&#x000A;109:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">token</span>&#x000A;110:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkNL</span>&#x000A;111:         <span class="ruby-keyword kw">break</span>&#x000A;112:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkDO</span>&#x000A;113:         <span class="ruby-identifier">success</span> = <span class="ruby-keyword kw">true</span>&#x000A;114:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkCONSTANT</span>&#x000A;115:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">token</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">:@name</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;Proc&quot;</span> <span class="ruby-operator">&amp;&amp;</span>&#x000A;116:            <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">token</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkDOT</span>)&#x000A;117:           <span class="ruby-identifier">method</span> = <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">token</span>&#x000A;118:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">method</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkIDENTIFIER</span>) <span class="ruby-operator">&amp;&amp;</span>&#x000A;119:              <span class="ruby-identifier">method</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">:@name</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;new&quot;</span>&#x000A;120:             <span class="ruby-identifier">success</span> = <span class="ruby-keyword kw">true</span>&#x000A;121:           <span class="ruby-keyword kw">end</span>&#x000A;122:         <span class="ruby-keyword kw">end</span>&#x000A;123:       <span class="ruby-keyword kw">end</span>&#x000A;124:     <span class="ruby-keyword kw">end</span>&#x000A;125:     <span class="ruby-identifier">success</span>&#x000A;126:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

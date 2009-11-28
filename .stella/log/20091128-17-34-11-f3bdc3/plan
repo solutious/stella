@@ -1,0 +1,78 @@
+ Product Finder  (f3bdc3)                                            
+  Simple search  (09746b)                                       65% 
+    Homepage  (105c4b)                                            
+      GET /
+      wait: 1..3
+       params: {}
+    Search Results  (c9983f)                                      
+      GET /search
+      wait: 2..3
+       params: {:what=>#<Proc:0x00000101340b40@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:90>, :where=>#<Proc:0x00000101340948@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:90>}
+      response: 200    do
+          
+          # If the response contains HTML, it will
+          # automatically be parsed using the Ruby
+          # library Nokogiri. See the following link
+          # for more information:
+          # http://nokogiri.rubyforge.org/nokogiri/
+          #
+          # The important thing to note is that you 
+          # don't need to write complex regular 
+          # expressions to grab data from the page. 
+          # 
+          listing = doc.css('div.listing').first
+          
+          # Here we grab the first listing ID on the
+          # page and store it in a variable called
+          # :lid. This is similar to a resource. 
+          #
+          set :lid, listing['id'].match(/(\d+)/)[0]
+        end
+      response: 404    do 
+          fail "No results"
+        end
+    Selected listing  (0416ef)                                    
+      GET /listing/:lid
+      wait: 1..4
+       params: {}
+  YAML API  (178369)                                            25% 
+    View All  (ff7e03)                                            
+      GET /listings.yaml
+      wait: 0
+       params: {}
+      response: 200    do
+        
+          # We showed above how HTML is parsed automatically.
+          # Stella can do the same with XML, YAML, and JSON. 
+          #
+          # A variable called "doc" contains the parsed YAML.
+          # "collect" is a Ruby method that iterates through 
+          # all items in an Array and returns a new Array 
+          # containing the return values from each iteration. 
+          # Each item item is available in the variable 
+          # called 'l'. 
+          #
+          # The variable called "listings" will contain all
+          # listing ids in the YAML document.
+          #
+          listings = doc.collect! { |l|; l[:id]; }
+          
+          # And here we store that list of ids. 
+          #
+          set :listing_ids, listings
+        end
+    Select Listing  (2df81a)                                      
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Proc:0x0000010133e760@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:135>}
+      response: 200    do
+          repeat 7
+        end
+  Self-serve API  (e6ed17)                                      10% 
+    Add a listing  (15b0ab)                                       
+      POST /listing/add
+      wait: 0
+       params: {:name=>#<Proc:0x0000010133d340@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:90>, :city=>#<Proc:0x0000010133d110@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:90>, :logo=>#<Proc:0x0000010133cf88@/Users/delano/Projects/opensource/stella/lib/stella/data.rb:63>}
+      response: 302    do
+          repeat 3
+        end

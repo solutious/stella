@@ -1,0 +1,69 @@
+[7m Test plan  (cc01f6)                                                       [0m
+ [7m[1m Dynamic Data  (a5246b)                                                100% [0m[0m
+[1m   Get Listings  (ff7e03)                                                   [0m
+    GET /listings.yaml
+      do_request                     0.009 <= 0.011s >= 0.014; 0.002(SD) 5(N)
+      query                          0.001 <= 0.001s >= 0.002; 0.001(SD) 5(N)
+      connect                        0.001 <= 0.001s >= 0.002; 0.000(SD) 5(N)
+      socket_gets_first_byte         0.007 <= 0.008s >= 0.010; 0.001(SD) 5(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 5(N)
+
+[1m   Sequential  (2df81a)                                                     [0m
+    GET /listing/:lid.yaml
+      do_request                     0.002 <= 0.003s >= 0.019; 0.002(SD) 90(N)
+      query                          0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+      connect                        0.000 <= 0.000s >= 0.000; 0.000(SD) 0(N)
+      socket_gets_first_byte         0.001 <= 0.001s >= 0.010; 0.001(SD) 90(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+
+[1m   Reverse Sequential  (2df81a)                                             [0m
+    GET /listing/:lid.yaml
+      do_request                     0.002 <= 0.003s >= 0.019; 0.002(SD) 90(N)
+      query                          0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+      connect                        0.000 <= 0.000s >= 0.000; 0.000(SD) 0(N)
+      socket_gets_first_byte         0.001 <= 0.001s >= 0.010; 0.001(SD) 90(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+
+[1m   Random  (2df81a)                                                         [0m
+    GET /listing/:lid.yaml
+      do_request                     0.002 <= 0.003s >= 0.019; 0.002(SD) 90(N)
+      query                          0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+      connect                        0.000 <= 0.000s >= 0.000; 0.000(SD) 0(N)
+      socket_gets_first_byte         0.001 <= 0.001s >= 0.010; 0.001(SD) 90(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 90(N)
+
+[1m   Sub Total:[0m
+      Total requests                 95 (200: 95)
+       success                       95
+       failed                        0
+      do_request                     0.003s 0.003(SD)
+      query                          0.000s 0.000(SD)
+      connect                        0.001s 0.000(SD)
+      socket_gets_first_byte         0.002s 0.002(SD)
+      get_body                       0.000s 0.000(SD)
+      request_header_size            26.82KB      (avg:282.36B)
+      request_content_size           0.00B        (avg:0.00B)
+      response_headers_size          18.71KB      (avg:197.00B)
+      response_content_size          18.01KB      (avg:189.57B)
+
+ [7m Total:                                                             [0m
+      Total requests                 95
+       success                       95 (req/s: 155.67)
+       failed                        0
+      do_request                     0.003s     0.003(SD)
+      query                          0.000s     0.000(SD)
+      connect                        0.001s     0.000(SD)
+      socket_gets_first_byte         0.002s     0.002(SD)
+      get_body                       0.000s     0.000(SD)
+      request_header_size            26.82KB      (avg:282.36B)
+      request_content_size           0.00B        (avg:0.00B)
+      response_headers_size          18.71KB      (avg:197.00B)
+      response_content_size          18.01KB      (avg:189.57B)
+
+Summary: 
+      successful req:       95
+          failed req:        0
+         max clients:        1
+         repetitions:        5
+           test time:     0.61
+      reporting time:     0.06

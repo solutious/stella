@@ -1,0 +1,3 @@
+:redis_host: localhost
+:redis_port: 3111
+:redis_pass: rockJohnson911

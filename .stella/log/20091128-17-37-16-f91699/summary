@@ -1,0 +1,53 @@
+[7m Test plan  (f91699)                                                       [0m
+ [7m[1m Dynamic Data  (af1ad0)                                                100% [0m[0m
+[1m   Get Listings  (ff7e03)                                                   [0m
+    GET /listings.yaml
+      do_request                     0.021 <= 0.021s >= 0.021; 0.000(SD) 1(N)
+      query                          0.001 <= 0.001s >= 0.001; 0.000(SD) 1(N)
+      connect                        0.001 <= 0.001s >= 0.001; 0.000(SD) 1(N)
+      socket_gets_first_byte         0.003 <= 0.003s >= 0.003; 0.000(SD) 1(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 1(N)
+
+[1m   Reverse Sequential  (2df81a)                                             [0m
+    GET /listing/:lid.yaml
+      do_request                     0.002 <= 0.003s >= 0.004; 0.000(SD) 6(N)
+      query                          0.000 <= 0.000s >= 0.000; 0.000(SD) 6(N)
+      connect                        0.000 <= 0.000s >= 0.000; 0.000(SD) 0(N)
+      socket_gets_first_byte         0.001 <= 0.001s >= 0.002; 0.000(SD) 6(N)
+      get_body                       0.000 <= 0.000s >= 0.000; 0.000(SD) 6(N)
+
+[1m   Sub Total:[0m
+      Total requests                 7 (200: 7)
+       success                       7
+       failed                        0
+      do_request                     0.005s 0.007(SD)
+      query                          0.000s 0.000(SD)
+      connect                        0.001s 0.000(SD)
+      socket_gets_first_byte         0.002s 0.001(SD)
+      get_body                       0.000s 0.000(SD)
+      request_header_size            1.94KB       (avg:276.57B)
+      request_content_size           0.00B        (avg:0.00B)
+      response_headers_size          1.38KB       (avg:197.00B)
+      response_content_size          986.00B      (avg:140.86B)
+
+ [7m Total:                                                             [0m
+      Total requests                 7
+       success                       7 (req/s: 137.67)
+       failed                        0
+      do_request                     0.005s     0.007(SD)
+      query                          0.000s     0.000(SD)
+      connect                        0.001s     0.000(SD)
+      socket_gets_first_byte         0.002s     0.001(SD)
+      get_body                       0.000s     0.000(SD)
+      request_header_size            1.94KB       (avg:276.57B)
+      request_content_size           0.00B        (avg:0.00B)
+      response_headers_size          1.38KB       (avg:197.00B)
+      response_content_size          986.00B      (avg:140.86B)
+
+Summary: 
+      successful req:        7
+          failed req:        0
+         max clients:        1
+         repetitions:        1
+           test time:     0.05
+      reporting time:     0.01

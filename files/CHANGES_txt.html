@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2009-10-21 12:12:27 -0400</span>
+          <span class='datetime'>2009-11-28 12:47:07 -0500</span>
         </div>
       </div>
       <div id='content'>
@@ -40,6 +40,147 @@
             <p>
             STELLA, CHANGES
             </p>
+            <p>
+            #### 0.7.7 (2009-11-??) ###############################
+            </p>
+            <ul>
+            <li>FIXED: JSON parse error when nil body
+            
+            </li>
+            <li>CHANGE: Removed Stella::Testplan::Stats
+            
+            </li>
+            <li>ADDED: Stella::Testplan#to_json
+            
+            </li>
+            <li>ADDED: <a
+            href="../classes/Stella/Data/Helpers.html#M000066">Stella::Data::Helpers#read_file</a>
+            
+            </li>
+            <li>ADDED: Stella::Data::Helpers#resequential
+            
+            </li>
+            <li>ADDED: <a
+            href="../classes/Stella/Data/Helpers.html#M000067">Stella::Data::Helpers#path</a>
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.6 (2009-11-24) ###############################
+            </p>
+            <ul>
+            <li>FIXED: httpclient fix: use full request URI (i.e. path and query string) in
+            authentication (NOTE: SSPINegotiateAuth and NegotiateAuth not tested)
+            
+            </li>
+            <li>FIXED: Use request URI in authentication domain
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.5 (2009-11-16) ###############################
+            </p>
+            <ul>
+            <li>FIXED: Correctly capture exceptions in Client
+            
+            </li>
+            <li>FIXED: Issue with printing the dot (.) for the start of every usecase
+            
+            </li>
+            <li>FIXED: Stats samples not cleared between background calculations
+            
+            </li>
+            <li>CHANGE: Do not include testplan, usecase, or request descriptions in digest
+            calculation
+            
+            </li>
+            <li>CHANGE: Use 6 digit digest in log directory names
+            
+            </li>
+            <li>CHANGE: Client aborts usecase on unhandled exceptions
+            
+            </li>
+            <li>ADDED: Support for $perlstyle variables in config
+            
+            </li>
+            <li>ADDED: Print log dir below summary report
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.4 (2009-11-11) ###############################
+            </p>
+            <ul>
+            <li>FIXED: Proper handling for timeout errors
+            
+            </li>
+            <li>CHANGE: Log directory is now YYYYMMDD-HH-mm-ss-SHA1
+            
+            </li>
+            <li>ADDED: Logging to .stella/log
+            
+            </li>
+            <li>ADDED: Global variables via &#8212;var
+            
+            </li>
+            <li>ADDED: Using naive CSV parsing via quickcsv (CSV lib is slooow for large
+            files)
+            
+            </li>
+            <li>ADDED: Testplan file cache (load a file only once)
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.3 (2009-10-30) ###############################
+            </p>
+            <ul>
+            <li>FIXED: warning: regexp match /.../n against to UTF-8 string
+            
+            </li>
+            <li>ADDED: Arrival rate
+            
+            </li>
+            <li>ADDED: Added HTTP auth per request
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.2 (2009-10-29) ###############################
+            </p>
+            <ul>
+            <li>FIXED: <a href="bin/stella.html">bin/stella</a> exits with 1 if any request
+            fails.
+            
+            </li>
+            <li>CHANGE: sequential and rsequential resourcing is now global across all
+            clients.
+            
+            </li>
+            <li>ADDED: Automatic form parsing for html pages
+            
+            </li>
+            <li>ADDED: Container now has params and headers from the request
+            
+            </li>
+            <li>ADDED: Assume HTTP response codes >= 400 are failed requests unless a
+            response block is defined for that status in which case the block must
+            return fail.
+            
+            </li>
+            <li>ADDED: Support for HTTP Basic authentication
+            
+            </li>
+            <li>ADDED: Templating for resources parameters and headers.
+            
+            </li>
+            <li>ADDED: Built-in variable :HOSTNAME can be overriden by CLI argument.
+            
+            </li>
+            <li>ADDED: Automatic JSON parsing in response blocks (as &#8216;doc&#8217;)
+            
+            </li>
+            </ul>
             <p>
             #### 0.7.1 (2009-10-21) ###############################
             </p>
@@ -130,8 +271,8 @@
             <li>Improved argument handling for load tool adapters (httperf not complete)
             
             </li>
-            <li>Re-built Stella::Storable and subclasses (now using &#8220;field&#8221;
-            method)
+            <li>Re-built <a href="../classes/Storable.html">Stella::Storable</a> and
+            subclasses (now using &#8220;field&#8221; method)
             
             </li>
             <li>Test::Stats, Test::Run::Summary cleanup

@@ -1,0 +1,16 @@
+ Product Finder  (387cf6)                                            
+  Simple search  (8e5a9d)                                       65% 
+    Homepage  (105c4b)                                            
+      GET /
+    Search Results  (c9983f)                                      
+      GET /search
+    Selected listing  (0416ef)                                    
+      GET /listing/:lid
+  YAML API  (020eda)                                            25% 
+    View All  (ff7e03)                                            
+      GET /listings.yaml
+    Select Listing  (2df81a)                                      
+      GET /listing/:lid.yaml
+  Self-serve API  (fd6370)                                      10% 
+    Add a listing  (15b0ab)                                       
+      POST /listing/add

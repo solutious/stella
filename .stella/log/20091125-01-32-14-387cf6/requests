@@ -1,0 +1,16 @@
+1259112735.48448; vanya.local; 76865ce5; 8e5a9d; 105c4b; GET; 200; http://bff.heroku.com:80; ; ; 22fd70a071
+1259112735.52368; vanya.local; 76865ce5; 8e5a9d; c9983f; GET; 404; http://bff.heroku.com:80/search; what=fu&where=Vancouver; ; 82dc5d6eeb
+1259112735.56043; vanya.local; 76865ce5; 8e5a9d; 0416ef; GET; 302; http://bff.heroku.com:80/listing/:lid; ; ; efa855e6fa
+1259112735.56809; vanya.local; 9c5819e7; fd6370; 15b0ab; POST; 302; http://bff.heroku.com:80/listing/add; name=mqg6c5tv&city=Montreal&logo=#<File:0x00000100f98890>; ; 355c73d32c
+1259112735.67114; vanya.local; 9c5819e7; fd6370; 15b0ab; POST; 302; http://bff.heroku.com:80/listing/add; name=ud6vanvy&city=Toronto&logo=#<File:0x00000100cea3c0>; ; ece0bdead1
+1259112735.77671; vanya.local; 9c5819e7; fd6370; 15b0ab; POST; 302; http://bff.heroku.com:80/listing/add; name=t4x8ezv3&city=Montreal&logo=#<File:0x00000100b00238>; ; c7df1c9ce8
+1259112735.88366; vanya.local; 9c5819e7; fd6370; 15b0ab; POST; 302; http://bff.heroku.com:80/listing/add; name=tpt8achd&city=Montreal&logo=#<File:0x000001009bd278>; ; d150bc4cb9
+1259112735.51895; vanya.local; 61aac024; 020eda; ff7e03; GET; 200; http://bff.heroku.com:80/listings.yaml; ; ; 77b655cdf5
+1259112735.55149; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1000.yaml; ; ; 362b557b31
+1259112735.60246; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1001.yaml; ; ; 6195e6b819
+1259112735.63623; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1002.yaml; ; ; 27d364d88f
+1259112735.67716; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1003.yaml; ; ; 905ba08898
+1259112735.71158; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1004.yaml; ; ; 23a5995cfd
+1259112735.74839; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1005.yaml; ; ; 01c9f01afc
+1259112735.78755; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1006.yaml; ; ; 04baa2bcc8
+1259112735.8201; vanya.local; 61aac024; 020eda; 2df81a; GET; 200; http://bff.heroku.com:80/listing/1007.yaml; ; ; dde40fc979

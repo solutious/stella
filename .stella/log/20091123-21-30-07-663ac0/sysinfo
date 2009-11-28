@@ -1,0 +1,13 @@
+--- !ruby/object:SysInfo 
+arch: :x86
+hostname: vanya.local
+impl: :osx
+ipaddress_internal: 172.16.10.129
+os: :unix
+ruby: 
+- 1
+- 9
+- 1
+uptime: 1156.36085364779
+user: delano
+vm: :ruby

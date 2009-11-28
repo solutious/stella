@@ -1,0 +1,27 @@
+[7m Test plan  (43e902)                                                       [0m
+ [7m[1m Usecase #1  (218910)                                                  100% [0m[0m
+[1m   Request  (c6d7e0)                                                        [0m
+    GET /
+      do_request                     0.001 <= 0.012s >= 1.965; 0.146(SD) 360(N)
+
+[1m   Sub Total:[0m
+      Total requests                 360 ()
+       success                       360
+       failed                        0
+      do_request                     0.012s 0.146(SD)
+      response_content_size          0.00B        (avg:0.00B)
+
+ [7m Total:                                                             [0m
+      Total requests                 360
+       success                       360 (req/s: 125.68)
+       failed                        0
+      do_request                     0.012s     0.146(SD)
+      response_content_size          0.00B        (avg:0.00B)
+
+Summary: 
+      successful req:      360
+          failed req:        0
+         max clients:        1
+         repetitions:      180
+           test time:     2.86
+      reporting time:     0.03

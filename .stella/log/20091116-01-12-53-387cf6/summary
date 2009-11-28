@@ -1,0 +1,63 @@
+[7m Product Finder  (387cf6)                                                  [0m
+ [7m[1m Simple search  (8e5a9d)                                               65% [0m[0m
+[1m   Homepage  (105c4b)                                                       [0m
+    GET /
+      do_request                     0.018 <= 0.032s >= 0.064; 0.014(SD) 64(N)
+
+[1m   Search Results  (c9983f)                                                 [0m
+    GET /search
+      do_request                     0.005 <= 0.049s >= 0.217; 0.067(SD) 64(N)
+
+[1m   Selected listing  (0416ef)                                               [0m
+    GET /listing/:lid
+      do_request                     0.002 <= 0.010s >= 0.108; 0.023(SD) 64(N)
+
+[1m   Sub Total:[0m
+      Total requests                 192 (200: 120, 404: 36, 302: 36)
+       success                       156
+       failed                        36
+      do_request                     0.031s 0.044(SD)
+      response_content_size          165.95KB     (avg:864.32B)
+
+ [7m[1m YAML API  (020eda)                                                    25% [0m[0m
+[1m   View All  (ff7e03)                                                       [0m
+    GET /listings.yaml
+      do_request                     0.076 <= 0.257s >= 0.377; 0.092(SD) 24(N)
+
+[1m   Select Listing  (2df81a)                                                 [0m
+    GET /listing/:lid.yaml
+      do_request                     0.003 <= 0.062s >= 0.186; 0.040(SD) 192(N)
+
+[1m   Sub Total:[0m
+      Total requests                 216 (200: 216)
+       success                       216
+       failed                        0
+      do_request                     0.083s 0.078(SD)
+      response_content_size          195.70KB     (avg:906.00B)
+
+ [7m[1m Self-serve API  (fd6370)                                              10% [0m[0m
+[1m   Add a listing  (15b0ab)                                                  [0m
+    POST /listing/add
+      do_request                     0.077 <= 0.172s >= 0.355; 0.108(SD) 40(N)
+
+[1m   Sub Total:[0m
+      Total requests                 40 (302: 40)
+       success                       40
+       failed                        0
+      do_request                     0.172s 0.108(SD)
+      response_content_size          0.00B        (avg:0.00B)
+
+ [7m Total:                                                             [0m
+      Total requests                 448
+       success                       412 (req/s: 48.61)
+       failed                        36
+      do_request                     0.069s     0.081(SD)
+      response_content_size          361.65KB     (avg:807.25B)
+
+Summary: 
+      successful req:      448
+          failed req:       36
+         max clients:       49
+         repetitions:        1
+           test time:     8.48
+      reporting time:     0.09
