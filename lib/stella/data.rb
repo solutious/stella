@@ -36,6 +36,23 @@ module Stella::Data
       end
     end
     
+    def read_file(*args)
+      input = args.size > 1 ? args : args.first
+      Proc.new do
+        case input.class.to_s
+        when "String"
+          Stella.ld "READFILE: #{input}"
+          path = File.exists?(input) ? input : File.join(@base_path, input)
+          Stella.ld "Creating file object: #{path}"
+          File.read(path)
+        when "Proc"
+          input.call
+        else
+          input
+        end
+      end
+    end
+    
     def file(*args)
       input = args.size > 1 ? args : args.first
       Proc.new do
