@@ -205,7 +205,6 @@ class Stella::Client
     
     def file(*args)
       input = args.size > 1 ? args : args.first
-      
         value = case input.class.to_s
         when "String"
           Stella.ld "FILE: #{input}"

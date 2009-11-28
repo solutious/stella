@@ -41,10 +41,7 @@ module Stella::Data
       Proc.new do
         case input.class.to_s
         when "String"
-          Stella.ld "READFILE: #{input}"
-          path = File.exists?(input) ? input : File.join(@base_path, input)
-          Stella.ld "Creating file object: #{path}"
-          File.read(path)
+          file(input).read  # This is the file method defined in Container.
         when "Proc"
           input.call
         else
