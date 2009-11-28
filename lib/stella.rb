@@ -114,5 +114,23 @@ Stella.stdout.autoflush!
 
 
 
+class Storable
+  # These methods are used by Storable objects. 
+  # See Stella::Testplan
+  module DefaultProcessors
+    # If the object already has a value for +@id+
+    # use it, otherwise return the current digest.
+    #
+    # This allows an object to have a preset ID. 
+    #
+    # NOTE: Does not assign a value to +@id+. 
+    def gibbler_id_processor
+      Proc.new do |val|
+        @id || self.gibbler
+      end
+    end
+  end
+end
+
 
 

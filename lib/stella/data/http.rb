@@ -4,14 +4,14 @@ module Stella::Data::HTTP
   class Request < Storable
     include Gibbler::Complex
     include Stella::Data::Helpers
-      
-    attic :description
-      
-    field :id do |val|
-      self.gibbler
-    end
     
+    field :id, &gibbler_id_processor
+    
+    # Store the description in the attic so
+    # it's not used in the gibbler digest.
+    attic :description
     field :description
+    
     field :header 
     field :uri
     field :wait
@@ -29,14 +29,7 @@ module Stella::Data::HTTP
       #     304 => { ... }
       #     500 => { ... }
       #
-    field :response_handler do |procs|
-      a = {}
-      procs.each_pair { |n,v| 
-        a[n] = (Proc === v) ? v.source : v 
-      }
-      a
-    end
-    
+    field :response_handler, &hash_proc_processor
     
     def has_body?
       !@body.nil?

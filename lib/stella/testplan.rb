@@ -24,9 +24,8 @@ class Testplan < Storable
   attic :plan_path
   attic :description
   
-  field :id do |val|
-    self.gibbler
-  end
+  field :id, &gibbler_id_processor
+  
   field :usecases 
   field :description 
   
@@ -34,8 +33,7 @@ class Testplan < Storable
     self.description = "Test plan"
     @usecases = []
     @testplan_current_ratio = 0
-    @stats = Stella::Testplan::Stats.new
-
+    
     unless uris.empty?
       uris = [uris] unless Array === uris
       usecase = Stella::Testplan::Usecase.new
@@ -179,15 +177,14 @@ class Testplan
     
     attic :base_path # we don't want gibbler to see this
     attic :plan_path
-    attic :description
     
-    field :id do |val|
-      self.gibbler
-    end
+    field :id, &gibbler_id_processor
+    
+    attic :description
     field :description
+    
     field :ratio
     field :http_auth
-    
     field :requests
     field :resources
     
@@ -287,30 +284,3 @@ class Testplan
 end
 end
 
-
-
-module Stella
-class Testplan
-
-  class Stats
-    include Gibbler::Complex
-    attr_reader :requests
-
-    def initialize
-      @requests = OpenStruct.new
-      reset
-    end
-    
-    def total_requests
-      @requests.successful + @requests.failed
-    end
-    
-    def reset 
-      @requests.successful = 0
-      @requests.failed = 0
-    end
-    
-  end
-    
-end
-end
