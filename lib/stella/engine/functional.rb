@@ -10,7 +10,7 @@ module Stella::Engine
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       
-      client = Stella::Client.new opts[:hosts].first
+      client = Stella::Client.new opts[:hosts].first, 1, opts
       client.add_observer(self)
 
       client.enable_nowait_mode if opts[:nowait]

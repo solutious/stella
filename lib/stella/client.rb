@@ -18,7 +18,7 @@ module Stella
     
     def initialize(base_uri=nil, client_id=1, opts={})
       opts = {
-        :parse_templates => true
+        :'disable-templates' => true
       }.merge! opts
       @opts = opts
       @base_uri, @client_id = base_uri, client_id
@@ -72,8 +72,10 @@ module Stella
           Benelux.add_thread_tags :retry => counter
           Benelux.add_thread_tags :stella_id => stella_id
         
-          container.unique_id = stella_id
-          params['__stella'] = headers['X-Stella-ID'] = container.unique_id[0..10]
+          container.unique_id = stella_id[0..10]
+          
+          params['__stella'] = container.unique_id unless @opts[:'no-param']
+          headers['X-Stella-ID'] = container.unique_id unless @opts[:'no-header']
           
           meth = req.http_method.to_s.downcase
           Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
@@ -198,7 +200,7 @@ module Stella
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
         v = container.instance_eval &v if v.is_a?(Proc)
-        if @opts[:parse_templates]
+        if @opts[:'disable-templates']
           v = container.parse_template v if String === v
         end
         v = extra.call(v) unless extra.nil?

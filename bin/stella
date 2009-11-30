@@ -42,7 +42,13 @@ class Stella::CLI::Definition
     Drydock.debug true
     Stella.enable_debug
   end
-  global :P, :pause, Integer, "Seconds to pause before starting test"
+  global :W, :wait, Integer, "Seconds to wait before starting test"
+  global :'no-header', "Do not include X-Stella-ID request header" do
+    true  # params starting with 'no-' return false??
+  end
+  global :'no-param', "Do not include __stella query parameter header" do
+    true
+  end
   global :E, :engine, String, "Specify a load engine (experimental)"
   global :o, :output, String, "Write output to the given file" do |v|
     String.disable_color
