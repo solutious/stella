@@ -61,7 +61,7 @@ module Stella::Engine
       if req.http_method == 'POST'
         cont = container.response.request.body.content
         if String === cont
-          Stella.stdout.info3 ('   ' << cont.split($/).join("#{$/}    "))
+          Stella.stdout.info3('   ' << cont.split($/).join("#{$/}    "))
         elsif HTTP::Message::Body::Parts === cont
           cont.parts.each do |part|
             if File === part

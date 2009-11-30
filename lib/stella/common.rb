@@ -137,10 +137,6 @@ class Stella::Config < Storable
   field :apikey
   field :secret
   
-  field :redis_host
-  field :redis_port
-  field :redis_pass
-  
    # Returns true when the current config matches the default config
   def default?; to_hash.gibbler == DEFAULT_CONFIG_HASH; end
   
@@ -209,13 +205,18 @@ class Stella::Config < Storable
   
   
   unless defined?(DIR_NAME)
-    DIR_NAME = Stella.sysinfo.os == :windows ? 'Stella' : '.stella'
-    USER_PATH = File.join(Stella.sysinfo.home, DIR_NAME, 'config')
+    if Stella.sysinfo.os == :windows
+      DIR_NAME = 'Stella'
+      USER_PATH = File.join(Stella.sysinfo.home, DIR_NAME, 'config.txt')
+    else
+      DIR_NAME = '.stella'
+      USER_PATH = File.join(Stella.sysinfo.home, DIR_NAME, 'config')
+    end
     PROJECT_PATH = Stella::Config.find_project_config
     DEFAULT_CONFIG = <<CONF
 apikey: ''
 secret: ''
-remote: stella.solutious.com:443
+source: api.solutious.com
 CONF
     DEFAULT_CONFIG_HASH = YAML.load(DEFAULT_CONFIG).gibbler
   end
