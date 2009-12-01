@@ -10,7 +10,7 @@
 # $ stella example
 #
 #
-# 2. RUNNING THE TEST PLAN
+# 2. RUN THE TEST PLAN
 #
 # $ stella verify -p examples/dynamic/plan.rb http://127.0.0.1:3114/
 # 

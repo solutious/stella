@@ -1,25 +1,49 @@
 # Stella Test Plan - Cookies (2009-10-08)
 #
-# TO BE DOCUMENTED.
+# 1. START THE EXAMPLE APPLICATION
 # 
-# If you're reading this, remind me!
+# This test plan is written to work with the
+# example application that ships with Stella. 
+# See:
 #
-desc "Maintain Your Cookies"
+# $ stella example
+#
+#
+# 2. RUN THE TEST PLAN
+#
+# $ stella verify -p examples/cookies/plan.rb http://127.0.0.1:3114/
+#
+desc "Cookies Examples"
 
-usecase 65, "Simple search" do
-  get "/", "Homepage"
+usecase "Temporary Cookies" do
   
-  get "/search", "Search Results" do
-    param :what  => "<%= random(['Big', 'Beads']) %>"
-    param :where => 'Toronto'
+  # By default, Stella keeps temporary cookies available within 
+  # a single usecase. The example application creates a cookie
+  # called "bff-history" that contains the most recent search
+  # terms. Before we run a search request, the cookie is empty.
+  get "/", "Homepage" do
+    response do
+      puts "COOKIE: " << headers['Set-Cookie'].first
+    end
   end
   
+  # Here the cookie will contain the search term
+  get "/search", "Search" do
+    param :what  => "<%= random(['Big', 'Beads', 'Joe']) %>"
+    response do
+      puts "COOKIE: " << headers['Set-Cookie'].first
+    end
+  end
+  
+  # And if we check the homepage again, the homepage now contains
+  # a list of the most recent search terms. This shows how Stella
+  # automatically sends the temporary cookie within a usecase.
   get "/", "Homepage" do
     response 200 do
-      puts doc.css('ul#history').first
+      puts "You searched for: " << doc.css('ul#history a').first.content
     end
   end
   
 end
 
-# c88c5e4e8c72e305928c8e512ca1e26baf271544
+# d656b33a825e649cb477e1bbb050a340c84d8ae7
