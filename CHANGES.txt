@@ -9,6 +9,7 @@ STELLA, CHANGES
 * ADDED: Stella::Data::Helpers#read_file
 * ADDED: Stella::Data::Helpers#resequential
 * ADDED: Stella::Data::Helpers#path
+* ADDED: no-param, no-header options
 
 
 #### 0.7.6 (2009-11-24) ###############################
