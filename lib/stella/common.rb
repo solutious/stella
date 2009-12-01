@@ -16,6 +16,17 @@ class String
   
 end
 
+class Symbol
+  
+  def downcase
+    self.to_s.downcase.to_sym
+  end
+  def upcase
+    self.to_s.upcase.to_sym
+  end
+
+end
+
 class MatchData
   include Gibbler::String
 end
