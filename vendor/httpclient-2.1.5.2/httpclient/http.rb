@@ -787,12 +787,15 @@ module HTTP
           if value.respond_to?(:read)
             value = value.read
           end
-          URI.escape(attr.to_s) << '=' << URI.escape(value.to_s)
+          escape(attr.to_s) << '=' << escape(value.to_s)
         }.join('&')
       end
 
       # from CGI.escape
       def escape(str) # :nodoc:
+        if RUBY_VERSION >= "1.9"
+          str = str.dup.force_encoding('ASCII-8BIT')
+        end
         str.gsub(/([^ a-zA-Z0-9_.-]+)/n) {
           '%' + $1.unpack('H2' * $1.size).join('%').upcase
         }.tr(' ', '+')
