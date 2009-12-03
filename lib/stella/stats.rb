@@ -17,12 +17,9 @@ class Stats
   
   # Resets the internal counters so you can start sampling again.
   def reset
-    @sum = 0.0
-    @sumsq = 0.0
+    @n, @sum, @sumsq = 0.0, 0.0, 0.0
     @last_time = Time.new
-    @n = 0.0
-    @min = 0.0
-    @max = 0.0
+    @min, @max = 0.0, 0.0
   end
 
   # Adds a sampling to the calculations.

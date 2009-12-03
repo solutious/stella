@@ -46,8 +46,8 @@ testplan :dsl_example1 do
     end
   end
 
-  get "/product/22" do
-    name "Product 22"
+  get "/product/:id" do
+    name "Product #{params[:id]}"
     response 200 do |header, body|
       data = YAML.load(body)
     end

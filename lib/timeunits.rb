@@ -6,7 +6,7 @@ $__timeunits__ = File.expand_path __FILE__
 
   class Time
     module Units 
-      VERSION = "0.0.3" # Changed from 0.0.1 (should have been 0.0.2)
+      VERSION = "0.0.3"
 
       def __less__() "/" end
       def __more__() "*" end
