@@ -20,7 +20,6 @@ STELLA, CHANGES
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
 * TODO: review :variables in URI elements
 * TODO: review cooking handling. Not always sent automatically. 
-* TODO: auth :user, :pass, resource(:domain_value)
 * TODO: global responses
 
 
