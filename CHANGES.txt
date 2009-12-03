@@ -10,6 +10,7 @@ STELLA, CHANGES
 * FIXED: JSON parse error when nil body 
 * FIXED: URI query parameter encoding
 * CHANGE: Removed Stella::Testplan::Stats
+* CHANGE: Better output for errors during functional tests
 * ADDED: Stella::Testplan#to_json
 * ADDED: Stella::Data::Helpers#read_file
 * ADDED: Stella::Data::Helpers#resequential
