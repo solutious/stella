@@ -26,7 +26,7 @@ require 'net/http'
     
     # Takes a string or array. See parse_header_body for further info.
     # Returns +method+, +http_version+, +uri+, +header+, +body+
-    def HTTPUtil.parse_http_request(data, host=:unknown, port=80)
+    def HTTPUtil.parse_http_request(data, host=nil, port=nil)
       return unless data && !data.empty?
       data = data.split(/\r?\n/) unless data.kind_of? Array
       data.shift while (data[0].empty? || data[0].nil?)   # Remove leading empties
@@ -53,12 +53,14 @@ require 'net/http'
         header, body = HTTPUtil.parse_header_body(data)
         query = HTTPUtil.parse_query(method, query_string)
         
+        host ||= header[:Host][0]
+        host, port = host.split(':') if host.index(':')
         
         # TODO: Parse username/password
         uri = URI::HTTP.build({
           :scheme => 'http',
-          :host => header[:Host][0] || host.to_s, 
-          :port => port, 
+          :host => host.to_s, 
+          :port => port || 80, 
           :path => path, 
           :query => query_string
         })

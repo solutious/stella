@@ -148,7 +148,7 @@ module Stella
           resp_filter = Pcap::Filter.new("#{@protocol} and src port #{@sport}", @pcaplet.capture)
           @pcaplet.add_filter(req_filter | resp_filter)
           @pcaplet.each_packet do |packet|
-            data = packet.tcp_data
+            data = packet.tcp_data rescue nil
             next if data.nil?
             
             
