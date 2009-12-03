@@ -6,6 +6,7 @@ Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 module Stella
   class Client
+    MAX_REDIRECTS = 5.freeze unless defined?(MAX_REDIRECTS)
     
     require 'stella/client/container'
     
@@ -50,7 +51,7 @@ module Stella
           headers = prepare_headers(container, req.headers)
         
           container.params, container.headers = params, headers
-        
+          
           uri = build_request_uri req.uri, params, container
           
           if http_auth = usecase.http_auth || req.http_auth
@@ -71,7 +72,7 @@ module Stella
           Benelux.add_thread_tags :request => req.digest_cache
           Benelux.add_thread_tags :retry => counter
           Benelux.add_thread_tags :stella_id => stella_id
-        
+          
           container.unique_id = stella_id[0..10]
           
           params['__stella'] = container.unique_id unless @opts[:'no-param']
@@ -128,6 +129,17 @@ module Stella
           update(:request_repeat, counter, ret.times+1, uri, container)
           Benelux.remove_thread_tags :status
           redo if counter <= ret.times
+        when "Stella::Client::Follow"
+          ret.uri ||= container.header['Location'].first
+          if counter > MAX_REDIRECTS
+            update(:max_redirects, counter-1, ret, uri, container)
+            break
+          else
+            req = ret.generate_request(req)
+            update(:follow_redirect, ret, uri, container)
+            Benelux.remove_thread_tags :status, :request
+            redo
+          end
         when "Stella::Client::Quit"
           update(:usecase_quit, ret.message, uri, container)
           Benelux.remove_thread_tags :status
@@ -314,15 +326,29 @@ end
 class Stella::Client
   
   class ResponseModifier
-    attr_accessor :message
-    def initialize(msg=nil)
-      @message = msg
+    attr_accessor :obj
+    def initialize(obj=nil)
+      @obj = obj
     end 
+    alias_method :message, :obj
+    alias_method :message=, :obj=
   end
   class Repeat < ResponseModifier; 
-    attr_accessor :times
-    def initialize(times)
-      @times = times
+    alias_method :times, :obj
+    alias_method :times=, :obj=
+  end
+  class Follow < ResponseModifier; 
+    alias_method :uri, :obj
+    alias_method :uri=, :obj=
+    def generate_request(req)
+      a = Stella::Data::HTTP::Request.new :GET, '1'
+      n = Stella::Data::HTTP::Request.new :GET, self.uri, req.http_version
+      n.description = "#{req.description || 'Request'} (autofollow)"
+      n.http_auth = req.http_auth
+      n.response_handler = req.response_handler
+      n.autofollow!
+      n.freeze
+      n
     end
   end
   class Quit < ResponseModifier; end

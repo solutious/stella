@@ -16,9 +16,11 @@ STELLA, CHANGES
 * ADDED: Stella::Data::Helpers#resequential
 * ADDED: Stella::Data::Helpers#path
 * ADDED: no-param, no-header options
+* ADDED: Follow redirects within one request definition 
 * TODO: review :variables in URI elements
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: auth :user, :pass, resource(:domain_value)
+* TODO: global responses
 
 
 #### 0.7.6 (2009-11-24) ###############################

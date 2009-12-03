@@ -22,6 +22,8 @@ module Stella::Data::HTTP
     field :content_type
     field :http_auth
     
+    field :autofollow  # boolean. Was this an auto generated follow request. 
+    
       # A hash containing blocks to be executed depending on the HTTP response status.
       # The hash keys are numeric HTTP Status Codes. 
       #
@@ -40,9 +42,14 @@ module Stella::Data::HTTP
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
       @resources = {}
+      @autofollow = false
       @wait = 0
       self.description = "Request"
       instance_eval &definition unless definition.nil?
+    end
+    
+    def autofollow!
+      @autofollow = true
     end
     
     def auth(user=nil, pass=nil, kind=:basic)

@@ -123,7 +123,6 @@ class Storable
     #
     # This allows an object to have a preset ID. 
     #
-    # NOTE: Does not assign a value to +@id+. 
     def gibbler_id_processor
       Proc.new do |val|
         @id || self.gibbler

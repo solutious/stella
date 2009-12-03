@@ -92,12 +92,20 @@ module Stella::Engine
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       #desc = "#{usecase.desc} > #{req.desc}"
-      Stella.le '  %24s: %s' % [ex.message, uri]
+      Stella.le '  ERROR   %24s: %s' % [ex.message, uri]
       Stella.le '  %s' % params.inspect
       unless req.headers.nil? || req.headers.empty? 
         Stella.le '  %s' % req.headers.inspect
       end
       Stella.ld ex.backtrace
+    end
+    
+    def update_follow_redirect client_id, ret, req, container
+      Stella.stdout.info2 "  FOLLOW   %-53s" % [ret.uri]
+    end
+    
+    def update_max_redirects client_id, counter, ret, req, container
+      Stella.stdout.info "  MAX REDIRECTS   %-53s" % [counter]
     end
     
     def update_usecase_quit client_id, msg, req, container

@@ -398,6 +398,14 @@ module Stella::Engine
       Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
     
+    def update_follow_redirect client_id, ret, req, container
+      Stella.stdout.info3 "  Client-%s     FOLLOW   %-53s" % [client_id, ret.uri]
+    end
+    
+    def update_max_redirects client_id, counter, ret, req, container
+      Stella.stdout.info3 "  Client-%s     MAX REDIRECTS   %s " % [client_id, counter]
+    end
+    
     def update_authenticate client_id, usecase, req, kind, domain, user, pass
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push usecase.digest.shorter, req.digest.shorter
