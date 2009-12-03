@@ -3,6 +3,9 @@ STELLA, CHANGES
 #### 0.8.0 (2009-12-??) ###############################
 
 * TODO: Replace runtime procs with string templates
+* TODO: review cooking handling. Not always sent automatically. 
+* TODO: global responses
+* TODO: review :variables in URI elements
 
 
 #### 0.7.7 (2009-12-??) ###############################
@@ -18,9 +21,6 @@ STELLA, CHANGES
 * ADDED: no-param, no-header options
 * ADDED: Follow redirects within one request definition
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
-* TODO: review :variables in URI elements
-* TODO: review cooking handling. Not always sent automatically. 
-* TODO: global responses
 
 
 #### 0.7.6 (2009-11-24) ###############################
