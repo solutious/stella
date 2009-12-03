@@ -171,7 +171,7 @@ class Testplan
     include Stella::Data::Helpers
     extend Attic
     
-    class Auth < Struct.new(:kind, :user, :pass)
+    class Auth < Struct.new(:domain, :user, :pass)
       include Gibbler::Complex
     end
     
@@ -255,9 +255,9 @@ class Testplan
       self
     end
     
-    def auth(user, pass=nil, kind=:basic)
+    def auth(user, pass=nil, domain=nil)
       @http_auth ||= Auth.new
-      @http_auth.user, @http_auth.pass, @http_auth.kind = user, pass, kind
+      @http_auth.user, @http_auth.pass, @http_auth.domain = user, pass, domain
     end
     
     def add_request(meth, *args, &blk)

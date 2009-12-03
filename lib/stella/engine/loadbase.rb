@@ -406,10 +406,10 @@ module Stella::Engine
       Stella.stdout.info3 "  Client-%s     MAX REDIRECTS   %s " % [client_id, counter]
     end
     
-    def update_authenticate client_id, usecase, req, kind, domain, user, pass
+    def update_authenticate client_id, usecase, req, domain, user, pass
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push usecase.digest.shorter, req.digest.shorter
-      args.push 'AUTH', kind, domain, user, pass
+      args.push 'AUTH', domain, user, pass
       Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
     end
     

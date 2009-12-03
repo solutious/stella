@@ -57,12 +57,14 @@ module Stella
           if http_auth = usecase.http_auth || req.http_auth
             # TODO: The first arg is domain and can include a URI path. 
             #       Are there cases where this is important?
-            domain = '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, req.uri] 
+            domain = http_auth.domain
+            domain ||= '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, req.uri] 
+            domain = container.instance_eval &domain if Proc === domain
             Stella.ld "DOMAIN " << domain
             user, pass = http_auth.user, http_auth.pass
             user = container.instance_eval &user if Proc === user
             pass = container.instance_eval &pass if Proc === pass
-            update(:authenticate, usecase, req, http_auth.kind, domain, user, pass)
+            update(:authenticate, usecase, req, domain, user, pass)
             http_client.set_auth(domain, user, pass)
           end
         

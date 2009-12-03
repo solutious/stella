@@ -18,8 +18,11 @@
 #
 usecase "Dynamic Data" do
   
-  # HTTP Authentication (Basic or Digest)
-  #auth :user, :password
+  # Specify HTTP Authentication (Basic or Digest). 
+  # Specify a username, password, and optional value
+  # to use for the authentication domain. If no domain
+  # is specifed, the root URI will be used. 
+  #auth :user, :password, 'http://domain/'
   
   # Retrieve a list of listings and store
   # them in a resource called listing_ids.

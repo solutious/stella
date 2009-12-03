@@ -16,7 +16,8 @@ STELLA, CHANGES
 * ADDED: Stella::Data::Helpers#resequential
 * ADDED: Stella::Data::Helpers#path
 * ADDED: no-param, no-header options
-* ADDED: Follow redirects within one request definition 
+* ADDED: Follow redirects within one request definition
+* ADDED: Support for specifying HTTP AUTH domain in usecase config 
 * TODO: review :variables in URI elements
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: auth :user, :pass, resource(:domain_value)

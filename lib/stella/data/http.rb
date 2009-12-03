@@ -52,9 +52,9 @@ module Stella::Data::HTTP
       @autofollow = true
     end
     
-    def auth(user=nil, pass=nil, kind=:basic)
+    def auth(user=nil, pass=nil, domain=nil)
       @http_auth ||= Stella::Testplan::Usecase::Auth.new
-      @http_auth.user, @http_auth.pass, @http_auth.kind = user, pass, kind
+      @http_auth.user, @http_auth.pass, @http_auth.domain = user, pass, domain
     end
     
     def desc(*args)
