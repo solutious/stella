@@ -1,6 +1,11 @@
 STELLA, CHANGES
 
-#### 0.7.7 (2009-11-??) ###############################
+#### 0.8.0 (2009-12-??) ###############################
+
+* TODO: Replace runtime procs with string templates
+
+
+#### 0.7.7 (2009-12-??) ###############################
 
 * FIXED: JSON parse error when nil body 
 * FIXED: URI query parameter encoding
@@ -10,6 +15,9 @@ STELLA, CHANGES
 * ADDED: Stella::Data::Helpers#resequential
 * ADDED: Stella::Data::Helpers#path
 * ADDED: no-param, no-header options
+* TODO: review :variables in URI elements
+* TODO: review cooking handling. Not always sent automatically. 
+* TODO: auth :user, :pass, resource(:domain_value)
 
 
 #### 0.7.6 (2009-11-24) ###############################

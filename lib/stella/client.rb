@@ -18,7 +18,7 @@ module Stella
     
     def initialize(base_uri=nil, client_id=1, opts={})
       opts = {
-        :'disable-templates' => true
+        :'disable-templates' => false
       }.merge! opts
       @opts = opts
       @base_uri, @client_id = base_uri, client_id
@@ -200,7 +200,7 @@ module Stella
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
         v = container.instance_eval &v if v.is_a?(Proc)
-        if @opts[:'disable-templates']
+        unless @opts[:'disable-templates']
           v = container.parse_template v if String === v
         end
         v = extra.call(v) unless extra.nil?
