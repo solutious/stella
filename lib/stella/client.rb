@@ -265,6 +265,9 @@ module Stella
     # If not found, returns nil. 
     def find_replacement_value(name, params, container, base_uri)
       value = nil
+      
+      global_var = RUBY_VERSION < "1.9" ? "$#{name}" : "$#{name}".to_sym
+      
       #Stella.ld "REPLACE: #{name}"
       #Stella.ld "PARAMS: #{params.inspect}"
       #Stella.ld "IVARS: #{container.instance_variables}"
@@ -272,7 +275,10 @@ module Stella
         value = base_uri.host 
       elsif params.has_key?(name.to_sym)
         value = params.delete name.to_sym
+      elsif Kernel.global_variables.member?(global_var)
+        value = eval(global_var.to_s)
       end
+      
       value = container.resource name.to_sym if value.nil?
       value
     end 

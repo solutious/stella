@@ -14,6 +14,7 @@ STELLA, CHANGES
 * FIXED: URI query parameter encoding
 * CHANGE: Removed Stella::Testplan::Stats
 * CHANGE: Better output for errors during functional tests
+* CHANGE: Global variables can now be used like regular URI vars
 * ADDED: Stella::Testplan#to_json
 * ADDED: Stella::Data::Helpers#read_file
 * ADDED: Stella::Data::Helpers#resequential
