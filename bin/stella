@@ -54,11 +54,7 @@ class Stella::CLI::Definition
     String.disable_color
     Stella.log.output = v
   end
-  global :var, String, 'Set an arbitrary variable (--var "name=v")' do |var|
-    n, v = *var.split('=')
-    raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
-    eval "$#{n} = '#{v}'"
-  end
+  global :var, Array, 'Set an arbitrary variable (--var "name=v")'
   global :f, :format, String, "Output format (partial support)"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color

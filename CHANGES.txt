@@ -14,7 +14,8 @@ STELLA, CHANGES
 * FIXED: URI query parameter encoding
 * CHANGE: Removed Stella::Testplan::Stats
 * CHANGE: Better output for errors during functional tests
-* CHANGE: Global variables can now be used like regular URI vars
+* CHANGE: Global variables now implemented in Stella::Testplan.global
+  and can be used like usecase and request resources.
 * CHANGE: Variable replacement now checks the client container 
   resources before the usecase resources. 
 * ADDED: Stella::Testplan#to_json
@@ -24,6 +25,7 @@ STELLA, CHANGES
 * ADDED: no-param, no-header options
 * ADDED: Follow redirects within one request definition
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
+* TODO: Global variables should be transparent in variable replacement.
 
 
 #### 0.7.6 (2009-11-24) ###############################

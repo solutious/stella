@@ -22,6 +22,7 @@ class Stella::CLI < Drydock::Command
     [:'disable-templates', :'disable-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
+    
     ret = Stella::Engine::Functional.run @testplan, opts
     @exit_code = (ret ? 0 : 1)
   end
@@ -99,6 +100,11 @@ class Stella::CLI < Drydock::Command
       uri = 'http://' << uri unless uri.match /^https?:\/\//i
       URI.parse uri; 
     }
+    (@global.var || []).each do |var|
+      n, v = *var.split('=')
+      raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
+      Stella::Testplan.global(n.to_sym, v)
+    end
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
     else

@@ -151,7 +151,9 @@ class Stella::Client
     # the usecase (in that order). Otherwise, nil. 
     def resource(n)
       n &&= n.to_sym
-      @resources.has_key?(n) ? @resources[n] : @usecase.resource(n)
+      v = @resources.has_key?(n) ? @resources[n] : @usecase.resource(n)
+      v = Stella::Testplan.global(n) if Stella::Testplan.global?(n)
+      v
     end
     
     def resource?(n)
@@ -168,8 +170,6 @@ class Stella::Client
         @resources.merge! name
       elsif !name.nil? && !args.empty?
         @resources.merge!({name => args[0]})
-      elsif !name.nil?
-        @resources[name]
       end
     end
     def wait(t); sleep t; end

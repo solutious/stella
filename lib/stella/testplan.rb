@@ -7,9 +7,10 @@ class Testplan < Storable
   extend Attic
   
   @file_cache = {}
-  
+  @globals = {}
   class << self
     attr_reader :file_cache
+    attr_reader :globals
     def readlines path
       if @file_cache.has_key?(path)
         Stella.ld "FILE CACHE HIT: #{path}"
@@ -17,6 +18,13 @@ class Testplan < Storable
       end
       Stella.ld "FILE CACHE LOAD: #{path}"
       @file_cache[path] = File.readlines(path)
+    end
+    def global(n,v=nil)
+      @globals[n.to_sym] = v unless v.nil?
+      @globals[n.to_sym]
+    end
+    def global?(n)
+      @globals.has_key?(n.to_sym)
     end
   end
   
@@ -28,11 +36,13 @@ class Testplan < Storable
   
   field :usecases 
   field :description 
+  #field :resources
   
   def initialize(uris=[], opts={})
     self.description = "Test plan"
     @usecases = []
     @testplan_current_ratio = 0
+    #@resources = {}
     
     unless uris.empty?
       uris = [uris] unless Array === uris
@@ -208,8 +218,10 @@ class Testplan
         @resources.merge! name
       elsif !name.nil? && !args.empty?
         @resources.merge!({name => args[0]})
-      elsif !name.nil?
+      elsif @resources.has_key?(name)
         @resources[name]
+      elsif Stella::Testplan.global?(name)
+        Stella::Testplan.global(name)
       end
     end
     alias_method :set, :resource
