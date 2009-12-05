@@ -234,6 +234,7 @@ module Stella
     # if necessary and replaces all variables with literal values.
     # If no replacement value can be found, the variable will remain. 
     def build_request_uri(uri, params, container)
+      raise "Request given with no URI" if uri.nil?
       newuri = uri.clone  # don't modify uri template
       # We call uri.clone b/c we modify uri. 
       uri.scan(/([:\$])([a-z_]+)/i) do |inst|
