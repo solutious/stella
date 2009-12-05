@@ -147,12 +147,15 @@ class Stella::Client
     end
     alias_method :form, :forms
     
-    # Return a resource from the usecase or from this 
-    # container (in that order).
+    # Return a resource from this container or from  
+    # the usecase (in that order). Otherwise, nil. 
     def resource(n)
-      return @usecase.resource(n) if @usecase.resources.has_key? n
-      return @resources[n] if @resources.has_key? n
-      nil
+      n &&= n.to_sym
+      @resources.has_key?(n) ? @resources[n] : @usecase.resource(n)
+    end
+    
+    def resource?(n)
+      !resource(n).nil?
     end
     
     def body; @response.body.content; end
@@ -160,8 +163,14 @@ class Stella::Client
       alias_method :header, :headers
     def status; @response.status; end
     def set(*args)
-      h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
-      @resources.merge! h
+      if Hash === name
+        Stella.ld "ARGS IGNORED: #{args.inspect} (#{caller[0]})" if !args.empty?
+        @resources.merge! name
+      elsif !name.nil? && !args.empty?
+        @resources.merge!({name => args[0]})
+      elsif !name.nil?
+        @resources[name]
+      end
     end
     def wait(t); sleep t; end
     def quit(msg=nil); Quit.new(msg); end
