@@ -8,7 +8,7 @@ STELLA, CHANGES
 * TODO: review :variables in URI elements
 
 
-#### 0.7.7 (2009-12-??) ###############################
+#### 0.7.7 (2009-12-05) ###############################
 
 * FIXED: JSON parse error when nil body 
 * FIXED: URI query parameter encoding
@@ -25,7 +25,6 @@ STELLA, CHANGES
 * ADDED: no-param, no-header options
 * ADDED: Follow redirects within one request definition
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
-* TODO: Global variables should be transparent in variable replacement.
 
 
 #### 0.7.6 (2009-11-24) ###############################
