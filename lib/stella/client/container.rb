@@ -164,7 +164,7 @@ class Stella::Client
     def headers; @response.header; end
       alias_method :header, :headers
     def status; @response.status; end
-    def set(*args)
+    def set(name, *args)
       if Hash === name
         Stella.ld "ARGS IGNORED: #{args.inspect} (#{caller[0]})" if !args.empty?
         @resources.merge! name
