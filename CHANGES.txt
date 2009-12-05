@@ -15,6 +15,8 @@ STELLA, CHANGES
 * CHANGE: Removed Stella::Testplan::Stats
 * CHANGE: Better output for errors during functional tests
 * CHANGE: Global variables can now be used like regular URI vars
+* CHANGE: Variable replacement now checks the client container 
+  resources before the usecase resources. 
 * ADDED: Stella::Testplan#to_json
 * ADDED: Stella::Data::Helpers#read_file
 * ADDED: Stella::Data::Helpers#resequential

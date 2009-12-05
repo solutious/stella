@@ -275,11 +275,11 @@ module Stella
         value = base_uri.host 
       elsif params.has_key?(name.to_sym)
         value = params.delete name.to_sym
+      elsif container.resource?( name)
+        value = container.resource name
       elsif Kernel.global_variables.member?(global_var)
         value = eval(global_var.to_s)
       end
-      
-      value = container.resource name.to_sym if value.nil?
       value
     end 
     

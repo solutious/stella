@@ -202,10 +202,17 @@ class Testplan
       self.description
     end
     
-    def resource(name, value=nil)
-      @resources[name] = value unless value.nil?
-      @resources[name]
+    def resource(name, *args)
+      if Hash === name
+        Stella.ld "ARGS IGNORED: #{args.inspect} (#{caller[0]})" if !args.empty?
+        @resources.merge! name
+      elsif !name.nil? && !args.empty?
+        @resources.merge!({name => args[0]})
+      elsif !name.nil?
+        @resources[name]
+      end
     end
+    alias_method :set, :resource
     
     def ratio
       r = (@ratio || 0).to_f
