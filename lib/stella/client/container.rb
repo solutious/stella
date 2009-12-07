@@ -177,7 +177,7 @@ class Stella::Client
     def fail(msg=nil); Fail.new(msg); end
     def error(msg=nil); Error.new(msg); end
     def repeat(t=1); Repeat.new(t); end
-    def follow(uri=nil); Follow.new(uri); end
+    def follow(uri=nil,&blk); Follow.new(uri,&blk); end
     
     
     

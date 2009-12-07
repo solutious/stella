@@ -343,12 +343,29 @@ class Stella::Client
     alias_method :times, :obj
     alias_method :times=, :obj=
   end
+  #
+  # Automatically follow a Location header or you 
+  # can optionally specify the URI to load. 
+  # 
+  #     get '/' do
+  #       response 302 do
+  #         follow do 
+  #           header :'X-SOME-HEADER' => 'somevalue'
+  #         end
+  #       end
+  #     end
+  #
+  # The block is optional and accepts the same syntax as regular requests.
+  #
   class Follow < ResponseModifier; 
     alias_method :uri, :obj
     alias_method :uri=, :obj=
+    attr_reader :definition
+    def initialize(obj=nil,&definition)
+      @obj, @definition = obj, definition
+    end
     def generate_request(req)
-      a = Stella::Data::HTTP::Request.new :GET, '1'
-      n = Stella::Data::HTTP::Request.new :GET, self.uri, req.http_version
+      n = Stella::Data::HTTP::Request.new :GET, self.uri, req.http_version, &definition
       n.description = "#{req.description || 'Request'} (autofollow)"
       n.http_auth = req.http_auth
       n.response_handler = req.response_handler

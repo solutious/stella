@@ -227,7 +227,7 @@ class Stella::Config < Storable
     DEFAULT_CONFIG = <<CONF
 apikey: ''
 secret: ''
-source: api.solutious.com
+source: ''
 CONF
     DEFAULT_CONFIG_HASH = YAML.load(DEFAULT_CONFIG).gibbler
   end

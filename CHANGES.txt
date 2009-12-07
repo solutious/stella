@@ -2,6 +2,8 @@ STELLA, CHANGES
 
 #### 0.8.0 (2009-12-??) ###############################
 
+* ADDED: follow responses can contain definition blocks
+
 * TODO: Replace runtime procs with string templates
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
