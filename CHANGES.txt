@@ -8,7 +8,14 @@ STELLA, CHANGES
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
 * TODO: review :variables in URI elements
-
+* TODO: Check authentication is working
+* TODO: Should record a failure on request timeout
+usecase do
+  timeout 60
+  get '/' do
+    timeout 30 # local override
+  end
+end
 
 #### 0.7.7 (2009-12-05) ###############################
 
