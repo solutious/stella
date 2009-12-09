@@ -2,13 +2,15 @@ STELLA, CHANGES
 
 #### 0.8.0 (2009-12-??) ###############################
 
+* FIXED: HTTP auth failures
 * ADDED: follow responses can contain definition blocks
+* ADDED: Support for specifying default path prefix on CLI
+* ADDED: Support for specifying receive timeout
 
 * TODO: Replace runtime procs with string templates
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
 * TODO: review :variables in URI elements
-* TODO: Check authentication is working
 * TODO: Should record a failure on request timeout
 usecase do
   timeout 60
@@ -34,7 +36,6 @@ end
 * ADDED: no-param, no-header options
 * ADDED: Follow redirects within one request definition
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
-* ADDED: Support for specifying default path prefix on CLI
 
 
 #### 0.7.6 (2009-11-24) ###############################

@@ -195,6 +195,7 @@ class Testplan
     
     field :ratio
     field :http_auth
+    field :timeout
     field :requests
     field :resources
     
@@ -210,6 +211,11 @@ class Testplan
     def desc(*args)
       self.description = args.first unless args.empty?
       self.description
+    end
+    
+    def timeout(*args)
+      @timeout = args.first unless args.empty?
+      @timeout
     end
     
     def resource(name, *args)

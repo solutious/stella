@@ -54,7 +54,7 @@ module Stella
           
           uri = build_request_uri req.uri, params, container
           
-          if http_auth = usecase.http_auth || req.http_auth
+          if http_auth = req.http_auth || usecase.http_auth
             # TODO: The first arg is domain and can include a URI path. 
             #       Are there cases where this is important?
             domain = http_auth.domain
@@ -67,7 +67,12 @@ module Stella
             update(:authenticate, usecase, req, domain, user, pass)
             http_client.set_auth(domain, user, pass)
           end
-        
+          
+          if tout = req.timeout || usecase.timeout
+            http_client.receive_timeout = tout
+          end
+          Stella.ld "TIMEOUT " << http_client.receive_timeout.to_s
+          
           raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
           stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
         

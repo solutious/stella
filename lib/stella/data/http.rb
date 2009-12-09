@@ -21,6 +21,7 @@ module Stella::Data::HTTP
     field :http_version
     field :content_type
     field :http_auth
+    field :timeout
     
     field :autofollow  # boolean. Was this an auto generated follow request. 
     
@@ -55,6 +56,11 @@ module Stella::Data::HTTP
     def auth(user=nil, pass=nil, domain=nil)
       @http_auth ||= Stella::Testplan::Usecase::Auth.new
       @http_auth.user, @http_auth.pass, @http_auth.domain = user, pass, domain
+    end
+    
+    def timeout(*args)
+      @timeout = args.first unless args.empty?
+      @timeout
     end
     
     def desc(*args)
