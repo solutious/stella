@@ -19,7 +19,7 @@ class Stella::CLI < Drydock::Command
     opts = {}
     opts[:hosts] = @hosts
     opts[:nowait] = true if @option.nowait
-    [:'disable-templates', :'disable-stats', :'no-header', :'no-param'].each do |opt|
+    [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     
@@ -38,7 +38,7 @@ class Stella::CLI < Drydock::Command
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
 
-    [:'disable-templates', :'disable-stats', :'no-header', :'no-param'].each do |opt|
+    [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     

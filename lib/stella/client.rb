@@ -19,7 +19,7 @@ module Stella
     
     def initialize(base_uri=nil, client_id=1, opts={})
       opts = {
-        :'disable-templates' => false
+        :'no-templates' => false
       }.merge! opts
       @opts = opts
       @base_uri, @client_id = base_uri, client_id
@@ -27,9 +27,10 @@ module Stella
       @proxy = OpenStruct.new
     end
     def execute(usecase, &stat_collector)
-      # We need to make sure the gibbler cache has a value
-      self.gibbler if self.digest_cache.nil?
-      
+#      Gibbler.enable_debug
+      # We need to make sure the digest cache has a value
+      self.digest if self.digest_cache.nil?
+      Gibbler.disable_debug
       http_client = create_http_client
       stats = {}
       container = Container.new(self.digest_cache, usecase)
@@ -74,7 +75,7 @@ module Stella
           Stella.ld "TIMEOUT " << http_client.receive_timeout.to_s
           
           raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
-          stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].gibbler
+          stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].digest
         
           Benelux.add_thread_tags :request => req.digest_cache
           Benelux.add_thread_tags :retry => counter
@@ -123,6 +124,7 @@ module Stella
                HTTPClient::ReceiveTimeoutError => ex
           update(:request_timeout, usecase, uri, req, params, headers, counter, container)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
+          next
         rescue => ex
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
@@ -220,7 +222,7 @@ module Stella
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
         v = container.instance_eval &v if v.is_a?(Proc)
-        unless @opts[:'disable-templates']
+        unless @opts[:'no-templates']
           v = container.parse_template v if String === v
         end
         v = extra.call(v) unless extra.nil?

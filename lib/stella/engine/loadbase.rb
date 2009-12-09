@@ -151,7 +151,7 @@ module Stella::Engine
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
-        Benelux.timeline.clear if opts[:"disable-stats"]
+        Benelux.timeline.clear if opts[:"no-stats"]
       end
 
     end
@@ -399,11 +399,11 @@ module Stella::Engine
     end
     
     def update_follow_redirect client_id, ret, req, container
-      Stella.stdout.info3 "  Client-%s     FOLLOW   %-53s" % [client_id, ret.uri]
+      Stella.stdout.info3 "  Client-%s     FOLLOW   %-53s" % [client_id.shorter, ret.uri]
     end
     
     def update_max_redirects client_id, counter, ret, req, container
-      Stella.stdout.info3 "  Client-%s     MAX REDIRECTS   %s " % [client_id, counter]
+      Stella.stdout.info3 "  Client-%s     MAX REDIRECTS   %s " % [client_id.shorter, counter]
     end
     
     def update_authenticate client_id, usecase, req, domain, user, pass
@@ -414,7 +414,7 @@ module Stella::Engine
     end
     
     def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
-      Stella.stdout.info3 "  Client-%s     TIMEOUT   %-53s" % [client_id, uri]
+      Stella.stdout.info3 "  Client-%s     TIMEOUT   %-53s" % [client_id.shorter, uri]
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
       args.push [uri, 'TOUT', container.unique_id[0,10]]

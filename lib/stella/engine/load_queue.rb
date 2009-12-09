@@ -31,7 +31,9 @@ module Stella::Engine
           reps.times { |rep| 
             break if Stella.abort?
             Thread.current[:real_reps] += 1
-            args = [c.digest.short, uc.desc, uc.digest.short, Thread.current[:real_reps]]
+            # NOTE: It's important to not call digest or gibbler methods
+            # on client object b/c it is not frozen. Always use digest_cache.
+            args = [c.digest_cache.short, uc.desc, uc.digest.short, Thread.current[:real_reps]]
             Stella.stdout.info4 $/, "======== THREAD %s: %s:%s (rep: %d)" % args
             
             Benelux.add_thread_tags :rep =>  rep

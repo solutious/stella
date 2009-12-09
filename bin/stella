@@ -65,11 +65,15 @@ class Stella::CLI::Definition
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
     Stella.stdout.lev += 1
   end
-  global :'disable-stats', "Disable stat collection"
-  global :'disable-logging', "Disable all logging" do
+  global :'no-stats', "Disable stat collection" do
+    true
+  end
+  global :'no-logging', "Disable all logging" do
     Stella::Logger.disable!
   end
-  global :'disable-templates', "Disable template parsing"
+  global :'no-templates', "Disable template parsing" do
+    true
+  end
   global :V, :version, "Display version number" do
     puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
     exit 0
