@@ -45,13 +45,13 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000180">new</a></li>
+              <li><a href="#M000192">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000183">start</a></li>
-              <li><a href="#M000181">stop</a></li>
-              <li><a href="#M000182">stop?</a></li>
+              <li><a href="#M000195">start</a></li>
+              <li><a href="#M000193">stop</a></li>
+              <li><a href="#M000194">stop?</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -74,22 +74,22 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000180'>
-                <a name='M000180'>      </a>
+              <div class='method public-class' id='method-M000192'>
+                <a name='M000192'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(freq=4, rest=1, &amp;routine)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000192-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000180-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 235</span>&#x000A;235:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">freq</span>=<span class="ruby-value">4</span>, <span class="ruby-identifier">rest</span>=<span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">routine</span>)&#x000A;236:       <span class="ruby-ivar">@freq</span>, <span class="ruby-ivar">@rest</span>, <span class="ruby-ivar">@routine</span> = <span class="ruby-identifier">freq</span>, <span class="ruby-identifier">rest</span>, <span class="ruby-identifier">routine</span>&#x000A;237:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000192-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 246</span>&#x000A;246:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">freq</span>=<span class="ruby-value">4</span>, <span class="ruby-identifier">rest</span>=<span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">routine</span>)&#x000A;247:       <span class="ruby-ivar">@freq</span>, <span class="ruby-ivar">@rest</span>, <span class="ruby-ivar">@routine</span> = <span class="ruby-identifier">freq</span>, <span class="ruby-identifier">rest</span>, <span class="ruby-identifier">routine</span>&#x000A;248:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000183'>
-                <a name='M000183'>      </a>
+              <div class='method public-instance' id='method-M000195'>
+                <a name='M000195'>      </a>
                 <div class='synopsis'>
                   <span class='name'>start</span>
                   <span class='arguments'>()</span>
@@ -100,36 +100,36 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000195-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000183-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 247</span>&#x000A;247:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;248:       <span class="ruby-ivar">@dthread</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>&#x000A;249:         <span class="ruby-identifier">prev_ptime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;250:         <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>&#x000A;251:           <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">abort?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">stop?</span>&#x000A;252:           <span class="ruby-keyword kw">if</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">prev_ptime</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-ivar">@freq</span>&#x000A;253:             <span class="ruby-ivar">@routine</span>.<span class="ruby-identifier">call</span>&#x000A;254:             <span class="ruby-identifier">prev_ptime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;255:           <span class="ruby-keyword kw">end</span>&#x000A;256:           <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@rest</span>&#x000A;257:         <span class="ruby-keyword kw">end</span>&#x000A;258:       <span class="ruby-keyword kw">end</span>&#x000A;259:       <span class="ruby-ivar">@dthread</span>.<span class="ruby-identifier">abort_on_exception</span> = <span class="ruby-keyword kw">true</span>&#x000A;260:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000195-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 258</span>&#x000A;258:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;259:       <span class="ruby-ivar">@dthread</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>&#x000A;260:         <span class="ruby-identifier">prev_ptime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;261:         <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>&#x000A;262:           <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">abort?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">stop?</span>&#x000A;263:           <span class="ruby-keyword kw">if</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">prev_ptime</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-ivar">@freq</span>&#x000A;264:             <span class="ruby-ivar">@routine</span>.<span class="ruby-identifier">call</span>&#x000A;265:             <span class="ruby-identifier">prev_ptime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;266:           <span class="ruby-keyword kw">end</span>&#x000A;267:           <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@rest</span>&#x000A;268:         <span class="ruby-keyword kw">end</span>&#x000A;269:       <span class="ruby-keyword kw">end</span>&#x000A;270:       <span class="ruby-ivar">@dthread</span>.<span class="ruby-identifier">abort_on_exception</span> = <span class="ruby-keyword kw">true</span>&#x000A;271:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000181'>
-                <a name='M000181'>      </a>
+              <div class='method public-instance' id='method-M000193'>
+                <a name='M000193'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stop</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000193-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000181-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 239</span>&#x000A;239:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>()  &#x000A;240:       <span class="ruby-ivar">@force_stop</span> = <span class="ruby-keyword kw">true</span>  &#x000A;241:       <span class="ruby-ivar">@dthread</span>.<span class="ruby-identifier">join</span>&#x000A;242:       <span class="ruby-ivar">@routine</span>.<span class="ruby-identifier">call</span>&#x000A;243:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000193-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 250</span>&#x000A;250:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>()  &#x000A;251:       <span class="ruby-ivar">@force_stop</span> = <span class="ruby-keyword kw">true</span>  &#x000A;252:       <span class="ruby-ivar">@dthread</span>.<span class="ruby-identifier">join</span>&#x000A;253:       <span class="ruby-ivar">@routine</span>.<span class="ruby-identifier">call</span>&#x000A;254:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000182'>
-                <a name='M000182'>      </a>
+              <div class='method public-instance' id='method-M000194'>
+                <a name='M000194'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stop?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000182-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000194-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000182-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 244</span>&#x000A;244:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop?</span>() <span class="ruby-ivar">@force_stop</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000194-source'>     <span class="ruby-comment cmt"># File lib/stella/common.rb, line 255</span>&#x000A;255:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop?</span>() <span class="ruby-ivar">@force_stop</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

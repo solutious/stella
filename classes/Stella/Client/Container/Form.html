@@ -45,19 +45,19 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000169">from_doc</a></li>
+              <li><a href="#M000180">from_doc</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000168">field</a></li>
-              <li><a href="#M000167">fields</a></li>
+              <li><a href="#M000179">field</a></li>
+              <li><a href="#M000178">fields</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000169'>
-                <a name='M000169'>      </a>
+              <div class='method public-class' id='method-M000180'>
+                <a name='M000180'>      </a>
                 <div class='synopsis'>
                   <span class='name'>from_doc</span>
                   <span class='arguments'>(doc)</span>
@@ -68,36 +68,36 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000169-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000169-source'>     <span class="ruby-comment cmt"># File lib/stella/client/container.rb, line 122</span>&#x000A;122:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_doc</span>(<span class="ruby-identifier">doc</span>)&#x000A;123:           <span class="ruby-identifier">f</span> = <span class="ruby-identifier">new</span>&#x000A;124:           <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>[<span class="ruby-identifier">n</span>] = <span class="ruby-identifier">v</span> }&#x000A;125:           <span class="ruby-identifier">f</span>[<span class="ruby-value str">'input'</span>] = {}&#x000A;126:           (<span class="ruby-identifier">doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-value str">'input'</span>) <span class="ruby-operator">||</span> []).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;127:             <span class="ruby-identifier">f</span>[<span class="ruby-value str">'input'</span>][<span class="ruby-identifier">input</span>[<span class="ruby-value str">'name'</span>]] = <span class="ruby-identifier">input</span>[<span class="ruby-value str">'value'</span>]&#x000A;128:           <span class="ruby-keyword kw">end</span>&#x000A;129:           <span class="ruby-identifier">f</span>&#x000A;130:         <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000180-source'>     <span class="ruby-comment cmt"># File lib/stella/client/container.rb, line 122</span>&#x000A;122:         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_doc</span>(<span class="ruby-identifier">doc</span>)&#x000A;123:           <span class="ruby-identifier">f</span> = <span class="ruby-identifier">new</span>&#x000A;124:           <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>[<span class="ruby-identifier">n</span>] = <span class="ruby-identifier">v</span> }&#x000A;125:           <span class="ruby-identifier">f</span>[<span class="ruby-value str">'input'</span>] = {}&#x000A;126:           (<span class="ruby-identifier">doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-value str">'input'</span>) <span class="ruby-operator">||</span> []).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;127:             <span class="ruby-identifier">f</span>[<span class="ruby-value str">'input'</span>][<span class="ruby-identifier">input</span>[<span class="ruby-value str">'name'</span>]] = <span class="ruby-identifier">input</span>[<span class="ruby-value str">'value'</span>]&#x000A;128:           <span class="ruby-keyword kw">end</span>&#x000A;129:           <span class="ruby-identifier">f</span>&#x000A;130:         <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000168'>
-                <a name='M000168'>      </a>
+              <div class='method public-instance' id='method-M000179'>
+                <a name='M000179'>      </a>
                 <div class='synopsis'>
                   <span class='name'>field</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Form.html#M000167">fields</a>
+                  Alias for <a href="Form.html#M000178">fields</a>
                   </p>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000167'>
-                <a name='M000167'>      </a>
+              <div class='method public-instance' id='method-M000178'>
+                <a name='M000178'>      </a>
                 <div class='synopsis'>
                   <span class='name'>fields</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000167-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000178-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000167-source'>     <span class="ruby-comment cmt"># File lib/stella/client/container.rb, line 115</span>&#x000A;115:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fields</span>(<span class="ruby-identifier">key</span>)&#x000A;116:         <span class="ruby-keyword kw">self</span>[<span class="ruby-value str">'input'</span>] <span class="ruby-operator">||=</span> {}&#x000A;117:         <span class="ruby-keyword kw">self</span>[<span class="ruby-value str">'input'</span>][<span class="ruby-identifier">key</span>]&#x000A;118:       <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000178-source'>     <span class="ruby-comment cmt"># File lib/stella/client/container.rb, line 115</span>&#x000A;115:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fields</span>(<span class="ruby-identifier">key</span>)&#x000A;116:         <span class="ruby-keyword kw">self</span>[<span class="ruby-value str">'input'</span>] <span class="ruby-operator">||=</span> {}&#x000A;117:         <span class="ruby-keyword kw">self</span>[<span class="ruby-value str">'input'</span>][<span class="ruby-identifier">key</span>]&#x000A;118:       <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2009-11-28 12:59:04 -0500</span>
+          <span class='datetime'>2009-12-09 15:51:37 -0500</span>
         </div>
       </div>
       <div id='content'>
@@ -41,27 +41,87 @@
             STELLA, CHANGES
             </p>
             <p>
-            #### 0.7.7 (2009-11-??) ###############################
+            #### 0.8.0 (2009-12-??) ###############################
+            </p>
+            <ul>
+            <li>FIXED: HTTP auth failures
+            
+            </li>
+            <li>FIXED: Request timeouts shold count towards failures
+            
+            </li>
+            <li>FIXED: <a href="../classes/Stella/Client.html">Stella::Client</a> ID was
+            changing between requests in certain conditions
+            
+            </li>
+            <li>ADDED: follow responses can contain definition blocks
+            
+            </li>
+            <li>ADDED: Support for specifying default path prefix on CLI
+            
+            </li>
+            <li>ADDED: Support for specifying timeouts
+            
+            </li>
+            <li>TODO: Replace runtime procs with string templates
+            
+            </li>
+            <li>TODO: review cooking handling. Not always sent automatically.
+            
+            </li>
+            <li>TODO: global responses
+            
+            </li>
+            <li>TODO: review :variables in URI elements
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.7.7 (2009-12-05) ###############################
             </p>
             <ul>
             <li>FIXED: JSON parse error when nil body
             
             </li>
+            <li>FIXED: URI query parameter encoding
+            
+            </li>
             <li>CHANGE: Removed Stella::Testplan::Stats
+            
+            </li>
+            <li>CHANGE: Better output for errors during functional tests
+            
+            </li>
+            <li>CHANGE: Global variables now implemented in <a
+            href="../classes/Stella/Testplan.html#M000222">Stella::Testplan.global</a>
+            and can be used like usecase and request resources.
+            
+            </li>
+            <li>CHANGE: Variable replacement now checks the client container resources
+            before the usecase resources.
             
             </li>
             <li>ADDED: Stella::Testplan#to_json
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000066">Stella::Data::Helpers#read_file</a>
+            href="../classes/Stella/Data/Helpers.html#M000070">Stella::Data::Helpers#read_file</a>
             
             </li>
             <li>ADDED: Stella::Data::Helpers#resequential
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000067">Stella::Data::Helpers#path</a>
+            href="../classes/Stella/Data/Helpers.html#M000071">Stella::Data::Helpers#path</a>
+            
+            </li>
+            <li>ADDED: no-param, no-header options
+            
+            </li>
+            <li>ADDED: Follow redirects within one request definition
+            
+            </li>
+            <li>ADDED: Support for specifying HTTP AUTH domain in usecase config
             
             </li>
             </ul>
