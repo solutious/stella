@@ -119,11 +119,11 @@ class HTTPClient
       @chunk_size = 4096
 
       @connect_timeout = 60
-      @connect_retry = 1
+      @connect_retry = 2
       @send_timeout = 120
       @receive_timeout = 60       # For each read_block_size bytes
       @read_block_size = 1024 * 16 # follows net/http change in 1.8.7
-      @protocol_retry_count = 1
+      @protocol_retry_count = 2
 
       @ssl_config = nil
       @test_loopback_http_response = []
@@ -495,11 +495,11 @@ class HTTPClient
       @debug_dev = nil
 
       @connect_timeout = nil
-      @connect_retry = 1
+      @connect_retry = 2
       @send_timeout = nil
       @receive_timeout = nil
       @read_block_size = nil
-      @protocol_retry_count = 5
+      @protocol_retry_count = 2
 
       @ssl_config = nil
       @ssl_peer_cert = nil
