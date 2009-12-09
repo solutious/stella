@@ -34,6 +34,7 @@ end
 * ADDED: no-param, no-header options
 * ADDED: Follow redirects within one request definition
 * ADDED: Support for specifying HTTP AUTH domain in usecase config 
+* ADDED: Support for specifying default path prefix on CLI
 
 
 #### 0.7.6 (2009-11-24) ###############################

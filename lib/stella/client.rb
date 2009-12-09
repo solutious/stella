@@ -254,7 +254,18 @@ module Stella
       uri.scheme = base_uri.scheme if uri.scheme.nil?
       uri.host = base_uri.host if uri.host.nil?
       uri.port = base_uri.port if uri.port.nil?
-      uri.path ||= ''
+      
+      # Support for specifying default path prefix:
+      # $ stella verify -p plan.rb http://localhost/basicauth
+      if base_uri.path
+        if uri.path.nil? || uri.path.empty?
+          uri.path = base_uri.path
+        else
+          a = base_uri.path.gsub(/\/$/, '')
+          b = uri.path.gsub(/^\//, '')
+          uri.path = [a,b].join('/')
+        end
+      end
       
       uri
     end
