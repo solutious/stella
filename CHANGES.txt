@@ -3,21 +3,15 @@ STELLA, CHANGES
 #### 0.8.0 (2009-12-??) ###############################
 
 * FIXED: HTTP auth failures
+* FIXED: Request timeouts shold count towards failures
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI
-* ADDED: Support for specifying receive timeout
+* ADDED: Support for specifying timeouts
 
 * TODO: Replace runtime procs with string templates
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
 * TODO: review :variables in URI elements
-* TODO: Should record a failure on request timeout
-usecase do
-  timeout 60
-  get '/' do
-    timeout 30 # local override
-  end
-end
 
 #### 0.7.7 (2009-12-05) ###############################
 

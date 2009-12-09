@@ -414,6 +414,7 @@ module Stella::Engine
     end
     
     def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
+      Stella.stdout.info3 "  Client-%s     TIMEOUT   %-53s" % [client_id, uri]
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
       args.push [uri, 'TOUT', container.unique_id[0,10]]

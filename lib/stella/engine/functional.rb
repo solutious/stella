@@ -128,6 +128,11 @@ module Stella::Engine
     def update_authenticate client_id, usecase, req, domain, user, pass
       Stella.stdout.info "  AUTH   #{domain} (#{user}/#{pass})"
     end
+    
+    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
+      Stella.stdout.info "  TIMEOUT   %-53s" % [uri]
+    end
+    
   end
 end
 

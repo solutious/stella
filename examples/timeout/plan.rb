@@ -14,4 +14,5 @@ usecase "Timeout" do
   end
   
   get "/"
+  
 end

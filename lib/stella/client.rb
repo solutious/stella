@@ -119,7 +119,8 @@ module Stella
             Benelux.remove_thread_tags :asset
           end
           asset_duration = Time.now - asset_start
-        rescue HTTPClient::ConnectTimeoutError => ex
+        rescue HTTPClient::ConnectTimeoutError, HTTPClient::SendTimeoutError,
+               HTTPClient::ReceiveTimeoutError => ex
           update(:request_timeout, usecase, uri, req, params, headers, counter, container)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
         rescue => ex
