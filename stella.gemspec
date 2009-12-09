@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.8.0.000"
+  s.version = "0.7.6.007"
   s.summary = "Blame Stella for breaking your web applications."
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -34,10 +34,13 @@
   examples/cookies/plan.rb
   examples/csvdata/plan.rb
   examples/csvdata/search_terms.csv
+  examples/dynamic/plan.rb
   examples/essentials/logo.png
   examples/essentials/plan.rb
   examples/essentials/search_terms.txt
   examples/exceptions/plan.rb
+  examples/timeout/plan.rb
+  examples/variables/plan.rb
   lib/proc_source.rb
   lib/stella.rb
   lib/stella/cli.rb

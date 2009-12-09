@@ -21,9 +21,9 @@ module Stella
   module VERSION
     unless defined?(MAJOR)
       MAJOR = 0.freeze
-      MINOR = 8.freeze
-      TINY  = 0.freeze
-      PATCH = '000'.freeze 
+      MINOR = 7.freeze
+      TINY  = 6.freeze
+      PATCH = '007'.freeze 
     end
     def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
     def self.to_f; self.to_s.to_f; end
