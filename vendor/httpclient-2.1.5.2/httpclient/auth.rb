@@ -233,6 +233,7 @@ class HTTPClient
         uri = Util.uri_dirname(uri)
         @auth[uri] = ["#{user}:#{passwd}"].pack('m').tr("\n", '')
       end
+      
     end
 
     # Response handler: returns credential.

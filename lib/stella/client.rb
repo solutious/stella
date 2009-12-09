@@ -255,7 +255,6 @@ module Stella
       uri.host = base_uri.host if uri.host.nil?
       uri.port = base_uri.port if uri.port.nil?
       uri.path ||= ''
-      uri.path.gsub! /\/$/, ''  # Don't double up on the first slash
       
       uri
     end
