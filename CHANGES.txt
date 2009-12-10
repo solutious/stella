@@ -3,7 +3,7 @@ STELLA, CHANGES
 #### 0.8.0 (2009-12-??) ###############################
 
 * FIXED: HTTP auth failures
-* FIXED: Request timeouts shold count towards failures
+* FIXED: Request timeouts should count towards failures
 * FIXED: Stella::Client ID was changing between requests in certain conditions
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI
@@ -13,6 +13,7 @@ STELLA, CHANGES
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
 * TODO: review :variables in URI elements
+* TODO: Add option to dump full request/response output to a file by client
 
 
 #### 0.7.7 (2009-12-05) ###############################
