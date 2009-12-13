@@ -40,7 +40,9 @@ module Stella
   class WackyRatio < Stella::Error; end
   class WackyDuration < Stella::Error; end
   class InvalidOption < Stella::Error; end
-  class NoHostDefined < Stella::Error; end
+  class NoHostDefined < Stella::Error
+    def message; "No host specified for uri: #{@obj}"; end
+  end
 end
 
 

@@ -92,7 +92,7 @@ module Stella::Engine
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       #desc = "#{usecase.desc} > #{req.desc}"
-      Stella.le '  ERROR   %24s: %s' % [ex.message, uri]
+      Stella.le '  ERROR   %24s   %s' % [ex.message, uri]
       Stella.le '  %s' % params.inspect
       unless req.headers.nil? || req.headers.empty? 
         Stella.le '  %s' % req.headers.inspect
