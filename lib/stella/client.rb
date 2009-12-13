@@ -47,7 +47,7 @@ module Stella
           # This is for the values that were "set"
           # in the part before the response body.
           prepare_resources(container, req.resources)
-        
+          
           params = prepare_params(container, req.params)
           headers = prepare_headers(container, req.headers)
         
@@ -175,7 +175,12 @@ module Stella
   private
     # We use a method so we can time it with Benelux
     def send_request(http_client, usecase, meth, uri, req, params, headers, container, counter)
-      container.response = http_client.send(meth, uri, params, headers) # booya!
+      if meth == "delete"
+        args = [meth, uri, headers]
+      else
+        args = [meth, uri, params, headers]
+      end
+      container.response = http_client.send(*args) # booya!
     end
     
     def update(kind, *args)

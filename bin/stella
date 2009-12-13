@@ -144,7 +144,6 @@ class Stella::CLI::Definition
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
   # ------------------------------------------------------------------
-
   before do |obj|
     #puts $$
     @start = Time.now

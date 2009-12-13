@@ -5,15 +5,19 @@ STELLA, CHANGES
 * FIXED: HTTP auth failures
 * FIXED: Request timeouts should count towards failures
 * FIXED: Stella::Client ID was changing between requests in certain conditions
+* FIXED: HTTP delete now works correctly
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI
 * ADDED: Support for specifying timeouts
+
 
 * TODO: Replace runtime procs with string templates
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
 * TODO: review :variables in URI elements
 * TODO: Add option to dump full request/response output to a file by client
+* TODO: Force response block content type. 
+* TODO: A confusing error is displayed when now host is specified
 
 
 #### 0.7.7 (2009-12-05) ###############################
