@@ -16,7 +16,6 @@ module Stella::Engine
       client.enable_nowait_mode if opts[:nowait]
       
       Stella.stdout.info2 $/, "Starting test...", $/
-      sleep 0.3
       
       # Identify this thread to Benelux
       Benelux.current_track :functional 

@@ -51,7 +51,9 @@ module Stella
   
   require 'stella/logger'
   
-  START_TIME = Time.now.freeze
+  unless defined?(START_TIME)
+    START_TIME = Time.now.freeze
+  end
   
   @globals = {}
   @sysinfo = nil
@@ -108,6 +110,7 @@ module Stella
   autoload :Testplan, 'stella/testplan'
   autoload :Engine, 'stella/engine'
   autoload :Client, 'stella/client'
+  autoload :Service, 'stella/service'
   
 end
 
