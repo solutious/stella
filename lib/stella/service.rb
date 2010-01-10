@@ -1,7 +1,9 @@
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 class Stella::Service
-  class Problem < Stella::Error; end
+  class Problem < Stella::Error
+    def res() @obj end
+  end
   module V1
     class NoTestplanSelected < Problem; end
     class NoUsecaseSelected < Problem; end
@@ -10,6 +12,17 @@ class Stella::Service
       req = uri('v1', 'testplan', "#{digest}.json")
       res = send_request :get, req
       !res.content.empty?
+    rescue Stella::Service::Problem => ex
+      raise ex unless ex.res.status == 404
+      false
+    end
+    def testrun?(digest)
+      req = uri('v1', 'testrun', "#{digest}.json")
+      res = send_request :get, req
+      !res.content.empty?
+    rescue Stella::Service::Problem => ex
+      raise ex unless ex.res.status == 404
+      false
     end
     def testplan_create(desc, opts={})
       req = uri('v1', 'testplan', "create.json")
@@ -59,27 +72,29 @@ class Stella::Service
       obj = JSON.parse res.content
       obj['digest']
     end
-    def sync_testplan(plan)
-      #unless testplan? plan.digest
-        Stella.stdout.info "Syncing Testplan #{plan.digest.short}"
-        testplan_create plan.desc, :digest => plan.digest
-        plan.usecases.each do |uc|
-          Stella.stdout.info "Syncing Usecase #{uc.digest.short}"
-          props = uc.to_hash
-          props[:digest] ||= uc.digest
-          usecase_create uc.desc, props
-          uc.requests.each do |req|
-            props = req.to_hash
-            props[:digest] ||= req.digest
-            props[:desc] = props.delete :description
-            handlers = props.delete :response_handler
-            request_create props[:uri], props
-            handlers.each_pair do |regex, proc|
-              handler_create regex, proc
-            end
+    # Returns true if the testplan was created. 
+    # Otherwise false if it already exists.
+    def testplan_sync(plan)
+      return false if testplan? plan.digest
+      Stella.stdout.info "Syncing Testplan #{plan.digest.short}"
+      testplan_create plan.desc, :digest => plan.digest
+      plan.usecases.each do |uc|
+        Stella.stdout.info "Syncing Usecase #{uc.digest.short}"
+        props = uc.to_hash
+        props[:digest] ||= uc.digest
+        usecase_create uc.desc, props
+        uc.requests.each do |req|
+          props = req.to_hash
+          props[:digest] ||= req.digest
+          props[:desc] = props.delete :description
+          handlers = props.delete :response_handler
+          request_create props[:uri], props
+          handlers.each_pair do |regex, proc|
+            handler_create regex, proc
           end
         end
-      #end
+      end
+      true
     end
   end
 end
@@ -119,7 +134,7 @@ class Stella::Service
       args = [meth, uri, params, headers]
     end
     res = @http_client.send(*args) # booya!
-    raise Problem, "#{res.status}: #{res.content}" if res.status > 200
+    raise Problem.new(res) if res.status > 200
     res
   end
   
