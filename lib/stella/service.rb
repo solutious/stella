@@ -2,11 +2,25 @@ Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 class Stella::Service
   module V1
-    def testplan?(token)
-      p uri('v1', 'testplan', "#{token}.json")
-      false
+    def testplan?(digest)
+      req = uri('v1', 'testplan', "#{digest}.json")
+      res = send_request :get, req
+      !res.content.empty?
     end
-    
+    def testplan_create(desc,digest=nil)
+      req = uri('v1', 'testplan', "create.json")
+      params = {
+        :desc => desc,
+        :digest => digest
+      }
+      res = send_request :post, req, params
+      if res.status > 200
+        raise Stella::Error, res.message
+      else
+        obj = JSON.parse res.content
+        obj['digest']
+      end
+    end
   end
 end
 
@@ -33,10 +47,11 @@ class Stella::Service
   def uri(*parts)
     uri = URI.parse @source
     uri.path = '/api/' << parts.join( '/')
+    Stella.ld "SERVICE URI: #{uri}"
     uri
   end
   
-  def send_request(meth, uri, params, headers)
+  def send_request(meth, uri, params={}, headers={})
     headers['X-TOKEN'] ||= @apikey
     if meth == "delete"
       args = [meth, uri, headers]
@@ -55,7 +70,7 @@ class Stella::Service
       }
       http_client = HTTPClient.new opts
       http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
-      http_client.debug_dev = STDOUT if Stella.debug? 
+      http_client.debug_dev = STDOUT if Stella.debug? && Stella.log.lev > 1
       http_client.protocol_version = "HTTP/1.1"
       #http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE
       http_client
