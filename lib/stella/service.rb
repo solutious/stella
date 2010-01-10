@@ -16,6 +16,7 @@ class Stella::Service
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
+      Stella.ld "CREATED TP: #{obj.inspect}"
       @tid = obj['digest']
     end
     def usecase_create(desc, opts={})
@@ -27,6 +28,7 @@ class Stella::Service
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
+      Stella.ld "CREATED UC: #{obj.inspect}"
       @uid = obj['digest']
     end
     def request_create(uri, opts={})
@@ -39,7 +41,6 @@ class Stella::Service
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
-      @uid = obj['digest']
     end
     def sync_testplan(plan)
       #unless testplan? plan.digest
@@ -48,14 +49,14 @@ class Stella::Service
         plan.usecases.each do |uc|
           Stella.stdout.info "Syncing Usecase #{uc.digest.short}"
           usecase_create uc.desc, :ratio => uc.ratio,
-                                      :timeout => uc.timeout,
-                                      :http_auth => uc.http_auth,
-                                      :digest => uc.digest
-          #uc.requests.each do |req|
-          #  hsh = req.to_hash
-          #  hsh[:desc] = hsh[:description]
-          #  request_create hsh[:uri], hsh
-          #end
+                                  :timeout => uc.timeout,
+                                  :http_auth => uc.http_auth,
+                                  :digest => uc.digest
+          uc.requests.each do |req|
+            hsh = req.to_hash
+            hsh[:desc] = hsh[:description]
+            request_create hsh[:uri], hsh
+          end
         end
       #end
     end
