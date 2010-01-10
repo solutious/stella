@@ -41,6 +41,7 @@ class Stella::Service
         :tid  => @tid,
         :desc => desc
       }.merge! opts
+      
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED UC: #{obj.inspect}"
@@ -75,7 +76,7 @@ class Stella::Service
     # Returns true if the testplan was created. 
     # Otherwise false if it already exists.
     def testplan_sync(plan)
-      return false if testplan? plan.digest
+      #return false if testplan? plan.digest
       Stella.stdout.info "Syncing Testplan #{plan.digest.short}"
       testplan_create plan.desc, :digest => plan.digest
       plan.usecases.each do |uc|
@@ -87,11 +88,11 @@ class Stella::Service
           props = req.to_hash
           props[:digest] ||= req.digest
           props[:desc] = props.delete :description
-          handlers = props.delete :response_handler
+          #handlers = props.delete :response_handler
           request_create props[:uri], props
-          handlers.each_pair do |regex, proc|
-            handler_create regex, proc
-          end
+          #handlers.each_pair do |regex, proc|
+          #  handler_create regex, proc
+          #end
         end
       end
       true
@@ -128,6 +129,8 @@ class Stella::Service
   
   def send_request(meth, uri, params={}, headers={})
     headers['X-TOKEN'] ||= @apikey
+    params = process_params(params)
+    puts params.to_yaml
     if meth == "delete"
       args = [meth, uri, headers]
     else
@@ -139,6 +142,33 @@ class Stella::Service
   end
   
   private
+    # Turn nested Hashes into: "key[:name]"
+    def process_params(raw={})
+      cooked = {}
+      raw.each_pair do |k,v|
+        cooked.merge!(process_enumerable(k, v)) and next if Enumerable === v
+        cooked[k] = v
+      end
+      cooked
+    end
+    
+    def process_enumerable(k,v)
+      cooked = {}
+      case v.class.to_s
+      when "Array"
+        v.each_with_index do |v2,index|
+          name = "#{k}[#{index}]"
+          cooked[name] = Enumerable === v2 ? process_enumerable(name, v2) : v2
+        end
+      when "Hash"
+        v.each_pair do |k2,v2|
+          name = "#{k}[#{k2}]"
+          cooked[name] = Enumerable === v2 ? process_enumerable(name, v2) : v2
+        end
+      end
+      cooked
+    end
+    
     def create_http_client
       opts = {
         :proxy       => @proxy.uri || nil, # a tautology for clarity
