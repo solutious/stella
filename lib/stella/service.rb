@@ -4,6 +4,8 @@ class Stella::Service
   class Problem < Stella::Error; end
   module V1
     class NoTestplanSelected < Problem; end
+    class NoUsecaseSelected < Problem; end
+    class NoRequestSelected < Problem; end
     def testplan?(digest)
       req = uri('v1', 'testplan', "#{digest}.json")
       res = send_request :get, req
@@ -41,6 +43,21 @@ class Stella::Service
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
+      @rtid = obj['digest']
+    end
+    def handler_create(regex, proc)
+      raise NoRequestSelected unless @rtid
+      req = uri('v1', 'testplan', 'usecase', 'request', 'handler', "create.json")
+      params = {
+        :tid  => @tid,
+        :uid  => @uid,
+        :rtid  => @rtid,
+        :regex => regex,
+        :proc => proc
+      }
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      obj['digest']
     end
     def sync_testplan(plan)
       #unless testplan? plan.digest
@@ -48,14 +65,18 @@ class Stella::Service
         testplan_create plan.desc, :digest => plan.digest
         plan.usecases.each do |uc|
           Stella.stdout.info "Syncing Usecase #{uc.digest.short}"
-          usecase_create uc.desc, :ratio => uc.ratio,
-                                  :timeout => uc.timeout,
-                                  :http_auth => uc.http_auth,
-                                  :digest => uc.digest
+          props = uc.to_hash
+          props[:digest] ||= uc.digest
+          usecase_create uc.desc, props
           uc.requests.each do |req|
-            hsh = req.to_hash
-            hsh[:desc] = hsh[:description]
-            request_create hsh[:uri], hsh
+            props = req.to_hash
+            props[:digest] ||= req.digest
+            props[:desc] = props.delete :description
+            handlers = props.delete :response_handler
+            request_create props[:uri], props
+            handlers.each_pair do |regex, proc|
+              handler_create regex, proc
+            end
           end
         end
       #end
