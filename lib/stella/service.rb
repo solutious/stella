@@ -1,25 +1,63 @@
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
 class Stella::Service
+  class Problem < Stella::Error; end
   module V1
+    class NoTestplanSelected < Problem; end
     def testplan?(digest)
       req = uri('v1', 'testplan', "#{digest}.json")
       res = send_request :get, req
       !res.content.empty?
     end
-    def testplan_create(desc,digest=nil)
+    def testplan_create(desc, opts={})
       req = uri('v1', 'testplan', "create.json")
       params = {
-        :desc => desc,
-        :digest => digest
-      }
+        :desc => desc
+      }.merge! opts
       res = send_request :post, req, params
-      if res.status > 200
-        raise Stella::Error, res.message
-      else
-        obj = JSON.parse res.content
-        obj['digest']
-      end
+      obj = JSON.parse res.content
+      @tid = obj['digest']
+    end
+    def usecase_create(desc, opts={})
+      raise NoTestplanSelected unless @tid
+      req = uri('v1', 'testplan', 'usecase', "create.json")
+      params = {
+        :tid  => @tid,
+        :desc => desc
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      @uid = obj['digest']
+    end
+    def request_create(uri, opts={})
+      raise NoUsecaseSelected unless @uid
+      req = uri('v1', 'testplan', 'usecase', 'request', "create.json")
+      params = {
+        :tid  => @tid,
+        :uid  => @uid,
+        :uri => uri
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      @uid = obj['digest']
+    end
+    def sync_testplan(plan)
+      #unless testplan? plan.digest
+        Stella.stdout.info "Syncing Testplan #{plan.digest.short}"
+        testplan_create plan.desc, :digest => plan.digest
+        plan.usecases.each do |uc|
+          Stella.stdout.info "Syncing Usecase #{uc.digest.short}"
+          usecase_create uc.desc, :ratio => uc.ratio,
+                                      :timeout => uc.timeout,
+                                      :http_auth => uc.http_auth,
+                                      :digest => uc.digest
+          #uc.requests.each do |req|
+          #  hsh = req.to_hash
+          #  hsh[:desc] = hsh[:description]
+          #  request_create hsh[:uri], hsh
+          #end
+        end
+      #end
     end
   end
 end
@@ -58,7 +96,9 @@ class Stella::Service
     else
       args = [meth, uri, params, headers]
     end
-    @http_client.send(*args) # booya!
+    res = @http_client.send(*args) # booya!
+    raise Problem, "#{res.status}: #{res.content}" if res.status > 200
+    res
   end
   
   private
@@ -77,3 +117,4 @@ class Stella::Service
     end
   
 end
+

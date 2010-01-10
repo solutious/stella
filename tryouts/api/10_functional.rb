@@ -9,16 +9,9 @@ abort 'Set STELLA_SOURCE' unless Bone['STELLA_SOURCE']
 
 plan_path = File.join STELLA_LIB_HOME, '..', 'examples', 'dynamic', 'plan.rb'
 plan = Stella::Testplan.load_file plan_path
-puts plan.digest
-
 
 service = Stella::Service.new Bone['STELLA_SOURCE'], Bone['STELLA_TOKEN']
-unless service.testplan? plan.digest
-  puts "Creating Testplan"
-  tid = service.testplan_create "Testplan 1", plan.digest
-  #s.usecase_create tid
-end
-
+service.sync_testplan plan
 
 
 

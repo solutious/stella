@@ -122,9 +122,7 @@ class Testplan < Storable
     self.description = args.first unless args.empty?
     self.description
   end
-
-    
-    
+  
   def pretty(long=false)
     str = []
     dig = long ? self.digest_cache : self.digest_cache.shorter
