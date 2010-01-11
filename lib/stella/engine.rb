@@ -1,7 +1,10 @@
 
 
 module Stella::Engine
-  
+  @service = nil
+  class << self
+    attr_accessor :service
+  end
   module Base
     extend self
     

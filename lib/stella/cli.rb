@@ -19,6 +19,13 @@ class Stella::CLI < Drydock::Command
     opts = {}
     opts[:hosts] = @hosts
     opts[:nowait] = true if @option.nowait
+    
+    if @global.remote
+      require 'bone'
+      s = Stella::Service.new Bone['STELLA_SOURCE'], Bone['STELLA_TOKEN']
+      Stella::Engine.service = s
+    end
+    
     [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end

@@ -7,6 +7,11 @@ module Stella::Engine
     def run(plan, opts={})
       opts = process_options! plan, opts
       
+      if Stella::Engine.service
+        Stella::Engine.service.testplan_sync plan
+        Stella::Engine.service.testrun_create plan.digest, opts
+      end
+      
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       

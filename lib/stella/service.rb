@@ -24,6 +24,17 @@ class Stella::Service
       raise ex unless ex.res.status == 404
       false
     end
+    def testrun_create(tid, opts={})
+      req = uri('v1', 'testrun', "create.json")
+      params = {
+        :tid => tid,
+        :start_time => Stella::START_TIME
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "CREATED TRUN: #{obj.inspect}"
+      @tid = obj['digest']
+    end
     def testplan_create(desc, opts={})
       req = uri('v1', 'testplan', "create.json")
       params = {
@@ -59,20 +70,6 @@ class Stella::Service
       obj = JSON.parse res.content
       @rtid = obj['digest']
     end
-    def handler_create(regex, proc)
-      raise NoRequestSelected unless @rtid
-      req = uri('v1', 'testplan', 'usecase', 'request', 'handler', "create.json")
-      params = {
-        :tid  => @tid,
-        :uid  => @uid,
-        :rtid  => @rtid,
-        :regex => regex,
-        :proc => proc
-      }
-      res = send_request :post, req, params
-      obj = JSON.parse res.content
-      obj['digest']
-    end
     # Returns true if the testplan was created. 
     # Otherwise false if it already exists.
     def testplan_sync(plan)
@@ -88,11 +85,7 @@ class Stella::Service
           props = req.to_hash
           props[:digest] ||= req.digest
           props[:desc] = props.delete :description
-          #handlers = props.delete :response_handler
           request_create props[:uri], props
-          #handlers.each_pair do |regex, proc|
-          #  handler_create regex, proc
-          #end
         end
       end
       true
@@ -130,19 +123,23 @@ class Stella::Service
   def send_request(meth, uri, params={}, headers={})
     headers['X-TOKEN'] ||= @apikey
     params = process_params(params)
-    puts params.to_yaml
     if meth == "delete"
       args = [meth, uri, headers]
     else
       args = [meth, uri, params, headers]
     end
     res = @http_client.send(*args) # booya!
-    raise Problem.new(res) if res.status > 200
+    
+    if res.status > 200
+      puts res.content
+      raise Problem.new(res) 
+    end
+    
     res
   end
   
   private
-    # Turn nested Hashes into: "key[:name]"
+    # Turn nested Hashes into: "key[name][1]" etc...
     def process_params(raw={})
       cooked = {}
       raw.each_pair do |k,v|

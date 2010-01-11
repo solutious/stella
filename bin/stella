@@ -49,6 +49,7 @@ class Stella::CLI::Definition
   global :'no-param', "Do not include __stella query parameter header" do
     true
   end
+  global :R, :remote
   global :E, :engine, String, "Specify a load engine (experimental)"
   global :o, :output, String, "Write output to the given file" do |v|
     String.disable_color
