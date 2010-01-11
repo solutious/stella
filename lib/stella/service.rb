@@ -8,6 +8,7 @@ class Stella::Service
     class NoTestplanSelected < Problem; end
     class NoUsecaseSelected < Problem; end
     class NoRequestSelected < Problem; end
+    class NoTestrunSelected < Problem; end
     def testplan?(digest)
       req = uri('v1', 'testplan', "#{digest}.json")
       res = send_request :get, req
@@ -24,16 +25,28 @@ class Stella::Service
       raise ex unless ex.res.status == 404
       false
     end
-    def testrun_create(tid, opts={})
+    def testrun_create(opts={})
+      raise NoTestplanSelected unless @tid
       req = uri('v1', 'testrun', "create.json")
       params = {
-        :tid => tid,
+        :tid => @tid,
         :start_time => Stella::START_TIME
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED TRUN: #{obj.inspect}"
-      @tid = obj['digest']
+      @runid = obj['digest']
+    end
+    def testrun_summary(opts={})
+      raise NoTestrunSelected unless @runid
+      req = uri('v1', 'testrun', 'summary', "create.json")
+      params = {
+        :runid => @runid
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "CREATED SUMMARY: #{obj.inspect}"
+      obj
     end
     def testplan_create(desc, opts={})
       req = uri('v1', 'testplan', "create.json")
@@ -73,7 +86,10 @@ class Stella::Service
     # Returns true if the testplan was created. 
     # Otherwise false if it already exists.
     def testplan_sync(plan)
-      #return false if testplan? plan.digest
+      if testplan? plan.digest
+        @tid = plan.digest
+        return false 
+      end
       Stella.stdout.info "Syncing Testplan #{plan.digest.short}"
       testplan_create plan.desc, :digest => plan.digest
       plan.usecases.each do |uc|
@@ -106,6 +122,8 @@ class Stella::Service
   
   attr_reader :source
   attr_reader :apikey
+  
+  attr_accessor :tid, :uid, :rtid, :runid
   
   def initialize(source=nil,apikey=nil)
     @source, @apikey = source, apikey

@@ -9,7 +9,7 @@ module Stella::Engine
       
       if Stella::Engine.service
         Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create plan.digest, opts
+        Stella::Engine.service.testrun_create opts
       end
       
       Stella.ld "OPTIONS: #{opts.inspect}"
@@ -25,6 +25,8 @@ module Stella::Engine
       # Identify this thread to Benelux
       Benelux.current_track :functional 
       
+      start_time = Time.now.utc
+      
       dig = Stella.stdout.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
       Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
       plan.usecases.each_with_index do |uc,i|
@@ -34,8 +36,22 @@ module Stella::Engine
         Stella.rescue { client.execute uc }
       end
       
-      tl = Benelux.thread_timeline
-      tl.stats.group(:failed).merge.n == 0
+      test_time = Time.now.utc - start_time
+      
+      # Need to use thread timeline b/c the clients are running in the
+      # main thread which Benelux.update_global_timeline does not touch.
+      tt = Benelux.thread_timeline
+      
+      failed = tt.stats.group(:failed).merge
+      total = tt.stats.group(:do_request).merge
+      
+      if Stella::Engine.service
+        Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
+                                               :failed => failed.n,
+                                               :duration => test_time
+      end
+      
+      failed == 0
     end
     
     
