@@ -126,9 +126,13 @@ class Stella::Service
   attr_accessor :tid, :uid, :rtid, :runid
   
   def initialize(source=nil,apikey=nil)
+    source ||= ENV['STELLA_SOURCE']
+    apikey ||= ENV['STELLA_TOKEN']
     @source, @apikey = source, apikey
     @proxy = OpenStruct.new
     @http_client = create_http_client
+    raise Stella::Error, "Set STELLA_SOURCE" unless @source
+    raise Stella::Error, "Set STELLA_TOKEN" unless @apikey
   end
   
   def uri(*parts)
