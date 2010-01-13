@@ -42,7 +42,7 @@ module Stella::Engine
       # main thread which Benelux.update_global_timeline does not touch.
       tt = Benelux.thread_timeline
       
-      #puts tt.messages.filter(:kind => :log)
+      puts tt.messages.filter(:kind => :log)
       
       failed = tt.stats.group(:failed).merge
       total = tt.stats.group(:do_request).merge
