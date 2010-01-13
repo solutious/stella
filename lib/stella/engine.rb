@@ -1,9 +1,26 @@
 
-
 module Stella::Engine
   @service = nil
   class << self
     attr_accessor :service
+  end
+  class Log < Storable
+    field  :stamp
+    field  :uniqueid
+    field :clientid
+    field :planid
+    field :caseid
+    field :reqid
+    field :httpmethod
+    field :httpstatus
+    field  :uri     
+    def initialize(stamp, uniqueid, clientid, planid,
+                   caseid, reqid, httpmethod, httpstatus,
+                   uri, params, headers)     
+      @stamp, @uniqueid, @clientid, @planid = stamp, uniqueid, clientid, planid    
+      @caseid, @reqid, @httpmethod, @httpstatus = caseid, reqid, httpmethod, httpstatus                
+      @uri, @params, @headers = uri, params, headers
+    end
   end
   module Base
     extend self
