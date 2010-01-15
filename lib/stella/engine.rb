@@ -5,22 +5,20 @@ module Stella::Engine
     attr_accessor :service
   end
   class Log < Storable
-    field  :stamp
-    field  :uniqueid
+    include Selectable::Object
+    field :stamp
+    field :uniqueid
     field :clientid
     field :planid
     field :caseid
     field :reqid
     field :httpmethod
     field :httpstatus
-    field  :uri     
-    def initialize(stamp, uniqueid, clientid, planid,
-                   caseid, reqid, httpmethod, httpstatus,
-                   uri, params, headers)     
-      @stamp, @uniqueid, @clientid, @planid = stamp, uniqueid, clientid, planid    
-      @caseid, @reqid, @httpmethod, @httpstatus = caseid, reqid, httpmethod, httpstatus                
-      @uri, @params, @headers = uri, params, headers
-    end
+    field :uri     
+    field :params
+    field :headers
+    field :response_headers
+    field :response_body
   end
   module Base
     extend self

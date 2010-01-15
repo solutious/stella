@@ -7,18 +7,19 @@ module Stella::Engine
     def run(plan, opts={})
       opts = process_options! plan, opts
       
-      if Stella::Engine.service
-        Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create opts
-      end
-      
       Stella.ld "OPTIONS: #{opts.inspect}"
       Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       
       client = Stella::Client.new opts[:hosts].first, 1, opts
       client.add_observer(self)
-      
+            
       client.enable_nowait_mode if opts[:nowait]
+      
+      if Stella::Engine.service
+        Stella::Engine.service.testplan_sync plan
+        Stella::Engine.service.testrun_create opts
+        Stella::Engine.service.client_create client.digest, :index => client.index
+      end
       
       Stella.stdout.info2 $/, "Starting test...", $/
       
@@ -42,17 +43,17 @@ module Stella::Engine
       # main thread which Benelux.update_global_timeline does not touch.
       tt = Benelux.thread_timeline
       
-      puts tt.messages.filter(:kind => :log)
-      
       failed = tt.stats.group(:failed).merge
       total = tt.stats.group(:do_request).merge
       
       if Stella::Engine.service
+        data = tt.messages.filter(:kind => :log).to_json
+        Stella::Engine.service.client_log client.digest, data
         Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
                                                :failed => failed.n,
                                                :duration => test_time
       end
-      
+      p 1
       failed == 0
     end
     
@@ -67,14 +68,15 @@ module Stella::Engine
     
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       log = Stella::Engine::Log.new Time.now.to_f, container.unique_id, client_id,
-                                    'testrunid',
-                                    usecase.digest.short, req.digest.short,
+                                    'testplanid',
+                                    usecase.digest, req.digest,
                                     req.http_method, container.status, uri,
-                                    params, headers
-      Benelux.thread_timeline.add_message log.to_json,
-       :status => container.status,
-       :kind => :log
-       
+                                    params, headers, 
+                                    container.response.header.dump, 
+                                    container.response.body.dump
+
+      Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
+      
       msg = '  %-6s %-53s ' % [req.http_method, uri]
       msg << container.status.to_s if Stella.stdout.lev == 1
       Stella.stdout.info msg

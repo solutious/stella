@@ -13,17 +13,19 @@ module Stella
     include Gibbler::Complex
     include Observable
     
-    attr_reader :client_id
+    attr_reader :index
     attr_accessor :base_uri
     attr_accessor :proxy
     
-    def initialize(base_uri=nil, client_id=1, opts={})
+    gibbler :opts, :index, :base_uri, :proxy, :nowait
+    
+    def initialize(base_uri=nil, index=1, opts={})
       opts = {
         :'no-templates' => false
       }.merge! opts
       @opts = opts
-      @base_uri, @client_id = base_uri, client_id
-      #@cookie_file = File.new("cookies-#{client_id}", 'w')
+      @base_uri, @index = base_uri, index
+      #@cookie_file = File.new("cookies-#{index}", 'w')
       @proxy = OpenStruct.new
     end
     def execute(usecase, &stat_collector)
@@ -81,7 +83,7 @@ module Stella
           Benelux.add_thread_tags :retry => counter
           Benelux.add_thread_tags :stella_id => stella_id
           
-          container.unique_id = stella_id[0..10]
+          container.unique_id = stella_id
           
           params['__stella'] = container.unique_id unless @opts[:'no-param']
           headers['X-Stella-ID'] = container.unique_id unless @opts[:'no-header']

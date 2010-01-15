@@ -25,29 +25,6 @@ class Stella::Service
       raise ex unless ex.res.status == 404
       false
     end
-    def testrun_create(opts={})
-      raise NoTestplanSelected unless @tid
-      req = uri('v1', 'testrun', "create.json")
-      params = {
-        :tid => @tid,
-        :start_time => Stella::START_TIME
-      }.merge! opts
-      res = send_request :post, req, params
-      obj = JSON.parse res.content
-      Stella.ld "CREATED TRUN: #{obj.inspect}"
-      @runid = obj['digest']
-    end
-    def testrun_summary(opts={})
-      raise NoTestrunSelected unless @runid
-      req = uri('v1', 'testrun', 'summary', "create.json")
-      params = {
-        :runid => @runid
-      }.merge! opts
-      res = send_request :post, req, params
-      obj = JSON.parse res.content
-      Stella.ld "CREATED SUMMARY: #{obj.inspect}"
-      obj
-    end
     def testplan_create(desc, opts={})
       req = uri('v1', 'testplan', "create.json")
       params = {
@@ -82,6 +59,51 @@ class Stella::Service
       res = send_request :post, req, params
       obj = JSON.parse res.content
       @rtid = obj['digest']
+    end
+    def testrun_create(opts={})
+      raise NoTestplanSelected unless @tid
+      req = uri('v1', 'testrun', "create.json")
+      params = {
+        :tid => @tid,
+        :start_time => Stella::START_TIME
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "CREATED TRUN: #{obj.inspect}"
+      @runid = obj['digest']
+    end
+    def testrun_summary(opts={})
+      raise NoTestrunSelected unless @runid
+      req = uri('v1', 'testrun', 'summary', "create.json")
+      params = {
+        :runid => @runid
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "CREATED SUMMARY: #{obj.inspect}"
+      @runid
+    end
+    def client_create(clientid, opts={})
+      raise NoTestrunSelected unless @runid
+      req = uri('v1', 'client', "create.json")
+      params = {
+        :runid  => @runid,
+        :clientid  => clientid
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      @rtid = obj['digest']
+    end
+    def client_log(clientid, data, opts={})
+      raise NoTestrunSelected unless @runid
+      req = uri('v1', 'client', clientid, 'log.json')
+      params = {
+        :data => data
+      }.merge! opts
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "LOGGED: #{obj.inspect}"
+      obj
     end
     # Returns true if the testplan was created. 
     # Otherwise false if it already exists.
