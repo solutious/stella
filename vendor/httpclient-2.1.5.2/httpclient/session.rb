@@ -619,7 +619,7 @@ class HTTPClient
         end
       end
       if @agent_name
-        req.header.set('User-Agent', "#{@agent_name} #{LIB_NAME}")
+        req.header.set('User-Agent', "#{@agent_name}")
       end
       if @from
         req.header.set('From', @from)
