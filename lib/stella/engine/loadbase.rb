@@ -81,7 +81,7 @@ module Stella::Engine
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
         Stella.stdout.info $/, "Done" 
       rescue Interrupt
-        Stella.stdout.nstatus "Stopping test"
+        Stella.stdout.info $/, "Stopping test"
         Stella.abort!
         @threads.each { |t| t.join } unless @threads.nil? || @threads.empty? # wait
       rescue => ex
