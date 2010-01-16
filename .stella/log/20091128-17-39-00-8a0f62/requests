@@ -1,7 +1,0 @@
-1259429941.45674; vanya.local; ec951092; 5776cc; ff7e03; GET; 200; http://localhost:3114/listings.yaml; ; ; 886c543232
-1259429941.48202; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1000.yaml; path=examples/dynamic/hello.txt; ; 84df958066
-1259429941.48588; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1000.yaml; path=examples/dynamic/hello.txt; ; 45b4d7d6b3
-1259429941.48951; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1002.yaml; path=examples/dynamic/hello.txt; ; 0c007a918c
-1259429941.49602; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1002.yaml; path=examples/dynamic/hello.txt; ; 38ec1c43db
-1259429941.50597; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1002.yaml; path=examples/dynamic/hello.txt; ; c202ff1fac
-1259429941.51001; vanya.local; ec951092; 5776cc; 2d6494; GET; 200; http://localhost:3114/listing/1001.yaml; path=examples/dynamic/hello.txt; ; aef8db7d79
