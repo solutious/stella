@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::SyncLogger [Blame Stella for breaking your web applications.]</title>
+    <title>: Stella::SyncLogger [Blame Stella for breaking your web application!]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -50,37 +50,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000219">print</a></li>
-              <li><a href="#M000220">puts</a></li>
+              <li><a href="#M000231">print</a></li>
+              <li><a href="#M000232">puts</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000219'>
-                <a name='M000219'>      </a>
+              <div class='method public-instance' id='method-M000231'>
+                <a name='M000231'>      </a>
                 <div class='synopsis'>
                   <span class='name'>print</span>
                   <span class='arguments'>(level, *msg)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000219-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000231-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000219-source'>     <span class="ruby-comment cmt"># File lib/stella/logger.rb, line 120</span>&#x000A;120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print</span>(<span class="ruby-identifier">level</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;121:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">level</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@lev</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">disabled?</span>&#x000A;122:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { &#x000A;123:         <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">print</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> &#x000A;124:         <span class="ruby-identifier">flush</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">autoflush?</span>&#x000A;125:       }&#x000A;126:       <span class="ruby-keyword kw">true</span>&#x000A;127:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000231-source'>     <span class="ruby-comment cmt"># File lib/stella/logger.rb, line 120</span>&#x000A;120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print</span>(<span class="ruby-identifier">level</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;121:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">level</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@lev</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">disabled?</span>&#x000A;122:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { &#x000A;123:         <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">print</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> &#x000A;124:         <span class="ruby-identifier">flush</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">autoflush?</span>&#x000A;125:       }&#x000A;126:       <span class="ruby-keyword kw">true</span>&#x000A;127:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000220'>
-                <a name='M000220'>      </a>
+              <div class='method public-instance' id='method-M000232'>
+                <a name='M000232'>      </a>
                 <div class='synopsis'>
                   <span class='name'>puts</span>
                   <span class='arguments'>(level, *msg)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000220-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000232-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000220-source'>     <span class="ruby-comment cmt"># File lib/stella/logger.rb, line 129</span>&#x000A;129:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">level</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;130:       <span class="ruby-comment cmt">#Stella.ld [level, @lev, msg]</span>&#x000A;131:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">level</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@lev</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">disabled?</span>&#x000A;132:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { &#x000A;133:         <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> &#x000A;134:         <span class="ruby-identifier">flush</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">autoflush?</span>&#x000A;135:       }&#x000A;136:       <span class="ruby-keyword kw">true</span>&#x000A;137:     <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000232-source'>     <span class="ruby-comment cmt"># File lib/stella/logger.rb, line 129</span>&#x000A;129:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">level</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span>)&#x000A;130:       <span class="ruby-comment cmt">#Stella.ld [level, @lev, msg]</span>&#x000A;131:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">level</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@lev</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">disabled?</span>&#x000A;132:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { &#x000A;133:         <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">msg</span> &#x000A;134:         <span class="ruby-identifier">flush</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">autoflush?</span>&#x000A;135:       }&#x000A;136:       <span class="ruby-keyword kw">true</span>&#x000A;137:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

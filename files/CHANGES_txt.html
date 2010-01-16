@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: CHANGES.txt [Blame Stella for breaking your web applications.]</title>
+    <title>File: CHANGES.txt [Blame Stella for breaking your web application!]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2009-12-09 15:51:37 -0500</span>
+          <span class='datetime'>2010-01-16 16:17:46 -0500</span>
         </div>
       </div>
       <div id='content'>
@@ -41,17 +41,82 @@
             STELLA, CHANGES
             </p>
             <p>
-            #### 0.8.0 (2009-12-??) ###############################
+            #### 0.8.X (XXXX-XX-XX) ###############################
+            </p>
+            <ul>
+            <li>TODO: Force response block content type.
+            
+            </li>
+            <li>TODO: Add assert methods to response blocks (reconsider)
+            
+            </li>
+            <li>TODO: Add option to dump full request/response output to a file by client
+            
+            </li>
+            <li>TODO: review cooking handling. Not always sent automatically.
+            
+            </li>
+            <li>TODO: review :variables in URI elements
+            
+            </li>
+            <li>TODO: Stella::Testrun (no local analog for runid so it&#8217;s set by the
+            service)
+            
+            </li>
+            <li>TODO: global responses
+            
+            </li>
+            <li>TODO: request block conditions.
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.8.0 (2010-01-16) ###############################
+            </p>
+            <p>
+            NOTE: The configuration language changed slightly in this release. See the
+            README for more information on what needs to be updated.
             </p>
             <ul>
             <li>FIXED: HTTP auth failures
             
             </li>
-            <li>FIXED: Request timeouts shold count towards failures
+            <li>FIXED: Request timeouts should count towards failures
             
             </li>
             <li>FIXED: <a href="../classes/Stella/Client.html">Stella::Client</a> ID was
             changing between requests in certain conditions
+            
+            </li>
+            <li>FIXED: HTTP delete now works correctly
+            
+            </li>
+            <li>FIXED: Missing rsequential method in Container
+            
+            </li>
+            <li>FIXED: Don&#8217;t override user agent header when specified
+            
+            </li>
+            <li>FIXED: variables testplan example.
+            
+            </li>
+            <li>FIXED: Print reports again when load test is interrupted
+            
+            </li>
+            <li>FIXED: Sporadic ERB template error under high concurrency
+            
+            </li>
+            <li>CHANGE: A proper message displayed when no host specified
+            
+            </li>
+            <li>CHANGE: Don&#8217;t append httpclient info to User-Agent header
+            
+            </li>
+            <li>CHANGE: param and header helper methods now return strings instead of
+            Procs.
+            
+            </li>
+            <li>CHANGE: Verbosity level 2 now prints only params, 3 w/ headers, 4 w/ body
             
             </li>
             <li>ADDED: follow responses can contain definition blocks
@@ -63,16 +128,7 @@
             <li>ADDED: Support for specifying timeouts
             
             </li>
-            <li>TODO: Replace runtime procs with string templates
-            
-            </li>
-            <li>TODO: review cooking handling. Not always sent automatically.
-            
-            </li>
-            <li>TODO: global responses
-            
-            </li>
-            <li>TODO: review :variables in URI elements
+            <li>ADDED: Friendly error for empty request configs
             
             </li>
             </ul>
@@ -93,7 +149,7 @@
             
             </li>
             <li>CHANGE: Global variables now implemented in <a
-            href="../classes/Stella/Testplan.html#M000222">Stella::Testplan.global</a>
+            href="../classes/Stella/Testplan.html#M000248">Stella::Testplan.global</a>
             and can be used like usecase and request resources.
             
             </li>
@@ -105,14 +161,14 @@
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000070">Stella::Data::Helpers#read_file</a>
+            href="../classes/Stella/Data/Helpers.html#M000071">Stella::Data::Helpers#read_file</a>
             
             </li>
             <li>ADDED: Stella::Data::Helpers#resequential
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000071">Stella::Data::Helpers#path</a>
+            href="../classes/Stella/Data/Helpers.html#M000072">Stella::Data::Helpers#path</a>
             
             </li>
             <li>ADDED: no-param, no-header options

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Data::HTTP::Request [Blame Stella for breaking your web applications.]</title>
+    <title>: Stella::Data::HTTP::Request [Blame Stella for breaking your web application!]</title>
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -55,6 +55,7 @@
               <li><a href="#M000054">content_type</a></li>
               <li><a href="#M000067">cookies</a></li>
               <li><a href="#M000053">desc</a></li>
+              <li><a href="#M000068">freeze</a></li>
               <li><a href="#M000048">has_body?</a></li>
               <li><a href="#M000058">header</a></li>
               <li><a href="#M000057">headers</a></li>
@@ -177,6 +178,19 @@
                     [show source]
                   </a>
                   <pre id='M000053-source'>    <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 66</span>&#x000A;66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">desc</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;67:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">description</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;68:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">description</span>&#x000A;69:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000068'>
+                <a name='M000068'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>freeze</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000068-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000068-source'>     <span class="ruby-comment cmt"># File lib/stella/data/http.rb, line 145</span>&#x000A;145:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;146:       <span class="ruby-ivar">@params</span> = <span class="ruby-identifier">convert_values_to_templates</span> <span class="ruby-ivar">@params</span>&#x000A;147:       <span class="ruby-ivar">@headers</span> = <span class="ruby-identifier">convert_values_to_templates</span> <span class="ruby-ivar">@headers</span>&#x000A;148:       <span class="ruby-keyword kw">super</span>&#x000A;149:       <span class="ruby-keyword kw">self</span>&#x000A;150:     <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000048'>
