@@ -277,6 +277,7 @@ class Stella::Client
     end
     
     
+    
     # NOTE: This is global across all users
     def sequential(*args)
       if Symbol === args.first
@@ -318,6 +319,51 @@ class Stella::Client
         value
       
     end
+    
+    
+    # NOTE: This is global across all users
+    def rsequential(*args)
+      if Symbol === args.first
+        input, index = *args
+      elsif Array === args.first || args.size == 1
+        input = args.first
+      else
+        input = args
+      end
+      
+        if @rsequential_value[input.object_id]
+          value = @rsequential_value[input.object_id]
+        else
+          value = case input.class.to_s
+          when "Symbol"
+            ret = resource(input)
+            ret
+          when "Array"
+            input
+          when "Range"
+            input.to_a
+          when "Proc"
+            input.call
+          end
+          digest = value.object_id
+          if value.is_a?(Array)
+            idx = Stella::Client::Container.rsequential_offset(digest, value.size-1)
+            value = value[ idx ] 
+            Stella.ld "SELECTED(RSEQ): #{value} #{idx} #{input} #{digest}"
+          end
+          
+          # I think this needs to be updated for global_sequential:
+          @rsequential_value[input.object_id] = value
+        end
+        # The resource may be an Array of Arrays (e.g. a CSV file)
+        if value.is_a?(Array) && !index.nil?
+          value = value[ index ] 
+          Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
+        end
+        value
+        
+    end
+    
     
   end
   
