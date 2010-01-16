@@ -230,9 +230,8 @@ module Stella
       newh = {}
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
-        v = container.instance_eval &v if v.is_a?(Proc)
         unless @opts[:'no-templates']
-          v = container.parse_template v if String === v
+          v = container.parse_template v
         end
         v = extra.call(v) unless extra.nil?
         newh[n] = v

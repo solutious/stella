@@ -45,6 +45,18 @@ module Stella
   end
 end
 
+class Stella::Template
+  include Gibbler::String
+  attr_reader :src
+  def initialize(src)
+    src = src.to_s
+    @src, @template = src, ERB.new(src)
+  end
+  def result(binding)
+    @template.result(binding)
+  end
+  def to_s() src end
+end
 
 module Stella
   extend self

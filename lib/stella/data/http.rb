@@ -142,6 +142,19 @@ module Stella::Data::HTTP
       header[:Cookie] 
     end
     
+    def freeze
+      @params = convert_values_to_templates @params
+      @headers = convert_values_to_templates @headers
+      super
+      self
+    end
+    
+    private 
+     def convert_values_to_templates(hash)
+       updated = {}
+       hash.each_pair { |k,v| updated[k] = Stella::Template.new v }
+       updated
+     end
   end
   
 end

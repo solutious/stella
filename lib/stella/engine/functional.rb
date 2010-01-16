@@ -53,7 +53,7 @@ module Stella::Engine
                                                :failed => failed.n,
                                                :duration => test_time
       end
-      p 1
+      
       failed == 0
     end
     

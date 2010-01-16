@@ -86,11 +86,10 @@ class Stella::Client
       # ERB BUG?: Under heavy threading, some calls
       # produce the error:
       # wrong number of arguments(1 for 0)
-      template = ERB.new(t)
-      v = template.result(binding)  
+      v = t.result(binding)  
     rescue => ex
       Stella.ld ex.message, ex.backtrace
-      t
+      t.to_s
     end
     
     def doc
