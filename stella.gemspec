@@ -1,8 +1,8 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.8.0.900"
-  s.summary = "Blame Stella for breaking your web applications."
+  s.version = "0.8.0.000"
+  s.summary = "Blame Stella for breaking your web application!"
   s.description = s.summary
   s.author = "Delano Mandelbaum"
   s.email = "delano@solutious.com"
