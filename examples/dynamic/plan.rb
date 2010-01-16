@@ -37,7 +37,7 @@ usecase "Dynamic Data" do
   get "/listing/:lid.yaml", "Sequential" do
     param :lid => sequential(:listing_ids)
     response 200 do
-      #repeat 5
+      repeat 5
     end
   end
   
@@ -45,7 +45,7 @@ usecase "Dynamic Data" do
   get "/listing/:lid.yaml", "Reverse Sequential" do
     param :lid => rsequential(:listing_ids)
     response 200 do
-      #repeat 5
+      repeat 5
     end
   end
  
@@ -53,7 +53,7 @@ usecase "Dynamic Data" do
   get "/listing/:lid.yaml", "Random" do
     param :lid => random(:listing_ids)
     response 200 do
-      #repeat 5
+      repeat 5
     end
   end
    

@@ -242,46 +242,39 @@ class Stella::Client
     end
     
     def random(*args)
-      if Symbol === args.first
-        input, index = *args
-      elsif Array === args.first || args.size == 1
-        input = args.first
+      input, idxcol = *std_arg_processor(*args)
+    
+      if @random_value[input.object_id]
+        value = @random_value[input.object_id]
       else
-        input = args
+        value = case input.class.to_s
+        when "Symbol"
+          resource(input)
+        when "Array"
+          input
+        when "Range"
+          input.to_a
+        when "Proc"
+          input.call
+        when "Fixnum"
+          Stella::Utils.strand( input )
+        when "NilClass"
+          Stella::Utils.strand( rand(100) )
+        end
+        raise Stella::Testplan::Usecase::UnknownResource, input if value.nil?
+        Stella.ld "RANDVALUES: #{input} #{value.class} #{value.inspect}"
+        value = value[ rand(value.size) ] if value.is_a?(Array)
+        Stella.ld "SELECTED: #{value.class} #{value} "
+        @random_value[input.object_id] = value
       end
-        
       
-        if @random_value[input.object_id]
-          value = @random_value[input.object_id]
-        else
-          value = case input.class.to_s
-          when "Symbol"
-            resource(input)
-          when "Array"
-            input
-          when "Range"
-            input.to_a
-          when "Proc"
-            input.call
-          when "Fixnum"
-            Stella::Utils.strand( input )
-          when "NilClass"
-            Stella::Utils.strand( rand(100) )
-          end
-          raise Stella::Testplan::Usecase::UnknownResource, input if value.nil?
-          Stella.ld "RANDVALUES: #{input} #{value.class} #{value.inspect}"
-          value = value[ rand(value.size) ] if value.is_a?(Array)
-          Stella.ld "SELECTED: #{value.class} #{value} "
-          @random_value[input.object_id] = value
-        end
-        
-        # The resource may be an Array of Arrays (e.g. a CSV file)
-        if value.is_a?(Array) && !index.nil?
-          value = value[ index ] 
-          Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
-        end
-        
-        value
+      # The resource may be an Array of Arrays (e.g. a CSV file)
+      if value.is_a?(Array) && !idxcol.nil?
+        value = value[ idxcol ] 
+        Stella.ld "SELECTED INDEX: #{idxcol} #{value.inspect} "
+      end
+      
+      value
       
     end
     
@@ -289,16 +282,8 @@ class Stella::Client
     
     # NOTE: This is global across all users
     def sequential(*args)
-      if Symbol === args.first
-        input, index = *args
-      elsif Array === args.first || args.size == 1
-        input = args.first
-      else
-        input = args
-      end
-      
-      Stella.stdout.li [:seq, @sequential_value, input, @sequential_value[input.object_id]]
-      
+      input, idxcol = *std_arg_processor(*args)
+            
       if @sequential_value[input.object_id]
         value = @sequential_value[input.object_id]
       else
@@ -315,64 +300,74 @@ class Stella::Client
         end
         digest = value.object_id
         if value.is_a?(Array)
-          index = Stella::Client::Container.sequential_offset(digest, value.size-1)
-          value = value[ index ] 
+          idxrow = Stella::Client::Container.sequential_offset(digest, value.size-1)
+          value = value[ idxrow ] 
+          Stella.ld "SELECTED(SEQ): #{value} #{idxrow} #{input} #{digest}"
         end
-        Stella.ld "SELECTED(SEQ): #{value} #{index} #{input} #{digest}"
         # I think this needs to be updated for global_sequential:
         @sequential_value[input.object_id] = value
       end
       # The resource may be an Array of Arrays (e.g. a CSV file)
-      if value.is_a?(Array) && !index.nil?
-        value = value[ index ] 
-        Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
+      if value.is_a?(Array) && !idxcol.nil?
+        value = value[ idxcol ] 
+        Stella.ld "SELECTED INDEX: #{idxcol} #{value.inspect} "
+      end
+      
+      value
+      
+    end
+    
+
+    # NOTE: This is global across all users
+    def rsequential(*args)
+      input, idxcol = *std_arg_processor(*args)
+      
+      if @rsequential_value[input.object_id]
+        value = @rsequential_value[input.object_id]
+      else
+        value = case input.class.to_s
+        when "Symbol"
+          ret = resource(input)
+          ret
+        when "Array"
+          input
+        when "Range"
+          input.to_a
+        when "Proc"
+          input.call
+        end
+        digest = value.object_id
+        if value.is_a?(Array)
+          idxrow = Stella::Client::Container.rsequential_offset(digest, value.size-1)
+          value = value[ idxrow ] 
+          Stella.ld "SELECTED(RSEQ): #{value} #{idxrow} #{input} #{digest}"
+        end
+        
+        # I think this needs to be updated for global_sequential:
+        @rsequential_value[input.object_id] = value
+      end
+      # The resource may be an Array of Arrays (e.g. a CSV file)
+      if value.is_a?(Array) && !idxcol.nil?
+        value = value[ idxcol ] 
+        Stella.ld "SELECTED INDEX: #{idxcol} #{value.inspect} "
       end
       value
       
     end
     
     
-    # NOTE: This is global across all users
-    def rsequential(*args)
+    private 
+    
+    def std_arg_processor(*args)
+      input, idxcol = nil, nil
       if Symbol === args.first
-        input, index = *args
+        input, idxcol = *args
       elsif Array === args.first || args.size == 1
         input = args.first
       else
         input = args
       end
-      
-        if @rsequential_value[input.object_id]
-          value = @rsequential_value[input.object_id]
-        else
-          value = case input.class.to_s
-          when "Symbol"
-            ret = resource(input)
-            ret
-          when "Array"
-            input
-          when "Range"
-            input.to_a
-          when "Proc"
-            input.call
-          end
-          digest = value.object_id
-          if value.is_a?(Array)
-            idx = Stella::Client::Container.rsequential_offset(digest, value.size-1)
-            value = value[ idx ] 
-            Stella.ld "SELECTED(RSEQ): #{value} #{idx} #{input} #{digest}"
-          end
-          
-          # I think this needs to be updated for global_sequential:
-          @rsequential_value[input.object_id] = value
-        end
-        # The resource may be an Array of Arrays (e.g. a CSV file)
-        if value.is_a?(Array) && !index.nil?
-          value = value[ index ] 
-          Stella.ld "SELECTED INDEX: #{index} #{value.inspect} "
-        end
-        value
-        
+      [input, idxcol]
     end
     
     

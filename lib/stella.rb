@@ -88,7 +88,7 @@ module Stella
   def ld(*msg)
     return unless Stella.debug?
     prefix = "D(#{Thread.current.object_id}):  "
-    Stella.stdout.info "#{prefix}" << msg.join("#{$/}#{prefix}")
+    Stella.stdout.info("#{prefix}#{msg.join("#{$/}#{prefix}")}".colour(:yellow))
   end
   
   def sysinfo
