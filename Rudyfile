@@ -10,7 +10,7 @@ machines do
   end
   
   env :stage do
-                           
+                      
     role :app do             
       positions 2      
       user :root           
@@ -19,8 +19,8 @@ machines do
   
     role :gen do
       user :root
-      size 'm1.large'
-      ami 'ami-7133d018'
+      size 'm1.small'
+      ami 'ami-212ccf48'
     end
     
     role :demo do
@@ -146,9 +146,14 @@ routines do
   
   install_gem do
     before :package_gem
+    local do
+      cd 'pkg'
+      gems = unsafely {ls "*gem"}
+      $gemfile = gems.first
+    end
     remote :root do
-      file_upload "pkg/stella-#{Stella::VERSION}.gem", "/tmp/"
-      gem_install "/tmp/stella-#{Stella::VERSION}.gem"
+      file_upload "pkg/#{$gemfile}", "/tmp/"
+      gem_install "/tmp/#{$gemfile}"
     end
 
   end
