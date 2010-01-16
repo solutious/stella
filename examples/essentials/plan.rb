@@ -122,8 +122,8 @@ usecase 65, "Simple search" do
     # to be used, but we could also specify sequential
     # or reverse sequential values (see XML API).
     #
-    param :what  => "<%= random(:search_terms) =>"
-    param :where => "<%= random(['Toronto', 'Vancouver', 'Montreal']) %>"
+    param :what  => random(:search_terms)
+    param :where => random(['Toronto', 'Vancouver', 'Montreal'])
     
     # Each request can also include one or more 
     # optional response blocks. These blocks determine
@@ -214,7 +214,7 @@ usecase 25, "YAML API" do
     # vuser will have its own copy of the Array and
     # iterate through it independently.
     #
-    param :lid => "<%= sequential(:listing_ids) %>"
+    param :lid => sequential(:listing_ids)
     
     # We can use response blocks to affect behaviour 
     # the user. Here we specify that every virtual
@@ -234,9 +234,9 @@ usecase 10, "Self-serve API" do
   # identical to the ones you've seen above.
   #
   post "/listing/add", "Add a listing" do
-    param :name => "<%= random(8) %>"
-    param :city => "<%= random(['Toronto', 'Vancouver', 'Montreal']) %>"
-    param :logo => "<%= file('logo.png') %>"
+    param :name => random(8)
+    param :city => random(['Toronto', 'Vancouver', 'Montreal'])
+    param :logo => file('logo.png')
     response 302 do
       repeat 3
     end

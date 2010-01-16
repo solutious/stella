@@ -25,7 +25,7 @@ See the README for more information on what needs to be updated.
 * FIXED: Don't override specified user agent header
 * CHANGE: A proper message displayed when no host specified
 * CHANGE: Don't append httpclient info to User-Agent header
-* CHANGE: Proc values are no longer supported in configuration (params and headers)
+* CHANGE: param and header helper methods now return strings instead of Procs.
 * CHANGE: Verbosity level 2 now prints only params, 3 w/ headers, 4 w/ body
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI

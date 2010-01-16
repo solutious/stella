@@ -50,12 +50,17 @@ class Stella::Template
   attr_reader :src
   def initialize(src)
     src = src.to_s
-    @src, @template = src, ERB.new(src)
+    @src, @template = src, ERB.new(Stella::Template.to_templ(src))
   end
   def result(binding)
     @template.result(binding)
   end
   def to_s() src end
+  private
+  def self.to_templ(str)
+    return str if str.match(/\A<%.+%>\z/)
+    "<%= #{str} %>"
+  end
 end
 
 module Stella

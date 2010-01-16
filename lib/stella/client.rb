@@ -54,7 +54,7 @@ module Stella
           
           params = prepare_params(container, req.params)
           headers = prepare_headers(container, req.headers)
-        
+          
           container.params, container.headers = params, headers
           
           uri = build_request_uri req.uri, params, container

@@ -29,7 +29,7 @@ usecase "Temporary Cookies" do
   
   # Here the cookie will contain the search term
   get "/search", "Search" do
-    param :what  => "<%= random(['Big', 'Beads', 'Joe']) %>"
+    param :what  => random(['Big', 'Beads', 'Joe'])
     response do
       puts "COOKIE: " << headers['Set-Cookie'].first
     end

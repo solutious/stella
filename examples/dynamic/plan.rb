@@ -35,26 +35,25 @@ usecase "Dynamic Data" do
   
   # Access each listing page in the order
   get "/listing/:lid.yaml", "Sequential" do
-    param :lid => '<%= sequential(:listing_ids) %>'
+    param :lid => sequential(:listing_ids)
     response 200 do
-      repeat 5
+      #repeat 5
     end
   end
   
   # Access each listing page in reverse order
   get "/listing/:lid.yaml", "Reverse Sequential" do
-    param :lid => '<%= rsequential(:listing_ids) %>'
-    
+    param :lid => rsequential(:listing_ids)
     response 200 do
-      repeat 5
+      #repeat 5
     end
   end
  
   # Access listing pages in random order
   get "/listing/:lid.yaml", "Random" do
-    param :lid => '<%= random(:listing_ids) %>'
+    param :lid => random(:listing_ids)
     response 200 do
-      repeat 5
+      #repeat 5
     end
   end
    

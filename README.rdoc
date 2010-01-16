@@ -1,6 +1,11 @@
-= Stella - 0.7 PREVIEW
+= Stella - 0.8 BETA
 
 <b>Blame Stella for breaking your web applications.</b>
+
+=== Important Information Regarding Your Digests
+
+<i>Digest calculation changed in the 0.7 release for Proc objects. See "News" below for more info.</i>
+
 
 == Features
 
@@ -36,7 +41,7 @@ Test plans are defined in the Ruby programming language. This makes it possible 
     usecase 65, "Simple search" do
   
       get "/", "Homepage" do
-        wait 1..5
+        wait 1..5                      # => 1 to 5 sec think-time
         response 200 do
           status                       # => 200
           headers['Content-Type']      # => ['text/html']
@@ -78,7 +83,22 @@ Test plans are defined in the Ruby programming language. This makes it possible 
     
 See examples/ for more. 
 
+== News
+
+=== 2010-01-16: sequential, random, rsequential etc... methods now return ERB-style templates instead of Procs
+
+Pre-0.8 would return a Proc that would be evaluated at request time:
+
+    get "/" do
+      param :salt => random(8)    # => "#<Proc0x13423c0 ...>"
+    end
     
+In 0.8 and beyond, the same configuration will return a String:
+
+    get "/" do
+      param :salt => random(8)    # => "<%= random(8) %>"
+    end
+
 == Installation
 
 Get it in one of the following ways:
