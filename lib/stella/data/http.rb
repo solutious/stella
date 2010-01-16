@@ -152,7 +152,15 @@ module Stella::Data::HTTP
     private 
      def convert_values_to_templates(hash)
        updated = {}
-       hash.each_pair { |k,v| updated[k] = Stella::Template.new v }
+       hash.each_pair { |k,v| 
+         if Proc === v
+           msg = "As of Stella 0.8, Procs are no longer supported as values#{$/}"
+           msg << "for parameters and headers (\"#{k}\" in \"#{description}\").#{$/}"
+           msg << "Use string templates instead. See the examples/ directory."
+           raise Stella::Error, msg
+         end
+         updated[k] = Stella::Template.new( v || '')
+       }
        updated
      end
   end
