@@ -86,33 +86,33 @@ module Stella::Engine
         Stella.stdout.info2 "     %s: %s" % pair
       end
       
-      Stella.stdout.info2 $/, '   ' << container.response.request.header.send(:request_line)
+      Stella.stdout.info3 $/, '   ' << container.response.request.header.send(:request_line)
       
       container.response.request.header.all.each do |pair|
-        Stella.stdout.info2 "   %s: %s" % pair
+        Stella.stdout.info3 "   %s: %s" % pair
       end
       
       if req.http_method == 'POST'
         cont = container.response.request.body.content
         if String === cont
-          Stella.stdout.info3('   ' << cont.split($/).join("#{$/}    "))
+          Stella.stdout.info4('   ' << cont.split($/).join("#{$/}    "))
         elsif HTTP::Message::Body::Parts === cont
           cont.parts.each do |part|
             if File === part
-              Stella.stdout.info3 "<#{part.path}>"
+              Stella.stdout.info4 "<#{part.path}>"
             else
-              Stella.stdout.info3 part
+              Stella.stdout.info4 part
             end
           end
         end
       end
       
       resh = container.response.header
-      Stella.stdout.info2 $/, '   HTTP/%s %3d %s' % [resh.http_version, resh.status_code, resh.reason_phrase]
+      Stella.stdout.info3 $/, '   HTTP/%s %3d %s' % [resh.http_version, resh.status_code, resh.reason_phrase]
       container.headers.all.each do |pair|
-        Stella.stdout.info2 "   %s: %s" % pair
+        Stella.stdout.info3 "   %s: %s" % pair
       end
-      Stella.stdout.info3 container.body.empty? ? '   [empty]' : container.body
+      Stella.stdout.info4 container.body.empty? ? '   [empty]' : container.body
       Stella.stdout.info2 $/
     end
     

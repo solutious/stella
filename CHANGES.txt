@@ -9,9 +9,10 @@ STELLA, CHANGES
 * TODO: review :variables in URI elements
 * TODO: Stella::Testrun (no local analog for runid so it's set by the service)
 * TODO: global responses
+* TODO: request block conditions. 
 
 
-#### 0.8.0 (2009-12-??) ###############################
+#### 0.8.0 (2010-01-??) ###############################
 
 NOTE: The configuration language changed slightly in this release. 
 See the README for more information on what needs to be updated. 
@@ -25,13 +26,13 @@ See the README for more information on what needs to be updated.
 * CHANGE: A proper message displayed when no host specified
 * CHANGE: Don't append httpclient info to User-Agent header
 * CHANGE: Proc values are no longer supported in configuration (params and headers)
+* CHANGE: Verbosity level 2 now prints only params, 3 w/ headers, 4 w/ body
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI
 * ADDED: Support for specifying timeouts
 
 
-* TODO: Replace runtime procs with string templates
-  * TODO: Look into ERB template issue. Call ERB.new before test starts. 
+* TODO: Look into ERB template issue. Call ERB.new before test starts. 
 
 
 #### 0.7.7 (2009-12-05) ###############################
