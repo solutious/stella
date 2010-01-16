@@ -24,6 +24,8 @@ See the README for more information on what needs to be updated.
 * FIXED: Missing rsequential method in Container
 * FIXED: Don't override specified user agent header
 * FIXED: variables testplan example. 
+* FIXED: Print reports again when load test is interrupted 
+* FIXED: Sporadic ERB template error under high concurrency
 * CHANGE: A proper message displayed when no host specified
 * CHANGE: Don't append httpclient info to User-Agent header
 * CHANGE: param and header helper methods now return strings instead of Procs.
@@ -32,9 +34,6 @@ See the README for more information on what needs to be updated.
 * ADDED: Support for specifying default path prefix on CLI
 * ADDED: Support for specifying timeouts
 * ADDED: Friendly error for empty request configs
-
-
-* TODO: Look into ERB template issue. Call ERB.new before test starts. 
 
 
 #### 0.7.7 (2009-12-05) ###############################
