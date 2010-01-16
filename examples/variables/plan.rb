@@ -26,7 +26,7 @@ usecase "Form Example" do
   
   # URI variables can also be specified with a dollar sign. 
   get "$uri/search" do
-    param :what => resource(:globalvar)
+    param :what => "<%= resource(:globalvar) %>"
     response do
       puts "  Global variable: " << resource(:globalvar)
       puts "  Usecase variable: " << resource(:uri)
