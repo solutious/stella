@@ -7,6 +7,8 @@ STELLA, CHANGES
 * TODO: Add option to dump full request/response output to a file by client
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: review :variables in URI elements
+* TODO: Stella::Testrun (no local analog for runid so it's set by the service)
+* TODO: global responses
 
 
 #### 0.8.0 (2009-12-??) ###############################
@@ -15,7 +17,10 @@ STELLA, CHANGES
 * FIXED: Request timeouts should count towards failures
 * FIXED: Stella::Client ID was changing between requests in certain conditions
 * FIXED: HTTP delete now works correctly
+* FIXED: Missing rsequential method in Container
+* FIXED: Don't override specified user agent header
 * CHANGE: A proper message displayed when no host specified
+* CHANGE: Don't append httpclient info to User-Agent header
 * ADDED: follow responses can contain definition blocks
 * ADDED: Support for specifying default path prefix on CLI
 * ADDED: Support for specifying timeouts
@@ -23,8 +28,6 @@ STELLA, CHANGES
 
 * TODO: Replace runtime procs with string templates
   * TODO: Look into ERB template issue. Call ERB.new before test starts. 
-* TODO: global responses
-
 
 
 #### 0.7.7 (2009-12-05) ###############################
