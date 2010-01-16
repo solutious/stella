@@ -287,7 +287,11 @@ class Testplan
     end
     
     def add_request(meth, *args, &blk)
-      raise "'#{meth}' block given in #{self.plan_path} with no URI" if args[0].nil?
+      if args[0].nil?
+        msg = "No URI given for request ##{@requests.size} "
+        msg << "#{meth} block in #{self.plan_path}"
+        raise Stella::Error, msg 
+      end
       req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args[0], &blk
       req.description = args[1] if args.size > 1 # Description is optional
       Stella.ld req

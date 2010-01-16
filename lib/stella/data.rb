@@ -4,7 +4,7 @@ module Stella::Data
     
   module Helpers
     
-    def resource(name)   to_templ(:resource, *args)   end
+    def resource(args)   to_templ(:resource, *args)   end
     
     # Can include glob
     #

@@ -34,7 +34,5 @@ usecase "Form Example" do
     end
   end
   
-  get 
-  
 end
 
