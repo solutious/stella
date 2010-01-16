@@ -52,7 +52,7 @@ Stella test plans are defined in subset of the Ruby programming language. They a
     end
     
     
-See examples/ and [Getting Started](http://solutious.com/projects/stella/getting-started/) for more information. 
+See the [examples/](http://github.com/solutious/stella/tree/0.8/examples/) directory and [Getting Started](http://solutious.com/projects/stella/getting-started/) for more information. 
 
 
 ### Running Tests
@@ -61,12 +61,13 @@ Stella is a command-line tool with two main commands: "verify" for integration t
 
     # Verify a test plan is defined correctly
     # by running a single user functional test.
-    $ stella verify -p examples/basic/plan.rb http://stellaaahhhh.com/
+    $ stella verify -p examples/essentials/plan.rb http://stellaaahhhh.com/
     
     # Generate load using the same test plan. 
-    $ stella generate -p examples/basic/plan.rb -c 50 http://stellaaahhhh.com/
+    $ stella generate -p examples/essentials/plan.rb -c 50 -d 10m http://stellaaahhhh.com/
     
 
+See <tt>$ stella -h</tt> and <tt>$ stella example</tt> for more info. 
 
 ## News
 
@@ -88,8 +89,8 @@ In 0.8 and beyond, the same configuration will return a String:
 
 Get it in one of the following ways:
      
-    $ gem install stella   --source=http://gemcutter.org/
-    $ sudo gem install stella   --source=http://gemcutter.org/
+    $ gem install stella --source=http://gemcutter.org/
+    $ sudo gem install stella --source=http://gemcutter.org/
     $ git clone git://github.com/solutious/stella.git
 
 You can also download via [tarball](http://github.com/solutious/stella/tarball/latest) or [zip](http://github.com/solutious/stella/zipball/latest). 
