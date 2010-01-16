@@ -2,26 +2,28 @@
 
 <b>Blame Stella for breaking your web applications.</b>
 
+Stella is an integration and load testing tool. It fits well into an agile development process because the configuration syntax is simple yet powerful and a single config can be used for both kinds of tests (integration and load). Stella runs at the protocol-level which means it generates HTTP requests and parses the responses but does not perform any browser simulation (see Caveats).
+
 === Important Information Regarding Your Digests
 
-<i>Digest calculation changed in the 0.7 release for Proc objects. See "News" below for more info.</i>
-
+<i>The testplan configuration syntax changed a little in 0.8. See "News" below for more info.</i>
 
 == Features
 
-* Realistic load simulation
-* Sophisticated response handling (with automatic HTML document parsing)
+* Sophisticated response handling 
+* Automatic parsing of HTML, XML, XHTML, YAML, and JSON response bodies
 * Dynamic variable replacement 
+* Support for testing multiple sites simultaneously
 
+== Caveats
 
-== PREVIEW NOTICE
+There are a few known limitations:
 
-This is an early preview of Stella. The following features are still under development (as of 2009-09-15):
-
-* Reporting of any kind. 
-* File uploads.
-* Documentation.
-
+* SHOW-STOPPER: An upper limit of around 200-300 concurrent virtual HTTP clients. There is a threading issue in the HTTPClient library which appears under high load. 
+* SHOW-STOPPER (for some): No support for browser or UI based tests (a la Watir or Selenium). If this is a show stopper for you, check out WatirGrid[http://github.com/90kts/watirgrid]
+* ANNOYING: File uploads do not work with some HTTP servers (WEBrick)
+* ANNOYING: Lack of documentation (see examples/ directory)
+* ANNOYING: Reporting is limited to log files and command-line output. You need to make your own graphs. 
 
 == Usage Example
 
@@ -35,53 +37,16 @@ This is an early preview of Stella. The following features are still under devel
     
 == Test Plan Example
 
+Every load testing tool worth its salt allows you to  Test plans are defined in the Ruby programming language. 
 
-Test plans are defined in the Ruby programming language. This makes it possible to define sophisticated logic to handle responses. They also typically contain more than one usecase which is important when simulating realistic load. In this example, 65% of virtual users will execute the first usecase and 35% will execute the second.
+This makes it possible to define sophisticated logic to handle responses. They also typically contain more than one usecase which is important when simulating realistic load. In this example, 65% of virtual users will execute the first usecase and 35% will execute the second.
 
-    usecase 65, "Simple search" do
-  
-      get "/", "Homepage" do
-        wait 1..5                      # => 1 to 5 sec think-time
-        response 200 do
-          status                       # => 200
-          headers['Content-Type']      # => ['text/html']
-          body                         # => <html>...
-          doc                          # => Nokigiri::HTML::Document
-        end
-      end
-  
-      get "/search", "Search Results" do
-        wait 2..5
-        param :what  => 'Sarsaparilla'
-        param :where => 'Lexington'
-        response 200 do
-          listing = doc.css('div.listing').first
-          set :lid, listing['id'].match(/(\d+)/)[0]
-        end
-      end
-      
-      get "/listing/:lid" do           # URIs can contain variables.
-        desc "Selected listing"        # This one will be replaced by
-        wait 1..8                      # the one stored in the previous
-      end                              # request.
-  
-    end
-
-    usecase 35, "YAML API" do
-    
-      resource :listing_ids, list('ids.csv')
-      
-      get "/listing/:lid.yaml" do
-        desc "Select listing"
-        param :lid => random(:listing_ids)
-        response 200 do
-          repeat 5
-        end
-      end
-
+    usecase "An Example Usecase" do
+      get '/'
     end
     
-See examples/ for more. 
+    
+See examples/ and getting-started[http://solutious.com/projects/stella/getting-started/] for more information. 
 
 == News
 
@@ -102,10 +67,12 @@ In 0.8 and beyond, the same configuration will return a String:
 == Installation
 
 Get it in one of the following ways:
+     
+    $ gem install stella   --source=http://gemcutter.org/
+    $ sudo gem install stella   --source=http://gemcutter.org/
+    $ git clone git://github.com/solutious/stella.git
 
-     $ gem install stella 
-     $ git clone git://github.com/solutious/stella.git
-     $ gem install solutious-stella --source http://gems.github.com
+You can also download via tarball[http://github.com/solutious/stella/tarball/latest] or zip[http://github.com/solutious/stella/zipball/latest]. 
 
 
 == More Information
@@ -113,7 +80,7 @@ Get it in one of the following ways:
 * Homepage[http://solutious.com/projects/stella]
 * Codes[http://github.com/solutious/stella]
 * RDocs[http://solutious.com/stella]
-* Stellaaahhhh[http://www.youtube.com/watch?v=jHHprvyl-Hc]
+* Stellaaahhhh[http://stellaaahhhh.com]
 
 
 == Credits
@@ -128,6 +95,16 @@ Get it in one of the following ways:
 * Dave L, the best intern money can't buy. 
 * Peter McCurdy for the feedback and bug fixes. 
 
+
+== Related Projects
+
+* WatirGrid[http://github.com/90kts/watirgrid]
+* Watir[http://watir.com/]
+* JMeter[http://jakarta.apache.org/jmeter/]
+* Tsung[http://tsung.erlang-projects.org/]
+* Grinder[http://grinder.sourceforge.net/]
+* Pylot[http://www.pylot.org/]
+* Trample[http://github.com/jamesgolick/trample]
 
 == License
 

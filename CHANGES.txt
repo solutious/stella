@@ -12,7 +12,7 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 
 
-#### 0.8.0 (2010-01-??) ###############################
+#### 0.8.0 (2010-01-16) ###############################
 
 NOTE: The configuration language changed slightly in this release. 
 See the README for more information on what needs to be updated. 
@@ -22,7 +22,7 @@ See the README for more information on what needs to be updated.
 * FIXED: Stella::Client ID was changing between requests in certain conditions
 * FIXED: HTTP delete now works correctly
 * FIXED: Missing rsequential method in Container
-* FIXED: Don't override specified user agent header
+* FIXED: Don't override user agent header when specified
 * FIXED: variables testplan example. 
 * FIXED: Print reports again when load test is interrupted 
 * FIXED: Sporadic ERB template error under high concurrency

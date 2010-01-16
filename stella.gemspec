@@ -58,6 +58,7 @@
   lib/stella/engine/loadbase.rb
   lib/stella/guidelines.rb
   lib/stella/logger.rb
+  lib/stella/service.rb
   lib/stella/testplan.rb
   lib/stella/utils.rb
   lib/stella/utils/httputil.rb
@@ -68,6 +69,7 @@
   support/useragents.txt
   tryouts/01_numeric_mixins_tryouts.rb
   tryouts/12_digest_tryouts.rb
+  tryouts/api/10_functional.rb
   tryouts/configs/failed_requests.rb
   tryouts/configs/global_sequential.rb
   tryouts/proofs/thread_queue.rb
