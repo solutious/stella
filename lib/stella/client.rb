@@ -16,10 +16,12 @@ module Stella
     attr_reader :index
     attr_accessor :base_uri
     attr_accessor :proxy
+    attr_accessor :created 
     
-    gibbler :opts, :index, :base_uri, :proxy, :nowait
+    gibbler :opts, :index, :base_uri, :proxy, :nowait, :created
     
     def initialize(base_uri=nil, index=1, opts={})
+      @created = Time.now.to_f
       opts = {
         :'no-templates' => false
       }.merge! opts
