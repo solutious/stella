@@ -52,8 +52,8 @@ end
 #about 'Public release to rubyforge'
 task 'publish:gem' => [:package] do |t|
   sh <<-end
-    rubyforge add_release -o Any -a CHANGES.txt -f -n README.rdoc #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.gem &&
-    rubyforge add_file -o Any -a CHANGES.txt -f -n README.rdoc #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.tgz 
+    rubyforge add_release -o Any -a CHANGES.txt -f -n README.md #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.gem &&
+    rubyforge add_file -o Any -a CHANGES.txt -f -n README.md #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.tgz 
   end
 end
 
@@ -64,7 +64,7 @@ Rake::RDocTask.new do |t|
 	t.options << '--line-numbers' <<  '-A cattr_accessor=object'
 	t.options << '--charset' << 'utf-8'
 	t.rdoc_files.include('LICENSE.txt')
-	t.rdoc_files.include('README.rdoc')
+	t.rdoc_files.include('README.md')
 	t.rdoc_files.include('CHANGES.txt')
 	#t.rdoc_files.include('Rudyfile')  # why is the formatting f'd?
 	t.rdoc_files.include('bin/*')
