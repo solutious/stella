@@ -1,5 +1,14 @@
 STELLA, CHANGES
 
+#### 0.8.X (XXXX-XX-XX) ###############################
+
+* TODO: Force response block content type. 
+* TODO: Add assert methods to response blocks (reconsider)
+* TODO: Add option to dump full request/response output to a file by client
+* TODO: review cooking handling. Not always sent automatically. 
+* TODO: review :variables in URI elements
+
+
 #### 0.8.0 (2009-12-??) ###############################
 
 * FIXED: HTTP auth failures
@@ -14,14 +23,7 @@ STELLA, CHANGES
 
 * TODO: Replace runtime procs with string templates
   * TODO: Look into ERB template issue. Call ERB.new before test starts. 
-* TODO: review cooking handling. Not always sent automatically. 
 * TODO: global responses
-* TODO: review :variables in URI elements
-* TODO: Add option to dump full request/response output to a file by client
-* TODO: Force response block content type. 
-* TODO: Add assert methods to response blocks
-* TODO: Add bone support
-* TODO: Single file per client debug output 
 
 
 

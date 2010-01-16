@@ -17,7 +17,7 @@
   
   s.add_dependency 'benelux',    '>= 0.5.3'
   s.add_dependency 'drydock',    '>= 0.6.8'
-  s.add_dependency 'gibbler',    '>= 0.7.1'
+  s.add_dependency 'gibbler',    '>= 0.7.3'
   s.add_dependency 'sysinfo',    '>= 0.7.1'
   s.add_dependency 'storable',   '>= 0.6.1'
   s.add_dependency 'nokogiri'
