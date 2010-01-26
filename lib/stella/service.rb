@@ -159,7 +159,7 @@ class Stella::Service
   
   def uri(*parts)
     uri = URI.parse @source
-    uri.path = '/api/' << parts.join( '/')
+    uri.path = '/stella/' << parts.join( '/')
     Stella.ld "SERVICE URI: #{uri}"
     uri
   end
