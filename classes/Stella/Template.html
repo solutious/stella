@@ -45,12 +45,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000287">new</a></li>
+              <li><a href="#M000279">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000288">result</a></li>
-              <li><a href="#M000289">to_s</a></li>
+              <li><a href="#M000280">result</a></li>
+              <li><a href="#M000281">to_s</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -76,44 +76,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000287'>
-                <a name='M000287'>      </a>
+              <div class='method public-class' id='method-M000279'>
+                <a name='M000279'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(src)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000287-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000279-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000287-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 51</span>&#x000A;51:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">src</span>)&#x000A;52:     <span class="ruby-identifier">src</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">to_s</span>&#x000A;53:     <span class="ruby-ivar">@src</span>, <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">src</span>, <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">to_templ</span>(<span class="ruby-identifier">src</span>))&#x000A;54:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000279-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 51</span>&#x000A;51:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">src</span>)&#x000A;52:     <span class="ruby-identifier">src</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">to_s</span>&#x000A;53:     <span class="ruby-ivar">@src</span>, <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">src</span>, <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">to_templ</span>(<span class="ruby-identifier">src</span>))&#x000A;54:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000288'>
-                <a name='M000288'>      </a>
+              <div class='method public-instance' id='method-M000280'>
+                <a name='M000280'>      </a>
                 <div class='synopsis'>
                   <span class='name'>result</span>
                   <span class='arguments'>(binding)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000288-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000280-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000288-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 55</span>&#x000A;55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;56:     <span class="ruby-ivar">@template</span>.<span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;57:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000280-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 55</span>&#x000A;55:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;56:     <span class="ruby-ivar">@template</span>.<span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;57:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000289'>
-                <a name='M000289'>      </a>
+              <div class='method public-instance' id='method-M000281'>
+                <a name='M000281'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000289-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000281-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000289-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 58</span>&#x000A;58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>() <span class="ruby-identifier">src</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000281-source'>    <span class="ruby-comment cmt"># File lib/stella.rb, line 58</span>&#x000A;58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>() <span class="ruby-identifier">src</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
