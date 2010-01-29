@@ -11,6 +11,9 @@ STELLA, CHANGES
 * TODO: global responses
 * TODO: request block conditions. 
 
+#### 0.8.1 (2010-??-??) ###############################
+
+* FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9
 
 #### 0.8.0 (2010-01-16) ###############################
 

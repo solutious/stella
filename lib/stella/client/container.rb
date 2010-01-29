@@ -95,18 +95,19 @@ class Stella::Client
     def doc
       return @doc unless @doc.nil?
       return nil if body.nil? || body.empty?
+      str = RUBY_VERSION >= "1.9.0" ? body.force_encoding("UTF-8") : body
       # NOTE: It's important to parse the document on every 
       # request because this container is available for the
       # entire life of a usecase. 
       @doc = case (@response.header['Content-Type'] || []).first
       when /text\/html/
-        Nokogiri::HTML(body)
+        Nokogiri::HTML(str)
       when /text\/xml/
-        Nokogiri::XML(body)
+        Nokogiri::XML(str)
       when /text\/yaml/
-        YAML.load(body)
+        YAML.load(str)
       when /application\/json/
-        JSON.load(body)
+        JSON.load(str)
       end
     end
     
