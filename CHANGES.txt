@@ -10,7 +10,8 @@ STELLA, CHANGES
 * TODO: Stella::Testrun (no local analog for runid so it's set by the service)
 * TODO: global responses
 * TODO: request block conditions. 
-
+* TODO: FIX template parsing. See note in Stella::Template.to_templ
+ 
 #### 0.8.1 (2010-??-??) ###############################
 
 * FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9

@@ -58,6 +58,8 @@ class Stella::Template
   def to_s() src end
   private
   def self.to_templ(str)
+    # Replace with a scan for $vars and replace with <%= %>
+    # e.g. $random(:anything) => <%= random(:anything) %>
     return str if str.match(/\A<%.+%>\z/)
     "<%= #{str} %>"
   end
