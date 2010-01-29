@@ -364,7 +364,12 @@ module HTTP
           set('Last-Modified', @body_date.httpdate)
         end
         if self['Content-Type'].empty?
-          set('Content-Type', "#{ @body_type || 'text/html' }; charset=#{ charset_label(@body_charset || $KCODE) }")
+          if RUBY_VERSION < "1.9"
+            charset = charset_label(@body_charset || $KCODE)
+          else
+            charset = charset_label(@body_charset)
+          end
+          set('Content-Type', "#{ @body_type || 'text/html' }; charset=#{ charset }")
         end
       end
 
