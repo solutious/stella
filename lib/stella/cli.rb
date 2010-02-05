@@ -20,11 +20,7 @@ class Stella::CLI < Drydock::Command
     opts[:hosts] = @hosts
     opts[:nowait] = true if @option.nowait
     
-    if @global.remote
-      require 'bone'
-      s = Stella::Service.new Bone['STELLA_SOURCE'], Bone['STELLA_TOKEN']
-      Stella::Engine.service = s
-    end
+    connect_service if @global.remote
     
     [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
@@ -48,6 +44,8 @@ class Stella::CLI < Drydock::Command
     [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
+    
+    connect_service if @global.remote
     
     case @global.engine
     when "package"
@@ -99,6 +97,14 @@ class Stella::CLI < Drydock::Command
   end
   
   private
+  def connect_service
+    if @global.remote
+      require 'bone'
+      s = Stella::Service.new Bone['STELLA_SOURCE'], Bone['STELLA_TOKEN']
+      Stella::Engine.service = s
+    end
+  end
+  
   def create_testplan
     unless @option.testplan.nil? || File.exists?(@option.testplan)
       raise Stella::InvalidOption, "Bad path: #{@option.testplan}" 

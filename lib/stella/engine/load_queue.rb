@@ -73,8 +73,9 @@ module Stella::Engine
         
         unless arrival.nil?
           # Create 1 second / users per second 
-          args = [1/arrival, @threads.size, packages.size]
-          Stella.stdout.info2 $/, "======== ARRIVAL (%s): %s of %s" % args
+          args = [@threads.size, packages.size]
+          Stella.stdout.print 2, '+'
+          Stella.stdout.info3 $/, "-> NEW CLIENT: %s of %s" % args
           sleep 1/arrival
         end
       }

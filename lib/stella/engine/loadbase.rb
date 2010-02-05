@@ -48,6 +48,11 @@ module Stella::Engine
       @optlog.add_template :head, '%10s: %s'
       @failog.add_template :request, '%s %s'
       
+      if Stella::Engine.service
+        Stella::Engine.service.testplan_sync plan
+        Stella::Engine.service.testrun_create opts
+      end
+      
       @dumper = prepare_dumper(plan, opts)
       
       if Stella.stdout.lev > 2
@@ -102,7 +107,7 @@ module Stella::Engine
       tt = Benelux.thread_timeline
       
       test_time = tt.stats.group(:execute_test_plan).mean
-      generate_report @sumlog, plan, test_time
+      #generate_report @sumlog, plan, test_time
       report_time = tt.stats.group(:generate_report).mean
       
       # Here is the calcualtion for the number of
@@ -143,84 +148,46 @@ module Stella::Engine
     end
     
     def prepare_dumper(plan, opts)
-      Stella::Hand.new(15.seconds, 2.seconds) do
+      Stella::Hand.new(LoadQueue::ROTATE_TIMELINE, 2.seconds) do
         Benelux.update_global_timeline 
+        tlc = Benelux.timeline_chunk
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
-        Benelux.timeline.clear if opts[:"no-stats"]
-      end
-
-    end
-    
-    def calculate_usecase_clients(plan, opts)
-      counts = { :total => 0 }
-      plan.usecases.each_with_index do |usecase,i|
-        count = case opts[:clients]
-        when 0..9
-          if (opts[:clients] % plan.usecases.size > 0) 
-            msg = "Client count does not evenly match usecase count"
-            raise Stella::WackyRatio, msg
-          else
-            (opts[:clients] / plan.usecases.size)
-          end
-        else
-          (opts[:clients] * usecase.ratio).to_i
-        end
-        counts[usecase.digest_cache] = count
-        counts[:total] += count
-      end
-      counts
-    end
-    
-    def build_thread_package(plan, opts, counts)
-      packages, pointer = Array.new(counts[:total]), 0
-      plan.usecases.each do |usecase|
-        count = counts[usecase.digest_cache]
-        Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
-        # Fill the thread_package with the contents of the block
-        packages.fill(pointer, count) do |index|
-          client = Stella::Client.new opts[:hosts].first, index+1, opts
-          client.add_observer(self)
-          client.enable_nowait_mode if opts[:nowait]
-          Stella.stdout.info4 "Created client #{client.digest.short}"
-          ThreadPackage.new(index+1, client, usecase)
-        end
-        pointer += count
-      end
-      packages.compact # TODO: Why one nil element sometimes?
-    end
-    
-    def execute_test_plan(*args)
-      raise "Override execute_test_plan method in #{self}"
-    end
-    
-    def running_threads
-      @threads.select { |t| t.status }  # non-false status are still running
-    end
-    
-    def generate_runtime_report(plan)
-      gt = Benelux.timeline
-      gstats = gt.stats.group(:do_request).merge
-      
-      plan.usecases.uniq.each_with_index do |uc,i| 
-        uc.requests.each do |req| 
-          filter = [uc.digest_cache, req.digest_cache]
-
-          Load.timers.each do |sname|
-            stats = gt.stats.group(sname)[filter].merge
-            #Stella.stdout.info stats.inspect
-            puts [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n].join('; ')
-          end
-          
-        end
-      end
-      
-    end
         
+        # @threads contains only stella clients
+        concurrency = @threads.select { |t| !t.status.nil? }.size
+        
+        reltime = Time.now
+        msgs = []
+        sls = Stella::Testrun::Log.new :batch => Benelux.timeline_updates, 
+                                       :duration => tlc.duration,
+                                       :stamp => Time.now.to_i,
+                                       :concurrency => concurrency
+        
+        plan.usecases.uniq.each_with_index do |uc,i| 
+          uc.requests.each do |req| 
+            filter = [uc.digest_cache, req.digest_cache]
+            Load.timers.each do |event|
+              stats = tlc.stats.group(event)[filter].merge
+              sls.push uc.digest, req.digest, event, stats
+            end
+          end
+        end
+        
+        if Stella::Engine.service
+          Stella::Engine.service.testrun_log sls
+        end
+        
+        Benelux.timeline.clear if opts[:"no-stats"]
+        
+      end
+
+    end
+
     def generate_report(sumlog,plan,test_time)
       global_timeline = Benelux.timeline
       global_stats = global_timeline.stats.group(:do_request).merge
@@ -228,8 +195,6 @@ module Stella::Engine
         Stella.ld "No stats"
         return
       end
-      
-      
       
       @sumlog.info " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.digest_cache.shorter})"]
       plan.usecases.uniq.each_with_index do |uc,i| 
@@ -253,7 +218,9 @@ module Stella::Engine
             stats = global_timeline.stats.group(sname)[filter].merge
 #            Stella.stdout.info stats.inspect
             str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
-            @sumlog.info str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
+            msg = str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
+            puts msg
+            @sumlog.info msg
             @sumlog.flush
           end
           @sumlog.info $/
@@ -319,6 +286,72 @@ module Stella::Engine
       end
     end
     
+    
+    def calculate_usecase_clients(plan, opts)
+      counts = { :total => 0 }
+      plan.usecases.each_with_index do |usecase,i|
+        count = case opts[:clients]
+        when 0..9
+          if (opts[:clients] % plan.usecases.size > 0) 
+            msg = "Client count does not evenly match usecase count"
+            raise Stella::WackyRatio, msg
+          else
+            (opts[:clients] / plan.usecases.size)
+          end
+        else
+          (opts[:clients] * usecase.ratio).to_i
+        end
+        counts[usecase.digest_cache] = count
+        counts[:total] += count
+      end
+      counts
+    end
+
+    
+    def build_thread_package(plan, opts, counts)
+      packages, pointer = Array.new(counts[:total]), 0
+      plan.usecases.each do |usecase|
+        count = counts[usecase.digest_cache]
+        Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
+        # Fill the thread_package with the contents of the block
+        packages.fill(pointer, count) do |index|
+          client = Stella::Client.new opts[:hosts].first, index+1, opts
+          client.add_observer(self)
+          client.enable_nowait_mode if opts[:nowait]
+          Stella.stdout.info4 "Created client #{client.digest.short}"
+          ThreadPackage.new(index+1, client, usecase)
+        end
+        pointer += count
+      end
+      packages.compact # TODO: Why one nil element sometimes?
+    end
+    
+    def execute_test_plan(*args)
+      raise "Override execute_test_plan method in #{self}"
+    end
+    
+    def running_threads
+      @threads.select { |t| t.status }  # non-false status are still running
+    end
+    
+    def generate_runtime_report(plan)
+      gt = Benelux.timeline
+      gstats = gt.stats.group(:do_request).merge
+      
+      plan.usecases.uniq.each_with_index do |uc,i| 
+        uc.requests.each do |req| 
+          filter = [uc.digest_cache, req.digest_cache]
+
+          Load.timers.each do |sname|
+            stats = gt.stats.group(sname)[filter].merge
+            #Stella.stdout.info stats.inspect
+            puts [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n].join('; ')
+          end
+          
+        end
+      end
+      
+    end
     
     def update_prepare_request(client_id, usecase, req, counter)
      

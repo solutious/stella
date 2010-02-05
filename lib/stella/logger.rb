@@ -1,8 +1,10 @@
 
 
 module Stella
+  
 
   class Logger
+    
     @@disable = false
     def self.disable!()  @@disable = true  end
     def self.disabled?()  @@disable == true end

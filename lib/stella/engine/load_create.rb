@@ -13,11 +13,13 @@ module Stella::Engine
       
       time_started = Time.now
 
+      
       (1..reps).to_a.each { |rep|
         @real_reps += 1  # Increments when duration is specified.
         Stella.stdout.info3 "*** REPETITION #{@real_reps} of #{reps} ***"
         packages.each { |package|
           if running_threads.size <= packages.size
+            Stella::Engine.service.client_create package.client.digest, :index => package.client.index
             @threads << Thread.new do
               c, uc = package.client, package.usecase
               msg = "THREAD START: client %s: " % [c.digest.short] 
@@ -40,6 +42,7 @@ module Stella::Engine
             Stella.sleep CREATE_THREAD_SLEEPx
           end
           
+          @current_clients = running_threads.size
           if running_threads.size > @max_clients
             @max_clients = running_threads.size
           end

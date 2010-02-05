@@ -1,6 +1,32 @@
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
+class Stella::Testrun
+  class Log < Storable
+    field :batch
+    field :concurrency
+    field :stamp
+    field :duration
+    field :stats => Hash
+    def initialize(opts={})
+      opts.each_pair do |n,v|
+        self.send("#{n}=", v) if has_field? n
+      end
+      @stats = {}
+    end
+      
+    def push(uc, req, event, stats)
+      self.stats[uc] ||= {}
+      self.stats[uc][req] ||= {}
+      self.stats[uc][req][event] ||= stats
+      #stats.min, stats.mean, stats.max, stats.sd, stats.n
+    end
+    
+  end
+end
+
+
 class Stella::Service
+  attr_accessor :runid, :tid, :uid, :rtid
   class Problem < Stella::Error
     def res() @obj end
   end
@@ -65,12 +91,22 @@ class Stella::Service
       req = uri('v1', 'testrun', "create.json")
       params = {
         :tid => @tid,
-        :start_time => Stella::START_TIME
+        :start_time => Stella::START_TIME.to_i
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED TRUN: #{obj.inspect}"
       @runid = obj['digest']
+    end
+    def testrun_log(sls)
+      raise NoTestrunSelected, "no testrun: #{runid}" unless @runid
+      req = uri('v1', 'testrun', @runid, "log.json")
+      params = {
+        :data => sls.to_json
+      }
+      res = send_request :post, req, params
+      obj = JSON.parse res.content
+      Stella.ld "LOGGED: #{obj.inspect}"
     end
     def testrun_summary(opts={})
       raise NoTestrunSelected unless @runid
@@ -175,7 +211,8 @@ class Stella::Service
     res = @http_client.send(*args) # booya!
     
     if res.status > 200
-      puts res.content
+      pp [uri, meth]
+#      puts res.content
       raise Problem.new(res) 
     end
     
