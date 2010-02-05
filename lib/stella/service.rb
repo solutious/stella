@@ -211,8 +211,7 @@ class Stella::Service
     res = @http_client.send(*args) # booya!
     
     if res.status > 200
-      pp [uri, meth]
-#      puts res.content
+      puts res.content
       raise Problem.new(res) 
     end
     
