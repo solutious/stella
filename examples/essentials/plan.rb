@@ -156,7 +156,7 @@ usecase 65, "Simple search" do
       set :lid, listing['id'].match(/(\d+)/)[0]
     end
     response 404 do 
-      fail "No results"
+      quit "No results"
     end
   end
   

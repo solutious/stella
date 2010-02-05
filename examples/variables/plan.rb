@@ -28,6 +28,9 @@ usecase "Form Example" do
   get "$uri/search" do
     param :what => resource(:globalvar)
     response do
+      if resource(:globalvar).nil?
+        abort "Usage: stella --var globalvar=smoked verify -p examples/variables/plan.rb"
+      end
       puts "  Global variable: " << resource(:globalvar)
       puts "  Usecase variable: " << resource(:uri)
       puts "  Usecase copy of global: " << resource(:apple)
