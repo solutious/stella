@@ -7,7 +7,6 @@ STELLA, CHANGES
 * TODO: Add option to dump full request/response output to a file by client
 * TODO: review cooking handling. Not always sent automatically. 
 * TODO: review :variables in URI elements
-* TODO: Stella::Testrun (no local analog for runid so it's set by the service)
 * TODO: global responses
 * TODO: request block conditions. 
 * TODO: FIX template parsing. See note in Stella::Template.to_templ

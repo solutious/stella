@@ -1,5 +1,45 @@
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
+class Hash
+  
+  # Courtesy of Julien Genestoux
+  def flatten
+    params = {}
+    stack = []
+
+    each do |k, v|
+      if v.is_a?(Hash)
+        stack << [k,v]
+      elsif v.is_a?(Array)
+        stack << [k,Hash.from_array(v)]
+      else
+        params[k] =  v
+      end
+    end
+
+    stack.each do |parent, hash|
+      hash.each do |k, v|
+        if v.is_a?(Hash)
+          stack << ["#{parent}[#{k}]", v]
+        else
+          params["#{parent}[#{k}]"] = v
+        end
+      end
+    end
+
+    params
+  end
+
+  def self.from_array(array = [])
+    h = Hash.new
+    array.size.times do |t|
+      h[t] = array[t]
+    end
+    h
+  end
+
+end
+
 class Stella::Testrun
   class Log < Storable
     field :batch
@@ -100,20 +140,23 @@ class Stella::Service
     end
     def testrun_log(sls)
       raise NoTestrunSelected, "no testrun: #{runid}" unless @runid
-      req = uri('v1', 'testrun', @runid, "log.json")
+      req = uri('v1', 'testrun', "log.json")
       params = {
+        :runid => @runid,
         :data => sls.to_json
       }
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "LOGGED: #{obj.inspect}"
+      @runid
     end
-    def testrun_summary(opts={})
+    def testrun_summary(summary)
       raise NoTestrunSelected unless @runid
-      req = uri('v1', 'testrun', 'summary', "create.json")
+      req = uri('v1', 'testrun', "summary.json")
       params = {
-        :runid => @runid
-      }.merge! opts
+        :runid => @runid,
+        :data => summary.to_json
+      }
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED SUMMARY: #{obj.inspect}"
@@ -202,7 +245,9 @@ class Stella::Service
   
   def send_request(meth, uri, params={}, headers={})
     headers['X-TOKEN'] ||= @apikey
+
     params = process_params(params)
+
     if meth == "delete"
       args = [meth, uri, headers]
     else

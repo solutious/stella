@@ -46,12 +46,23 @@ module Stella::Engine
       failed = tt.stats.group(:failed).merge
       total = tt.stats.group(:do_request).merge
       
+      ucsummaries = {}
+      plan.usecases.each do |uc|
+        ucfailed = tt.stats.group(:failed)[uc.digest].merge
+        uctotal = tt.stats.group(:do_request)[uc.digest].merge
+        ucsummaries[uc.digest] = { 
+          :successful => (uctotal.n-ucfailed.n), 
+          :failed => ucfailed.n 
+        }
+      end
+      
       if Stella::Engine.service
         data = tt.messages.filter(:kind => :log).to_json
         Stella::Engine.service.client_log client.digest, data
         Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
                                                :failed => failed.n,
-                                               :duration => test_time
+                                               :duration => test_time, 
+                                               :usecases => ucsummaries
       end
       
       failed == 0
