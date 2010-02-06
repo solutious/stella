@@ -5,12 +5,11 @@ STELLA, CHANGES
 * TODO: Force response block content type. 
 * TODO: Add assert methods to response blocks (reconsider)
 * TODO: Add option to dump full request/response output to a file by client
-* TODO: review cooking handling. Not always sent automatically. 
+* TODO: review cookie handling. Not always sent automatically. 
 * TODO: review :variables in URI elements
 * TODO: global responses
 * TODO: request block conditions. 
-* TODO: FIX template parsing. See note in Stella::Template.to_templ
- 
+
 #### 0.8.1 (2010-??-??) ###############################
 
 * FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9

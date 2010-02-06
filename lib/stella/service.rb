@@ -29,7 +29,36 @@ class Hash
 
     params
   end
+  
+  # Courtesy of Julien Genestoux
+  # See: http://stackoverflow.com/questions/798710/how-to-turn-a-ruby-hash-into-http-params
+  def to_params
+    params = ''
+    stack = []
 
+    each do |k, v|
+      if v.is_a?(Hash)
+        stack << [k,v]
+      elsif v.is_a?(Array)
+        stack << [k,Hash.from_array(v)]
+      else
+        params << "#{k}=#{v}&"
+      end
+    end
+
+    stack.each do |parent, hash|
+      hash.each do |k, v|
+        if v.is_a?(Hash)
+          stack << ["#{parent}[#{k}]", v]
+        else
+          params << "#{parent}[#{k}]=#{v}&"
+        end
+      end
+    end
+
+    params.chop! 
+    params
+  end
   def self.from_array(array = [])
     h = Hash.new
     array.size.times do |t|
@@ -131,7 +160,7 @@ class Stella::Service
       req = uri('v1', 'testrun', "create.json")
       params = {
         :tid => @tid,
-        :start_time => Stella::START_TIME.to_i
+        :start_at => Stella::START_TIME.to_i
       }.merge! opts
       res = send_request :post, req, params
       obj = JSON.parse res.content

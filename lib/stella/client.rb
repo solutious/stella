@@ -87,8 +87,8 @@ module Stella
           
           container.unique_id = stella_id
           
-          params['__stella'] = container.unique_id unless @opts[:'no-param']
-          headers['X-Stella-ID'] = container.unique_id unless @opts[:'no-header']
+          params['__stella'] = container.unique_id.short unless @opts[:'no-param']
+          headers['X-Stella-ID'] = container.unique_id.short unless @opts[:'no-header']
           
           meth = req.http_method.to_s.downcase
           Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect

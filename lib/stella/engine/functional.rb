@@ -52,8 +52,8 @@ module Stella::Engine
         ucfailed = tt.stats.group(:failed)[uc.digest].merge
         uctotal = tt.stats.group(:do_request)[uc.digest].merge
         ucsummaries[uc.digest] = { 
-          :successful => (uctotal.n-ucfailed.n), 
-          :failed => ucfailed.n 
+          :successful => (uctotal.n-ucfailed.n).to_i, 
+          :failed => ucfailed.n.to_i 
         }
       end
       
