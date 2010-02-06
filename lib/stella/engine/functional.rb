@@ -16,6 +16,7 @@ module Stella::Engine
       client.enable_nowait_mode if opts[:nowait]
       
       if Stella::Engine.service
+        opts[:mode] = 'f'
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create opts
         Stella::Engine.service.client_create client.digest, :index => client.index

@@ -49,7 +49,7 @@ module Stella::Data
     end
     
     def to_templ(meth, *args)
-      Stella::Template.to_templ("#{meth}(#{args_to_str(*args)})")
+      "<%= #{meth}(#{args_to_str(*args)}) %>"
     end
     
   end

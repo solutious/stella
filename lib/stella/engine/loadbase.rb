@@ -49,6 +49,7 @@ module Stella::Engine
       @failog.add_template :request, '%s %s'
       
       if Stella::Engine.service
+        opts[:mode] = 'l'
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create opts
       end
@@ -107,7 +108,7 @@ module Stella::Engine
       tt = Benelux.thread_timeline
       
       test_time = tt.stats.group(:execute_test_plan).mean
-      #generate_report @sumlog, plan, test_time
+      generate_report @sumlog, plan, test_time
       report_time = tt.stats.group(:generate_report).mean
       
       # Here is the calcualtion for the number of

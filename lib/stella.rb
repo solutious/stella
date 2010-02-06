@@ -50,19 +50,12 @@ class Stella::Template
   attr_reader :src
   def initialize(src)
     src = src.to_s
-    @src, @template = src, ERB.new(Stella::Template.to_templ(src))
+    @src, @template = src, ERB.new(src)
   end
   def result(binding)
     @template.result(binding)
   end
   def to_s() src end
-  private
-  def self.to_templ(str)
-    # Replace with a scan for $vars and replace with <%= %>
-    # e.g. $random(:anything) => <%= random(:anything) %>
-    return str if str.match(/\A<%.+%>\z/)
-    "<%= #{str} %>"
-  end
 end
 
 module Stella
