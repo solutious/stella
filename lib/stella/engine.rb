@@ -84,6 +84,7 @@ module Stella::Engine
       opts
     end
     
+    
     def run; raise; end
     def update_usecase_quit(client_id, msg) raise end
     def update_request_repeat(client_id, counter, total) raise end

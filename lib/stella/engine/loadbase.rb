@@ -120,6 +120,24 @@ module Stella::Engine
       failed = bt.stats.group(:failed).merge
       total = bt.stats.group(:do_request).merge
       
+      ucsummaries = {}
+      plan.usecases.each do |uc|
+        ucfailed = bt.stats.group(:failed)[uc.digest].merge
+        uctotal = bt.stats.group(:do_request)[uc.digest].merge
+        ucsummaries[uc.digest] = { 
+          :successful => (uctotal.n-ucfailed.n).to_i, 
+          :failed => ucfailed.n.to_i 
+        }
+      end
+      
+      if Stella::Engine.service
+        Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
+                                               :failed => failed.n,
+                                               :duration => test_time, 
+                                               :usecases => ucsummaries
+      end
+      
+      
       @sumlog.info $/, "Summary: "
       @sumlog.dsummary 'successful req', total.n
       @sumlog.dsummary "failed req", failed.n
