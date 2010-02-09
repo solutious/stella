@@ -4,6 +4,7 @@ module Stella::Engine
   class << self
     attr_accessor :service
   end
+  # See functional.rb
   class Log < Storable
     include Selectable::Object
     field :stamp
@@ -22,6 +23,8 @@ module Stella::Engine
   end
   module Base
     extend self
+    
+    @testrun = nil
     
     @@client_limit = 1000
     
@@ -120,3 +123,74 @@ module Stella::Engine
 
 end
 
+class Stella::Testrun
+  attr_reader :samples
+  attr_reader :plan
+  attr_reader :stats
+  attr_reader :events
+  def initialize(plan, events)
+    @plan, @events = plan, events
+    @samples, @stats = nil, nil
+    reset
+  end
+  
+  def reset
+    @samples = []
+    @stats = { :summary => {} }
+    @plan.usecases.each do |uc|
+      @events.each do |event|
+        @stats[:summary][event] = Benelux::Stats::Calculator.new
+        @stats[uc.digest] ||= { :summary => {} }
+        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
+      end
+    end
+  end
+  
+  def add_sample batch, concurrency, tl
+    
+    opts = {
+      :batch => batch, 
+      :duration => tl.duration,
+      :stamp => Time.now.utc.to_i,
+      :concurrency => concurrency
+    }
+    
+    sam = Stella::Testrun::Sample.new opts
+    
+    @plan.usecases.uniq.each_with_index do |uc,i| 
+      sam.stats[uc.digest] ||= { :summary => {} }
+      uc.requests.each do |req| 
+        sam.stats[uc.digest][req.digest] ||= {}
+        filter = [uc.digest_cache, req.digest_cache]
+        @events.each_with_index do |event,idx|  # do_request, etc...
+          stats = tl.stats.group(event)[filter].merge
+          sam.stats[uc.digest][req.digest][event] = stats
+          # Tally usecase and total summaries at the same time. 
+          @stats[uc.digest][:summary][event] += stats
+          @stats[:summary][event] += stats
+        end
+      end
+    end
+    
+    pp sam
+    
+    if Stella::Engine.service
+      #Stella::Engine.service.testrun_log sls
+    end
+  end
+  
+  
+  class Sample < Storable
+    field :batch
+    field :concurrency
+    field :stamp
+    field :duration
+    field :stats => Hash
+    def initialize(opts={})
+      opts.each_pair do |n,v|
+        self.send("#{n}=", v) if has_field? n
+      end
+      @stats = { :summary => {} }
+    end
+  end
+end

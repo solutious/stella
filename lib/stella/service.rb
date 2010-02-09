@@ -69,30 +69,6 @@ class Hash
 
 end
 
-class Stella::Testrun
-  class Log < Storable
-    field :batch
-    field :concurrency
-    field :stamp
-    field :duration
-    field :stats => Hash
-    def initialize(opts={})
-      opts.each_pair do |n,v|
-        self.send("#{n}=", v) if has_field? n
-      end
-      @stats = {}
-    end
-      
-    def push(uc, req, event, stats)
-      self.stats[uc] ||= {}
-      self.stats[uc][req] ||= {}
-      self.stats[uc][req][event] ||= stats
-      #stats.min, stats.mean, stats.max, stats.sd, stats.n
-    end
-    
-  end
-end
-
 
 class Stella::Service
   attr_accessor :runid, :tid, :uid, :rtid
@@ -160,6 +136,7 @@ class Stella::Service
       req = uri('v1', 'testrun', "create.json")
       params = {
         :tid => @tid,
+        :v => Stella::VERSION.to_s,
         :start_at => Stella::START_TIME.to_i
       }.merge! opts
       res = send_request :post, req, params

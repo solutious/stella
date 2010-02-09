@@ -48,6 +48,15 @@ module Stella::Engine
       @optlog.add_template :head, '%10s: %s'
       @failog.add_template :request, '%s %s'
       
+      if Stella.stdout.lev > 2
+        Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
+        Load.counts  = [:request_header_size, :request_content_size]
+        Load.counts += [:response_headers_size, :response_content_size]
+      end
+      
+      events = [Load.timers, Load.counts, :failed].flatten
+      @testrun = Stella::Testrun.new plan, events
+      
       if Stella::Engine.service
         opts[:mode] = 'l'
         Stella::Engine.service.testplan_sync plan
@@ -55,12 +64,6 @@ module Stella::Engine
       end
       
       @dumper = prepare_dumper(plan, opts)
-      
-      if Stella.stdout.lev > 2
-        Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
-        Load.counts  = [:request_header_size, :request_content_size]
-        Load.counts += [:response_headers_size, :response_content_size]
-      end
       
       counts = calculate_usecase_clients plan, opts
       
@@ -108,7 +111,7 @@ module Stella::Engine
       tt = Benelux.thread_timeline
       
       test_time = tt.stats.group(:execute_test_plan).mean
-      generate_report @sumlog, plan, test_time
+      #generate_report @sumlog, plan, test_time
       report_time = tt.stats.group(:generate_report).mean
       
       # Here is the calcualtion for the number of
@@ -169,37 +172,17 @@ module Stella::Engine
     def prepare_dumper(plan, opts)
       Stella::Hand.new(LoadQueue::ROTATE_TIMELINE, 2.seconds) do
         Benelux.update_global_timeline 
-        tlc = Benelux.timeline_chunk
+        # @threads contains only stella clients
+        concurrency = @threads.select { |t| !t.status.nil? }.size
+        batch, timeline = Benelux.timeline_updates, Benelux.timeline_chunk
+        @testrun.add_sample batch, concurrency, timeline
+        
         #reqlog.info [Time.now, Benelux.timeline.size].inspect
         @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
         @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
         @reqlog.clear and @failog.clear and @authlog.clear
-        
-        # @threads contains only stella clients
-        concurrency = @threads.select { |t| !t.status.nil? }.size
-        
-        reltime = Time.now
-        msgs = []
-        sls = Stella::Testrun::Log.new :batch => Benelux.timeline_updates, 
-                                       :duration => tlc.duration,
-                                       :stamp => Time.now.to_i,
-                                       :concurrency => concurrency
-        
-        plan.usecases.uniq.each_with_index do |uc,i| 
-          uc.requests.each do |req| 
-            filter = [uc.digest_cache, req.digest_cache]
-            Load.timers.each do |event|
-              stats = tlc.stats.group(event)[filter].merge
-              sls.push uc.digest, req.digest, event, stats
-            end
-          end
-        end
-        
-        if Stella::Engine.service
-          Stella::Engine.service.testrun_log sls
-        end
         
         Benelux.timeline.clear if opts[:"no-stats"]
         
@@ -343,6 +326,9 @@ module Stella::Engine
         pointer += count
       end
       packages.compact # TODO: Why one nil element sometimes?
+      # Randomize so when ramping up load
+      # we get a mix of usecases. 
+      packages.sort_by {rand}
     end
     
     def execute_test_plan(*args)

@@ -15,6 +15,7 @@ STELLA, CHANGES
 * FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9
 * FIXED:  warning in Ruby 1.9
 * CHANGE: Don't attempt to convert parameters or headers to ERB templates.
+* CHANGE: Randomize order of usecase when generating load
 
 
 #### 0.8.0 (2010-01-16) ###############################
