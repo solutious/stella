@@ -123,14 +123,26 @@ module Stella::Engine
 
 end
 
-class Stella::Testrun
-  attr_reader :samples
-  attr_reader :plan
-  attr_reader :stats
-  attr_reader :events
-  def initialize(plan, events)
+class Stella::Testrun < Storable
+  extend Attic
+  attic :remote_digest
+  field :samples => Array
+  field :plan
+  field :stats
+  field :hosts
+  field :events
+  field :mode  # (f)unctional or (l)oad
+  field :clients => Integer
+  field :duration => Integer
+  field :arrival => Float
+  field :repetitions => Integer
+  field :nowait => Integer
+  def initialize(plan, events, opts={})
     @plan, @events = plan, events
     @samples, @stats = nil, nil
+    opts.each_pair do |n,v|
+      self.send("#{n}=", v) if has_field? n
+    end
     reset
   end
   
@@ -142,6 +154,10 @@ class Stella::Testrun
         @stats[:summary][event] = Benelux::Stats::Calculator.new
         @stats[uc.digest] ||= { :summary => {} }
         @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
+        uc.requests.each do |req|
+          @stats[uc.digest][req.digest] ||= {}
+          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
+        end
       end
     end
   end
@@ -161,18 +177,17 @@ class Stella::Testrun
       sam.stats[uc.digest] ||= { :summary => {} }
       uc.requests.each do |req| 
         sam.stats[uc.digest][req.digest] ||= {}
-        filter = [uc.digest_cache, req.digest_cache]
+        filter = [uc.digest, req.digest]
         @events.each_with_index do |event,idx|  # do_request, etc...
           stats = tl.stats.group(event)[filter].merge
           sam.stats[uc.digest][req.digest][event] = stats
-          # Tally usecase and total summaries at the same time. 
+          # Tally request, usecase and total summaries at the same time. 
+          @stats[uc.digest][req.digest][event] += stats
           @stats[uc.digest][:summary][event] += stats
           @stats[:summary][event] += stats
         end
       end
     end
-    
-    pp sam
     
     if Stella::Engine.service
       #Stella::Engine.service.testrun_log sls
@@ -186,6 +201,7 @@ class Stella::Testrun
     field :stamp
     field :duration
     field :stats => Hash
+    #gibbler :batch, :concurrency, :stamp, :duration
     def initialize(opts={})
       opts.each_pair do |n,v|
         self.send("#{n}=", v) if has_field? n

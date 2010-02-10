@@ -22,7 +22,7 @@ class Stella::CLI < Drydock::Command
     
     connect_service if @global.remote
     
-    [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
+    [:'no-templates', :'no-stats', :'with-header', :'with-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     

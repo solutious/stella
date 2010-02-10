@@ -43,12 +43,8 @@ class Stella::CLI::Definition
     Stella.enable_debug
   end
   global :W, :wait, Integer, "Seconds to wait before starting test"
-  global :'no-header', "Do not include X-Stella-ID request header" do
-    true  # params starting with 'no-' return false??
-  end
-  global :'no-param', "Do not include __stella query parameter header" do
-    true
-  end
+  global :'with-header', "Include X-Stella-ID request header" 
+  global :'with-param', "Include __stella query parameter header"
   global :R, :remote
   global :E, :engine, String, "Specify a load engine (experimental)"
   global :o, :output, String, "Write output to the given file" do |v|

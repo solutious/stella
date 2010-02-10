@@ -131,17 +131,25 @@ class Stella::Service
       obj = JSON.parse res.content
       @rtid = obj['digest']
     end
-    def testrun_create(opts={})
+    def testrun_create(trun)
       raise NoTestplanSelected unless @tid
       req = uri('v1', 'testrun', "create.json")
       params = {
         :tid => @tid,
         :v => Stella::VERSION.to_s,
-        :start_at => Stella::START_TIME.to_i
-      }.merge! opts
+        :start_at => Stella::START_TIME.to_i,
+        :mode => trun.mode,
+        :clients => trun.clients,
+        :duration => trun.duration,
+        :arrival => trun.arrival,
+        :repetitions => trun.repetitions,
+        :nowait => trun.nowait,
+        :hosts => trun.hosts
+      }
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED TRUN: #{obj.inspect}"
+      trun.remote_digest = obj['digest']
       @runid = obj['digest']
     end
     def testrun_log(sls)

@@ -252,13 +252,15 @@ module Stella
       @routine.call
     end
     def stop?() @force_stop == true end
-  
+    
+    def stopped?() @stopped end
+      
     # Execute yield every FREQUENCY seconds.
     def start
       @dthread ||= Thread.new do
         prev_ptime = Time.now
         loop do
-          break if Stella.abort? || stop?
+          @stopped = true and break if Stella.abort? || stop?
           if (Time.now - prev_ptime).to_i >= @freq
             @routine.call
             prev_ptime = Time.now

@@ -9,13 +9,19 @@ STELLA, CHANGES
 * TODO: review :variables in URI elements
 * TODO: global responses
 * TODO: request block conditions. 
+* TODO: process templates for calls to set in get blocks
 
-#### 0.8.1 (2010-??-??) ###############################
+
+#### 0.8.1 (2010-02-??) ###############################
 
 * FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9
 * FIXED:  warning in Ruby 1.9
+* FIXED: Setting of domain for HTTP authentication when the request URI 
+  is a fully qualified URI. 
 * CHANGE: Don't attempt to convert parameters or headers to ERB templates.
 * CHANGE: Randomize order of usecase when generating load
+* CHANGE: noparams and noheader now default to off. Must use with-param and with-header.
+* ADDED: Stella.get
 
 
 #### 0.8.0 (2010-01-16) ###############################

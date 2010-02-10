@@ -23,7 +23,7 @@ module Stella
       MAJOR = 0.freeze
       MINOR = 8.freeze
       TINY  = 0.freeze
-      PATCH = '001'.freeze 
+      PATCH = '002'.freeze 
     end
     def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
     def self.to_f; self.to_s.to_f; end
@@ -78,7 +78,7 @@ module Stella
   class << self
     attr_accessor :log, :stdout
   end
-
+  
   def le(*msg); stdout.info "  " << msg.join("#{$/}  ").color(:red); end
   def ld(*msg)
     return unless Stella.debug?
@@ -123,6 +123,16 @@ module Stella
   autoload :Engine, 'stella/engine'
   autoload :Client, 'stella/client'
   autoload :Service, 'stella/service'
+  
+  def get(uri, query={})
+    require 'stella/client'
+    http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
+    http_client.get(uri, query).body.content
+  rescue => ex
+    STDERR.puts ex.message
+    STDERR.puts ex.backtrace if Stella.debug?
+    nil
+  end
   
 end
 

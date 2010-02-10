@@ -15,10 +15,12 @@ module Stella::Engine
             
       client.enable_nowait_mode if opts[:nowait]
       
+      @testrun = Stella::Testrun.new plan, [], opts
+      
       if Stella::Engine.service
         opts[:mode] = 'f'
         Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create opts
+        Stella::Engine.service.testrun_create @testrun
         Stella::Engine.service.client_create client.digest, :index => client.index
       end
       
@@ -90,7 +92,7 @@ module Stella::Engine
       Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
       
       msg = '  %-6s %-53s ' % [req.http_method, uri]
-      msg << container.status.to_s if Stella.stdout.lev == 1
+      msg << container.status.to_s if Stella.stdout.lev <= 2
       Stella.stdout.info msg
       
       Stella.stdout.info2 $/, "   Params:"

@@ -55,12 +55,12 @@ module Stella::Engine
       end
       
       events = [Load.timers, Load.counts, :failed].flatten
-      @testrun = Stella::Testrun.new plan, events
+      @testrun = Stella::Testrun.new plan, events, opts
       
       if Stella::Engine.service
         opts[:mode] = 'l'
         Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create opts
+        Stella::Engine.service.testrun_create @testrun
       end
       
       @dumper = prepare_dumper(plan, opts)
@@ -104,14 +104,21 @@ module Stella::Engine
       @dumper.stop
       
       Stella.stdout.status "Processing" 
-      
-      Benelux.update_global_timeline
+      #Stella.stdout.flush
+      #  
+      #while !@dumper.stopped?
+      #  Stella.stdout.print '.'
+      #  sleep 1
+      #end
+
       
       bt = Benelux.timeline
       tt = Benelux.thread_timeline
       
+      
+      # TODO: don't get test time from benelux. 
       test_time = tt.stats.group(:execute_test_plan).mean
-      #generate_report @sumlog, plan, test_time
+      generate_report @sumlog, plan, test_time
       report_time = tt.stats.group(:generate_report).mean
       
       # Here is the calcualtion for the number of
@@ -150,9 +157,7 @@ module Stella::Engine
       @sumlog.fsummary "reporting time", report_time
       @sumlog.flush
       
-      Stella.stdout.info File.read(@sumlog.path)
-      # DNE:
-      #p [@real_reps, total.n]
+      #Stella.stdout.info File.read(@sumlog.path)
       
       Stella.stdout.info $/, "Log dir: #{@logdir}"
       
@@ -209,19 +214,22 @@ module Stella::Engine
         desc = uc.desc || "Usecase ##{i+1} "
         desc << "  (#{uc.digest_cache.shorter}) "
         str = ' ' << " %-66s %s   %d%% ".bright.att(:reverse)
-        @sumlog.info str % [desc, '', uc.ratio_pretty]
-        
+        @sumlog.info str % [desc, '', uc.ratio_pretty]        
         uc.requests.each do |req| 
           filter = [uc.digest_cache, req.digest_cache]
           desc = req.desc 
           @sumlog.info "   %-72s ".bright % ["#{req.desc}  (#{req.digest_cache.shorter})"]
           @sumlog.info "    %s" % [req.to_s]
+
           Load.timers.each do |sname|
             stats = global_timeline.stats.group(sname)[filter].merge
 #            Stella.stdout.info stats.inspect
             str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
             msg = str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
-            puts msg
+            p [1, stats]
+            stats = @testrun.stats[uc.digest][req.digest][sname]
+            p [2, stats]
+            puts
             @sumlog.info msg
             @sumlog.flush
           end

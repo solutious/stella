@@ -63,7 +63,11 @@ module Stella
             # TODO: The first arg is domain and can include a URI path. 
             #       Are there cases where this is important?
             domain = http_auth.domain
-            domain ||= '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, req.uri] 
+            # When req.uri is a fully qualified URI, domain will be
+            # set to an incorrect value like, http://domain1/http://domain2. 
+            # So we parse it and if that fails we'll set it to the value given.
+            uri_tmp = URI.parse(req.uri).uri rescue req.uri
+            domain ||= '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, uri_tmp] 
             domain = container.instance_eval &domain if Proc === domain
             Stella.ld "DOMAIN " << domain
             user, pass = http_auth.user, http_auth.pass
@@ -87,8 +91,8 @@ module Stella
           
           container.unique_id = stella_id
           
-          params['__stella'] = container.unique_id.short unless @opts[:'no-param']
-          headers['X-Stella-ID'] = container.unique_id.short unless @opts[:'no-header']
+          params['__stella'] = container.unique_id.short if @opts[:'with-param']
+          headers['X-Stella-ID'] = container.unique_id.short if @opts[:'with-header']
           
           meth = req.http_method.to_s.downcase
           Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
