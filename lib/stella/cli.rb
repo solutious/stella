@@ -99,8 +99,7 @@ class Stella::CLI < Drydock::Command
   private
   def connect_service
     if @global.remote
-      require 'bone'
-      s = Stella::Service.new Bone['STELLA_SOURCE'], Bone['STELLA_TOKEN']
+      s = Stella::Service.new 
       Stella::Engine.service = s
     end
   end

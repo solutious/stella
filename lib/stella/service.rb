@@ -245,6 +245,14 @@ class Stella::Service
   attr_accessor :tid, :uid, :rtid, :runid
   
   def initialize(source=nil,apikey=nil)
+    begin
+      require 'bone'
+    rescue LoadError
+    end
+    if defined?(Bone)
+      source ||= Bone['STELLA_SOURCE'] rescue nil
+      apikey ||= Bone['STELLA_TOKEN'] rescue nil
+    end
     source ||= ENV['STELLA_SOURCE']
     apikey ||= ENV['STELLA_TOKEN']
     @source, @apikey = source, apikey
