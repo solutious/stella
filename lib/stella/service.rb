@@ -144,7 +144,8 @@ class Stella::Service
         :arrival => trun.arrival,
         :repetitions => trun.repetitions,
         :nowait => trun.nowait,
-        :hosts => trun.hosts
+        :hosts => trun.hosts,
+        :status => 'created'
       }
       res = send_request :post, req, params
       obj = JSON.parse res.content
@@ -152,28 +153,31 @@ class Stella::Service
       trun.remote_digest = obj['digest']
       @runid = obj['digest']
     end
-    def testrun_log(sls)
+    def testrun_stats(summary, samples)
       raise NoTestrunSelected, "no testrun: #{runid}" unless @runid
-      req = uri('v1', 'testrun', "log.json")
+      req = uri('v1', 'testrun', "stats.json")
       params = {
         :runid => @runid,
-        :data => sls.to_json
+        :status => 'running',
+        :summary => summary.to_json,
+        :samples => samples.to_json
       }
       res = send_request :post, req, params
       obj = JSON.parse res.content
-      Stella.ld "LOGGED: #{obj.inspect}"
+      Stella.ld "TESTRUN STATS: #{obj.inspect}"
       @runid
     end
-    def testrun_summary(summary)
+    def testrun_finalize(duration)
       raise NoTestrunSelected unless @runid
-      req = uri('v1', 'testrun', "summary.json")
+      req = uri('v1', 'testrun', "finalize.json")
       params = {
         :runid => @runid,
-        :data => summary.to_json
+        :duration => duration,
+        :status => 'complete'
       }
       res = send_request :post, req, params
       obj = JSON.parse res.content
-      Stella.ld "CREATED SUMMARY: #{obj.inspect}"
+      Stella.ld "FINALIZE TESTRUN: #{obj.inspect}"
       @runid
     end
     def client_create(clientid, opts={})
@@ -270,7 +274,6 @@ class Stella::Service
     res = @http_client.send(*args) # booya!
     
     if res.status > 200
-      puts res.content
       raise Problem.new(res) 
     end
     

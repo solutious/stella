@@ -56,9 +56,9 @@ module Stella::Engine
       
       events = [Load.timers, Load.counts, :failed].flatten
       @testrun = Stella::Testrun.new plan, events, opts
+      @testrun.mode = 'l'
       
       if Stella::Engine.service
-        opts[:mode] = 'l'
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create @testrun
       end
@@ -88,7 +88,6 @@ module Stella::Engine
         @optlog.head "START", Time.now.to_s
         Stella.stdout.status "Running" 
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
-        Stella.stdout.info $/, "Done" 
       rescue Interrupt
         Stella.stdout.info $/, "Stopping test"
         Stella.abort!
@@ -98,19 +97,12 @@ module Stella::Engine
         STDERR.puts ex.backtrace if Stella.debug? || Stella.stdout.lev >= 3
       end
       
+      Stella.stdout.status "Processing"
+      
       @optlog.head "END", Time.now.to_s
       @optlog.flush
       
       @dumper.stop
-      
-      Stella.stdout.status "Processing" 
-      #Stella.stdout.flush
-      #  
-      #while !@dumper.stopped?
-      #  Stella.stdout.print '.'
-      #  sleep 1
-      #end
-
       
       bt = Benelux.timeline
       tt = Benelux.thread_timeline
@@ -130,34 +122,25 @@ module Stella::Engine
       failed = bt.stats.group(:failed).merge
       total = bt.stats.group(:do_request).merge
       
-      ucsummaries = {}
-      plan.usecases.each do |uc|
-        ucfailed = bt.stats.group(:failed)[uc.digest].merge
-        uctotal = bt.stats.group(:do_request)[uc.digest].merge
-        ucsummaries[uc.digest] = { 
-          :successful => (uctotal.n-ucfailed.n).to_i, 
-          :failed => ucfailed.n.to_i 
-        }
-      end
+      #ucsummaries = {}
+      #plan.usecases.each do |uc|
+      #  ucfailed = bt.stats.group(:failed)[uc.digest].merge
+      #  uctotal = bt.stats.group(:do_request)[uc.digest].merge
+      #  ucsummaries[uc.digest] = { 
+      #    :successful => (uctotal.n-ucfailed.n).to_i, 
+      #    :failed => ucfailed.n.to_i 
+      #  }
+      #end
+      #
+      #if Stella::Engine.service
+      #  Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
+      #                                         :failed => failed.n,
+      #                                         :duration => test_time, 
+      #                                         :usecases => ucsummaries
+      #end
       
-      if Stella::Engine.service
-        Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
-                                               :failed => failed.n,
-                                               :duration => test_time, 
-                                               :usecases => ucsummaries
-      end
       
-      
-      @sumlog.info $/, "Summary: "
-      @sumlog.dsummary 'successful req', total.n
-      @sumlog.dsummary "failed req", failed.n
-      @sumlog.dsummary "max clients", @max_clients
-      @sumlog.dsummary "repetitions", @real_reps
-      @sumlog.fsummary "test time", test_time
-      @sumlog.fsummary "reporting time", report_time
-      @sumlog.flush
-      
-      #Stella.stdout.info File.read(@sumlog.path)
+      Stella.stdout.info File.read(@sumlog.path)
       
       Stella.stdout.info $/, "Log dir: #{@logdir}"
       
@@ -175,7 +158,7 @@ module Stella::Engine
     end
     
     def prepare_dumper(plan, opts)
-      Stella::Hand.new(LoadQueue::ROTATE_TIMELINE, 2.seconds) do
+      hand = Stella::Hand.new(LoadQueue::ROTATE_TIMELINE, 2.seconds) do
         Benelux.update_global_timeline 
         # @threads contains only stella clients
         concurrency = @threads.select { |t| !t.status.nil? }.size
@@ -192,7 +175,19 @@ module Stella::Engine
         Benelux.timeline.clear if opts[:"no-stats"]
         
       end
-
+      hand.finally do
+        #total = @testrun.stats[:summary][:do_request].n 
+        #failed = @testrun.stats[:summary][:failed].n 
+        #@sumlog.info $/, "Summary: "
+        #@sumlog.dsummary 'successful req', total-failed
+        #@sumlog.dsummary "failed req", failed
+        #@sumlog.dsummary "max clients", @max_clients
+        #@sumlog.dsummary "repetitions", @real_reps
+        ##@sumlog.fsummary "test time", test_time
+        ##@sumlog.fsummary "reporting time", report_time
+        #@sumlog.flush
+      end
+      hand
     end
 
     def generate_report(sumlog,plan,test_time)
@@ -226,10 +221,6 @@ module Stella::Engine
 #            Stella.stdout.info stats.inspect
             str = '      %-30s %.3f <= ' << '%.3fs' << ' >= %.3f; %.3f(SD) %d(N)'
             msg = str % [sname, stats.min, stats.mean, stats.max, stats.sd, stats.n]
-            p [1, stats]
-            stats = @testrun.stats[uc.digest][req.digest][sname]
-            p [2, stats]
-            puts
             @sumlog.info msg
             @sumlog.flush
           end

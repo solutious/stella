@@ -250,6 +250,7 @@ module Stella
       @force_stop = true  
       @dthread.join
       @routine.call
+      @finally.call unless @finally.nil?
     end
     def stop?() @force_stop == true end
     
@@ -270,7 +271,13 @@ module Stella
       end
       @dthread.abort_on_exception = true
     end
+  
+    def finally(&blk)
+      @finally = blk
+    end
   end
+  
+  
 end
 
 

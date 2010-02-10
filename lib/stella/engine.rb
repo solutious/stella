@@ -128,7 +128,7 @@ class Stella::Testrun < Storable
   attic :remote_digest
   field :samples => Array
   field :plan
-  field :stats
+  field :summary
   field :hosts
   field :events
   field :mode  # (f)unctional or (l)oad
@@ -139,7 +139,7 @@ class Stella::Testrun < Storable
   field :nowait => Integer
   def initialize(plan, events, opts={})
     @plan, @events = plan, events
-    @samples, @stats = nil, nil
+    @samples, @summary = nil, nil
     opts.each_pair do |n,v|
       self.send("#{n}=", v) if has_field? n
     end
@@ -148,15 +148,15 @@ class Stella::Testrun < Storable
   
   def reset
     @samples = []
-    @stats = { :summary => {} }
+    @summary = { :summary => {} }
     @plan.usecases.each do |uc|
       @events.each do |event|
-        @stats[:summary][event] = Benelux::Stats::Calculator.new
-        @stats[uc.digest] ||= { :summary => {} }
-        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
+        @summary[:summary][event] = Benelux::Stats::Calculator.new
+        @summary[uc.digest] ||= { :summary => {} }
+        @summary[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
         uc.requests.each do |req|
-          @stats[uc.digest][req.digest] ||= {}
-          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
+          @summary[uc.digest][req.digest] ||= {}
+          @summary[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
         end
       end
     end
@@ -174,7 +174,7 @@ class Stella::Testrun < Storable
     sam = Stella::Testrun::Sample.new opts
     
     @plan.usecases.uniq.each_with_index do |uc,i| 
-      sam.stats[uc.digest] ||= { :summary => {} }
+      sam.stats[uc.digest] ||= { }
       uc.requests.each do |req| 
         sam.stats[uc.digest][req.digest] ||= {}
         filter = [uc.digest, req.digest]
@@ -182,16 +182,24 @@ class Stella::Testrun < Storable
           stats = tl.stats.group(event)[filter].merge
           sam.stats[uc.digest][req.digest][event] = stats
           # Tally request, usecase and total summaries at the same time. 
-          @stats[uc.digest][req.digest][event] += stats
-          @stats[uc.digest][:summary][event] += stats
-          @stats[:summary][event] += stats
+          @summary[uc.digest][req.digest][event] += stats
+          @summary[uc.digest][:summary][event] += stats
+          @summary[:summary][event] += stats
         end
       end
     end
     
-    if Stella::Engine.service
-      #Stella::Engine.service.testrun_log sls
+    @samples << sam
+    
+    begin
+      if Stella::Engine.service
+        Stella::Engine.service.testrun_stats @summary, @samples
+      end
+    rescue => ex
+      Stella.stdout.info "Error syncing to #{Stella::Engine.service.source}"
+      Stella.stdout.info ex.message, ex.backtrace if Stella.debug?
     end
+    
   end
   
   
@@ -206,7 +214,7 @@ class Stella::Testrun < Storable
       opts.each_pair do |n,v|
         self.send("#{n}=", v) if has_field? n
       end
-      @stats = { :summary => {} }
+      @stats = { }
     end
   end
 end
