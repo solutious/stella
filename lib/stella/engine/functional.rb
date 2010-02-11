@@ -15,7 +15,7 @@ module Stella::Engine
             
       client.enable_nowait_mode if opts[:nowait]
       
-      @testrun = Stella::Testrun.new plan, [], opts
+      @testrun = Stella::Testrun.new plan, [:do_request, :failed], opts
       @testrun.mode = 'f'      
       
       if Stella::Engine.service
@@ -26,49 +26,40 @@ module Stella::Engine
       
       Stella.stdout.info2 $/, "Starting test...", $/
       
-      # Identify this thread to Benelux
-      Benelux.current_track :functional 
-      
       start_time = Time.now.utc
       
-      dig = Stella.stdout.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
-      Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
-      plan.usecases.each_with_index do |uc,i|
-        desc = (uc.desc || "Usecase ##{i+1}")
-        dig = Stella.stdout.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
-        Stella.stdout.info ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
-        Stella.rescue { client.execute uc }
+      thread = Thread.new do
+        # Identify this thread to Benelux
+        Benelux.current_track :functional
+        
+        dig = Stella.stdout.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
+        Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
+        plan.usecases.each_with_index do |uc,i|
+          desc = (uc.desc || "Usecase ##{i+1}")
+          Benelux.add_thread_tags :usecase => uc.digest_cache
+          dig = Stella.stdout.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
+          Stella.stdout.info ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
+          Stella.rescue { client.execute uc }
+        end
       end
+      
+      thread.join
       
       test_time = Time.now.utc - start_time
       
+      #Benelux.update_global_timeline
+      
       # Need to use thread timeline b/c the clients are running in the
       # main thread which Benelux.update_global_timeline does not touch.
-      tt = Benelux.thread_timeline
-      
-      failed = tt.stats.group(:failed).merge
-      total = tt.stats.group(:do_request).merge
-      
-      ucsummaries = {}
-      plan.usecases.each do |uc|
-        ucfailed = tt.stats.group(:failed)[uc.digest].merge
-        uctotal = tt.stats.group(:do_request)[uc.digest].merge
-        ucsummaries[uc.digest] = { 
-          :successful => (uctotal.n-ucfailed.n).to_i, 
-          :failed => ucfailed.n.to_i 
-        }
-      end
+      tt = thread.timeline
       
       if Stella::Engine.service
         data = tt.messages.filter(:kind => :log).to_json
         Stella::Engine.service.client_log client.digest, data
-        Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
-                                               :failed => failed.n,
-                                               :duration => test_time, 
-                                               :usecases => ucsummaries
+        @testrun.add_sample 1, 1, tt
       end
       
-      failed == 0
+      @testrun.summary[:summary][:failed].n == 0 
     end
     
     
@@ -157,6 +148,7 @@ module Stella::Engine
     end
     
     def update_usecase_quit client_id, msg, req, container
+      Benelux.thread_timeline.add_count :failed, 1
       Stella.stdout.info "  QUIT   %s" % [msg]
     end
     
@@ -166,6 +158,7 @@ module Stella::Engine
     end
     
     def update_request_error client_id, msg, req, container
+      Benelux.thread_timeline.add_count :failed, 1
       Stella.stdout.info "  ERROR   %s" % [msg]
     end
     
@@ -178,6 +171,7 @@ module Stella::Engine
     end
     
     def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
+      Benelux.thread_timeline.add_count :failed, 1
       Stella.stdout.info "  TIMEOUT   %-53s" % [uri]
     end
     

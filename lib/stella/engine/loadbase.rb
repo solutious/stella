@@ -26,7 +26,7 @@ module Stella::Engine
         File.unlink latest if File.exists? latest
         FileUtils.ln_sf File.basename(@logdir), latest
       end
-
+        
       @reqlog = Stella::Logger.new log_path(plan, 'requests')
       @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
@@ -111,40 +111,13 @@ module Stella::Engine
       # TODO: don't get test time from benelux. 
       test_time = tt.stats.group(:execute_test_plan).mean
       generate_report @sumlog, plan, test_time
-      report_time = tt.stats.group(:generate_report).mean
-      
-      # Here is the calcualtion for the number of
-      # Benelux assets created for each request:
-      # 
-      #     [5*2*REQ+6, 5*1*REQ+3, 13*REQ]
-      # 
-      
-      failed = bt.stats.group(:failed).merge
-      total = bt.stats.group(:do_request).merge
-      
-      #ucsummaries = {}
-      #plan.usecases.each do |uc|
-      #  ucfailed = bt.stats.group(:failed)[uc.digest].merge
-      #  uctotal = bt.stats.group(:do_request)[uc.digest].merge
-      #  ucsummaries[uc.digest] = { 
-      #    :successful => (uctotal.n-ucfailed.n).to_i, 
-      #    :failed => ucfailed.n.to_i 
-      #  }
-      #end
-      #
-      #if Stella::Engine.service
-      #  Stella::Engine.service.testrun_summary :successful => (total.n-failed.n),
-      #                                         :failed => failed.n,
-      #                                         :duration => test_time, 
-      #                                         :usecases => ucsummaries
-      #end
-      
+      #report_time = tt.stats.group(:generate_report).mean
       
       Stella.stdout.info File.read(@sumlog.path)
       
       Stella.stdout.info $/, "Log dir: #{@logdir}"
       
-      failed.n == 0
+      @testrun.summary[:summary][:failed].n == 0 
     end
     
   protected
@@ -404,7 +377,7 @@ module Stella::Engine
         Stella.ld ex.backtrace
       end
     end
-
+    
     def update_usecase_quit client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :quit, 1
@@ -430,7 +403,7 @@ module Stella::Engine
         Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
       end
     end
-    
+      
     def update_request_repeat client_id, counter, total, req, container
       Stella.stdout.info3 "  Client-%s     REPEAT   %d of %d" % [client_id.shorter, counter, total]
     end
