@@ -11,6 +11,9 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
+#### 0.8.2 (2010-02-??) ###############################
+
+* FIXED: fail on connection error
 
 #### 0.8.1 (2010-02-10) ###############################
 
