@@ -1,0 +1,15 @@
+1265762176.90017; vanya.local; ea0cab96; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 81452319a8
+1265762179.38073; vanya.local; ea0cab96; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=furniture&where=Toronto; ; fd2494e296
+1265762177.02863; vanya.local; 9656f8fa; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=tbtrfvxe&city=Montreal&logo=#<File:0x000001014ac5c8>; ; d61858064d
+1265762177.04779; vanya.local; 9656f8fa; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=hw3bez8y&city=Montreal&logo=#<File:0x00000101308d00>; ; 2089c213be
+1265762177.08914; vanya.local; 9656f8fa; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=ghewx8tf&city=Montreal&logo=#<File:0x00000100b46a18>; ; 0c6c6dda03
+1265762177.09616; vanya.local; 9656f8fa; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=gtbp8wce&city=Vancouver&logo=#<File:0x000001012fc350>; ; 5d83363a71
+1265762177.03263; vanya.local; 6cbf3e73; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 0096ca4e08
+1265762177.09322; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 52427d2611
+1265762177.09802; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; cf136a88c3
+1265762177.10198; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; f94df3755e
+1265762177.10579; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 9d070e994c
+1265762177.10968; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 05a1e05992
+1265762177.11354; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; d47145d49b
+1265762177.11729; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 69650c83b8
+1265762177.12127; vanya.local; 6cbf3e73; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 022dfb6c7d

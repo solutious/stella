@@ -1,0 +1,15 @@
+1265735945.26922; vanya.local; c8d331c8; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=nmfffbpk&city=Vancouver&logo=#<File:0x00000101a3e728>; ; 9306dba264
+1265735945.39851; vanya.local; c8d331c8; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=5sqjmxfy&city=Montreal&logo=#<File:0x00000100f3fa08>; ; bc27a6d228
+1265735945.44184; vanya.local; c8d331c8; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=qjmsa88w&city=Montreal&logo=#<File:0x00000100e8c3d0>; ; cfd4fe2adc
+1265735945.46581; vanya.local; c8d331c8; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=m86krkpx&city=Vancouver&logo=#<File:0x00000101ec3520>; ; 32b132b2d1
+1265735945.26801; vanya.local; d43a2129; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; df155f4ba8
+1265735946.61868; vanya.local; d43a2129; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=keyboard&where=Vancouver; ; 33f079602c
+1265735945.40235; vanya.local; 8ca35df0; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; e1917b74ef
+1265735945.46757; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 18ef136005
+1265735945.47174; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; d7653325d3
+1265735945.4757; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 5336e6a6d5
+1265735945.47968; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; a582e03fdd
+1265735945.48512; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; d96da20408
+1265735945.48943; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 119197fe4a
+1265735945.49395; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; d3fe900982
+1265735945.49805; vanya.local; 8ca35df0; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 19911314dc

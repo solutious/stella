@@ -1,0 +1,15 @@
+1265762510.16999; vanya.local; c08cbc1b; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 8b6410fcd8
+1265762510.23011; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 6735b0bad6
+1265762510.23688; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; d2c18a1cd0
+1265762510.24342; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 444d2ee9d2
+1265762510.24817; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; f7b7a96186
+1265762510.25208; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 86d69e0fc7
+1265762510.2559; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 825c62bc2e
+1265762510.2598; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 099cec8474
+1265762510.26487; vanya.local; c08cbc1b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 25324750dc
+1265762510.1973; vanya.local; b6852683; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=vn542vas&city=Toronto&logo=#<File:0x000001014bdea8>; ; 03916fce0f
+1265762510.23279; vanya.local; b6852683; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=de5b267f&city=Toronto&logo=#<File:0x000001016d3ed0>; ; 07901d2f6b
+1265762510.23954; vanya.local; b6852683; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2qw3ewhh&city=Montreal&logo=#<File:0x00000101335fc0>; ; ebb538c75b
+1265762510.24612; vanya.local; b6852683; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=mh338emx&city=Montreal&logo=#<File:0x00000101299358>; ; 28e6c40ba6
+1265762510.18739; vanya.local; e71b5759; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 00a3fef007
+1265762511.44939; vanya.local; e71b5759; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ti&where=Toronto; ; 4cab0db432

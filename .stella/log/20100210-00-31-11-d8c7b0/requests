@@ -1,0 +1,15 @@
+1265761872.36352; vanya.local; 4ea38750; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; b32f0a9cfc
+1265761872.44061; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 7fb9700af4
+1265761872.44868; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; c5ff76ab1d
+1265761872.45324; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 32011addfe
+1265761872.45856; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 5f7a64d2bd
+1265761872.46321; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 869e134ce2
+1265761872.46738; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; a1ba43aea6
+1265761872.47139; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 68e724c791
+1265761872.47576; vanya.local; 4ea38750; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; b4214298fd
+1265761872.37939; vanya.local; d87a51ca; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2n5fgjjw&city=Vancouver&logo=#<File:0x0000010106e758>; ; 70926a3275
+1265761872.4298; vanya.local; d87a51ca; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=rjxft8sh&city=Toronto&logo=#<File:0x00000100b1b3c8>; ; d99cdc7fa0
+1265761872.4391; vanya.local; d87a51ca; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=sppzada2&city=Montreal&logo=#<File:0x00000100dfd298>; ; e2e7319351
+1265761872.45118; vanya.local; d87a51ca; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=xtchr2qv&city=Toronto&logo=#<File:0x00000100d51e18>; ; a4d7502a52
+1265761872.36757; vanya.local; b8450dc8; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 3439bdf052
+1265761874.7394; vanya.local; b8450dc8; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=al&where=Vancouver; ; d2a07ca982

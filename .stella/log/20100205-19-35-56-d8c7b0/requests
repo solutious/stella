@@ -1,0 +1,15 @@
+1265398559.82615; vanya.local; cf0b169d; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; ad7b2589f7
+1265398560.88101; vanya.local; cf0b169d; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=town&where=Montreal; ; 3f1994bfea
+1265398559.83232; vanya.local; 3de6cf7a; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 9122825975
+1265398559.8382; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 46a60ca261
+1265398559.85214; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 3624b79ab5
+1265398559.8807; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; a4c7018a5d
+1265398559.89091; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 2cb99e336c
+1265398559.89518; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; c28d665c22
+1265398559.89864; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 1c88d8243a
+1265398559.90196; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 3aa7474c6b
+1265398559.90534; vanya.local; 3de6cf7a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 6bd4d73a54
+1265398559.83647; vanya.local; 3a5299c7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=j5vscqnx&city=Montreal&logo=#<File:0x00000100ca2910>; ; 620beb7db1
+1265398559.85589; vanya.local; 3a5299c7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=jebdkftr&city=Vancouver&logo=#<File:0x00000100a76298>; ; fc2ca16ea5
+1265398559.87906; vanya.local; 3a5299c7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=m35cdxa7&city=Toronto&logo=#<File:0x00000100910d20>; ; a0d53f792d
+1265398559.88993; vanya.local; 3a5299c7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=ufpucrh5&city=Vancouver&logo=#<File:0x00000102b4cdc8>; ; 299637be94

@@ -1,0 +1,15 @@
+1265399424.30644; vanya.local; 6bf148c4; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 25ea51de79
+1265399425.17975; vanya.local; 6bf148c4; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=al&where=Toronto; ; 29f39aaac8
+1265399424.30081; vanya.local; d45732a7; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 0852a363e6
+1265399424.3102; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; cb7b45b63d
+1265399424.34455; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 93ccf6933a
+1265399424.35026; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 28975ddfd0
+1265399424.35432; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 982362e70c
+1265399424.35771; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 221f8aa153
+1265399424.36113; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 834542ed70
+1265399424.36445; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 492fce68dd
+1265399424.36798; vanya.local; d45732a7; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 5c722466da
+1265399424.3129; vanya.local; 4b43b8a3; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2d8gkvar&city=Montreal&logo=#<File:0x00000100c4c8e8>; ; bb9f1d4dec
+1265399424.32092; vanya.local; 4b43b8a3; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=5a667bpf&city=Vancouver&logo=#<File:0x00000100a749a8>; ; 9bab7f6e4d
+1265399424.32714; vanya.local; 4b43b8a3; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=n7j75s8q&city=Vancouver&logo=#<File:0x000001009afe10>; ; 4038ae55eb
+1265399424.35302; vanya.local; 4b43b8a3; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=s7pxn38w&city=Vancouver&logo=#<File:0x00000102664e18>; ; 16cbcc489c

@@ -1,0 +1,15 @@
+1265762743.97979; vanya.local; 88892bbb; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=nwch5k3h&city=Toronto&logo=#<File:0x00000101088768>; ; d8bef1c44d
+1265762744.11804; vanya.local; 88892bbb; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=86ch44hm&city=Toronto&logo=#<File:0x00000100dc61e8>; ; 105abf54cd
+1265762744.15905; vanya.local; 88892bbb; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=qkwkbxfe&city=Toronto&logo=#<File:0x00000100d39538>; ; 4ef4b440fa
+1265762744.16962; vanya.local; 88892bbb; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=psuqzzq2&city=Montreal&logo=#<File:0x000001025384a8>; ; fd7ee4f3b9
+1265762743.9892; vanya.local; f79476a0; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 555ac68700
+1265762745.89425; vanya.local; f79476a0; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ink&where=Montreal; ; 4cbfbed66c
+1265762744.12227; vanya.local; 9f49ec49; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 453575d655
+1265762744.19025; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 6f40c37810
+1265762744.1956; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; b0bfb11e6b
+1265762744.20001; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 1c60cedcdc
+1265762744.20446; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; cab0854e76
+1265762744.20896; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; d4d6a17782
+1265762744.21389; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 343f953cde
+1265762744.2186; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; fad1acd8d7
+1265762744.22308; vanya.local; 9f49ec49; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; f06527369d

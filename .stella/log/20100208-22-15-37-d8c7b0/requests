@@ -1,0 +1,15 @@
+1265667339.85265; vanya.local; aa54ceba; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; dffca381ec
+1265667340.65904; vanya.local; aa54ceba; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ti&where=Vancouver; ; 90acfcc895
+1265667339.85378; vanya.local; 27bda7a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=yrhxwdqs&city=Montreal&logo=#<File:0x000001014e7c08>; ; a66e45b9c5
+1265667339.89641; vanya.local; 27bda7a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=8b355z8q&city=Vancouver&logo=#<File:0x000001012b0118>; ; eac895354d
+1265667339.91975; vanya.local; 27bda7a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=sewp8zaf&city=Montreal&logo=#<File:0x00000101515c90>; ; 26f09f02b6
+1265667339.92981; vanya.local; 27bda7a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=gfrekya6&city=Vancouver&logo=#<File:0x0000010128dff8>; ; 884d22f664
+1265667339.85823; vanya.local; 1f704d6b; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 9359d3ac01
+1265667339.9212; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 3b6fe5111c
+1265667339.93092; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 7b444ec2ab
+1265667339.93557; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; f632949d3b
+1265667339.93999; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; eb7060e9ff
+1265667339.94452; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 7a724a3c97
+1265667339.94873; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 1234224747
+1265667339.95273; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 5023da07f5
+1265667339.95744; vanya.local; 1f704d6b; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; f0d0c07761

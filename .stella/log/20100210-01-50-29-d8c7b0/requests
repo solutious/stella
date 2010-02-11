@@ -1,0 +1,16 @@
+1265766632.8932; vanya.local; ef0e9389; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 68bc281168
+1265766634.31065; vanya.local; ef0e9389; b557f9; aaadf9; GET; 200; http://localhost:3114/search; what=ti&where=Montreal; ; 8f89af3fcd
+1265766634.85916; vanya.local; ef0e9389; b557f9; 90c7a9; GET; 200; http://localhost:3114/listing/1006; ; ; becdd5bada
+1265766632.89837; vanya.local; 518c5f61; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; edcb57de85
+1265766632.96116; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 9081d4c23a
+1265766632.96658; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 27cc418217
+1265766632.97068; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; c0f2e3a9a0
+1265766632.97466; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 9f879f2871
+1265766632.97857; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 56e4a03137
+1265766632.98249; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; d263c799eb
+1265766633.00435; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 088437f3b1
+1265766633.00855; vanya.local; 518c5f61; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 79b1405c8e
+1265766632.89481; vanya.local; 0e0b625f; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=gvdf3bw3&city=Montreal&logo=#<File:0x00000101004ca0>; ; f76b8d8f84
+1265766632.93435; vanya.local; 0e0b625f; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=44p83ufw&city=Montreal&logo=#<File:0x00000100f12f98>; ; 711d7f458f
+1265766632.95702; vanya.local; 0e0b625f; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=6qj8tfka&city=Vancouver&logo=#<File:0x0000010237d608>; ; d8ab64d462
+1265766632.96866; vanya.local; 0e0b625f; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=sch6b73t&city=Vancouver&logo=#<File:0x00000100c6b240>; ; c4761bc02e

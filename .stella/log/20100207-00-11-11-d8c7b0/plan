@@ -1,0 +1,78 @@
+ Product Finder  (d8c7b0)                                            
+  Simple search  (b557f9)                                       65% 
+    Homepage  (67cc83)                                            
+      GET /
+      wait: 1..3
+       params: {}
+    Search Results  (aaadf9)                                      
+      GET /search
+      wait: 2..3
+       params: {:what=>#<Stella::Template:0x0000010153a468 @src="<%= random(:search_terms) %>", @template=#<ERB:0x0000010174b1a8 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( random(:search_terms) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>, :where=>#<Stella::Template:0x00000101752090 @src="<%= random([\"Toronto\", \"Vancouver\", \"Montreal\"]) %>", @template=#<ERB:0x000001017520c8 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( random([\"Toronto\", \"Vancouver\", \"Montreal\"]) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 200    do
+          
+          # If the response contains HTML, it will
+          # automatically be parsed using the Ruby
+          # library Nokogiri. See the following link
+          # for more information:
+          # http://nokogiri.rubyforge.org/nokogiri/
+          #
+          # The important thing to note is that you 
+          # don't need to write complex regular 
+          # expressions to grab data from the page. 
+          # 
+          listing = doc.css('div.listing').first
+          
+          # Here we grab the first listing ID on the
+          # page and store it in a variable called
+          # :lid. This is similar to a resource. 
+          #
+          set :lid, listing['id'].match(/(\d+)/)[0]
+        end
+      response: 404    do 
+          quit "No results"
+        end
+    Selected listing  (90c7a9)                                    
+      GET /listing/:lid
+      wait: 1..4
+       params: {}
+  YAML API  (e34a6f)                                            25% 
+    View All  (25a8d1)                                            
+      GET /listings.yaml
+      wait: 0
+       params: {}
+      response: 200    do
+        
+          # We showed above how HTML is parsed automatically.
+          # Stella can do the same with XML, YAML, and JSON. 
+          #
+          # A variable called "doc" contains the parsed YAML.
+          # "collect" is a Ruby method that iterates through 
+          # all items in an Array and returns a new Array 
+          # containing the return values from each iteration. 
+          # Each item item is available in the variable 
+          # called 'l'. 
+          #
+          # The variable called "listings" will contain all
+          # listing ids in the YAML document.
+          #
+          listings = doc.collect! { |l|; l[:id]; }
+          
+          # And here we store that list of ids. 
+          #
+          set :listing_ids, listings
+        end
+    Select Listing  (bf26cd)                                      
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Stella::Template:0x000001021552b8 @src="<%= sequential(:listing_ids) %>", @template=#<ERB:0x00000102155280 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( sequential(:listing_ids) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 200    do
+          repeat 7
+        end
+  Self-serve API  (63e799)                                      10% 
+    Add a listing  (dd1782)                                       
+      POST /listing/add
+      wait: 0
+       params: {:name=>#<Stella::Template:0x000001020d0fd8 @src="<%= random(8) %>", @template=#<ERB:0x000001020d0fa0 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( random(8) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>, :city=>#<Stella::Template:0x000001020d0360 @src="<%= random([\"Toronto\", \"Vancouver\", \"Montreal\"]) %>", @template=#<ERB:0x000001020d0328 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( random([\"Toronto\", \"Vancouver\", \"Montreal\"]) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>, :logo=>#<Stella::Template:0x000001020cf720 @src="<%= file('logo.png') %>", @template=#<ERB:0x000001020cf6e8 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( file('logo.png') ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 302    do
+          repeat 3
+        end

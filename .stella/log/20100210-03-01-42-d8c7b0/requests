@@ -1,0 +1,15 @@
+1265770905.83963; vanya.local; ff28ec77; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 0519d49e30
+1265770905.94004; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 58f9f6d5bf
+1265770905.95726; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; cca3cfc10f
+1265770905.96274; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; ecc4aa5e5c
+1265770905.96799; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 18ba12da4d
+1265770905.97366; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; feeb07f329
+1265770905.99896; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 23334fdfd4
+1265770906.00749; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; f6171ce486
+1265770906.01303; vanya.local; ff28ec77; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 7645566652
+1265770905.88852; vanya.local; 54122f75; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=k5tdpbch&city=Vancouver&logo=#<File:0x000001015de648>; ; a88f43ae52
+1265770905.93316; vanya.local; 54122f75; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=hmtachb8&city=Vancouver&logo=#<File:0x00000102358570>; ; 095bcd23c5
+1265770905.94297; vanya.local; 54122f75; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=ffgnutj5&city=Montreal&logo=#<File:0x0000010120f968>; ; 680df2dded
+1265770905.94978; vanya.local; 54122f75; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=sk5kwkzq&city=Vancouver&logo=#<File:0x0000010115bc68>; ; 1737b09837
+1265770905.86456; vanya.local; 70318ff5; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 80ab507fc3
+1265770905.93043; vanya.local; 70318ff5; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=big&where=Vancouver; ; 26c3c4f2fa

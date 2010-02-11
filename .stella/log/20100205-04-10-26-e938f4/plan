@@ -1,0 +1,10 @@
+ Test plan  (e938f4)                                                 
+  Dynamic Data  (7ffc50)                                        100% 
+    Get Listings  (25a8d1)                                        
+      GET /listings.yaml
+    Sequential  (bf26cd)                                          
+      GET /listing/:lid.yaml
+    Reverse Sequential  (15d7a9)                                  
+      GET /listing/:lid.yaml
+    Random  (977a53)                                              
+      GET /listing/:lid.yaml

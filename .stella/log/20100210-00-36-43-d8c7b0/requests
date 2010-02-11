@@ -1,0 +1,16 @@
+1265762204.99907; vanya.local; a8ccd0b5; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; a0bd841ba5
+1265762205.06173; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 048a089555
+1265762205.06881; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 62c0929a6c
+1265762205.07354; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 3e2659b6d1
+1265762205.07765; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 28400bdb51
+1265762205.08151; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 449264eeb2
+1265762205.08541; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; ba50ea64ab
+1265762205.08942; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; ba078740c6
+1265762205.09326; vanya.local; a8ccd0b5; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; e5e2bf2f9c
+1265762205.04126; vanya.local; bd2ad5a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=a4xuzb4b&city=Toronto&logo=#<File:0x000001022ea7c8>; ; ee2e378fd5
+1265762205.05758; vanya.local; bd2ad5a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=5qf3pa8f&city=Toronto&logo=#<File:0x0000010274fae8>; ; ef107dd1fc
+1265762205.06447; vanya.local; bd2ad5a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=48jpu4h7&city=Toronto&logo=#<File:0x0000010217fef8>; ; f1ea377920
+1265762205.07163; vanya.local; bd2ad5a1; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2ewpw83w&city=Vancouver&logo=#<File:0x00000102013b40>; ; 0dfe936606
+1265762205.02368; vanya.local; 1939dc83; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 8e9fa27945
+1265762206.64031; vanya.local; 1939dc83; b557f9; aaadf9; GET; 200; http://localhost:3114/search; what=town&where=Toronto; ; 06f2800fae
+1265762206.65153; vanya.local; 1939dc83; b557f9; 90c7a9; GET; 200; http://localhost:3114/listing/1001; ; ; 7323da2686

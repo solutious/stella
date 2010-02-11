@@ -1,0 +1,15 @@
+1265771295.69937; vanya.local; 101d3c91; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=uj3a2tas&city=Toronto&logo=#<File:0x000001010d1e18>; ; 976afd367a
+1265771295.84437; vanya.local; 101d3c91; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=rd3jaejg&city=Vancouver&logo=#<File:0x00000100e86588>; ; 912f11c5e9
+1265771295.89215; vanya.local; 101d3c91; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=7fmbjru5&city=Montreal&logo=#<File:0x00000100ca19f8>; ; 20e36e0d4e
+1265771295.90735; vanya.local; 101d3c91; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=za7h8pbv&city=Toronto&logo=#<File:0x00000101933500>; ; 164b7fdb50
+1265771295.84086; vanya.local; 4825bddd; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 1876bc7a62
+1265771295.88662; vanya.local; 4825bddd; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=big&where=Vancouver; ; 4f654a9e11
+1265771295.84561; vanya.local; ae376f03; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 47ca2eea91
+1265771295.92201; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 53b12a224e
+1265771295.92752; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; b954319393
+1265771295.93289; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 76e5b58ade
+1265771295.93754; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; a73360f774
+1265771295.94163; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 030cbfd29d
+1265771295.96706; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 5d740934c0
+1265771295.97171; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 0b34aa09ad
+1265771295.9771; vanya.local; ae376f03; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 4cc73877a4

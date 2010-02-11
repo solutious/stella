@@ -1,0 +1,15 @@
+1265739703.33988; vanya.local; 3c16b0f6; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=rm7cymm7&city=Montreal&logo=#<File:0x000001016c9190>; ; 7cf1969001
+1265739703.46995; vanya.local; 3c16b0f6; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=bhprq76x&city=Vancouver&logo=#<File:0x000001014d1468>; ; 8d07772f59
+1265739703.50834; vanya.local; 3c16b0f6; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=p4cnbmwn&city=Toronto&logo=#<File:0x0000010143de80>; ; ab8f9b5332
+1265739703.54464; vanya.local; 3c16b0f6; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=tpdtpdss&city=Vancouver&logo=#<File:0x0000010269f4d0>; ; 470f603be9
+1265739703.34412; vanya.local; e97ebbbc; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; c9448410a5
+1265739703.54298; vanya.local; e97ebbbc; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=west&where=Vancouver; ; 21263f6fc7
+1265739703.47331; vanya.local; 99aed13a; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 64c0ed5944
+1265739703.54571; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 9f782bcc92
+1265739703.54998; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; f4d237a759
+1265739703.55403; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 24cd58cf0d
+1265739703.55802; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 652eb7f75e
+1265739703.56225; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 7847258929
+1265739703.5663; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; a30d15fa00
+1265739703.57023; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 208188cc88
+1265739703.57423; vanya.local; 99aed13a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 6ac8f3043b

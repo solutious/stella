@@ -45,12 +45,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000225">new</a></li>
+              <li><a href="#M000231">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000227">send_request</a></li>
-              <li><a href="#M000226">uri</a></li>
+              <li><a href="#M000233">send_request</a></li>
+              <li><a href="#M000232">uri</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -109,6 +109,16 @@
                     <td class='context-item-desc'></td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>rtid</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>runid</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>runid</td>
                     <td class='context-item-value'>[RW]</td>
                     <td class='context-item-desc'></td>
@@ -124,6 +134,16 @@
                     <td class='context-item-desc'></td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>tid</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>uid</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>uid</td>
                     <td class='context-item-value'>[RW]</td>
                     <td class='context-item-desc'></td>
@@ -133,44 +153,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000225'>
-                <a name='M000225'>      </a>
+              <div class='method public-class' id='method-M000231'>
+                <a name='M000231'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(source=nil,apikey=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000225-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000231-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000225-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 150</span>&#x000A;150:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>=<span class="ruby-keyword kw">nil</span>,<span class="ruby-identifier">apikey</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;151:     <span class="ruby-identifier">source</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_SOURCE'</span>]&#x000A;152:     <span class="ruby-identifier">apikey</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_TOKEN'</span>]&#x000A;153:     <span class="ruby-ivar">@source</span>, <span class="ruby-ivar">@apikey</span> = <span class="ruby-identifier">source</span>, <span class="ruby-identifier">apikey</span>&#x000A;154:     <span class="ruby-ivar">@proxy</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>&#x000A;155:     <span class="ruby-ivar">@http_client</span> = <span class="ruby-identifier">create_http_client</span>&#x000A;156:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-value str">&quot;Set STELLA_SOURCE&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@source</span>&#x000A;157:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-value str">&quot;Set STELLA_TOKEN&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@apikey</span>&#x000A;158:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000231-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 247</span>&#x000A;247:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>=<span class="ruby-keyword kw">nil</span>,<span class="ruby-identifier">apikey</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;248:     <span class="ruby-keyword kw">begin</span>&#x000A;249:       <span class="ruby-identifier">require</span> <span class="ruby-value str">'bone'</span>&#x000A;250:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span>&#x000A;251:     <span class="ruby-keyword kw">end</span>&#x000A;252:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">Bone</span>)&#x000A;253:       <span class="ruby-identifier">source</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Bone</span>[<span class="ruby-value str">'STELLA_SOURCE'</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>&#x000A;254:       <span class="ruby-identifier">apikey</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Bone</span>[<span class="ruby-value str">'STELLA_TOKEN'</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>&#x000A;255:     <span class="ruby-keyword kw">end</span>&#x000A;256:     <span class="ruby-identifier">source</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_SOURCE'</span>]&#x000A;257:     <span class="ruby-identifier">apikey</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_TOKEN'</span>]&#x000A;258:     <span class="ruby-ivar">@source</span>, <span class="ruby-ivar">@apikey</span> = <span class="ruby-identifier">source</span>, <span class="ruby-identifier">apikey</span>&#x000A;259:     <span class="ruby-ivar">@proxy</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>&#x000A;260:     <span class="ruby-ivar">@http_client</span> = <span class="ruby-identifier">create_http_client</span>&#x000A;261:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-value str">&quot;Set STELLA_SOURCE&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@source</span>&#x000A;262:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-value str">&quot;Set STELLA_TOKEN&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@apikey</span>&#x000A;263:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000227'>
-                <a name='M000227'>      </a>
+              <div class='method public-instance' id='method-M000233'>
+                <a name='M000233'>      </a>
                 <div class='synopsis'>
                   <span class='name'>send_request</span>
                   <span class='arguments'>(meth, uri, params={}, headers={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000227-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000233-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000227-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 167</span>&#x000A;167:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send_request</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">params</span>={}, <span class="ruby-identifier">headers</span>={})&#x000A;168:     <span class="ruby-identifier">headers</span>[<span class="ruby-value str">'X-TOKEN'</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@apikey</span>&#x000A;169:     <span class="ruby-identifier">params</span> = <span class="ruby-identifier">process_params</span>(<span class="ruby-identifier">params</span>)&#x000A;170:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">meth</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;delete&quot;</span>&#x000A;171:       <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">headers</span>]&#x000A;172:     <span class="ruby-keyword kw">else</span>&#x000A;173:       <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">headers</span>]&#x000A;174:     <span class="ruby-keyword kw">end</span>&#x000A;175:     <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@http_client</span>.<span class="ruby-identifier">send</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-comment cmt"># booya!</span>&#x000A;176:     &#x000A;177:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">status</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>&#x000A;178:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">content</span>&#x000A;179:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">Problem</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>) &#x000A;180:     <span class="ruby-keyword kw">end</span>&#x000A;181:     &#x000A;182:     <span class="ruby-identifier">res</span>&#x000A;183:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000233-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 272</span>&#x000A;272:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send_request</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">params</span>={}, <span class="ruby-identifier">headers</span>={})&#x000A;273:     <span class="ruby-identifier">headers</span>[<span class="ruby-value str">'X-TOKEN'</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@apikey</span>&#x000A;274: &#x000A;275:     <span class="ruby-identifier">params</span> = <span class="ruby-identifier">process_params</span>(<span class="ruby-identifier">params</span>)&#x000A;276: &#x000A;277:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">meth</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;delete&quot;</span>&#x000A;278:       <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">headers</span>]&#x000A;279:     <span class="ruby-keyword kw">else</span>&#x000A;280:       <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>, <span class="ruby-identifier">params</span>, <span class="ruby-identifier">headers</span>]&#x000A;281:     <span class="ruby-keyword kw">end</span>&#x000A;282:     <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@http_client</span>.<span class="ruby-identifier">send</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-comment cmt"># booya!</span>&#x000A;283:     &#x000A;284:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">status</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">200</span>&#x000A;285:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">Problem</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>) &#x000A;286:     <span class="ruby-keyword kw">end</span>&#x000A;287:     &#x000A;288:     <span class="ruby-identifier">res</span>&#x000A;289:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000226'>
-                <a name='M000226'>      </a>
+              <div class='method public-instance' id='method-M000232'>
+                <a name='M000232'>      </a>
                 <div class='synopsis'>
                   <span class='name'>uri</span>
                   <span class='arguments'>(*parts)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000226-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000232-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000226-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 160</span>&#x000A;160:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uri</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">parts</span>)&#x000A;161:     <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span> <span class="ruby-ivar">@source</span>&#x000A;162:     <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">path</span> = <span class="ruby-value str">'/stella/'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>( <span class="ruby-value str">'/'</span>)&#x000A;163:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;SERVICE URI: #{uri}&quot;</span>&#x000A;164:     <span class="ruby-identifier">uri</span>&#x000A;165:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000232-source'>     <span class="ruby-comment cmt"># File lib/stella/service.rb, line 265</span>&#x000A;265:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uri</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">parts</span>)&#x000A;266:     <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span> <span class="ruby-ivar">@source</span>&#x000A;267:     <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">path</span> = <span class="ruby-value str">'/stella/'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>( <span class="ruby-value str">'/'</span>)&#x000A;268:     <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;SERVICE URI: #{uri}&quot;</span>&#x000A;269:     <span class="ruby-identifier">uri</span>&#x000A;270:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

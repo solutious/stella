@@ -1,0 +1,15 @@
+1265747698.70643; vanya.local; a4f67d62; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=b2tey6vd&city=Montreal&logo=#<File:0x00000101517388>; ; 6a450993b9
+1265747698.73009; vanya.local; a4f67d62; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=8snypbrc&city=Toronto&logo=#<File:0x0000010117f250>; ; 40be55fd28
+1265747698.77225; vanya.local; a4f67d62; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=tu2bttmd&city=Vancouver&logo=#<File:0x00000100937e18>; ; d9294f927d
+1265747698.7841; vanya.local; a4f67d62; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=33zzkabp&city=Toronto&logo=#<File:0x00000101130a08>; ; 34fb9a1409
+1265747698.71182; vanya.local; caabd39c; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; ba390467d0
+1265747698.77376; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 31ae09be08
+1265747698.78144; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; c85cb3f3a3
+1265747698.78713; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; c9be048946
+1265747698.79145; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; af2bcdb332
+1265747698.79566; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 986c5cc1e3
+1265747698.79967; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; e52e995308
+1265747698.80371; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; d9ebf9286f
+1265747698.808; vanya.local; caabd39c; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 5daacb3cf8
+1265747698.71072; vanya.local; 52b6730f; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; c530b3c62f
+1265747700.18772; vanya.local; 52b6730f; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=beads&where=Toronto; ; 9bc7057445

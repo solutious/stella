@@ -1,0 +1,31 @@
+ Test plan  (e938f4)                                                 
+  Dynamic Data  (7ffc50)                                        100% 
+    Get Listings  (25a8d1)                                        
+      GET /listings.yaml
+      wait: 0
+       params: {}
+      response: 200    do
+          listings = doc.collect! { |l|; l[:id]; }
+          set :listing_ids, listings[0..2]
+        end
+    Sequential  (bf26cd)                                          
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Stella::Template:0x000001015f8a10 @src="<%= sequential(:listing_ids) %>", @template=#<ERB:0x000001017af780 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( sequential(:listing_ids) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 200    do
+          repeat 5
+        end
+    Reverse Sequential  (15d7a9)                                  
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Stella::Template:0x000001020c5428 @src="<%= rsequential(:listing_ids) %>", @template=#<ERB:0x000001020c7d10 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( rsequential(:listing_ids) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 200    do
+          repeat 5
+        end
+    Random  (977a53)                                              
+      GET /listing/:lid.yaml
+      wait: 0
+       params: {:lid=>#<Stella::Template:0x000001025bcd00 @src="<%= random(:listing_ids) %>", @template=#<ERB:0x000001025bca60 @safe_level=nil, @src="#coding:US-ASCII\n_erbout = ''; _erbout.concat(( random(:listing_ids) ).to_s); _erbout.force_encoding(__ENCODING__)", @enc=#<Encoding:US-ASCII>, @filename=nil>>}
+      response: 200    do
+          repeat 5
+        end

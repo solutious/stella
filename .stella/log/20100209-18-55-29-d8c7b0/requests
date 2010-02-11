@@ -1,0 +1,15 @@
+1265741730.68369; vanya.local; d1f6e34a; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; dfe1cfb7fe
+1265741730.7494; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; bbddc7c90b
+1265741730.7575; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; b54fa3ce04
+1265741730.7649; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; a539e9c4d7
+1265741730.7697; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 66535e1bec
+1265741730.7738; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 15e21b14e2
+1265741730.77791; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 41c5d77c3d
+1265741730.78189; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; cfefcc4f4a
+1265741730.78577; vanya.local; d1f6e34a; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 419eda7d21
+1265741730.69685; vanya.local; f1e65960; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; d641024ece
+1265741731.42949; vanya.local; f1e65960; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=town&where=Vancouver; ; 84c94804d0
+1265741730.70682; vanya.local; 077d93c9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=guzrz7we&city=Vancouver&logo=#<File:0x00000101020a00>; ; 6f0d4e08f0
+1265741730.74499; vanya.local; 077d93c9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2a57ezmv&city=Vancouver&logo=#<File:0x0000010096f8a0>; ; 79751a8c4a
+1265741730.76056; vanya.local; 077d93c9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=x7wp888u&city=Montreal&logo=#<File:0x00000100e7a5b0>; ; fe56020339
+1265741730.76779; vanya.local; 077d93c9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=nhwv2skv&city=Vancouver&logo=#<File:0x00000100ce5228>; ; 7aa6ed1527

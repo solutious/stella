@@ -1,0 +1,4 @@
+     RUNID: 43a3b6c1d5f9824bfc6db67d499143c206d8bc74
+   OPTIONS: {:hosts=>[#<URI::HTTP:0x00000101ce2cf0 URL:http://bff.heroku.com>], :clients=>1, :duration=>32.0, :nowait=>false, :arrival=>nil, :repetitions=>1}
+     START: 2010-02-04 23:41:15 -0500
+       END: 2010-02-04 23:41:47 -0500

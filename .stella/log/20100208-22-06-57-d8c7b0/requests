@@ -1,0 +1,15 @@
+1265666819.37378; vanya.local; dc7e89c0; b557f9; 67cc83; GET; 200; http://bff.heroku.com:80/; ; ; 0f88c34a07
+1265666821.55328; vanya.local; dc7e89c0; b557f9; aaadf9; GET; 404; http://bff.heroku.com:80/search; what=on&where=Vancouver; ; 2a07a297f1
+1265666819.38582; vanya.local; f380d191; e34a6f; 25a8d1; GET; 200; http://bff.heroku.com:80/listings.yaml; ; ; ad902b9363
+1265666819.43086; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1000.yaml; ; ; eda281d762
+1265666819.48182; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1001.yaml; ; ; af12227173
+1265666819.519; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1002.yaml; ; ; c640eea727
+1265666819.56044; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1003.yaml; ; ; d1b4f6933f
+1265666819.6089; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1004.yaml; ; ; 5d23e8b4ae
+1265666819.6516; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1005.yaml; ; ; 476b521763
+1265666819.71549; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1006.yaml; ; ; 3a6df2ea88
+1265666819.76554; vanya.local; f380d191; e34a6f; bf26cd; GET; 200; http://bff.heroku.com:80/listing/1007.yaml; ; ; 79fa9198d0
+1265666819.40007; vanya.local; afea9d2b; 63e799; dd1782; POST; 302; http://bff.heroku.com:80/listing/add; name=kdkvaxmw&city=Vancouver&logo=#<File:0x00000100e2a210>; ; ea3168e3bd
+1265666819.4422; vanya.local; afea9d2b; 63e799; dd1782; POST; 302; http://bff.heroku.com:80/listing/add; name=ayksbxy8&city=Toronto&logo=#<File:0x00000100cabb68>; ; 452a6ef93e
+1265666819.49073; vanya.local; afea9d2b; 63e799; dd1782; POST; 302; http://bff.heroku.com:80/listing/add; name=kzx6445e&city=Montreal&logo=#<File:0x00000100b40818>; ; 74ea97d0be
+1265666819.53328; vanya.local; afea9d2b; 63e799; dd1782; POST; 302; http://bff.heroku.com:80/listing/add; name=6e4mvurm&city=Toronto&logo=#<File:0x00000100a6f458>; ; 0aac6ad4ae

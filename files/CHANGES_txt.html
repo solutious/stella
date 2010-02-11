@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2010-01-16 16:58:02 -0500</span>
+          <span class='datetime'>2010-02-10 22:57:09 -0500</span>
         </div>
       </div>
       <div id='content'>
@@ -53,20 +53,48 @@
             <li>TODO: Add option to dump full request/response output to a file by client
             
             </li>
-            <li>TODO: review cooking handling. Not always sent automatically.
+            <li>TODO: review cookie handling. Not always sent automatically.
             
             </li>
             <li>TODO: review :variables in URI elements
-            
-            </li>
-            <li>TODO: Stella::Testrun (no local analog for runid so it&#8217;s set by the
-            service)
             
             </li>
             <li>TODO: global responses
             
             </li>
             <li>TODO: request block conditions.
+            
+            </li>
+            <li>TODO: process templates for calls to set in get blocks
+            
+            </li>
+            </ul>
+            <p>
+            #### 0.8.1 (2010-02-10) ###############################
+            </p>
+            <ul>
+            <li>FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9
+            
+            </li>
+            <li>FIXED: warning in Ruby 1.9
+            
+            </li>
+            <li>FIXED: Setting of domain for HTTP authentication when the request URI is a
+            fully qualified URI.
+            
+            </li>
+            <li>CHANGE: Don&#8217;t attempt to convert parameters or headers to ERB
+            templates.
+            
+            </li>
+            <li>CHANGE: Randomize order of usecase when generating load
+            
+            </li>
+            <li>CHANGE: noparams and noheader now default to off. Must use with-param and
+            with-header.
+            
+            </li>
+            <li>ADDED: <a href="../classes/Stella.html#M000051">Stella.get</a>
             
             </li>
             </ul>
@@ -149,7 +177,7 @@
             
             </li>
             <li>CHANGE: Global variables now implemented in <a
-            href="../classes/Stella/Testplan.html#M000240">Stella::Testplan.global</a>
+            href="../classes/Stella/Testplan.html#M000247">Stella::Testplan.global</a>
             and can be used like usecase and request resources.
             
             </li>
@@ -161,14 +189,14 @@
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000071">Stella::Data::Helpers#read_file</a>
+            href="../classes/Stella/Data/Helpers.html#M000075">Stella::Data::Helpers#read_file</a>
             
             </li>
             <li>ADDED: Stella::Data::Helpers#resequential
             
             </li>
             <li>ADDED: <a
-            href="../classes/Stella/Data/Helpers.html#M000072">Stella::Data::Helpers#path</a>
+            href="../classes/Stella/Data/Helpers.html#M000076">Stella::Data::Helpers#path</a>
             
             </li>
             <li>ADDED: no-param, no-header options

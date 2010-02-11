@@ -1,0 +1,39 @@
+[7m Test plan  (e938f4)                                                       [0m
+ [7m[1m Dynamic Data  (7ffc50)                                                100% [0m[0m
+[1m   Get Listings  (25a8d1)                                                   [0m
+    GET /listings.yaml
+      do_request                     0.062 <= 0.093s >= 0.261; 0.030(SD) 113(N)
+
+[1m   Sequential  (bf26cd)                                                     [0m
+    GET /listing/:lid.yaml
+      do_request                     0.032 <= 0.053s >= 0.224; 0.022(SD) 678(N)
+
+[1m   Reverse Sequential  (15d7a9)                                             [0m
+    GET /listing/:lid.yaml
+      do_request                     0.032 <= 0.054s >= 0.257; 0.025(SD) 678(N)
+
+[1m   Random  (977a53)                                                         [0m
+    GET /listing/:lid.yaml
+      do_request                     0.032 <= 0.053s >= 0.247; 0.023(SD) 678(N)
+
+[1m   Sub Total:[0m
+      Total requests                 2147 (200: 2147)
+       success                       2147
+       failed                        0
+      do_request                     0.055s 0.025(SD)
+      response_content_size          196.28KB     (avg:91.42B)
+
+ [7m Total:                                                             [0m
+      Total requests                 2147
+       success                       2147 (req/s: 67.68)
+       failed                        0
+      do_request                     0.055s     0.025(SD)
+      response_content_size          196.28KB     (avg:91.42B)
+
+Summary: 
+      successful req:     2147
+          failed req:        0
+         max clients:        5
+         repetitions:       22
+           test time:    31.72
+      reporting time:     0.43

@@ -1,0 +1,15 @@
+1265779378.07842; vanya.local; de091558; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 1d212922d5
+1265779378.2674; vanya.local; de091558; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ink&where=Montreal; ; 4c20ab47dc
+1265779378.24808; vanya.local; ddaaa4aa; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; c8df25192b
+1265779378.30987; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 17e8fb719f
+1265779378.31636; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 18eceb6833
+1265779378.32319; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; d85b661d07
+1265779378.3279; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 5a139ddacf
+1265779378.3318; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; bf87d044c4
+1265779378.35296; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; f756bc8acd
+1265779378.35773; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; d687b2c38b
+1265779378.36261; vanya.local; ddaaa4aa; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 642069e6cc
+1265779378.28576; vanya.local; 22339be7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=7aycsjyt&city=Toronto&logo=#<File:0x00000101668d20>; ; cfe2a9518a
+1265779378.3124; vanya.local; 22339be7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=4av847zp&city=Montreal&logo=#<File:0x00000101505d48>; ; c04db9ef62
+1265779378.31912; vanya.local; 22339be7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=7m2uxtst&city=Montreal&logo=#<File:0x00000101204870>; ; 04c53c1fc1
+1265779378.32603; vanya.local; 22339be7; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=mg68cwgj&city=Montreal&logo=#<File:0x0000010114bea8>; ; c21f1cef38

@@ -1,0 +1,16 @@
+1265776641.83839; vanya.local; a917d5ab; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; c6c868f2ed
+1265776641.95615; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; c81053d839
+1265776641.96691; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 35568b70d2
+1265776641.99702; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; d7d5dd302e
+1265776642.02054; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 0e4bd4921f
+1265776642.02513; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; c282afc775
+1265776642.02955; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; fb8e5e5027
+1265776642.03393; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 529027db22
+1265776642.03838; vanya.local; a917d5ab; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 0236d4934c
+1265776641.85743; vanya.local; aed50972; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=b6keuk5u&city=Vancouver&logo=#<File:0x00000100e7a498>; ; 888d4d8989
+1265776641.91718; vanya.local; aed50972; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=zgjr65d6&city=Vancouver&logo=#<File:0x00000100cb6c98>; ; 5213ffe6b8
+1265776641.95747; vanya.local; aed50972; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=wgjpvfdk&city=Montreal&logo=#<File:0x00000100b32b28>; ; 2ea4785fcf
+1265776642.00491; vanya.local; aed50972; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=7cfcc4dk&city=Vancouver&logo=#<File:0x00000100992408>; ; fc91ce7399
+1265776641.87788; vanya.local; f35499b6; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 54d06b4c28
+1265776641.95846; vanya.local; f35499b6; b557f9; aaadf9; GET; 200; http://localhost:3114/search; what=k&where=Vancouver; ; 3d7823fb67
+1265776642.01953; vanya.local; f35499b6; b557f9; 90c7a9; GET; 200; http://localhost:3114/listing/39436; ; ; 675a4902b1

@@ -1,0 +1,15 @@
+1265736429.3005; vanya.local; 692fc4f3; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 8cdcba7a48
+1265736429.36398; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 68f77d51e2
+1265736429.37809; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 42caa8cd0d
+1265736429.38423; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 6f986bcbc6
+1265736429.38894; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; bb700423de
+1265736429.39302; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; ba4f02bb7c
+1265736429.4821; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; c3bda85522
+1265736429.4869; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; e32cc0c410
+1265736429.49123; vanya.local; 692fc4f3; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 0a831e36c4
+1265736429.30192; vanya.local; 0778f53b; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 270216cbd2
+1265736431.92696; vanya.local; 0778f53b; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ti&where=Toronto; ; 8303570b48
+1265736429.32207; vanya.local; c695fdf9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=5squaubu&city=Montreal&logo=#<File:0x00000100e6e530>; ; f23b380dd2
+1265736429.36985; vanya.local; c695fdf9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=rbu2rgmn&city=Vancouver&logo=#<File:0x000001009bfb98>; ; 178cced782
+1265736429.37697; vanya.local; c695fdf9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=dyyf25aa&city=Montreal&logo=#<File:0x00000100cd36a8>; ; 7a36e4f730
+1265736429.38699; vanya.local; c695fdf9; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=n6q3tjwm&city=Vancouver&logo=#<File:0x00000100c4f710>; ; 3388a9f209

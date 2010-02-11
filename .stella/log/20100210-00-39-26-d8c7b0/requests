@@ -1,0 +1,16 @@
+1265762367.12242; vanya.local; 4da4d2e5; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; a08d742442
+1265762368.63515; vanya.local; 4da4d2e5; b557f9; aaadf9; GET; 200; http://localhost:3114/search; what=fu&where=Toronto; ; 2e704185e3
+1265762369.45815; vanya.local; 4da4d2e5; b557f9; 90c7a9; GET; 200; http://localhost:3114/listing/43339; ; ; 43f88451dc
+1265762367.25508; vanya.local; 6358a88c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=fru3cq85&city=Toronto&logo=#<File:0x00000101479648>; ; c799bc05f2
+1265762367.29468; vanya.local; 6358a88c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=up2zabem&city=Toronto&logo=#<File:0x000001013d5b68>; ; 4c0fe44d5d
+1265762367.3148; vanya.local; 6358a88c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=4wajefgw&city=Vancouver&logo=#<File:0x00000102553590>; ; 22c23b1dba
+1265762367.32457; vanya.local; 6358a88c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=87pbtnqc&city=Montreal&logo=#<File:0x000001013b0050>; ; f4169b7386
+1265762367.25865; vanya.local; f1fcb100; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; b92ef42bd9
+1265762367.31897; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 87a8c39fc1
+1265762367.32567; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; de4d5410e4
+1265762367.32965; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; a6f969f5fd
+1265762367.3336; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; ae4bda5a67
+1265762367.33734; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 068dafe760
+1265762367.34114; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; d44531d120
+1265762367.34584; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 7af1cc9c5f
+1265762367.35065; vanya.local; f1fcb100; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 483b177b70

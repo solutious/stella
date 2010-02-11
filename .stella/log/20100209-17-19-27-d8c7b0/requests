@@ -1,0 +1,15 @@
+1265735968.74135; vanya.local; 82412296; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=bpdet2j7&city=Toronto&logo=#<File:0x00000101a252e8>; ; 4394fcb6a6
+1265735968.95341; vanya.local; 82412296; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=4ujr5ygf&city=Montreal&logo=#<File:0x00000100ebf858>; ; f09a6edb17
+1265735969.00404; vanya.local; 82412296; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=h3qpu7m2&city=Toronto&logo=#<File:0x00000100dd8ac0>; ; f6ec610f41
+1265735969.02079; vanya.local; 82412296; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=4yvagz2h&city=Montreal&logo=#<File:0x00000101a27a48>; ; 2a408bfd55
+1265735968.95693; vanya.local; af46c7ee; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; c7f300bffe
+1265735969.02195; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; f8269e56bd
+1265735969.02656; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 57c39fc83b
+1265735969.03064; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 9c9deb13e3
+1265735969.03612; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 67a9cb7abb
+1265735969.04049; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; e056b6bd64
+1265735969.04458; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 87ce3fa379
+1265735969.04857; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; a65faeccd8
+1265735969.05249; vanya.local; af46c7ee; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 3577d08778
+1265735968.9523; vanya.local; 3cf396ad; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 27bcf55eb1
+1265735970.0969; vanya.local; 3cf396ad; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=smoked&where=Montreal; ; 6fbee8e487

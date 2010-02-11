@@ -1,0 +1,15 @@
+1265761952.27402; vanya.local; 62674643; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; eaa7e8f15f
+1265761954.91331; vanya.local; 62674643; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=on&where=Vancouver; ; e909c928c1
+1265761952.25923; vanya.local; 508f9875; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; d4a766da34
+1265761952.32159; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 2ca8653964
+1265761952.32847; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 67004ba8fa
+1265761952.33424; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 49fb278d13
+1265761952.33952; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; d2a615cb47
+1265761952.34346; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 74b396141b
+1265761952.34759; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; cc0a73060c
+1265761952.35156; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 577c750c41
+1265761952.35534; vanya.local; 508f9875; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 4fedcd82f2
+1265761952.28557; vanya.local; 51471c18; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=2d2w7n8d&city=Toronto&logo=#<File:0x000001014cffa0>; ; 156c64c5eb
+1265761952.31745; vanya.local; 51471c18; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=z6spnec2&city=Vancouver&logo=#<File:0x0000010083a8e0>; ; 9e52dfbc25
+1265761952.32454; vanya.local; 51471c18; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=qj5dqtnm&city=Toronto&logo=#<File:0x00000101451e50>; ; d2d81092b2
+1265761952.33646; vanya.local; 51471c18; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=apvd4pbz&city=Vancouver&logo=#<File:0x0000010131eac8>; ; 5d3d715465

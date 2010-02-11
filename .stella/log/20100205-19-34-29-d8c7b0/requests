@@ -1,0 +1,16 @@
+1265398472.55605; vanya.local; 78ccafe6; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 8ba0a05893
+1265398472.56504; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 8ad77e6b06
+1265398472.57398; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; c0b103249d
+1265398472.60014; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; fc43004fa9
+1265398472.60978; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 318263e53c
+1265398472.61676; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; b45a5114e5
+1265398472.62064; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; f62ddfe81f
+1265398472.62407; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 105c640b90
+1265398472.62755; vanya.local; 78ccafe6; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; a2e1bf1422
+1265398472.561; vanya.local; d6fa4d66; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=4gusy3xg&city=Toronto&logo=#<File:0x0000010130f8a0>; ; 7954e393b7
+1265398472.56844; vanya.local; d6fa4d66; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=g34dzwwr&city=Toronto&logo=#<File:0x00000101100f08>; ; adc1e47e06
+1265398472.5811; vanya.local; d6fa4d66; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=sptgg2ak&city=Vancouver&logo=#<File:0x000001009d0250>; ; 78cf663368
+1265398472.6151; vanya.local; d6fa4d66; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=pfbsht8g&city=Vancouver&logo=#<File:0x000001027904f0>; ; 6fd8f4c8cd
+1265398472.55995; vanya.local; be2a56df; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 199198d730
+1265398473.94143; vanya.local; be2a56df; b557f9; aaadf9; GET; 200; http://localhost:3114/search; what=w&where=Toronto; ; dc170a74af
+1265398474.04959; vanya.local; be2a56df; b557f9; 90c7a9; GET; 200; http://localhost:3114/listing/1000; ; ; 08dc931f27

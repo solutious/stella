@@ -1,0 +1,15 @@
+1265749154.07902; vanya.local; 60f20115; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 2c27881232
+1265749154.4283; vanya.local; 60f20115; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=keyboard&where=Vancouver; ; c0686c8a78
+1265749154.08454; vanya.local; 8cf5175d; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 9a670c298e
+1265749154.14803; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 5cf3617803
+1265749154.1541; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; e86eaf81a5
+1265749154.15949; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 3ba3f95e54
+1265749154.16371; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 861dbc74b3
+1265749154.16787; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 605751b55a
+1265749154.17226; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; dce9f7ad32
+1265749154.1765; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 8ed661ba46
+1265749154.18052; vanya.local; 8cf5175d; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 94fff3a87d
+1265749154.08092; vanya.local; f5606d7c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=35rsqerc&city=Vancouver&logo=#<File:0x000001010a7050>; ; 2a76272870
+1265749154.12267; vanya.local; f5606d7c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=cvywy57n&city=Montreal&logo=#<File:0x00000100e6bcf0>; ; c9f3e246b0
+1265749154.14363; vanya.local; f5606d7c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=v65af7se&city=Montreal&logo=#<File:0x0000010294f4f8>; ; 40e7e1a50f
+1265749154.15639; vanya.local; f5606d7c; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=73fvvdsb&city=Montreal&logo=#<File:0x00000100dd20a8>; ; efc1c30e43

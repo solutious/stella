@@ -1,0 +1,15 @@
+1265781022.05919; vanya.local; 717b0755; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=47y7xzdp&city=Toronto&logo=#<File:0x0000010176bf88>; ; 3d129b4126
+1265781022.19389; vanya.local; 717b0755; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=r2h8p8rr&city=Montreal&logo=#<File:0x0000010158f658>; ; b225576712
+1265781022.23987; vanya.local; 717b0755; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=5ybhtgzv&city=Vancouver&logo=#<File:0x0000010142f8d0>; ; 7b94febe39
+1265781022.25872; vanya.local; 717b0755; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=pgr3c7sn&city=Vancouver&logo=#<File:0x000001015da908>; ; c850ad4ed6
+1265781022.19733; vanya.local; 2dd9797e; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 861071f35f
+1265781022.25987; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; 95da84479a
+1265781022.26378; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; fc50559777
+1265781022.26746; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; 1864e5ac11
+1265781022.27118; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; b17c6ed47d
+1265781022.27482; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 0b3020b8cb
+1265781022.29475; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 49a6532798
+1265781022.29874; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 98f55c59cb
+1265781022.30256; vanya.local; 2dd9797e; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 2ffb9135c1
+1265781022.19056; vanya.local; 67486255; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; aadf374486
+1265781022.23849; vanya.local; 67486255; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=ink&where=Montreal; ; b070bb8ae7

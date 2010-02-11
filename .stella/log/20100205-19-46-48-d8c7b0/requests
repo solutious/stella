@@ -1,0 +1,15 @@
+1265399212.0552; vanya.local; 46df6aa0; b557f9; 67cc83; GET; 200; http://localhost:3114/; ; ; 3ef33e1010
+1265399212.15184; vanya.local; 46df6aa0; b557f9; aaadf9; GET; 404; http://localhost:3114/search; what=furniture&where=Vancouver; ; 39e81b5269
+1265399212.05641; vanya.local; a4400a68; e34a6f; 25a8d1; GET; 200; http://localhost:3114/listings.yaml; ; ; 8f9d85d820
+1265399212.08711; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1000.yaml; ; ; a692c64945
+1265399212.09913; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1001.yaml; ; ; 85f8465da6
+1265399212.12285; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1002.yaml; ; ; f8a55acb6b
+1265399212.12704; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1003.yaml; ; ; 5b55c28e00
+1265399212.13079; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1004.yaml; ; ; 2450807b4c
+1265399212.13436; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1005.yaml; ; ; 98dfa24ffe
+1265399212.13788; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1006.yaml; ; ; 3b05567661
+1265399212.14349; vanya.local; a4400a68; e34a6f; bf26cd; GET; 200; http://localhost:3114/listing/1007.yaml; ; ; 2faddf38d4
+1265399212.06217; vanya.local; 6eb19cfc; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=jxy23mxv&city=Toronto&logo=#<File:0x00000100bdc108>; ; 380977f6da
+1265399212.09055; vanya.local; 6eb19cfc; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=zmuzz2j8&city=Montreal&logo=#<File:0x00000100a44230>; ; 7e8a7473f1
+1265399212.11836; vanya.local; 6eb19cfc; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=eyzzy84t&city=Vancouver&logo=#<File:0x0000010096f948>; ; 24ab6a780f
+1265399212.12562; vanya.local; 6eb19cfc; 63e799; dd1782; POST; 302; http://localhost:3114/listing/add; name=hpbxb4m5&city=Montreal&logo=#<File:0x00000101e78120>; ; 507387772c
