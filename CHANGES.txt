@@ -12,7 +12,7 @@ STELLA, CHANGES
 * TODO: process templates for calls to set in get blocks
 
 
-#### 0.8.1 (2010-02-??) ###############################
+#### 0.8.1 (2010-02-10) ###############################
 
 * FIXED: Handling of non ASCII characters with Nokogiri parsing in Ruby 1.9
 * FIXED:  warning in Ruby 1.9
