@@ -67,7 +67,7 @@ module Stella
             # set to an incorrect value like, http://domain1/http://domain2. 
             # So we parse it and if that fails we'll set it to the value given.
             uri_tmp = URI.parse(req.uri).uri rescue req.uri
-            domain ||= '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, uri_tmp] 
+            domain ||= '%s://%s:%d%s' % [uri.scheme, uri.host, uri.port, '/'] 
             domain = container.instance_eval &domain if Proc === domain
             Stella.ld "DOMAIN " << domain
             user, pass = http_auth.user, http_auth.pass
