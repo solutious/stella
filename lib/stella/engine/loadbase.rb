@@ -61,6 +61,7 @@ module Stella::Engine
       if Stella::Engine.service
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create @testrun
+        Stella.stdout.head 'Testrun', @testrun.remote_digest
       end
       
       @dumper = prepare_dumper(plan, opts)
