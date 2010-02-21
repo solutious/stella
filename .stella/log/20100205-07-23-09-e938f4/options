@@ -1,4 +1,0 @@
-     RUNID: 862c07d2ccdb9030310db9e2243369a93c5fb5a1
-   OPTIONS: {:hosts=>[#<URI::HTTP:0x00000101787150 URL:http://bff.heroku.com>], :clients=>5, :duration=>10.0, :nowait=>false, :arrival=>0.3, :repetitions=>1}
-     START: 2010-02-05 02:23:09 -0500
-       END: 2010-02-05 02:23:26 -0500

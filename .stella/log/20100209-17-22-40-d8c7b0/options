@@ -1,4 +1,0 @@
-     RUNID: fe47ff5181196ad9194a25e25a7b0e4859b25160
-   OPTIONS: {:hosts=>[#<URI::HTTP:0x00000101032270 URL:http://localhost:3114>], :clients=>3, :duration=>0, :nowait=>false, :arrival=>nil, :repetitions=>1}
-     START: 2010-02-09 12:22:41 -0500
-       END: 2010-02-09 12:22:46 -0500
