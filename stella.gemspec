@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "stella"
   s.rubyforge_project = 'stella'
-  s.version = "0.8.1.001"
+  s.version = "0.8.1.002"
   s.summary = "Blame Stella for breaking your web application!"
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -14,12 +14,12 @@
   s.require_paths = %w[lib]
   
   s.executables = %w[stella]
-                          
-  s.add_dependency 'benelux',    '>= 0.5.6'
-  s.add_dependency 'drydock',    '>= 0.6.8'
-  s.add_dependency 'gibbler',    '>= 0.7.3'
-  s.add_dependency 'sysinfo',    '>= 0.7.1'
-  s.add_dependency 'storable',   '>= 0.6.1'
+  
+  s.add_dependency 'benelux',    '>= 0.5.7'
+  s.add_dependency 'drydock',    '>= 0.6.9'
+  s.add_dependency 'gibbler',    '>= 0.7.4'
+  s.add_dependency 'sysinfo',    '>= 0.7.3'
+  s.add_dependency 'storable',   '>= 0.6.3'
   s.add_dependency 'nokogiri'
   
   # = MANIFEST =

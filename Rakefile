@@ -3,7 +3,6 @@ require 'rake/clean'
 require 'rake/gempackagetask'
 require 'rake/testtask'
 require 'rake/runtest'
-#require 'monkeyspecdoc'  # http://jgre.org/2008/09/03/monkeyspecdoc/
 require 'fileutils'
 include FileUtils
  
