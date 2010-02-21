@@ -77,7 +77,7 @@ module Stella::Engine
                                     'testplanid',
                                     usecase.digest, req.digest,
                                     req.http_method, container.status, uri,
-                                    params, headers, 
+                                    params, container.response.request.header.dump, 
                                     container.response.header.dump, 
                                     container.response.body.dump
 

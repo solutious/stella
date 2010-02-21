@@ -11,10 +11,12 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
-#### 0.8.2 (2010-02-??) ###############################
+#### 0.8.1.002 (2010-02-20) ###############################
 
 * FIXED: fail on connection error
 * CHANGE: Remove hanna dependency
+* CHANGE: Now store complete headers sent rather than just configured. 
+
 
 #### 0.8.1 (2010-02-10) ###############################
 
