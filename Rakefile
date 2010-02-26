@@ -1,12 +1,12 @@
 require "rubygems"
 require "rake"
 require "rake/rdoctask"
+require "rake/clean"
 require 'yaml'
 
-#s.add_dependency 'sysinfo',    '>= 0.7.3'
-#s.add_dependency 'storable',   '>= 0.6.3'
-
 config = YAML.load_file("VERSION.yml")
+task :default => ["build"]
+CLEAN.include [ 'pkg', 'doc', 'rdoc', 'coverage*' ]
 
 begin
   require "jeweler"
@@ -42,10 +42,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include("bin/*.rb")
   rdoc.rdoc_files.include("lib/**/*.rb")
 end
-
-task :default => ["build"]
-
-#CLEAN.include [ 'pkg', '*.gem', '.config', 'doc', 'coverage*' ]
 
 
 # Rubyforge Release / Publish Tasks ==================================
