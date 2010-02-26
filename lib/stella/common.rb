@@ -5,7 +5,6 @@ module Stella
     def initialize(obj=nil); @obj = obj; end
     def message; @obj; end
   end
-  class InvalidOption < Stella::Error; end
   class NoHostDefined < Stella::Error
     def message; "No host specified for uri: #{@obj}"; end
   end

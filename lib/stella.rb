@@ -6,31 +6,31 @@ end
 
 require 'dependencies'
 autoload :YAML, 'yaml'
+autoload :URI, 'uri'
+autoload :Gibbler, 'gibbler'
 
+require 'stella/common'
 
 module Stella
   extend self
-  require 'stella/common'
-  
-  unless defined?(START_TIME)
-    START_TIME = Time.now.freeze
-  end
-  
+    
   @globals = {}
   @sysinfo = nil
   @debug   = false
   @abort   = false
   @quiet   = false
-  @stdout  = Stella::Logger.new STDOUT
+  @stdout  = Stella::SyncLogger.new STDOUT
     
   class << self
+    attr_reader :stdout
   end
   
-  def le(*msg); stdout.info "  " << msg.join("#{$/}  ").color(:red); end
+  def li(*args) @stdout.puts 1, *args; end
+  def le(*msg); li "  " << msg.join("#{$/}  ").color(:red); end
   def ld(*msg)
     return unless Stella.debug?
     prefix = "D(#{Thread.current.object_id}):  "
-    Stella.stdout.info("#{prefix}#{msg.join("#{$/}#{prefix}")}".colour(:yellow))
+    li("#{prefix}#{msg.join("#{$/}#{prefix}")}".colour(:yellow))
   end
   
   def sysinfo
@@ -48,10 +48,6 @@ module Stella
   def quiet?()        @quiet == true  end
   def enable_quiet()  @quiet = true   end
   def disable_quiet() @quiet = false  end
-  
-  def info(*args)
-    @stdout.puts 1, *args 
-  end
   
   def add_global(n,v)
     Stella.ld "SETGLOBAL: #{n}=#{v}"
@@ -74,6 +70,9 @@ module Stella
   #  STDERR.puts ex.backtrace if Stella.debug?
   #  nil
   #end
+  
+  autoload :Testplan, 'stella/testplan'
+  autoload :Testrun, 'stella/testrun'
   
 end
 

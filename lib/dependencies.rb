@@ -444,6 +444,17 @@ class Storable
         a
       end
     end
+    
+    # If the object already has a value for +@id+
+    # use it, otherwise return the current digest.
+    #
+    # This allows an object to have a preset ID. 
+    #
+    def gibbler_id_processor
+      Proc.new do |val|
+        @id || self.gibbler
+      end
+    end
   end
 end
 
@@ -524,6 +535,7 @@ class Storable
   
   # +args+ is a list of values to set amongst the fields. 
   # It's assumed that the order values matches the order
+  # defined using the field class method. 
   def initialize(*args)
     (self.class.field_names || []).each_with_index do |n,index|
       break if (index+1) >= args.size
