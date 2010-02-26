@@ -6,45 +6,21 @@ class Stella::CLI < Drydock::Command
   end
   
   require 'pp'
-  def verify
-    get_hosts
-    create_testplan
-    create_testrun :functional
-    pp @testrun
-    
-    #@exit_code = (ret ? 0 : 1)
-  end
-  
-  def generate_valid?
-    
-  end
-  
-  def generate
-    
-    #@exit_code = (ret ? 0 : 1)
-  end
-  
-  def preview
-    
-  end
-  
-  private
-  def connect_service
-    if @global.remote
-      #s = Stella::Service.new 
-      #Stella::Engine.service = s
-    end
-  end
-  
-  def get_hosts
+  def run
     raise Stella::Error, "No URIs" if @argv.empty?
+    mode = case @alias
+    when "verify"
+      :functional
+    when "generate"
+      :load
+    when "preview"
+      :preview
+    end
     @hosts ||= @argv.collect { |uri|
       uri = 'http://' << uri unless uri.match /^https?:\/\//i
       URI.parse uri
     }
-  end
-  
-  def create_testplan
+    
     # TODO: replace with Bone integration
     #(@global.var || []).each do |var|
     #  n, v = *var.split('=')
@@ -58,18 +34,15 @@ class Stella::CLI < Drydock::Command
     end
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests
-    Stella.li " #{@option.testplan || @testplan.desc} (#{@testplan.gibbler})" 
-    true
-  end
-  
-  def create_testrun(mode)
-    @testrun = Stella::Testrun.new @testplan, @hosts
+    Stella.li " #{@option.testplan || @testplan.desc} (#{@testplan.gibbler})"
+    
+    @testrun = Stella::Testrun.new @testplan, @hosts, mode
     @testrun.desc = @option.msg
-    opts = [:mode, :nowait]
+    opts = [:nowait]  # common options
     case @testrun.mode
     when :functional
     when :load
-      opts.push :client, :duration, :repetitions, :arrival
+      opts.push :clients, :duration, :repetitions, :arrival
     else
       raise Stella::Error, "Unknown mode #{mode}"
     end
@@ -77,10 +50,21 @@ class Stella::CLI < Drydock::Command
       next if @option.send(opt).nil?
       @testrun.send("#{opt}=", @option.send(opt)) 
     end
+    
+    
+    pp @testrun.gibbler
+    
+    #@exit_code = (ret ? 0 : 1)
   end
   
-  
-  
+  private
+  def connect_service
+    if @global.remote
+      #s = Stella::Service.new 
+      #Stella::Engine.service = s
+    end
+  end
+
   public 
   # I just don't want to see these
   def example

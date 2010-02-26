@@ -22,7 +22,7 @@ module Stella
   @stdout  = Stella::SyncLogger.new STDOUT
     
   class << self
-    attr_reader :stdout
+    attr_reader :stdout, :version
   end
   
   def li(*args) @stdout.puts 1, *args; end
@@ -74,17 +74,20 @@ module Stella
   autoload :Testplan, 'stella/testplan'
   autoload :Testrun, 'stella/testrun'
   
+  def VERSION
+    unless defined?(@version)
+      @version = YAML.load_file(File.join(STELLA_LIB_HOME, '..', 'VERSION.yml'))
+      [@version[:MAJOR], @version[:MINOR], @version[:PATCH]].join('.')
+    end
+  end
+  
 end
 
 
 =begin
 module Stella
   module Version
-    unless defined?(MAJOR)
-      v = YAML.load_file(STELLA_LIB_HOME, 'VERSION.yml')
-      MAJOR, MINOR = v[:MAJOR], v[:MINOR]
-      PATCH, BUILD = v[:PATCH], v[:BUILD]
-    end
+
     def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
     def self.to_f; self.to_s.to_f; end
     def self.patch; PATCH; end

@@ -72,7 +72,7 @@ class Stella::CLI::Definition
     true
   end
   global :V, :version, "Display version number" do
-    puts "Stella version: #{Stella::VERSION} (#{Stella::VERSION::PATCH})"
+    puts "Stella version: #{Stella.VERSION} (#{Stella.version[:BUILD]})"
     exit 0
   end
 
@@ -89,43 +89,20 @@ class Stella::CLI::Definition
   
   about "Preview a test plan"
   usage "stella preview [-p path/2/testplan.rb] "
-  option :m, :msg, String, "A short description of the test run (ignored)"
-  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
-  option :d, :duration, String, "Max duration to run test (ignored)"
-  option :W, :nowait, "Ignore wait times (ignored)"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  option :a, :arrival, Float, "Arrival rate (ignored)"
-  command :preview => Stella::CLI
-  
-  about "Verify a test plan"
-  usage "stella verify [-p path/2/testplan.rb] URI"
-  usage "e.g."
-  usage "   $ stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :m, :msg, String, "A short description of the test run"
-  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
-  option :d, :duration, String, "Max duration to run test (ignored)"
-  option :W, :nowait, "Ignore wait times"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  option :a, :arrival, Float, "Arrival rate (ignored)"
-  command :verify => Stella::CLI
-  
-  about "Generate requests"
-  usage "stella generate [options] URI"
-  usage "e.g. "
-  usage "   $ stella generate -p path/2/testplan.rb -u 100 -r 50 http://stellaaahhhh.com:3114/"
-  option :m, :msg, String, "A short description of the test run"
   option :c, :clients, Integer, "Maximum number of virtual clients"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan"
   option :d, :duration, String, "Max duration to run test"
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
-  option :a, :arrival, Float, "Arrival rate (new clients per second)"
-  command :generate => Stella::CLI
+  option :a, :arrival, Float, "Arrival rate"
+  option :m, :msg, String, "A short description of the test run"
+  command :run => Stella::CLI
+  command_alias :run, :preview
+  command_alias :run, :verify
+  command_alias :run, :generate
+
+
   about "Initialize Stella configuration"
   command :init do
     Stella::Config.init
