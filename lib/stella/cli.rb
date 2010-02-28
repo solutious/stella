@@ -10,8 +10,16 @@ class Stella::CLI < Drydock::Command
   end
   
   require 'pp'
+
   def run
     raise Stella::Error, "No URIs" if @argv.empty?
+    
+    if @option.testplan
+      @testplan = Stella::Testplan.load_file @option.testplan
+      @testplan.check!  # raise errors, update usecase ratios
+      @testplan.freeze  # cascades through usecases and events
+    end
+        
     run_opts = [:nowait]  # common options
     case @alias
     when "verify"
@@ -21,25 +29,22 @@ class Stella::CLI < Drydock::Command
       @mode = :load
     when "preview"
       @mode = :preview
+      raise Stella::Error, "No testplan provided" if @testplan.nil?
+      erb :preview
+      exit(0)
     else
       raise Stella::Error, "Unknown mode: #{@alias}"
     end
     
-    if @option.testplan
-      @testplan = Stella::Testplan.load_file @option.testplan
-    end
-    
-    @testplan.check!  # raise errors, update usecase ratios
-    @testplan.freeze  # cascades through usecases and requests
-    
+
     @testrun = Stella::Testrun.new @hosts, @mode, @testplan
     @testrun.desc = @option.msg
     
+    # Convert CLI options to Testplan attributes
     run_opts.each do |opt|
       next if @option.send(opt).nil?
       @testrun.send("#{opt}=", @option.send(opt)) 
     end
-    
     
     pp @testrun.gibbler
     
