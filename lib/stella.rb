@@ -61,16 +61,8 @@ module Stella
     Stella.ld ex.backtrace
   end
   
-  #def get(uri, query={})
-  #  require 'stella/client'
-  #  http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
-  #  http_client.get(uri, query).body.content
-  #rescue => ex
-  #  STDERR.puts ex.message
-  #  STDERR.puts ex.backtrace if Stella.debug?
-  #  nil
-  #end
-  
+  autoload :Utils, 'stella/utils'
+  autoload :Events, 'stella/events'
   autoload :Testplan, 'stella/testplan'
   autoload :Testrun, 'stella/testrun'
   
@@ -81,6 +73,23 @@ module Stella
     end
   end
   
+end
+
+
+
+module Stella
+  module RuntimeMethods
+    #def get(uri, query={})
+    #  require 'stella/client'
+    #  http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
+    #  http_client.get(uri, query).body.content
+    #rescue => ex
+    #  STDERR.puts ex.message
+    #  STDERR.puts ex.backtrace if Stella.debug?
+    #  nil
+    #end
+  end
+  include RuntimeMethods
 end
 
 

@@ -8,6 +8,10 @@ module Stella
   class NoHostDefined < Stella::Error
     def message; "No host specified for uri: #{@obj}"; end
   end
+  class UnknownResource < Stella::Error
+    def message; "UnknownResource: #{@obj}"; end
+  end
+  class WackyRatio < Stella::Error; end
 end
 
 module Stella

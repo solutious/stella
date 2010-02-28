@@ -11,7 +11,13 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
-#### 0.8.1.002 (2010-02-20) ###############################
+
+#### 0.9.0 (2010-03-??) ###############################
+
+* CHANGE: "http_auth" keyword is now "auth"
+
+
+#### 0.8.1.002 (2010-02-20) ###########################
 
 * FIXED: fail on connection error
 * CHANGE: Remove hanna dependency
