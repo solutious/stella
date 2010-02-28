@@ -1,0 +1,16 @@
+<%= "1. Start the web app:".bright %>
+$ thin -p 3114 -R <%= @thin_path %> start
+  OR  
+$ ruby <%= @webrick_path %>
+
+<%= "2. Check the web app in your browser".bright %>
+
+http://127.0.0.1:3114/
+
+<%= "3. Verify the testplan is correct (functional test):".bright %>
+
+$ stella verify -p <%= @tp_path %> 127.0.0.1:3114
+
+<%= "4. Generate requests (load test):".bright %>
+
+$ stella generate -p <%= @tp_path %> 127.0.0.1:3114

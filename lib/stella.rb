@@ -8,6 +8,7 @@ require 'dependencies'
 autoload :YAML, 'yaml'
 autoload :URI, 'uri'
 autoload :Gibbler, 'gibbler'
+autoload :ERB, 'erb'
 
 require 'stella/common'
 
