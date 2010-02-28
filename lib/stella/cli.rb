@@ -12,45 +12,30 @@ class Stella::CLI < Drydock::Command
   require 'pp'
   def run
     raise Stella::Error, "No URIs" if @argv.empty?
-    mode = case @alias
+    run_opts = [:nowait]  # common options
+    case @alias
     when "verify"
-      :functional
+      @mode = :functional
     when "generate"
-      :load
+      run_opts.push :clients, :duration, :repetitions, :arrival
+      @mode = :load
     when "preview"
-      :preview
+      @mode = :preview
+    else
+      raise Stella::Error, "Unknown mode: #{@alias}"
     end
-    @hosts ||= @argv.collect { |uri|
-      uri = 'http://' << uri unless uri.match /^https?:\/\//i
-      URI.parse uri
-    }
     
-    # TODO: replace with Bone integration
-    #(@global.var || []).each do |var|
-    #  n, v = *var.split('=')
-    #  raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
-    #  Stella::Testplan.global(n.to_sym, v)
-    #end
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan
-    else
-      @testplan = Stella::Testplan.new
     end
+    
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests
-    Stella.li " #{@option.testplan || @testplan.desc} (#{@testplan.gibbler})"
     
-    @testrun = Stella::Testrun.new @testplan, @hosts, mode
+    @testrun = Stella::Testrun.new @hosts, @mode, @testplan
     @testrun.desc = @option.msg
-    opts = [:nowait]  # common options
-    case @testrun.mode
-    when :functional
-    when :load
-      opts.push :clients, :duration, :repetitions, :arrival
-    else
-      raise Stella::Error, "Unknown mode #{mode}"
-    end
-    opts.each do |opt|
+    
+    run_opts.each do |opt|
       next if @option.send(opt).nil?
       @testrun.send("#{opt}=", @option.send(opt)) 
     end

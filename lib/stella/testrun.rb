@@ -17,13 +17,21 @@ module Stella
     field :status
     field :start_at     => Integer
     
-    def initialize(tp, hosts=[], mode=:functional)
+    def initialize(hosts=[], mode=:functional, tp=nil)
       self.testplan = tp
       self.hosts = hosts
       self.status = "new"
       self.mode = mode
       self.start_at = 0
       @created = Time.now.to_f  # used to keep the generated testrun id unique
+      check!
+    end
+    
+    def check!
+      @hosts &&= @hosts.collect { |uri|
+        uri = 'http://' << uri unless uri.match /^https?:\/\//i
+        URI.parse uri
+      }
     end
   end
 end
