@@ -36,7 +36,6 @@ class Stella::CLI < Drydock::Command
       raise Stella::Error, "Unknown mode: #{@alias}"
     end
     
-
     @testrun = Stella::Testrun.new @hosts, @mode, @testplan
     @testrun.desc = @option.msg
     
@@ -77,37 +76,4 @@ class Stella::CLI < Drydock::Command
   
 
   
-end
-
-
-module Stella
-  class Testplan
-    def print_pretty(long=false)
-      str = []
-      dig = long ? self.digest_cache : self.digest_cache.shorter
-      str << " %-66s  ".att(:reverse) % ["#{self.description}  (#{dig})"]
-      @usecases.each_with_index do |uc,i| 
-        dig = long ? uc.digest_cache : uc.digest_cache.shorter
-        desc = uc.description || "Usecase ##{i+1}"
-        desc += "  (#{dig}) "
-        str << (' ' << " %-61s %s%% ".att(:reverse).bright) % [desc, uc.ratio_pretty]
-        unless uc.http_auth.nil?
-          str << '    Auth: %s (%s/%s)' % uc.http_auth.values
-        end
-        requests = uc.requests.each do |r| 
-          dig = long ? r.digest_cache : r.digest_cache.shorter
-          str << "    %-62s".bright % ["#{r.description}  (#{dig})"]
-          str << "      %s" % [r]
-          if Stella.stdout.lev > 1
-            [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
-            str << '       %s: %s' % ['params', r.params.inspect] 
-            r.response_handler.each do |status,proc|
-              str << "      response: %s%s" % [status, proc.source.split($/).join("#{$/}    ")]
-            end
-          end
-        end
-      end
-      str.join($/)
-    end
-  end
 end

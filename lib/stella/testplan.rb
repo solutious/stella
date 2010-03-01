@@ -70,7 +70,7 @@ module Stella
       uc.description = name unless name.nil?
       add_usecase uc
     end
-    def xusecase(*args, &blk); Stella.ld "Skipping usecase"; end
+    def xusecase(*args, &blk) Stella.ld "Skipping usecase" end
 
     def add_usecase(uc)
       Stella.ld "Usecase: #{uc.description}"

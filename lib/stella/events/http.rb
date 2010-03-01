@@ -12,7 +12,7 @@ module Stella
             msg << "#{meth} block in #{self.plan_path}"
             raise Stella::Error, msg 
           end
-          req = Stella::Events::HTTP::Request.new meth.to_s.upcase, args[0], &blk
+          req = Stella::Events::HTTP::RequestTemplate.new meth.to_s.upcase, args[0], &blk
           req.description = args[1] if args.size > 1 # Description is optional
           Stella.ld req
           @requests << req
@@ -36,7 +36,7 @@ module Stella
         include Gibbler::Complex
       end
       
-      class Request < Storable
+      class RequestTemplate < Storable
         include EventTemplate
         include Gibbler::Complex
         #include Stella::Data::Helpers
