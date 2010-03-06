@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: README.md [stella 0.8.2.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>README.md</h1>
+        <div class='paths'>
+          README.md
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2010-03-05 21:56:51 -0500</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            # <a href="../classes/Stella.html">Stella</a> - 0.8 BETA
+            </p>
+            <p>
+            **Blame <a href="../classes/Stella.html">Stella</a> for breaking your web
+            application!**
+            </p>
+            <p>
+            <a href="../classes/Stella.html">Stella</a> is an integration and load
+            testing tool. It fits well into an agile development process because the
+            configuration syntax is simple yet powerful and a single config can be used
+            for both kinds of tests (integration and load). <a
+            href="../classes/Stella.html">Stella</a> runs at the protocol-level which
+            means it generates HTTP requests and parses the responses but does not
+            perform any browser simulation (see Caveats).
+            </p>
+            <p>
+            ### Important Information Regarding Your Testplans
+            </p>
+            <p>
+            *The testplan configuration syntax changed a little in 0.8. Most configs
+            will not be affected. See &#8220;News&#8221; below for more info.*
+            </p>
+            <p>
+            ## Features
+            </p>
+            <ul>
+            <li>Support for simulating multiple usecases at the same time
+            
+            </li>
+            <li>Sophisticated response handling
+            
+            </li>
+            <li>Automatic parsing of HTML, XML, XHTML, YAML, and JSON response bodies
+            
+            </li>
+            <li>Dynamic variable replacement
+            
+            </li>
+            <li>Support for testing multiple sites simultaneously
+            
+            </li>
+            </ul>
+            <p>
+            ## Caveats
+            </p>
+            <p>
+            There are a few known limitations:
+            </p>
+            <ul>
+            <li><b>SHOW-STOPPER</b>: An upper limit of around 200-300 concurrent virtual
+            HTTP clients. There is a threading issue in the HTTPClient library which
+            appears under high load.
+            
+            </li>
+            <li>*SHOW-STOPPER (for some)*: No support for browser or UI based tests (a la
+            Watir or Selenium). If this is a show stopper for you, check out
+            [WatirGrid](<a
+            href="http://github.com/90kts/watirgrid">github.com/90kts/watirgrid</a>)
+            
+            </li>
+            <li><b>ANNOYING</b>: File uploads do not work with some HTTP servers (WEBrick)
+            
+            </li>
+            <li><b>ANNOYING</b>: Lack of documentation (see examples/ directory)
+            
+            </li>
+            <li><b>ANNOYING</b>: Reporting is limited to log files and command-line output.
+            You need to make your own graphs.
+            
+            </li>
+            </ul>
+            <p>
+            ## Examples
+            </p>
+            <p>
+            ### Testplan Configuration
+            </p>
+            <p>
+            Every load testing tool worth its salt allows you to control the logical
+            flow with some form of programming language. One of the advantages that
+            open source tools have over commercial ones is that the languages used are
+            generally well known whereas most commercial tools use proprietary
+            languages. This makes it possible to define sophisticated and realistic
+            tests.
+            </p>
+            <p>
+            <a href="../classes/Stella.html">Stella</a> test plans are defined in
+            subset of the Ruby programming language. They also typically contain more
+            than one usecase which is important when simulating realistic load.
+            </p>
+            <pre>usecase &quot;An Example Usecase&quot; do&#x000A;  get '/some/path' do&#x000A;    param :what  =&gt; 'food'&#x000A;    param :where =&gt; 'iowa'&#x000A;    response 200 do&#x000A;      # code executed when the server returns a 200 response.&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get '/a/dynamic/:path' do&#x000A;    param :path =&gt; random(4)   # =&gt; http://host/a/dynamic/jrr1&#x000A;  end&#x000A;end</pre>
+            <p>
+            See the [examples/](<a
+            href="http://github.com/solutious/stella/tree/0.8/examples/">github.com/solutious/stella/tree/0.8/examples/</a>)
+            directory and [Getting Started](<a
+            href="http://solutious.com/projects/stella/getting-started">solutious.com/projects/stella/getting-started</a>/)
+            for more information.
+            </p>
+            <p>
+            ### Running Tests
+            </p>
+            <p>
+            <a href="../classes/Stella.html">Stella</a> is a command-line tool with two
+            main commands: &#8220;verify&#8221; for integration tests and
+            &#8220;generate&#8221; for load tests.
+            </p>
+            <pre># Verify a test plan is defined correctly&#x000A;# by running a single user functional test.&#x000A;$ stella verify -p examples/essentials/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Generate load using the same test plan.&#x000A;$ stella generate -p examples/essentials/plan.rb -c 50 -d 10m http://stellaaahhhh.com/</pre>
+            <p>
+            See <tt>$ stella -h</tt> and <tt>$ stella example</tt> for more info.
+            </p>
+            <p>
+            ## News
+            </p>
+            <p>
+            ### 2010-01-16: sequential, random, rsequential etc... methods now return
+            ERB-style templates instead of Procs
+            </p>
+            <p>
+            Pre-0.8 would return a Proc that would be evaluated at request time:
+            </p>
+            <pre>get &quot;/&quot; do&#x000A;  param :salt =&gt; random(8)    # =&gt; &quot;#&lt;Proc0x13423c0 ...&gt;&quot;&#x000A;end</pre>
+            <p>
+            In 0.8 and beyond, the same configuration will return a String:
+            </p>
+            <pre>get &quot;/&quot; do&#x000A;  param :salt =&gt; random(8)    # =&gt; &quot;&lt;%= random(8) %&gt;&quot;&#x000A;end</pre>
+            <p>
+            ## Installation
+            </p>
+            <p>
+            Get it in one of the following ways:
+            </p>
+            <pre>$ gem install stella --source=http://gemcutter.org/&#x000A;$ sudo gem install stella --source=http://gemcutter.org/&#x000A;$ git clone git://github.com/solutious/stella.git</pre>
+            <p>
+            You can also download via [tarball](<a
+            href="http://github.com/solutious/stella/tarball/latest">github.com/solutious/stella/tarball/latest</a>)
+            or [zip](<a
+            href="http://github.com/solutious/stella/zipball/latest">github.com/solutious/stella/zipball/latest</a>).
+            </p>
+            <p>
+            ## More Information
+            </p>
+            <ul>
+            <li>[Homepage](<a
+            href="http://solutious.com/projects/stella">solutious.com/projects/stella</a>)
+            
+            </li>
+            <li>[Codes](<a
+            href="http://github.com/solutious/stella">github.com/solutious/stella</a>)
+            
+            </li>
+            <li>[RDocs](<a href="http://solutious.com/stella">solutious.com/stella</a>)
+            
+            </li>
+            <li>[Stellaaahhhh](<a href="http://stellaaahhhh.com">stellaaahhhh.com</a>)
+            
+            </li>
+            </ul>
+            <p>
+            ## Credits
+            </p>
+            <ul>
+            <li>[Delano Mandelbaum](<a href="http://solutious.com">solutious.com</a>)
+            
+            </li>
+            </ul>
+            <p>
+            ## Thanks
+            </p>
+            <ul>
+            <li>Harm Aarts for the great test case and feedback!
+            
+            </li>
+            <li>Kalin Harvey for keeping me on track.
+            
+            </li>
+            <li>Dave L, the best intern money can&#8217;t buy.
+            
+            </li>
+            <li>Peter McCurdy for the feedback and bug fixes.
+            
+            </li>
+            </ul>
+            <p>
+            ## Related Projects
+            </p>
+            <ul>
+            <li>[WatirGrid](<a
+            href="http://github.com/90kts/watirgrid">github.com/90kts/watirgrid</a>)
+            
+            </li>
+            <li>[Watir](<a href="http://watir.com/">watir.com/</a>)
+            
+            </li>
+            <li>[JMeter](<a
+            href="http://jakarta.apache.org/jmeter/">jakarta.apache.org/jmeter/</a>)
+            
+            </li>
+            <li>[Tsung](<a
+            href="http://tsung.erlang-projects.org/">tsung.erlang-projects.org/</a>)
+            
+            </li>
+            <li>[Grinder](<a
+            href="http://grinder.sourceforge.net/">grinder.sourceforge.net/</a>)
+            
+            </li>
+            <li>[Pylot](<a href="http://www.pylot.org/">www.pylot.org/</a>)
+            
+            </li>
+            <li>[Trample](<a
+            href="http://github.com/jamesgolick/trample">github.com/jamesgolick/trample</a>)
+            
+            </li>
+            </ul>
+            <p>
+            ## License
+            </p>
+            <p>
+            See <a href="LICENSE_txt.html">LICENSE.txt</a>
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
