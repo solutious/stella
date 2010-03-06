@@ -19,18 +19,22 @@ require 'proc_source'
 
 module Stella
   module VERSION
-    unless defined?(MAJOR)
-      MAJOR = 0.freeze
-      MINOR = 8.freeze
-      TINY  = 1.freeze
-      PATCH = '002'.freeze 
+    def self.to_s
+      load_config
+      [@version[:MAJOR], @version[:MINOR], @version[:PATCH]].join('.')
     end
-    def self.to_s; [MAJOR, MINOR, TINY].join('.'); end
-    def self.to_f; self.to_s.to_f; end
-    def self.patch; PATCH; end
+    def self.inspect
+      load_config
+      [@version[:MAJOR], @version[:MINOR], @version[:PATCH], @version[:BUILD]].join('.')
+    end
+    def self.load_config
+      require 'yaml'
+      @version ||= YAML.load_file(File.join(STELLA_LIB_HOME, '..', 'VERSION.yml'))
+    end
   end
 end
 
+p Stella::VERSION
 
 module Stella
   class Error < RuntimeError
