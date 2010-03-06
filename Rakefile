@@ -1,12 +1,17 @@
 require "rubygems"
 require "rake"
-require "rake/rdoctask"
 require "rake/clean"
 require 'yaml'
 
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  require 'rake/rdoctask'
+end
+ 
 config = YAML.load_file("VERSION.yml")
 task :default => ["build"]
-CLEAN.include [ 'pkg', 'doc', 'rdoc', 'coverage*' ]
+CLEAN.include [ 'pkg', 'doc' ]
 
 begin
   require "jeweler"
