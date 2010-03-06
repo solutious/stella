@@ -10,7 +10,7 @@ module Stella::Engine
     @logdir = nil
     
     class << self
-      attr_accessor :timers, :counts, :logdir
+      attr_accessor :timers, :counts, :logdir, :testrun
     end
     
     def run(plan, opts={})

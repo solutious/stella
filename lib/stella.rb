@@ -34,8 +34,6 @@ module Stella
   end
 end
 
-p Stella::VERSION
-
 module Stella
   class Error < RuntimeError
     def initialize(obj=nil); @obj = obj; end
