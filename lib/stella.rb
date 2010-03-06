@@ -120,6 +120,7 @@ module Stella
   autoload :Config, 'stella/config'
   autoload :Data, 'stella/data'
   autoload :Testplan, 'stella/testplan'
+  autoload :Testrun, 'stella/engine'
   autoload :Engine, 'stella/engine'
   autoload :Client, 'stella/client'
   autoload :Service, 'stella/service'

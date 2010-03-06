@@ -104,11 +104,7 @@ module Stella::Engine
   end
   
   autoload :Functional, 'stella/engine/functional'
-  autoload :Load, 'stella/engine/loadbase'
-  autoload :LoadPackage, 'stella/engine/load_package'
-  autoload :LoadCreate, 'stella/engine/load_create'
-  autoload :LoadQueue, 'stella/engine/load_queue'
-  autoload :LoadEventMachine, 'stella/engine/load_em'
+  autoload :Load, 'stella/engine/load'
   
   # These timers are interesting from a reporting perspective.
   Benelux.add_counter    Stella::Client, :execute_response_handler

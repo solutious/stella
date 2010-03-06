@@ -15,6 +15,7 @@ STELLA, CHANGES
 
 * CHANGE: Remove all logs except summary and exceptions
 * CHANGE: Renamed .stella/logs/latest/request-exceptions to .stella/logs/latest/exceptions
+* CHANGE: Removed unused Load implementations and renamed LoadQueue to Load
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 
 

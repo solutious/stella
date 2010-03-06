@@ -47,16 +47,8 @@ class Stella::CLI < Drydock::Command
     
     connect_service if @global.remote
     
-    case @global.engine
-    when "package"
-      ret = Stella::Engine::LoadPackage.run @testplan, opts
-    when "create" 
-      ret = Stella::Engine::LoadCreate.run @testplan, opts
-    when "em" 
-      ret = Stella::Engine::LoadEventMachine.run @testplan, opts
-    else 
-      ret = Stella::Engine::LoadQueue.run @testplan, opts
-    end
+    ret = Stella::Engine::Load.run @testplan, opts
+    
     Stella.ld "ENGINE: #{@global.engine}: #{ret.class}"
     
     @exit_code = (ret ? 0 : 1)

@@ -112,7 +112,7 @@ module Stella::Engine
     end
     
     def prepare_dumper(plan, opts)
-      hand = Stella::Hand.new(LoadQueue::ROTATE_TIMELINE, 2.seconds) do
+      hand = Stella::Hand.new(Load::ROTATE_TIMELINE, 2.seconds) do
         Benelux.update_global_timeline 
         # @threads contains only stella clients
         concurrency = @threads.select { |t| !t.status.nil? }.size
