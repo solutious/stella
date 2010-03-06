@@ -12,6 +12,7 @@ end
 config = YAML.load_file("VERSION.yml")
 task :default => ["build"]
 CLEAN.include [ 'pkg', 'doc' ]
+name = "stella"
 
 begin
   require "jeweler"
