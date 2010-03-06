@@ -7,20 +7,15 @@ $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
 class String
   
-  def colour(*args)
+  def drydock_stub(*args)
     self
   end
   
-  def color(*args)
-    self
-  end
-  
-  def att(*args)
-    self
-  end
-  
-  def bright(*args)
-    self
+  unless method_defined? :color
+    alias_method :att, :drydock_stub
+    alias_method :bright, :drydock_stub
+    alias_method :color, :drydock_stub
+    alias_method :colour, :drydock_stub
   end
   
   def in_seconds
