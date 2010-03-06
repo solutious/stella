@@ -21,10 +21,18 @@ module Stella::Engine
     field :response_headers
     field :response_body
   end
-  module Base
-    extend self
+  class Base
     
-    @testrun = nil
+    class << self
+      attr_accessor :timers, :counts
+    end
+    
+    attr_reader :testrun, :logdir, :opts
+    
+    def initialize(opts={})
+      @opts = opts
+      @logdir = nil
+    end
     
     @@client_limit = 1000
     

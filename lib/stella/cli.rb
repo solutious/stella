@@ -26,8 +26,9 @@ class Stella::CLI < Drydock::Command
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     
-    ret = Stella::Engine::Functional.run @testplan, opts
-    @exit_code = (ret ? 0 : 1)
+    engine = Stella::Engine::Functional.new opts
+    testrun = engine.run @testplan
+    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
   end
   
   def generate_valid?
@@ -47,11 +48,9 @@ class Stella::CLI < Drydock::Command
     
     connect_service if @global.remote
     
-    ret = Stella::Engine::Load.run @testplan, opts
-    
-    Stella.ld "ENGINE: #{@global.engine}: #{ret.class}"
-    
-    @exit_code = (ret ? 0 : 1)
+    engine = Stella::Engine::Load.new opts
+    testrun = engine.run @testplan
+    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
   end
   
   def example

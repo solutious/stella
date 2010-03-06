@@ -1,11 +1,9 @@
 
 module Stella::Engine
-  module Functional
-    extend Stella::Engine::Base
-    extend self
+  class Functional < Stella::Engine::Base
     
-    def run(plan, opts={})
-      opts = process_options! plan, opts
+    def run(plan)
+      opts = process_options! plan, @opts
       
       Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
       
@@ -59,7 +57,7 @@ module Stella::Engine
         @testrun.add_sample 1, 1, tt
       end
       
-      @testrun.stats[:summary][:failed].n == 0 
+      @testrun
     end
     
     

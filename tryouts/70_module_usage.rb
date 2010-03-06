@@ -10,6 +10,9 @@ opts = {
   :clients => 100,
   #:duration => 10
 }
-Stella::Engine::Load.run plan, opts
 
-puts Stella::Engine::Load.testrun.stats[:summary].to_json
+#engine = Stella::Engine::Functional.new opts
+engine = Stella::Engine::Load.new opts
+engine.run plan
+
+puts engine.testrun.stats[:summary].to_json
