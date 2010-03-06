@@ -4,7 +4,7 @@ module Stella::Engine
   module Load
     extend Stella::Engine::Load
     extend self
-    ROTATE_TIMELINE = 15
+    ROTATE_TIMELINE = 5
     def execute_test_plan(packages, reps=1,duration=0,arrival=nil)
       time_started = Time.now
       

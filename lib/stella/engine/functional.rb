@@ -59,7 +59,7 @@ module Stella::Engine
         @testrun.add_sample 1, 1, tt
       end
       
-      @testrun.summary[:summary][:failed].n == 0 
+      @testrun.stats[:summary][:failed].n == 0 
     end
     
     

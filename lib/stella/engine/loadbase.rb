@@ -100,7 +100,7 @@ module Stella::Engine
       
       Stella.stdout.info $/, "Log dir: #{@logdir}"
       
-      @testrun.summary[:summary][:failed].n == 0 
+      @testrun.stats[:summary][:failed].n == 0 
     end
     
   protected

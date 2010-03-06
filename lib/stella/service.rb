@@ -153,13 +153,13 @@ class Stella::Service
       trun.remote_digest = obj['digest']
       @runid = obj['digest']
     end
-    def testrun_stats(summary, samples)
+    def testrun_stats(stats, samples)
       raise NoTestrunSelected, "no testrun: #{runid}" unless @runid
       req = uri('v1', 'testrun', "stats.json")
       params = {
         :runid => @runid,
         :status => 'running',
-        :summary => summary.to_json,
+        :stats => stats.to_json,
         :samples => samples.to_json
       }
       res = send_request :post, req, params

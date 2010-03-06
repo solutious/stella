@@ -139,7 +139,7 @@ class Stella::Testrun < Storable
   attic :remote_digest
   field :samples => Array
   field :plan
-  field :summary
+  field :stats
   field :hosts
   field :events
   field :mode  # (f)unctional or (l)oad
@@ -150,7 +150,7 @@ class Stella::Testrun < Storable
   field :nowait => Integer
   def initialize(plan, events, opts={})
     @plan, @events = plan, events
-    @samples, @summary = nil, nil
+    @samples, @stats = nil, nil
     opts.each_pair do |n,v|
       self.send("#{n}=", v) if has_field? n
     end
@@ -163,15 +163,15 @@ class Stella::Testrun < Storable
   
   def reset
     @samples = []
-    @summary = { :summary => {} }
+    @stats = { :summary => {} }
     @plan.usecases.each do |uc|
       @events.each do |event|
-        @summary[:summary][event] = Benelux::Stats::Calculator.new
-        @summary[uc.digest] ||= { :summary => {} }
-        @summary[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
+        @stats[:summary][event] = Benelux::Stats::Calculator.new
+        @stats[uc.digest] ||= { :summary => {} }
+        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
         uc.requests.each do |req|
-          @summary[uc.digest][req.digest] ||= {}
-          @summary[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
+          @stats[uc.digest][req.digest] ||= {}
+          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
         end
       end
     end
@@ -197,9 +197,9 @@ class Stella::Testrun < Storable
           stats = tl.stats.group(event)[filter].merge
           sam.stats[uc.digest][req.digest][event] = stats
           # Tally request, usecase and total summaries at the same time. 
-          @summary[uc.digest][req.digest][event] += stats
-          @summary[uc.digest][:summary][event] += stats
-          @summary[:summary][event] += stats
+          @stats[uc.digest][req.digest][event] += stats
+          @stats[uc.digest][:summary][event] += stats
+          @stats[:summary][event] += stats
         end
       end
     end
@@ -208,7 +208,7 @@ class Stella::Testrun < Storable
     
     begin
       if Stella::Engine.service
-        Stella::Engine.service.testrun_stats @summary, @samples
+        Stella::Engine.service.testrun_stats @stats, @samples
       end
     rescue => ex
       Stella.stdout.info "Error syncing to #{Stella::Engine.service.source}"

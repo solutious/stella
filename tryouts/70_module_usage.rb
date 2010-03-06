@@ -2,10 +2,14 @@
 
 require 'stella'
 
-#Stella.enable_debug
-Stella.stdout.lev = 3
+Stella.enable_quiet
 
+plan = Stella::Testplan.new('/')
+opts = {
+  :hosts => 'http://localhost:3114', 
+  :clients => 100,
+  #:duration => 10
+}
+Stella::Engine::Load.run plan, opts
 
-#plan = Stella::Testplan.new('/', '/search')
-plan = Stella::Testplan.load_file 'examples/essentials/plan.rb'
-Stella::Engine::Load.run plan, :hosts => 'http://localhost:3114'
+puts Stella::Engine::Load.testrun.stats[:summary].to_json

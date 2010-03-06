@@ -21,6 +21,7 @@ STELLA, CHANGES
 * CHANGE: Benelux 0.5.8 dependency
 * CHANGE: Cleaned up generate mode CLI output
 * CHANGE: Removed no-logging option
+* CHANGE: Renamed Testrun#summary to Testrun#stats
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 
 
