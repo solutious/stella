@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "0.8.2.001"
+  s.version = "0.8.2.002"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "README.md",
      "Rakefile",
      "Rudyfile",
+     "VERSION.yml",
      "bin/stella",
      "examples/cookies/plan.rb",
      "examples/csvdata/plan.rb",
@@ -47,6 +48,7 @@ Gem::Specification.new do |s|
      "lib/stella/data/http.rb",
      "lib/stella/engine.rb",
      "lib/stella/engine/functional.rb",
+     "lib/stella/engine/load.rb",
      "lib/stella/engine/loadbase.rb",
      "lib/stella/guidelines.rb",
      "lib/stella/logger.rb",
@@ -54,13 +56,13 @@ Gem::Specification.new do |s|
      "lib/stella/testplan.rb",
      "lib/stella/utils.rb",
      "lib/stella/utils/httputil.rb",
-     "lib/threadify.rb",
      "stella.gemspec",
      "support/sample_webapp/app.rb",
      "support/sample_webapp/config.ru",
      "support/useragents.txt",
      "tryouts/01_numeric_mixins_tryouts.rb",
      "tryouts/12_digest_tryouts.rb",
+     "tryouts/70_module_usage.rb",
      "tryouts/api/10_functional.rb",
      "tryouts/configs/failed_requests.rb",
      "tryouts/configs/global_sequential.rb",
