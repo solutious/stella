@@ -2,8 +2,8 @@
 
 require 'stella'
 
-Stella.enable_debug
-Stella.stdout.lev = 2
+#Stella.enable_debug
+Stella.stdout.lev = 3
 
 
 #plan = Stella::Testplan.new('/', '/search')

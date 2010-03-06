@@ -58,6 +58,9 @@ module Stella::Engine
     end
     
     def process_options!(plan, opts={})
+      # Plan must be frozen before running (see freeze methods)
+      plan.frozen? || plan.freeze  
+      
       opts = {
         :hosts          => [],
         :clients        => 1,

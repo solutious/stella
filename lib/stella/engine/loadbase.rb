@@ -14,7 +14,6 @@ module Stella::Engine
     end
     
     def run(plan, opts={})
-      
       opts = process_options! plan, opts
       @threads, @max_clients, @real_reps = [], 0, 0
       
