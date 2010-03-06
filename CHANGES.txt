@@ -14,6 +14,7 @@ STELLA, CHANGES
 #### 0.8.2 (2010-03-05) ###############################
 
 * FIXED: Misc issues with usage via module (Stella::Engine.load)
+* FIXED: ANSI code method stubs only created when Drydock not available
 * CHANGE: Remove all logs except summary and exceptions
 * CHANGE: Renamed .stella/logs/latest/request-exceptions to .stella/logs/latest/exceptions
 * CHANGE: Removed unused Load implementations and renamed LoadQueue to Load
@@ -22,6 +23,7 @@ STELLA, CHANGES
 * CHANGE: Cleaned up generate mode CLI output
 * CHANGE: Removed no-logging option
 * CHANGE: Renamed Testrun#summary to Testrun#stats
+* CHANGE: Pass entire URI when calling Testplan#new
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 
 
