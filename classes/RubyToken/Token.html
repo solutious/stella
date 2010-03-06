@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: RubyToken::Token [stella 0.8.2.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          RubyToken::Token
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/proc_source_rb.html">lib/proc_source.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong>Object</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000042">get_props</a></li>
+              <li><a href="#M000041">open_tag?</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>FAKIES</td>
+                    <td>=</td>
+                    <td class='context-item-value'>[RubyToken::TkWHEN, RubyToken::TkELSIF, RubyToken::TkTHEN]</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      These EXPR_BEG tokens don&#8217;t have associated end tags
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000042'>
+                <a name='M000042'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get_props</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 30</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_props</span>&#x000A;    <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkReading2Token</span>[<span class="ruby-ivar">@name</span>]&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000041'>
+                <a name='M000041'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>open_tag?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 22</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_tag?</span>&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_props</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-identifier">a</span> = (<span class="ruby-identifier">get_props</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">EXPR_BEG</span>) <span class="ruby-operator">&amp;&amp;</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/_MOD/</span>  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-comment cmt"># ignore onliner if, unless, etc...</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-constant">FAKIES</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>)  &#x000A;    <span class="ruby-identifier">a</span> &#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

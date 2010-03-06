@@ -1,12 +1,18 @@
 require "rubygems"
 require "rake"
-require "rake/rdoctask"
 require "rake/clean"
 require 'yaml'
 
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  require 'rake/rdoctask'
+end
+ 
+
 config = YAML.load_file("VERSION.yml")
 task :default => ["build"]
-CLEAN.include [ 'pkg', 'doc', 'rdoc', 'coverage*' ]
+CLEAN.include [ 'pkg', 'doc' ]
 
 begin
   require "jeweler"
@@ -37,7 +43,7 @@ end
 
 Rake::RDocTask.new do |rdoc|
   version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}.#{config[:BUILD]}"
-  rdoc.rdoc_dir = "rdoc"
+  rdoc.rdoc_dir = "doc"
   rdoc.title = "stella #{version}"
   rdoc.rdoc_files.include("README*")
   rdoc.rdoc_files.include("LICENSE.txt")

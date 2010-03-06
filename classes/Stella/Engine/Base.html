@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Stella::Engine::Base [stella 0.8.2.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Stella::Engine::Base
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/stella/engine_rb.html">lib/stella/engine.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000129">log_dir</a></li>
+              <li><a href="#M000128">runid</a></li>
+              <li><a href="#M000127">update</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000129'>
+                <a name='M000129'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>log_dir</span>
+                  <span class='arguments'>(plan, file=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 47</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_dir</span>(<span class="ruby-identifier">plan</span>, <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">stamp</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">START_TIME</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%Y%m%d-%H-%M-%S&quot;</span>)&#x000A;      <span class="ruby-identifier">stamp</span> <span class="ruby-value str">&quot;      #stamp &lt;&lt; \&quot;STAMP\&quot;\n      l = File.join Stella::Config.project_dir, 'log', stamp\n      FileUtils.mkdir_p l unless File.exists? l\n      l\n    end\n    \n    def log_path(plan, file)\n      File.join log_dir(plan), file\n    end\n    \n    def process_options!(plan, opts={})\n      # Plan must be frozen before running (see freeze methods)\n      plan.frozen? || plan.freeze  \n      \n      opts = {\n        :hosts          =&gt; [],\n        :clients        =&gt; 1,\n        :duration       =&gt; 0,\n        :nowait         =&gt; false,\n        :arrival        =&gt; nil,\n        :repetitions    =&gt; 1\n      }.merge! opts\n      \n      Stella.ld \&quot; Options: \#{opts.inspect}\&quot;\n      \n      unless Array === opts[:hosts]\n        opts[:hosts] = [opts[:hosts]]\n      end\n      \n      opts[:hosts].collect! do |host|\n        if URI::Generic === host\n          host\n        else\n          URI.parse host\n        end\n      end\n      \n      opts[:clients] = plan.usecases.size if opts[:clients] &lt; plan.usecases.size\n      \n      if opts[:clients] &gt; @@client_limit\n        Stella.stdout.info2 \&quot;Client limit is \#{@@client_limit}\&quot;\n        opts[:clients] = @@client_limit\n      end\n      \n      # Parses 60m -&gt; 3600. See mixins. \n      if opts[:duration].in_seconds.nil?\n        raise Stella::WackyDuration, opts[:duration] \n      end\n      \n      opts[:duration] = opts[:duration].in_seconds\n      \n      Stella.stdout.info3 \&quot; Hosts: \&quot; &lt;&lt; opts[:hosts].join(', ')\n      opts\n    end\n    \n    \n    def run; raise; end\n    def update_usecase_quit(client_id, msg) raise end\n    def update_request_repeat(client_id, counter, total) raise end\n    def update_stats(client_id, http_client, usecase, req) raise end\n    def update_prepare_request(*args) raise end\n    def update_send_request(*args) raise end\n    def update_receive_response(*args) raise end\n    def update_execute_response_handler(*args) raise end\n    def update_error_execute_response_handler(*args) raise end\n    def update_request_error(*args) raise end\n    def request_unhandled_exception(*args) raise end\n    def update_request_fail(*args) raise end\n    \n  end\n  \n  autoload :Functional, 'stella/engine/functional'\n  autoload :Load, 'stella/engine/load'\n  \n  # These timers are interesting from a reporting perspective.\n  Benelux.add_counter    Stella::Client, :execute_response_handler\n  Benelux.add_timer          HTTPClient, :do_request, :response_time\n  ## These are contained in connect\n  #Benelux.add_timer HTTPClient::Session, :create_socket\n  #Benelux.add_timer HTTPClient::Session, :create_ssl_socket\n  Benelux.add_timer HTTPClient::Session, :connect, :socket_connect\n  Benelux.add_timer HTTPClient::Session, :query, :send_request\n  Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte, :first_byte\n  Benelux.add_timer HTTPClient::Session, :get_body, :receive_response\n\nend\n\nclass Stella::Testrun &lt; Storable\n  extend Attic\n  attic :remote_digest\n  field :samples =&gt; Array\n  field :plan\n  field :stats\n  field :hosts\n  field :events\n  field :mode  # (f)unctional or (l)oad\n  field :clients =&gt; Integer\n  field :duration =&gt; Integer\n  field :arrival =&gt; Float\n  field :repetitions =&gt; Integer\n  field :nowait =&gt; Integer\n  def initialize(plan, events, opts={})\n    @plan, @events = plan, events\n    @samples, @stats = nil, nil\n    opts.each_pair do |n,v|\n      self.send(\&quot;\#{n}=\&quot;, v) if has_field? n\n    end\n    reset\n  end\n  \n  def save(path)\n    Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) \n  end\n  \n  def reset\n    @samples = []\n    @stats = { :summary =&gt; {} }\n    @plan.usecases.each do |uc|\n      @events.each do |event|\n        @stats[:summary][event] = Benelux::Stats::Calculator.new\n        @stats[uc.digest] ||= { :summary =&gt; {} }\n        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new\n        uc.requests.each do |req|\n          @stats[uc.digest][req.digest] ||= {}\n          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new\n        end\n      end\n    end\n  end\n  \n  def add_sample batch, concurrency, tl\n    \n    opts = {\n      :batch =&gt; batch, \n      :duration =&gt; tl.duration,\n      :stamp =&gt; Time.now.utc.to_i,\n      :concurrency =&gt; concurrency\n    }\n    \n    sam = Stella::Testrun::Sample.new opts\n    \n    @plan.usecases.uniq.each_with_index do |uc,i| \n      sam.stats[uc.digest] ||= { }\n      uc.requests.each do |req| \n        sam.stats[uc.digest][req.digest] ||= {}\n        filter = [uc.digest, req.digest]\n        @events.each_with_index do |event,idx|  # do_request, etc...\n          stats = tl.stats.group(event)[filter].merge\n          sam.stats[uc.digest][req.digest][event] = stats\n          # Tally request, usecase and total summaries at the same time. \n          @stats[uc.digest][req.digest][event] += stats\n          @stats[uc.digest][:summary][event] += stats\n          @stats[:summary][event] += stats\n        end\n      end\n    end\n    \n    @samples &lt;&lt; sam\n    \n    begin\n      if Stella::Engine.service\n        Stella::Engine.service.testrun_stats @stats, @samples\n      end\n    rescue =&gt; ex\n      Stella.stdout.info \&quot;Error syncing to \#{Stella::Engine.service.source}\&quot;\n      Stella.stdout.info ex.message, ex.backtrace if Stella.debug?\n    end\n    \n    sam\n  end\n  \n  \n  class Sample &lt; Storable\n    field :batch\n    field :concurrency\n    field :stamp\n    field :duration\n    field :stats =&gt; Hash\n    #gibbler :batch, :concurrency, :stamp, :duration\n    def initialize(opts={})\n      opts.each_pair do |n,v|\n        self.send(\&quot;\#{n}=\&quot;, v) if has_field? n\n      end\n      @stats = { }\n    end\n  end\nend\n&quot;</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000128'>
+                <a name='M000128'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>runid</span>
+                  <span class='arguments'>(plan)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000128-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 41</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runid</span>(<span class="ruby-identifier">plan</span>)&#x000A;      <span class="ruby-identifier">args</span> = [<span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">hostname</span>, <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">user</span>]&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">START_TIME</span>, <span class="ruby-identifier">plan</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">digest</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000127'>
+                <a name='M000127'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 31</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-identifier">what</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> = <span class="ruby-identifier">args</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>)&#x000A;        <span class="ruby-comment cmt">#Stella.ld &quot;OBSERVER UPDATE: #{what}&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">rescue</span> { <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) }&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;NO UPDATE HANDLER FOR: #{what}&quot;</span> &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
