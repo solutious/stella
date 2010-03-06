@@ -15,7 +15,7 @@
   
   s.executables = %w[stella]
   
-  s.add_dependency 'benelux',    '>= 0.5.7'
+  s.add_dependency 'benelux',    '>= 0.5.9'
   s.add_dependency 'drydock',    '>= 0.6.9'
   s.add_dependency 'gibbler',    '>= 0.7.4'
   s.add_dependency 'sysinfo',    '>= 0.7.3'

@@ -108,14 +108,14 @@ module Stella::Engine
   
   # These timers are interesting from a reporting perspective.
   Benelux.add_counter    Stella::Client, :execute_response_handler
-  Benelux.add_timer          HTTPClient, :do_request
+  Benelux.add_timer          HTTPClient, :do_request, :response_time
   ## These are contained in connect
   #Benelux.add_timer HTTPClient::Session, :create_socket
   #Benelux.add_timer HTTPClient::Session, :create_ssl_socket
-  Benelux.add_timer HTTPClient::Session, :connect
-  Benelux.add_timer HTTPClient::Session, :query
-  Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte
-  Benelux.add_timer HTTPClient::Session, :get_body
+  Benelux.add_timer HTTPClient::Session, :connect, :socket_connect
+  Benelux.add_timer HTTPClient::Session, :query, :send_request
+  Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte, :first_byte
+  Benelux.add_timer HTTPClient::Session, :get_body, :receive_response
 
 end
 

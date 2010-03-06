@@ -4,7 +4,7 @@ module Stella::Engine
     extend Stella::Engine::Base
     extend self
     
-    @timers = [:do_request]
+    @timers = [:response_time]
     @counts = [:response_content_size]
     @reqlog = nil
     @logdir = nil
@@ -34,8 +34,8 @@ module Stella::Engine
       Stella.stdout.add_template :head, '  %s: %s'
       Stella.stdout.add_template :status,  "#{$/}%s..."
       
-      if Stella.stdout.lev > 2
-        Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
+      if Stella.stdout.lev >= 2
+        Load.timers += [:socket_connect, :send_request, :first_byte, :receive_response]
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
       end
@@ -131,7 +131,7 @@ module Stella::Engine
 
     def generate_report(sumlog,plan,test_time)
       global_timeline = Benelux.timeline
-      global_stats = global_timeline.stats.group(:do_request).merge
+      global_stats = global_timeline.stats.group(:response_time).merge
       if global_stats.n == 0
         Stella.ld "No stats"
         return
@@ -141,9 +141,9 @@ module Stella::Engine
       plan.usecases.uniq.each_with_index do |uc,i| 
         
         # TODO: Create Ranges object, like Stats object
-        # global_timeline.ranges(:do_request)[:usecase => '1111']
-        # The following returns globl do_request ranges. 
-        requests = 0 #global_timeline.ranges(:do_request).size
+        # global_timeline.ranges(:response_time)[:usecase => '1111']
+        # The following returns global response_time ranges. 
+        requests = 0 #global_timeline.ranges(:response_time).size
         
         desc = uc.desc || "Usecase ##{i+1} "
         desc << "  (#{uc.digest_cache.shorter}) "
@@ -168,7 +168,7 @@ module Stella::Engine
         
         @sumlog.info "   Sub Total:".bright
         
-        stats = global_timeline.stats.group(:do_request)[uc.digest_cache].merge
+        stats = global_timeline.stats.group(:response_time)[uc.digest_cache].merge
         failed = global_timeline.stats.group(:failed)[uc.digest_cache].merge
         respgrp = global_timeline.stats.group(:execute_response_handler)[uc.digest_cache]
         resst = respgrp.tag_values(:status)
@@ -279,7 +279,7 @@ module Stella::Engine
     
     def generate_runtime_report(plan)
       gt = Benelux.timeline
-      gstats = gt.stats.group(:do_request).merge
+      gstats = gt.stats.group(:response_time).merge
       
       plan.usecases.uniq.each_with_index do |uc,i| 
         uc.requests.each do |req| 

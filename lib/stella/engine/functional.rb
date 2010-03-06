@@ -15,7 +15,7 @@ module Stella::Engine
             
       client.enable_nowait_mode if opts[:nowait]
       
-      @testrun = Stella::Testrun.new plan, [:do_request, :failed], opts
+      @testrun = Stella::Testrun.new plan, [:response_time, :failed], opts
       @testrun.mode = 'f'      
       
       if Stella::Engine.service
