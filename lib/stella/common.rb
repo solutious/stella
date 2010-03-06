@@ -7,6 +7,22 @@ $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
 class String
   
+  def colour(*args)
+    self
+  end
+  
+  def color(*args)
+    self
+  end
+  
+  def att(*args)
+    self
+  end
+  
+  def bright(*args)
+    self
+  end
+  
   def in_seconds
     # "60m" => ["60", "m"]
     q,u = self.scan(/([\d\.]+)([s,m,h])?/).flatten

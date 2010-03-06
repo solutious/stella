@@ -100,7 +100,6 @@ module Stella
           ret, asset_duration = nil, 0
         rescue => ex
           update(:request_unhandled_exception, usecase, uri, req, params, ex)
-          update(:usecase_error, ex.message, uri, container)
           Benelux.remove_thread_tags :status, :retry, :request, :stella_id
           break
         end

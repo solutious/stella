@@ -114,7 +114,7 @@ class Stella::CLI < Drydock::Command
     else
       opts = {}
       opts[:wait] = @option.wait if @option.wait
-      @testplan = Stella::Testplan.new(@argv, opts)
+      @testplan = Stella::Testplan.new(@argv)
     end
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests

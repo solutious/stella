@@ -64,9 +64,6 @@ class Stella::CLI::Definition
   global :'no-stats', "Disable stat collection" do
     true
   end
-  global :'no-logging', "Disable all logging" do
-    Stella::Logger.disable!
-  end
   global :'no-templates', "Disable template parsing" do
     true
   end

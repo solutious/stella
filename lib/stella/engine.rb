@@ -69,6 +69,18 @@ module Stella::Engine
       
       Stella.ld " Options: #{opts.inspect}"
       
+      unless Array === opts[:hosts]
+        opts[:hosts] = [opts[:hosts]]
+      end
+      
+      opts[:hosts].collect! do |host|
+        if URI::Generic === host
+          host
+        else
+          URI.parse host
+        end
+      end
+      
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       
       if opts[:clients] > @@client_limit

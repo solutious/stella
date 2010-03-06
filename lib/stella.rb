@@ -81,7 +81,7 @@ module Stella
     attr_accessor :log, :stdout
   end
   
-  def le(*msg); stdout.info "  " << msg.join("#{$/}  ").color(:red); end
+  def le(*msg); stdout.info "  " << msg.join("#{$/}  ").colour(:red); end
   def ld(*msg)
     return unless Stella.debug?
     prefix = "D(#{Thread.current.object_id}):  "
@@ -101,8 +101,8 @@ module Stella
   def abort!()        @abort =  true  end
   
   def quiet?()        @quiet == true  end
-  def enable_quiet()  @quiet = true   end
-  def disable_quiet() @quiet = false  end
+  def enable_quiet()  @quiet = true; @stdout.disable!;  end
+  def disable_quiet() @quiet = false; @stdout.enable!;  end
   
   def add_global(n,v)
     Stella.ld "SETGLOBAL: #{n}=#{v}"

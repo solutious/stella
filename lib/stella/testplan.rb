@@ -41,7 +41,8 @@ class Testplan < Storable
   # TODO: Add Stellar::TOKEN to the calculation
   gibbler :id, :usecases, :description
   
-  def initialize(uris=[], opts={})
+  def initialize(*uris)
+    uris.flatten!
     self.description = "Test plan"
     @usecases = []
     @testplan_current_ratio = 0
@@ -56,7 +57,6 @@ class Testplan < Storable
         uri = URI.parse uri
         uri.path = '/' if uri.path.nil? || uri.path.empty?
         req = usecase.add_request :get, uri.path
-        req.wait = opts[:wait] if opts[:wait]
       end
       self.add_usecase usecase
     end
@@ -124,10 +124,12 @@ class Testplan < Storable
   end
   
   def pretty(long=false)
+    self.digest # make sure we have values in the cache
     str = []
     dig = long ? self.digest_cache : self.digest_cache.shorter
     str << " %-66s  ".att(:reverse) % ["#{self.description}  (#{dig})"]
     @usecases.each_with_index do |uc,i| 
+      uc.digest
       dig = long ? uc.digest_cache : uc.digest_cache.shorter
       desc = uc.description || "Usecase ##{i+1}"
       desc += "  (#{dig}) "
@@ -136,6 +138,7 @@ class Testplan < Storable
         str << '    Auth: %s (%s/%s)' % uc.http_auth.values
       end
       requests = uc.requests.each do |r| 
+        r.digest
         dig = long ? r.digest_cache : r.digest_cache.shorter
         str << "    %-62s".bright % ["#{r.description}  (#{dig})"]
         str << "      %s" % [r]

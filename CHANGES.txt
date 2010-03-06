@@ -3,7 +3,6 @@ STELLA, CHANGES
 #### 0.8.X (XXXX-XX-XX) ###############################
 
 * TODO: Force response block content type. 
-* TODO: Add assert methods to response blocks (reconsider)
 * TODO: Add option to dump full request/response output to a file by client
 * TODO: review cookie handling. Not always sent automatically. 
 * TODO: review :variables in URI elements
@@ -11,14 +10,17 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
+
 #### 0.8.2 (2010-03-05) ###############################
 
+* FIXED: Misc issues with usage via module (Stella::Engine.load)
 * CHANGE: Remove all logs except summary and exceptions
 * CHANGE: Renamed .stella/logs/latest/request-exceptions to .stella/logs/latest/exceptions
 * CHANGE: Removed unused Load implementations and renamed LoadQueue to Load
 * CHANGE: Added proper names for statistics (response_time instead of do_request)
 * CHANGE: Benelux 0.5.8 dependency
 * CHANGE: Cleaned up generate mode CLI output
+* CHANGE: Removed no-logging option
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 
 
