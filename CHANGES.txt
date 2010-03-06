@@ -11,6 +11,13 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
+#### 0.8.2 (2010-03-05) ###############################
+
+* CHANGE: Remove all logs except summary and exceptions
+* CHANGE: Renamed .stella/logs/latest/request-exceptions to .stella/logs/latest/exceptions
+* ADDED: JSON statistics log (.stella/logs/latest/stats)
+
+
 #### 0.8.1.002 (2010-02-20) ###############################
 
 * FIXED: fail on connection error

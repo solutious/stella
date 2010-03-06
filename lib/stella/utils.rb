@@ -109,7 +109,7 @@ module Stella
     end
     
     # A basic file writer
-    def write_to_file(filename, content, mode, chmod=600)
+    def write_to_file(filename, content, mode, chmod=0600)
       mode = (mode == :append) ? 'a' : 'w'
       f = File.open(filename,mode)
       f.puts content

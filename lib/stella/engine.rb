@@ -146,6 +146,10 @@ class Stella::Testrun < Storable
     reset
   end
   
+  def save(path)
+    Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
+  end
+  
   def reset
     @samples = []
     @summary = { :summary => {} }
@@ -200,6 +204,7 @@ class Stella::Testrun < Storable
       Stella.stdout.info ex.message, ex.backtrace if Stella.debug?
     end
     
+    sam
   end
   
   

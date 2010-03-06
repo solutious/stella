@@ -26,27 +26,13 @@ module Stella::Engine
         File.unlink latest if File.exists? latest
         FileUtils.ln_sf File.basename(@logdir), latest
       end
-        
-      @reqlog = Stella::Logger.new log_path(plan, 'requests')
-      @failog = Stella::Logger.new log_path(plan, 'requests-exceptions')
+      
+      @statlog_path = log_path(plan, 'stats')
       @sumlog = Stella::Logger.new log_path(plan, 'summary')
-      @optlog = Stella::Logger.new log_path(plan, 'options')
-      @authlog = Stella::Logger.new log_path(plan, 'requests-auth')
-      
-      @syslog = Stella::Logger.new log_path(plan, 'sysinfo')
-      @syslog.info(Stella.sysinfo.dump(:yaml)) and @syslog.close
-      
-      @plalog = Stella::Logger.new log_path(plan, 'plan')
-      @plalog.info(plan.pretty.noansi) and @plalog.close
-      
+      @failog = Stella::Logger.new log_path(plan, 'exceptions')
       
       Stella.stdout.add_template :head, '  %s: %s'
       Stella.stdout.add_template :status,  "#{$/}%s..."
-      
-      @sumlog.add_template :dsummary, '%20s: %8d'
-      @sumlog.add_template :fsummary, '%20s: %8.2f'
-      @optlog.add_template :head, '%10s: %s'
-      @failog.add_template :request, '%s %s'
       
       if Stella.stdout.lev > 2
         Load.timers += [:query, :connect, :socket_gets_first_byte, :get_body]
@@ -64,12 +50,11 @@ module Stella::Engine
         Stella.stdout.head 'Testrun', @testrun.remote_digest
       end
       
+      @testrun.save(@statlog_path)
+      
       @dumper = prepare_dumper(plan, opts)
       
       counts = calculate_usecase_clients plan, opts
-      
-      @optlog.head 'RUNID', runid(plan)
-      @optlog.head 'OPTIONS', opts.inspect
       
       packages = build_thread_package plan, opts, counts
       
@@ -86,7 +71,6 @@ module Stella::Engine
       @dumper.start
       
       begin 
-        @optlog.head "START", Time.now.to_s
         Stella.stdout.status "Running" 
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
@@ -100,14 +84,10 @@ module Stella::Engine
       
       Stella.stdout.status "Processing"
       
-      @optlog.head "END", Time.now.to_s
-      @optlog.flush
-      
       @dumper.stop
       
       bt = Benelux.timeline
       tt = Benelux.thread_timeline
-      
       
       # TODO: don't get test time from benelux. 
       test_time = tt.stats.group(:execute_test_plan).mean
@@ -138,28 +118,13 @@ module Stella::Engine
         concurrency = @threads.select { |t| !t.status.nil? }.size
         batch, timeline = Benelux.timeline_updates, Benelux.timeline_chunk
         @testrun.add_sample batch, concurrency, timeline
-        
-        #reqlog.info [Time.now, Benelux.timeline.size].inspect
-        @reqlog.info Benelux.timeline.messages.filter(:kind => :request)
+        @testrun.save(@statlog_path)
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
-        @authlog.info Benelux.timeline.messages.filter(:kind => :authentication)
-        @reqlog.clear and @failog.clear and @authlog.clear
-        
         Benelux.timeline.clear if opts[:"no-stats"]
-        
       end
       hand.finally do
-        #total = @testrun.stats[:summary][:do_request].n 
-        #failed = @testrun.stats[:summary][:failed].n 
-        #@sumlog.info $/, "Summary: "
-        #@sumlog.dsummary 'successful req', total-failed
-        #@sumlog.dsummary "failed req", failed
-        #@sumlog.dsummary "max clients", @max_clients
-        #@sumlog.dsummary "repetitions", @real_reps
-        ##@sumlog.fsummary "test time", test_time
-        ##@sumlog.fsummary "reporting time", report_time
-        #@sumlog.flush
+        @testrun.save(@statlog_path)
       end
       hand
     end
@@ -348,9 +313,9 @@ module Stella::Engine
         '%s=%s' % el 
       }.compact.join('&') # remove skipped params
       args << container.unique_id[0,10]
-      Benelux.thread_timeline.add_message args.join('; '), 
-       :status => container.status,
-       :kind => :request
+      #Benelux.thread_timeline.add_message args.join('; '), 
+      # :status => container.status,
+      # :kind => :request
       args = [client_id.shorter, container.status, req.http_method, uri, params.inspect]
       Stella.stdout.info3 '  Client-%s %3d %-6s %s %s' % args
             
@@ -426,8 +391,8 @@ module Stella::Engine
     
     def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
       Stella.stdout.info3 "  Client-%s     TIMEOUT   %-53s" % [client_id.shorter, uri]
-      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
+      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push [uri, 'TOUT', container.unique_id[0,10]]
       Benelux.thread_timeline.add_message args.join('; '), :kind => :timeout
     end
