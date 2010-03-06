@@ -42,7 +42,7 @@ end
 
 Rake::RDocTask.new do |rdoc|
   version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}.#{config[:BUILD]}"
-  rdoc.rdoc_dir = "rdoc"
+  rdoc.rdoc_dir = "doc"
   rdoc.title = "stella #{version}"
   rdoc.rdoc_files.include("README*")
   rdoc.rdoc_files.include("LICENSE.txt")
