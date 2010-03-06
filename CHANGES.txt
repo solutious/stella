@@ -17,7 +17,8 @@ STELLA, CHANGES
 * CHANGE: Renamed .stella/logs/latest/request-exceptions to .stella/logs/latest/exceptions
 * CHANGE: Removed unused Load implementations and renamed LoadQueue to Load
 * CHANGE: Added proper names for statistics (response_time instead of do_request)
-* CHANGE: Benelux 0.5.9 dependency
+* CHANGE: Benelux 0.5.8 dependency
+* CHANGE: Cleaned up generate mode CLI output
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 
 

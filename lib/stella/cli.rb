@@ -118,7 +118,6 @@ class Stella::CLI < Drydock::Command
     end
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests
-    Stella.stdout.info2 " #{@option.testplan || @testplan.desc} (#{@testplan.digest})" 
     true
   end
   

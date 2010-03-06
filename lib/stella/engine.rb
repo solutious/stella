@@ -67,7 +67,7 @@ module Stella::Engine
         :repetitions    => 1
       }.merge! opts
       
-      Stella.stdout.info2 " Options: #{opts.inspect}"
+      Stella.ld " Options: #{opts.inspect}"
       
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       

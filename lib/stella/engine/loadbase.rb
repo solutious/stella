@@ -65,8 +65,11 @@ module Stella::Engine
       end
       
       Stella.stdout.head 'Plan', "#{plan.desc} (#{plan.digest.shorter})"
+      Stella.stdout.head 'Hosts', opts[:hosts].join(', ')
       Stella.stdout.head 'Clients', counts[:total]
       Stella.stdout.head 'Limit', timing
+      
+      Stella.stdout.head 'Arrival', opts[:arrival] if opts[:arrival]
       
       @dumper.start
       
@@ -172,14 +175,6 @@ module Stella::Engine
         failed = global_timeline.stats.group(:failed)[uc.digest_cache].merge
         respgrp = global_timeline.stats.group(:execute_response_handler)[uc.digest_cache]
         resst = respgrp.tag_values(:status)
-        statusi = []
-        resst.each do |status|
-          size = respgrp[:status => status].size
-          statusi << "#{status}: #{size}"
-        end
-        @sumlog.info '      %-30s %d (%s)' % ['Total requests', stats.n, statusi.join(', ')]
-        @sumlog.info '       %-29s %d' % [:success, stats.n - failed.n]
-        @sumlog.info '       %-29s %d' % [:failed, failed.n]
         
         Load.timers.each do |sname|
           stats = global_timeline.stats.group(sname)[uc.digest_cache].merge
@@ -193,9 +188,20 @@ module Stella::Engine
           @sumlog.flush
         end
         @sumlog.info $/
+        statusi = []
+        resst.each do |status|
+          size = respgrp[:status => status].size
+          statusi << "#{status}: #{size}"
+        end
+        @sumlog.info '      %-30s %d (%s)' % ['Total requests', stats.n, statusi.join(', ')]
+        @sumlog.info '       %-29s %d' % [:success, stats.n - failed.n]
+        @sumlog.info '       %-29s %d' % [:failed, failed.n]
+        
+        @sumlog.info $/
       end
       
       @sumlog.info ' ' << " %-66s ".att(:reverse) % 'Total:'
+      @sumlog.flush
       
       failed = global_timeline.stats.group(:failed)
       respgrp = global_timeline.stats.group(:execute_response_handler)
@@ -205,14 +211,7 @@ module Stella::Engine
         size = respgrp[:status => status].size
         statusi << [status, size]
       end
-      @sumlog.info  '      %-30s %d' % ['Total requests', global_stats.n]
-      success = global_stats.n - failed.n
-      @sumlog.info  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
-      statusi.each do |pair|
-        @sumlog.info3 '        %-28s %s: %d' % ['', *pair]
-      end
-      @sumlog.info  '       %-29s %d' % [:failed, failed.n]
-      
+     
       Load.timers.each do |sname|
         stats = global_timeline.stats.group(sname).merge
         @sumlog.info '      %-30s %-.3fs     %-.3f(SD)' % [sname, stats.mean, stats.sd]
@@ -224,6 +223,19 @@ module Stella::Engine
         @sumlog.info '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
         @sumlog.flush
       end
+      
+      @sumlog.info $/
+      @sumlog.info  '      %-30s %d' % ['Total requests', global_stats.n]
+      
+      success = global_stats.n - failed.n
+      @sumlog.info  '       %-29s %d (req/s: %.2f)' % [:success, success, success/test_time]
+      statusi.each do |pair|
+        @sumlog.info3 '        %-28s %s: %d' % ['', *pair]
+      end
+      @sumlog.info  '       %-29s %d' % [:failed, failed.n]
+      
+      @sumlog.flush
+      
     end
     
     
