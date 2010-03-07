@@ -24,7 +24,7 @@ STELLA, CHANGES
 * CHANGE: Removed no-logging option
 * CHANGE: Renamed Testrun#summary to Testrun#stats
 * CHANGE: Pass entire URI when calling Testplan#new
-* CHANGE: Engine objects are now classes 
+* CHANGE: Engine objects are now classes
 * CHANGE: Engine#run methods now return instance of Stella::Testrun
 * ADDED: JSON statistics log (.stella/logs/latest/stats)
 

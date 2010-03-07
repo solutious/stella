@@ -39,7 +39,7 @@ module Stella::Data::HTTP
     end
     
     def initialize (method, uri_str, version="1.1", &definition)
-      @uri = uri_str
+      @uri = uri_str.to_s
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
       @resources = {}

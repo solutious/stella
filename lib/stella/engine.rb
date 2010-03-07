@@ -92,6 +92,10 @@ module Stella::Engine
         end
       end
       
+      opts[:clients] &&= opts[:clients].to_i
+      opts[:duration] &&= opts[:duration].to_i
+      opts[:arrival] &&= opts[:arrival].to_f
+      opts[:repetitions] &&= opts[:repetitions].to_i
       opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
       
       if opts[:clients] > @@client_limit

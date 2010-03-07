@@ -2,8 +2,10 @@
 
 require 'stella'
 
-#Stella.enable_quiet
-Stella.stdout.lev = 3
+Benelux.enable_debug
+
+Stella.enable_quiet
+#Stella.stdout.lev = 3
 plan = Stella::Testplan.new('http://localhost:3114/search')
 opts = {
   :hosts => '', 
