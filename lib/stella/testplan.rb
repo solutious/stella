@@ -34,8 +34,8 @@ class Testplan < Storable
   
   field :id, &gibbler_id_processor
   
-  field :usecases 
-  field :description 
+  field :usecases => Array
+  field :description => String
   #field :resources
   
   # TODO: Add Stellar::TOKEN to the calculation
@@ -87,6 +87,13 @@ class Testplan < Storable
     Stella.ld "FREEZE TESTPLAN: #{self.description}"
     @usecases.each { |uc| uc.freeze }
     super
+    self
+  end
+  
+  def from_hash(hash)
+    super(hash)
+    p [self.usecases.class, self.usecases]
+    self.usecases.collect! { |uc| Stella::Testplan::Usecase.from_hash(uc) }
     self
   end
   
@@ -192,13 +199,13 @@ class Testplan
     field :id, &gibbler_id_processor
     
     attic :description
-    field :description
+    field :description => String
     
-    field :ratio
-    field :http_auth
-    field :timeout
-    field :requests
-    field :resources
+    field :ratio => Float
+    field :http_auth => Hash
+    field :timeout => Float
+    field :requests => Array
+    field :resources => Hash
     
     class UnknownResource < Stella::Error
       def message; "UnknownResource: #{@obj}"; end

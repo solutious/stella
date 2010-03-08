@@ -86,35 +86,29 @@ class Stella::Testrun < Storable
   CLIENT_LIMIT = 1000
   include Gibbler::Complex
   field :samples => Array
+  field :clients => Integer
+  field :duration => Integer
+  field :arrival => Float
+  field :repetitions => Integer
+  field :nowait => TrueClass
+  field :withparam => TrueClass
+  field :withheader => TrueClass
+  field :notemplates => TrueClass
+  field :nostats => TrueClass
+  field :start_time => Integer
+  field :mode  # verify or generate
   field :plan
   field :stats
   field :hosts
   field :events
   field :log
-  field :mode  # verify or generate
-  field :clients => Integer
-  field :duration => Integer
-  field :arrival => Float
-  field :repetitions => Integer
-  field :nowait => FalseClass
-  field :withparam => FalseClass
-  field :withheader => FalseClass
-  field :notemplates => FalseClass
-  field :nostats => FalseClass
-  field :start_time => Time
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time
-  def initialize(plan, opts={})
+  def initialize(plan=nil, opts={})
     @plan = plan
     @events = [:response_time, :failed]
     @samples, @stats = nil, nil
-    opts = process_options plan, opts
-    unless [:verify, :generate].member?(opts[:mode])
-      raise Stella::Error, "Unsupported mode; #{opts[:mode]}"
-    end
-    opts.each_pair do |n,v|
-      self.send("#{n}=", v) if has_field? n
-    end
-    reset
+    @start_time = 0
+    process_options! opts if !plan.nil? && !opts.empty?
   end
   
   def client_options
@@ -126,49 +120,65 @@ class Stella::Testrun < Storable
     }
   end
   
-  def process_options(plan, opts={})
-    # Plan must be frozen before running (see freeze methods)
-    plan.frozen? || plan.freeze  
+  def process_options!(opts={})
     
-    opts = {
-      :hosts          => [],
-      :clients        => 1,
-      :duration       => 0,
-      :nowait         => false,
-      :arrival        => nil,
-      :repetitions    => 1, 
-      :mode           => :verify
-    }.merge! opts
-    
-    Stella.ld " Options: #{opts.inspect}"
-    
-    unless Array === opts[:hosts]
-      opts[:hosts] = [opts[:hosts]]
+    unless opts.empty?
+      opts = {
+        :hosts          => [],
+        :clients        => 1,
+        :duration       => 0,
+        :nowait         => false,
+        :arrival        => nil,
+        :repetitions    => 1, 
+        :mode           => :verify
+      }.merge! opts      
+
+      opts.each_pair do |n,v|
+        self.send("#{n}=", v) if has_field? n
+      end
+      
+      Stella.ld " Options: #{opts.inspect}"
     end
+
+    @clients &&= @clients.to_i
+    @duration &&= @duration.to_i
+    @arrival &&= @arrival.to_f
+    @repetitions &&= @repetitions.to_i
     
-    opts[:hosts].collect! do |host|
+    @mode &&= @mode.to_sym
+    
+    @hosts = [@hosts] unless Array === @hosts
+    
+    @hosts.collect! do |host|
       host.to_s
     end
     
-    opts[:clients] &&= opts[:clients].to_i
-    opts[:duration] &&= opts[:duration].to_i
-    opts[:arrival] &&= opts[:arrival].to_f
-    opts[:repetitions] &&= opts[:repetitions].to_i
-    opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
-    
-    if opts[:clients] > CLIENT_LIMIT
+    if @clients > CLIENT_LIMIT
       Stella.stdout.info2 "Client limit is #{CLIENT_LIMIT}"
-      opts[:clients] = CLIENT_LIMIT
+      @clients = CLIENT_LIMIT
     end
     
     # Parses 60m -> 3600. See mixins. 
-    if opts[:duration].in_seconds.nil?
-      raise Stella::WackyDuration, opts[:duration] 
+    @duration = @duration.in_seconds
+    
+    raise Stella::WackyDuration, @duration if @duration.nil?
+    
+    unless [:verify, :generate].member?(@mode)
+      raise Stella::Error, "Unsupported mode: #{@mode}"
     end
     
-    opts[:duration] = opts[:duration].in_seconds
+    if Hash === self.plan # When reconstituting from JSON
+      p [self.class, 999]
+      self.plan = Stella::Testplan.from_hash(self.plan)
+    end
     
-    opts
+    if Stella::Testplan === self.plan
+      # Plan must be frozen before running (see freeze methods)
+      self.plan.frozen? || self.plan.freeze  
+      @clients = plan.usecases.size if @clients < plan.usecases.size
+    end
+    
+    reset_stats
   end
   
   def log_dir
@@ -204,7 +214,7 @@ class Stella::Testrun < Storable
     Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
   end
   
-  def reset
+  def reset_stats
     @samples = []
     @stats = { :summary => {} }
     @plan.usecases.each do |uc|
