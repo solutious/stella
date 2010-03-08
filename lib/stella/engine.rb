@@ -147,8 +147,7 @@ module Stella::Engine
 end
 
 class Stella::Testrun < Storable
-  extend Attic
-  attic :remote_digest
+  include Gibbler::Complex
   field :samples => Array
   field :plan
   field :stats
@@ -160,6 +159,8 @@ class Stella::Testrun < Storable
   field :arrival => Float
   field :repetitions => Integer
   field :nowait => Integer
+  field :start_time => Time
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :nowait, :start_time
   def initialize(plan, events, opts={})
     @plan, @events = plan, events
     @samples, @stats = nil, nil

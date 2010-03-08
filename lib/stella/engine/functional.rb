@@ -19,10 +19,11 @@ module Stella::Engine
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create @testrun
         Stella::Engine.service.client_create client.digest, :index => client.index
-        Stella.stdout.info "Testrun: #{@testrun.remote_digest}"
+        Stella.stdout.info "Testrun: #{@testrun.digest}"
       end
       
       Stella.stdout.info2 $/, "Starting test...", $/
+      @testrun.start_time = Time.now.utc.to_i
       
       start_time = Time.now.utc
       

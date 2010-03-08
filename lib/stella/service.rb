@@ -150,7 +150,7 @@ class Stella::Service
       res = send_request :post, req, params
       obj = JSON.parse res.content
       Stella.ld "CREATED TRUN: #{obj.inspect}"
-      trun.remote_digest = obj['digest']
+      #trun.remote_digest = obj['digest']
       @runid = obj['digest']
     end
     def testrun_stats(stats, samples)

@@ -38,7 +38,7 @@ module Stella::Engine
       if Stella::Engine.service
         Stella::Engine.service.testplan_sync plan
         Stella::Engine.service.testrun_create @testrun
-        Stella.stdout.head 'Testrun', @testrun.remote_digest
+        Stella.stdout.head 'Testrun', @testrun.digest
       end
       
       @testrun.save(@statlog_path)
@@ -66,6 +66,7 @@ module Stella::Engine
       
       begin 
         Stella.stdout.status "Running" 
+        @testrun.start_time = Time.now.utc.to_i
         execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
       rescue Interrupt
         Stella.stdout.info $/, "Stopping test"
