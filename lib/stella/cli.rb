@@ -30,8 +30,6 @@ class Stella::CLI < Drydock::Command
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     
-    connect_service if @global.remote
-    
     testrun = Stella::Testrun.new @testplan, opts
     testrun.run
     testrun
@@ -80,12 +78,6 @@ class Stella::CLI < Drydock::Command
   end
   
   private
-  def connect_service
-    if @global.remote
-      s = Stella::Service.new 
-      Stella::Engine.service = s
-    end
-  end
   
   def create_testplan
     unless @option.testplan.nil? || File.exists?(@option.testplan)

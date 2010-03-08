@@ -249,15 +249,6 @@ class Stella::Testrun < Storable
     
     @samples << sam
     
-    begin
-      if Stella::Engine.service
-        Stella::Engine.service.testrun_stats @stats, @samples
-      end
-    rescue => ex
-      Stella.stdout.info "Error syncing to #{Stella::Engine.service.source}"
-      Stella.stdout.info ex.message, ex.backtrace if Stella.debug?
-    end
-    
     sam
   end
   
