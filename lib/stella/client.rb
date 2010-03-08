@@ -19,11 +19,15 @@ module Stella
     attr_accessor :created 
     
     gibbler :opts, :index, :base_uri, :proxy, :nowait, :created
-    
-    def initialize(base_uri=nil, index=1, opts={})
+    @@client_index = 0
+    def initialize(base_uri=nil, opts={})
+      @index = @@client_index += 1
       @created = Time.now.to_f
       opts = {
-        :'no-templates' => false
+        :nowait => false,
+        :withparam => false,
+        :withheader => false,
+        :notemplates => false
       }.merge! opts
       @opts = opts
       @base_uri, @index = base_uri, index
@@ -91,8 +95,8 @@ module Stella
           
           container.unique_id = stella_id
           
-          params['__stella'] = container.unique_id.short if @opts[:'with-param']
-          headers['X-Stella-ID'] = container.unique_id.short if @opts[:'with-header']
+          params['__stella'] = container.unique_id.short if @opts[:'withparam']
+          headers['X-Stella-ID'] = container.unique_id.short if @opts[:'withheader']
           
           meth = req.http_method.to_s.downcase
           Stella.ld "#{req.http_method}: " << "#{req.uri} " << params.inspect
@@ -175,9 +179,9 @@ module Stella
       stats
     end
     
-    def enable_nowait_mode; @nowait = true; end
-    def disable_nowait_mode; @nowait = false; end
-    def nowait?; @nowait == true; end
+    def enable_nowait_mode; @opts[:'nowait'] = true; end
+    def disable_nowait_mode; @opts[:'nowait'] = false; end
+    def nowait?; @opts[:'nowait'] == true; end
       
   private
     # We use a method so we can time it with Benelux
@@ -233,7 +237,7 @@ module Stella
       newh = {}
       #Stella.ld "PREPARE HEADERS: #{headers}"
       hashobj.each_pair do |n,v|
-        unless @opts[:'no-templates']
+        unless @opts[:'notemplates']
           v = container.parse_template v
         end
         v = extra.call(v) unless extra.nil?
@@ -270,6 +274,7 @@ module Stella
         raise NoHostDefined, uri
       end
       
+      base_uri = URI.parse(self.base_uri || '')
       uri.scheme = base_uri.scheme if uri.scheme.nil?
       uri.host = base_uri.host if uri.host.nil?
       uri.port = base_uri.port if uri.port.nil?

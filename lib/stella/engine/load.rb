@@ -5,22 +5,19 @@ module Stella::Engine
     @timers = [:response_time]
     @counts = [:response_content_size]
     
-    def run(plan)
-      opts = process_options! plan, @opts
+    def run(testrun)
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      @logdir = log_dir(plan)
-      latest = File.join(File.dirname(@logdir), 'latest')
-      Stella.stdout.info "Logging to #{@logdir}", $/
+      Stella.stdout.info "Logging to #{testrun.log_dir}", $/
       
+      latest = File.join(File.dirname(testrun.log_dir), 'latest')
       if Stella.sysinfo.os == :unix
         File.unlink latest if File.exists? latest
-        FileUtils.ln_sf File.basename(@logdir), latest
+        FileUtils.ln_sf File.basename(testrun.log_dir), latest
       end
       
-      @statlog_path = log_path(plan, 'stats')
-      @sumlog = Stella::Logger.new log_path(plan, 'summary')
-      @failog = Stella::Logger.new log_path(plan, 'exceptions')
+      @sumlog = Stella::Logger.new testrun.log_path('summary')
+      @failog = Stella::Logger.new testrun.log_path('exceptions')
       
       Stella.stdout.add_template :head, '  %s: %s'
       Stella.stdout.add_template :status,  "#{$/}%s..."
@@ -32,42 +29,33 @@ module Stella::Engine
       end
       
       events = [Load.timers, Load.counts, :failed].flatten
-      @testrun = Stella::Testrun.new plan, events, opts
-      @testrun.mode = 'l'
+
+      testrun.save
       
-      if Stella::Engine.service
-        Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create @testrun
-        Stella.stdout.head 'Testrun', @testrun.digest
-      end
+      @dumper = prepare_dumper(testrun)
       
-      @testrun.save(@statlog_path)
+      counts = calculate_usecase_clients testrun
       
-      @dumper = prepare_dumper(plan, opts)
+      packages = build_thread_package testrun, counts
       
-      counts = calculate_usecase_clients plan, opts
-      
-      packages = build_thread_package plan, opts, counts
-      
-      if opts[:duration] > 0
-        timing = "#{opts[:duration].seconds.to_i} seconds"
+      if testrun.duration > 0
+        timing = "#{testrun.duration.seconds.to_i} seconds"
       else
-        timing = "#{opts[:repetitions]} repetitions"
+        timing = "#{testrun.repetitions} repetitions"
       end
       
-      Stella.stdout.head 'Plan', "#{plan.desc} (#{plan.digest.shorter})"
-      Stella.stdout.head 'Hosts', opts[:hosts].join(', ')
+      Stella.stdout.head 'Plan', "#{testrun.plan.desc} (#{testrun.plan.digest.shorter})"
+      Stella.stdout.head 'Hosts', testrun.hosts.join(', ')
       Stella.stdout.head 'Clients', counts[:total]
       Stella.stdout.head 'Limit', timing
-      
-      Stella.stdout.head 'Arrival', opts[:arrival] if opts[:arrival]
+      Stella.stdout.head 'Arrival', testrun.arrival if testrun.arrival
       
       @dumper.start
       
       begin 
         Stella.stdout.status "Running" 
-        @testrun.start_time = Time.now.utc.to_i
-        execute_test_plan packages, opts[:repetitions], opts[:duration], opts[:arrival]
+        testrun.start_time = Time.now.utc.to_i
+        execute_test_plan packages, testrun
       rescue Interrupt
         Stella.stdout.info $/, "Stopping test"
         Stella.abort!
@@ -86,18 +74,18 @@ module Stella::Engine
       
       # TODO: don't get test time from benelux. 
       test_time = tt.stats.group(:execute_test_plan).mean
-      generate_report @sumlog, plan, test_time
+      generate_report @sumlog, testrun, test_time
       #report_time = tt.stats.group(:generate_report).mean
       
       Stella.stdout.info File.read(@sumlog.path)
       
-      Stella.stdout.info $/, "Log dir: #{@logdir}"
+      Stella.stdout.info $/, "Log dir: #{testrun.log_dir}"
       
-      @testrun
+      testrun
     end
     
     ROTATE_TIMELINE = 5
-    def execute_test_plan(packages, reps=1,duration=0,arrival=nil)
+    def execute_test_plan(packages, testrun)
       time_started = Time.now
       
       pqueue = Queue.new
@@ -120,7 +108,7 @@ module Stella::Engine
           Benelux.add_thread_tags :usecase => uc.digest_cache
           Thread.current[:real_uctime].first_tick
           prev_ptime ||= Time.now
-          reps.times { |rep| 
+          testrun.repetitions.times { |rep| 
             break if Stella.abort?
             Thread.current[:real_reps] += 1
             # NOTE: It's important to not call digest or gibbler methods
@@ -152,9 +140,9 @@ module Stella::Engine
             
             # If a duration was given, we make sure 
             # to run for only that amount of time.
-            if duration > 0
-              break if (time_elapsed+Thread.current[:real_uctime].mean) >= duration
-              redo if (time_elapsed+Thread.current[:real_uctime].mean) <= duration
+            if testrun.duration > 0
+              break if (time_elapsed+Thread.current[:real_uctime].mean) >= testrun.duration
+              redo if (time_elapsed+Thread.current[:real_uctime].mean) <= testrun.duration
             end
           }
           
@@ -163,12 +151,12 @@ module Stella::Engine
           pqueue << package  # return the package to the queue
         end
         
-        unless arrival.nil?
+        unless testrun.arrival.nil?
           # Create 1 second / users per second 
           args = [@threads.size, packages.size]
           Stella.stdout.print 2, '+'
           Stella.stdout.info3 $/, "-> NEW CLIENT: %s of %s" % args
-          sleep 1/arrival
+          sleep 1/testrun.arrival
         end
       }
       
@@ -193,25 +181,25 @@ module Stella::Engine
       end
     end
     
-    def prepare_dumper(plan, opts)
+    def prepare_dumper(testrun)
       hand = Stella::Hand.new(Load::ROTATE_TIMELINE, 2.seconds) do
         Benelux.update_global_timeline 
         # @threads contains only stella clients
         concurrency = @threads.select { |t| !t.status.nil? }.size
         batch, timeline = Benelux.timeline_updates, Benelux.timeline_chunk
-        @testrun.add_sample batch, concurrency, timeline
-        @testrun.save(@statlog_path)
+        testrun.add_sample batch, concurrency, timeline
+        testrun.save
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
-        Benelux.timeline.clear if opts[:"no-stats"]
+        Benelux.timeline.clear if testrun.nostats
       end
       hand.finally do
-        @testrun.save(@statlog_path)
+        testrun.save
       end
       hand
     end
 
-    def generate_report(sumlog,plan,test_time)
+    def generate_report(sumlog,testrun,test_time)
       global_timeline = Benelux.timeline
       global_stats = global_timeline.stats.group(:response_time).merge
       if global_stats.n == 0
@@ -219,8 +207,8 @@ module Stella::Engine
         return
       end
       
-      @sumlog.info " %-72s  ".att(:reverse) % ["#{plan.desc}  (#{plan.digest_cache.shorter})"]
-      plan.usecases.uniq.each_with_index do |uc,i| 
+      @sumlog.info " %-72s  ".att(:reverse) % ["#{testrun.plan.desc}  (#{testrun.plan.digest_cache.shorter})"]
+      testrun.plan.usecases.uniq.each_with_index do |uc,i| 
         
         # TODO: Create Ranges object, like Stats object
         # global_timeline.ranges(:response_time)[:usecase => '1111']
@@ -318,19 +306,19 @@ module Stella::Engine
     end
     
     
-    def calculate_usecase_clients(plan, opts)
+    def calculate_usecase_clients(testrun)
       counts = { :total => 0 }
-      plan.usecases.each_with_index do |usecase,i|
-        count = case opts[:clients]
+      testrun.plan.usecases.each_with_index do |usecase,i|
+        count = case testrun.clients
         when 0..9
-          if (opts[:clients] % plan.usecases.size > 0) 
+          if (testrun.clients % testrun.plan.usecases.size > 0) 
             msg = "Client count does not evenly match usecase count"
             raise Stella::WackyRatio, msg
           else
-            (opts[:clients] / plan.usecases.size)
+            (testrun.clients / testrun.plan.usecases.size)
           end
         else
-          (opts[:clients] * usecase.ratio).to_i
+          (testrun.clients * usecase.ratio).to_i
         end
         counts[usecase.digest_cache] = count
         counts[:total] += count
@@ -339,16 +327,15 @@ module Stella::Engine
     end
 
     
-    def build_thread_package(plan, opts, counts)
+    def build_thread_package(testrun, counts)
       packages, pointer = Array.new(counts[:total]), 0
-      plan.usecases.each do |usecase|
+      testrun.plan.usecases.each do |usecase|
         count = counts[usecase.digest_cache]
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
-          client = Stella::Client.new opts[:hosts].first, index+1, opts
+          client = Stella::Client.new testrun.hosts.first, testrun.client_options
           client.add_observer(self)
-          client.enable_nowait_mode if opts[:nowait]
           Stella.stdout.info4 "Created client #{client.digest.short}"
           ThreadPackage.new(index+1, client, usecase)
         end
@@ -365,11 +352,11 @@ module Stella::Engine
       @threads.select { |t| t.status }  # non-false status are still running
     end
     
-    def generate_runtime_report(plan)
+    def generate_runtime_report(testrun)
       gt = Benelux.timeline
       gstats = gt.stats.group(:response_time).merge
       
-      plan.usecases.uniq.each_with_index do |uc,i| 
+      testrun.plan.usecases.uniq.each_with_index do |uc,i| 
         uc.requests.each do |req| 
           filter = [uc.digest_cache, req.digest_cache]
 

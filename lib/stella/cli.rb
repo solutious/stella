@@ -14,45 +14,37 @@ class Stella::CLI < Drydock::Command
   def verify_valid?
     create_testplan
   end
-  
-  def verify
-    opts = {}
-    opts[:hosts] = @hosts
-    opts[:nowait] = true if @option.nowait
-    
-    connect_service if @global.remote
-    
-    [:'no-templates', :'no-stats', :'with-header', :'with-param'].each do |opt|
-      opts[opt] = @global.send(opt) unless @global.send(opt).nil?
-    end
-    
-    engine = Stella::Engine::Functional.new opts
-    testrun = engine.run @testplan
-    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
-  end
-  
+
   def generate_valid?
     create_testplan
   end
   
-  def generate
-    opts = {}
+  def run(mode)
+    opts = { :mode => mode }
     opts[:hosts] = @hosts
     [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
 
-    [:'no-templates', :'no-stats', :'no-header', :'no-param'].each do |opt|
+    [:'notemplates', :'no-stats', :'no-header', :'no-param'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     
     connect_service if @global.remote
     
-    engine = Stella::Engine::Load.new opts
-    testrun = engine.run @testplan
-    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
+    testrun = Stella::Testrun.new @testplan, opts
+    testrun.run
+    testrun
   end
   
+  def generate
+    testrun = run :generate
+    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
+  end
+  def verify
+    testrun = run :verify
+  end
+    
   def example
     base_path = File.expand_path(File.join(STELLA_LIB_HOME, '..'))
     thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')

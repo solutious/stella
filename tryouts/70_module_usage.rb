@@ -2,19 +2,20 @@
 
 require 'stella'
 
-Benelux.enable_debug
+#Benelux.enable_debug
+#Stella.stdout.lev = 3
 
 Stella.enable_quiet
-#Stella.stdout.lev = 3
+
 plan = Stella::Testplan.new('http://localhost:3114/search')
 opts = {
   :hosts => '', 
+  :mode => :generate,
   :clients => 100,
   #:duration => 10
 }
 
-#engine = Stella::Engine::Functional.new opts
-engine = Stella::Engine::Load.new opts
-engine.run plan
+testrun = Stella::Testrun.new plan, opts
+testrun.run
 
-puts engine.testrun.stats[:summary].to_json
+puts testrun.to_yaml

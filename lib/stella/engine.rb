@@ -34,8 +34,6 @@ module Stella::Engine
       @logdir = nil
     end
     
-    @@client_limit = 1000
-    
     def update(*args)
       what, *args = args
       if respond_to?("update_#{what}")
@@ -50,68 +48,6 @@ module Stella::Engine
       args = [Stella.sysinfo.hostname, Stella.sysinfo.user]
       args.push Stella::START_TIME, plan
       args.digest
-    end
-    
-    def log_dir(plan, file=nil)
-      stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
-      stamp <<"-#{plan.digest.shorter}"
-      #stamp << "STAMP"
-      l = File.join Stella::Config.project_dir, 'log', stamp
-      FileUtils.mkdir_p l unless File.exists? l
-      l
-    end
-    
-    def log_path(plan, file)
-      File.join log_dir(plan), file
-    end
-    
-    def process_options!(plan, opts={})
-      # Plan must be frozen before running (see freeze methods)
-      plan.frozen? || plan.freeze  
-      
-      opts = {
-        :hosts          => [],
-        :clients        => 1,
-        :duration       => 0,
-        :nowait         => false,
-        :arrival        => nil,
-        :repetitions    => 1
-      }.merge! opts
-      
-      Stella.ld " Options: #{opts.inspect}"
-      
-      unless Array === opts[:hosts]
-        opts[:hosts] = [opts[:hosts]]
-      end
-      
-      opts[:hosts].collect! do |host|
-        if URI::Generic === host
-          host
-        else
-          URI.parse host
-        end
-      end
-      
-      opts[:clients] &&= opts[:clients].to_i
-      opts[:duration] &&= opts[:duration].to_i
-      opts[:arrival] &&= opts[:arrival].to_f
-      opts[:repetitions] &&= opts[:repetitions].to_i
-      opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
-      
-      if opts[:clients] > @@client_limit
-        Stella.stdout.info2 "Client limit is #{@@client_limit}"
-        opts[:clients] = @@client_limit
-      end
-      
-      # Parses 60m -> 3600. See mixins. 
-      if opts[:duration].in_seconds.nil?
-        raise Stella::WackyDuration, opts[:duration] 
-      end
-      
-      opts[:duration] = opts[:duration].in_seconds
-      
-      Stella.stdout.info3 " Hosts: " << opts[:hosts].join(', ')
-      opts
     end
     
     
@@ -147,30 +83,124 @@ module Stella::Engine
 end
 
 class Stella::Testrun < Storable
+  CLIENT_LIMIT = 1000
   include Gibbler::Complex
   field :samples => Array
   field :plan
   field :stats
   field :hosts
   field :events
-  field :mode  # (f)unctional or (l)oad
+  field :log
+  field :mode  # verify or generate
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
   field :repetitions => Integer
-  field :nowait => Integer
+  field :nowait => FalseClass
+  field :withparam => FalseClass
+  field :withheader => FalseClass
+  field :notemplates => FalseClass
+  field :nostats => FalseClass
   field :start_time => Time
-  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :nowait, :start_time
-  def initialize(plan, events, opts={})
-    @plan, @events = plan, events
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time
+  def initialize(plan, opts={})
+    @plan = plan
+    @events = [:response_time, :failed]
     @samples, @stats = nil, nil
+    opts = process_options plan, opts
+    unless [:verify, :generate].member?(opts[:mode])
+      raise Stella::Error, "Unsupported mode; #{opts[:mode]}"
+    end
     opts.each_pair do |n,v|
       self.send("#{n}=", v) if has_field? n
     end
     reset
   end
   
-  def save(path)
+  def client_options
+    opts = {
+      :nowait => self.nowait || false,
+      :withparam => self.withparam || false,
+      :withheader => self.withheader || false,
+      :notemplates => self.notemplates || false
+    }
+  end
+  
+  def process_options(plan, opts={})
+    # Plan must be frozen before running (see freeze methods)
+    plan.frozen? || plan.freeze  
+    
+    opts = {
+      :hosts          => [],
+      :clients        => 1,
+      :duration       => 0,
+      :nowait         => false,
+      :arrival        => nil,
+      :repetitions    => 1, 
+      :mode           => :verify
+    }.merge! opts
+    
+    Stella.ld " Options: #{opts.inspect}"
+    
+    unless Array === opts[:hosts]
+      opts[:hosts] = [opts[:hosts]]
+    end
+    
+    opts[:hosts].collect! do |host|
+      host.to_s
+    end
+    
+    opts[:clients] &&= opts[:clients].to_i
+    opts[:duration] &&= opts[:duration].to_i
+    opts[:arrival] &&= opts[:arrival].to_f
+    opts[:repetitions] &&= opts[:repetitions].to_i
+    opts[:clients] = plan.usecases.size if opts[:clients] < plan.usecases.size
+    
+    if opts[:clients] > CLIENT_LIMIT
+      Stella.stdout.info2 "Client limit is #{CLIENT_LIMIT}"
+      opts[:clients] = CLIENT_LIMIT
+    end
+    
+    # Parses 60m -> 3600. See mixins. 
+    if opts[:duration].in_seconds.nil?
+      raise Stella::WackyDuration, opts[:duration] 
+    end
+    
+    opts[:duration] = opts[:duration].in_seconds
+    
+    opts
+  end
+  
+  def log_dir
+    # Don't use @start_time here b/c that won't be set 
+    # until just before the actual testing starts. 
+    stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
+    stamp <<"-#{self.plan.digest.shorter}"
+    l = File.join Stella::Config.project_dir, 'log', stamp
+    FileUtils.mkdir_p l unless File.exists? l
+    l
+  end
+  
+  def log_path(file)
+    File.join log_dir, file
+  end
+  
+  
+  def run
+    #engine = Stella::Engine::Functional.new opts
+    engine = case self.mode 
+    when :verify 
+      Stella::Engine::Functional.new
+    when :generate
+      Stella::Engine::Load.new
+    else
+      raise Stella::Error, "Unsupported mode: #{self.mode}"
+    end
+    engine.run self
+  end
+  
+  def save
+    path = log_path('stats')
     Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
   end
   

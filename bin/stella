@@ -43,8 +43,8 @@ class Stella::CLI::Definition
     Stella.enable_debug
   end
   global :W, :wait, Integer, "Seconds to wait before starting test"
-  global :'with-header', "Include X-Stella-ID request header" 
-  global :'with-param', "Include __stella query parameter header"
+  global :H, :withheader, "Include X-Stella-ID request header" 
+  global :P, :withparam, "Include __stella query parameter header"
   global :R, :remote
   global :o, :output, String, "Write output to the given file" do |v|
     String.disable_color
@@ -61,10 +61,10 @@ class Stella::CLI::Definition
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
     Stella.stdout.lev += 1
   end
-  global :'no-stats', "Disable stat collection" do
+  global :nostats, "Disable stat collection" do
     true
   end
-  global :'no-templates', "Disable template parsing" do
+  global :notemplates, "Disable template parsing" do
     true
   end
   global :V, :version, "Display version number" do

@@ -2,28 +2,12 @@
 module Stella::Engine
   class Functional < Stella::Engine::Base
     
-    def run(plan)
-      opts = process_options! plan, @opts
-      
-      Stella.stdout.info2 "Hosts: " << opts[:hosts].join(', ') if !opts[:hosts].empty?
-      
-      client = Stella::Client.new opts[:hosts].first, 1, opts
+    def run(testrun)
+      client = Stella::Client.new testrun.hosts.first, testrun.client_options
       client.add_observer(self)
-            
-      client.enable_nowait_mode if opts[:nowait]
-      
-      @testrun = Stella::Testrun.new plan, [:response_time, :failed], opts
-      @testrun.mode = 'f'      
-      
-      if Stella::Engine.service
-        Stella::Engine.service.testplan_sync plan
-        Stella::Engine.service.testrun_create @testrun
-        Stella::Engine.service.client_create client.digest, :index => client.index
-        Stella.stdout.info "Testrun: #{@testrun.digest}"
-      end
       
       Stella.stdout.info2 $/, "Starting test...", $/
-      @testrun.start_time = Time.now.utc.to_i
+      testrun.start_time = Time.now.utc.to_i
       
       start_time = Time.now.utc
       
@@ -31,9 +15,9 @@ module Stella::Engine
         # Identify this thread to Benelux
         Benelux.current_track :functional
         
-        dig = Stella.stdout.lev > 1 ? plan.digest_cache : plan.digest_cache.shorter
-        Stella.stdout.info " %-65s  ".att(:reverse) % ["#{plan.desc}  (#{dig})"]
-        plan.usecases.each_with_index do |uc,i|
+        dig = Stella.stdout.lev > 1 ? testrun.plan.digest_cache : testrun.plan.digest_cache.shorter
+        Stella.stdout.info " %-65s  ".att(:reverse) % ["#{testrun.plan.desc}  (#{dig})"]
+        testrun.plan.usecases.each_with_index do |uc,i|
           desc = (uc.desc || "Usecase ##{i+1}")
           Benelux.add_thread_tags :usecase => uc.digest_cache
           dig = Stella.stdout.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
@@ -46,19 +30,11 @@ module Stella::Engine
       
       test_time = Time.now.utc - start_time
       
-      #Benelux.update_global_timeline
-      
       # Need to use thread timeline b/c the clients are running in the
       # main thread which Benelux.update_global_timeline does not touch.
       tt = thread.timeline
       
-      if Stella::Engine.service
-        data = tt.messages.filter(:kind => :log).to_json
-        Stella::Engine.service.client_log client.digest, data
-        @testrun.add_sample 1, 1, tt
-      end
-      
-      @testrun
+      testrun
     end
     
     
@@ -176,12 +152,3 @@ module Stella::Engine
     
   end
 end
-
-__END__
-
-
-$ stella verify -p examples/basic/plan.rb http://localhost:3114
-$ stella load -p examples/basic/plan.rb http://localhost:3114
-$ stella remote-load -p examples/basic/plan.rb http://localhost:3114
-$ stella remote-verify -p examples/basic/plan.rb http://localhost:3114
-

@@ -11,6 +11,12 @@ STELLA, CHANGES
 * TODO: process templates for calls to set in get blocks
 
 
+#### 0.8.3 (2010-03-07) ###############################
+
+* CHANGE: Removed dashes from CLI params: notemplate, nostats, nowait, withheader, withparam
+* CHANGE: Engine is now called via Testrun#run
+* ADDED: Testrun#client_options
+
 #### 0.8.2 (2010-03-05) ###############################
 
 * FIXED: Misc issues with usage via module (Stella::Engine.load)
