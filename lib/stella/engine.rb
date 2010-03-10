@@ -86,6 +86,7 @@ class Stella::Testrun < Storable
   CLIENT_LIMIT = 1000
   include Gibbler::Complex
   field :id => String, &gibbler_id_processor
+  field :userid => String
   field :start_time => Integer
   field :clients => Integer
   field :duration => Integer
@@ -98,21 +99,16 @@ class Stella::Testrun < Storable
   field :nostats => TrueClass
   field :samples => Array
   field :stats => Hash
+  field :runinfo => Hash
   field :mode  # verify or generate
   field :plan
   field :stats
   field :hosts
-  field :runhost
-  field :runuser
   field :events
   field :log
-  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :runhost, :runuser
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
-    @events = [:response_time, :failed]
-    @samples, @stats = nil, nil
-    @start_time = 0
-    @runhost, @runuser = Stella.sysinfo.hostname, Stella.sysinfo.user
     process_options! opts if !plan.nil? && !opts.empty?
   end
   
@@ -120,7 +116,7 @@ class Stella::Testrun < Storable
     me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
 #    me.samples = 
-    me.process_options! if !me.plan.nil?
+    me.process_options! unless me.plan.nil?
     me
   end
   
@@ -152,6 +148,13 @@ class Stella::Testrun < Storable
       
       Stella.ld " Options: #{opts.inspect}"
     end
+    
+    @events = [:response_time, :failed]
+    @runinfo = {
+      :user => Stella.sysinfo.user,
+      :host => Stella.sysinfo.hostname
+    }
+    @start_time = Time.now.to_i
     
     @duration ||= 0
     @repetitions ||= 0
@@ -195,6 +198,8 @@ class Stella::Testrun < Storable
       @clients = plan.usecases.size if @clients < plan.usecases.size
     end
     
+    @id ||= self.gibbler # populate id
+    
     reset_stats
   end
   
@@ -214,8 +219,9 @@ class Stella::Testrun < Storable
   
   
   def run
-    @start_time = Time.now.to_i
-    @id = self.gibbler
+    @runinfo[:time] = Time.now.to_i
+    @runinfo[:host] ||= Stella.sysinfo.hostname
+    @runinfo[:user] ||= Stella.sysinfo.user
     engine = case self.mode 
     when :verify 
       Stella::Engine::Functional.new

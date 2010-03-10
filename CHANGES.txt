@@ -13,12 +13,13 @@ STELLA, CHANGES
 
 #### 0.8.3 (2010-03-??) ###############################
 
+* FIXED: Testrun digest handling
 * CHANGE: Removed dashes from CLI params: notemplate, nostats, nowait, withheader, withparam
 * CHANGE: Engine is now called via Testrun#run
 * ADDED: Testrun#client_options
 * ADDED: Reconstituting Stella::Testrun and Stella::Testplan objects from JSON/Hash
-* ADDED: Testrun#run updates the testrun digest and start_time
 * ADDED: Testrun objects are now frozen after the run
+* ADDED: Testrun#userid, Testrun#runinfo
 
 #### 0.8.2 (2010-03-05) ###############################
 
