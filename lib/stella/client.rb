@@ -62,10 +62,11 @@ module Stella
           container.params, container.headers = params, headers
           
           uri = build_request_uri req.uri, params, container
-          
+
           if http_auth = req.http_auth || usecase.http_auth
             # TODO: The first arg is domain and can include a URI path. 
             #       Are there cases where this is important?
+            
             domain = http_auth.domain
             # When req.uri is a fully qualified URI, domain will be
             # set to an incorrect value like, http://domain1/http://domain2. 

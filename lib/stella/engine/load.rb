@@ -44,6 +44,7 @@ module Stella::Engine
         timing = "#{testrun.repetitions} repetitions"
       end
       
+      Stella.stdout.head "Runid", "#{testrun.id.shorter}"
       Stella.stdout.head 'Plan', "#{testrun.plan.desc} (#{testrun.plan.digest.shorter})"
       Stella.stdout.head 'Hosts', testrun.hosts.join(', ')
       Stella.stdout.head 'Clients', counts[:total]
@@ -151,7 +152,7 @@ module Stella::Engine
           pqueue << package  # return the package to the queue
         end
         
-        unless testrun.arrival.nil?
+        unless testrun.arrival.nil? || testrun.arrival.to_f <= 0
           # Create 1 second / users per second 
           args = [@threads.size, packages.size]
           Stella.stdout.print 2, '+'

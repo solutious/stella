@@ -85,7 +85,8 @@ end
 class Stella::Testrun < Storable
   CLIENT_LIMIT = 1000
   include Gibbler::Complex
-  field :samples => Array
+  field :id => String, &gibbler_id_processor
+  field :start_time => Integer
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
@@ -95,26 +96,31 @@ class Stella::Testrun < Storable
   field :withheader => TrueClass
   field :notemplates => TrueClass
   field :nostats => TrueClass
-  field :start_time => Integer
-  field :id, &gibbler_id_processor
+  field :samples => Array
+  field :stats => Hash
   field :mode  # verify or generate
   field :plan
   field :stats
   field :hosts
+  field :runhost
+  field :runuser
   field :events
   field :log
-  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :runhost, :runuser
   def initialize(plan=nil, opts={})
     @plan = plan
     @events = [:response_time, :failed]
     @samples, @stats = nil, nil
     @start_time = 0
+    @runhost, @runuser = Stella.sysinfo.hostname, Stella.sysinfo.user
     process_options! opts if !plan.nil? && !opts.empty?
   end
   
-  def self.from_hash(*args)
-    me = super(*args)
+  def self.from_hash(hash={})
+    me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
+#    me.samples = 
+    me.process_options! if !me.plan.nil?
     me
   end
   
@@ -146,7 +152,10 @@ class Stella::Testrun < Storable
       
       Stella.ld " Options: #{opts.inspect}"
     end
-
+    
+    @duration ||= 0
+    @repetitions ||= 0
+    
     @clients &&= @clients.to_i
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
@@ -169,6 +178,8 @@ class Stella::Testrun < Storable
     @duration = @duration.in_seconds
     
     raise Stella::WackyDuration, @duration if @duration.nil?
+    
+    @mode &&= @mode.to_sym
     
     unless [:verify, :generate].member?(@mode)
       raise Stella::Error, "Unsupported mode: #{@mode}"
@@ -203,7 +214,8 @@ class Stella::Testrun < Storable
   
   
   def run
-    #engine = Stella::Engine::Functional.new opts
+    @start_time = Time.now.to_i
+    @id = self.gibbler
     engine = case self.mode 
     when :verify 
       Stella::Engine::Functional.new
@@ -213,6 +225,8 @@ class Stella::Testrun < Storable
       raise Stella::Error, "Unsupported mode: #{self.mode}"
     end
     engine.run self
+    self.freeze
+    self
   end
   
   def save

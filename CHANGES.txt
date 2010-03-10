@@ -17,7 +17,8 @@ STELLA, CHANGES
 * CHANGE: Engine is now called via Testrun#run
 * ADDED: Testrun#client_options
 * ADDED: Reconstituting Stella::Testrun and Stella::Testplan objects from JSON/Hash
-
+* ADDED: Testrun#run updates the testrun digest and start_time
+* ADDED: Testrun objects are now frozen after the run
 
 #### 0.8.2 (2010-03-05) ###############################
 

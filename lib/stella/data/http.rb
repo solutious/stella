@@ -5,7 +5,16 @@ module Stella::Data::HTTP
     include Gibbler::Complex
     include Stella::Data::Helpers
     
-    field :id, &gibbler_id_processor
+    field :id => String, &gibbler_id_processor
+    
+      # A hash containing blocks to be executed depending on the HTTP response status.
+      # The hash keys are numeric HTTP Status Codes. 
+      #
+      #     200 => { ... }
+      #     304 => { ... }
+      #     500 => { ... }
+      #
+    field :response_handler => Hash, &hash_proc_processor
     
     # Store the description in the attic so
     # it's not used in the gibbler digest.
@@ -24,15 +33,7 @@ module Stella::Data::HTTP
     field :timeout
     
     field :autofollow  # boolean. Was this an auto generated follow request. 
-    
-      # A hash containing blocks to be executed depending on the HTTP response status.
-      # The hash keys are numeric HTTP Status Codes. 
-      #
-      #     200 => { ... }
-      #     304 => { ... }
-      #     500 => { ... }
-      #
-    field :response_handler, &hash_proc_processor
+
     
     def has_body?
       !@body.nil?
@@ -53,11 +54,12 @@ module Stella::Data::HTTP
       @autofollow = true
     end
     
-    def self.from_hash(*args)
-      me = super(*args)
+    def self.from_hash(hash={})
+      me = super(hash)
       me.response_handler.keys.each do |status|
         proc_str = me.response_handler[status]
         me.response_handler[status] = eval "Proc.new #{proc_str}"
+        me.response_handler[status].source = proc_str
       end
       me
     end

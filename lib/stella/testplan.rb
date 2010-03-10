@@ -195,7 +195,7 @@ class Testplan
     attic :base_path # we don't want gibbler to see this
     attic :plan_path
     
-    field :id, &gibbler_id_processor
+    field :id => String, &gibbler_id_processor
     
     attic :description
     field :description => String
@@ -215,8 +215,8 @@ class Testplan
       instance_eval &blk unless blk.nil?
     end
     
-    def self.from_hash(*args)
-      me = super(*args)
+    def self.from_hash(hash={})
+      me = super(hash)
       me.requests.collect! { |req| Stella::Data::HTTP::Request.from_hash(req) }
       me
     end
