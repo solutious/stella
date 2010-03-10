@@ -90,11 +90,10 @@ class Testplan < Storable
     self
   end
   
-  def from_hash(hash)
-    super(hash)
-    p [self.usecases.class, self.usecases]
-    self.usecases.collect! { |uc| Stella::Testplan::Usecase.from_hash(uc) }
-    self
+  def self.from_hash(*args)
+    me = super(*args)
+    me.usecases.collect! { |uc| Stella::Testplan::Usecase.from_hash(uc) }
+    me
   end
   
   def usecase(*args, &blk)
@@ -215,6 +214,13 @@ class Testplan
       @requests, @resources = [], {}
       instance_eval &blk unless blk.nil?
     end
+    
+    def self.from_hash(*args)
+      me = super(*args)
+      me.requests.collect! { |req| Stella::Data::HTTP::Request.from_hash(req) }
+      me
+    end
+    
     
     def desc(*args)
       self.description = args.first unless args.empty?

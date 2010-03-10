@@ -29,7 +29,7 @@ begin
     gem.add_dependency("drydock",    ">= 0.6.9")
     gem.add_dependency("benelux",    ">= 0.5.8")
     gem.add_dependency('sysinfo',    '>= 0.7.3')
-    gem.add_dependency('storable',   '>= 0.6.3')
+    gem.add_dependency('storable',   '>= 0.6.4')
     gem.add_dependency("nokogiri")
 
     #gem.add_development_dependency("rspec", ">= 1.2.9")

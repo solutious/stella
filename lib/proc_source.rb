@@ -1,3 +1,4 @@
+
 require 'stringio'
 require 'irb/ruby-lex'
 #SCRIPT_LINES__ = {} unless defined? SCRIPT_LINES__

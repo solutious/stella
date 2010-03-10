@@ -96,6 +96,7 @@ class Stella::Testrun < Storable
   field :notemplates => TrueClass
   field :nostats => TrueClass
   field :start_time => Integer
+  field :id, &gibbler_id_processor
   field :mode  # verify or generate
   field :plan
   field :stats
@@ -109,6 +110,12 @@ class Stella::Testrun < Storable
     @samples, @stats = nil, nil
     @start_time = 0
     process_options! opts if !plan.nil? && !opts.empty?
+  end
+  
+  def self.from_hash(*args)
+    me = super(*args)
+    me.plan = Stella::Testplan.from_hash(me.plan)
+    me
   end
   
   def client_options
@@ -168,7 +175,6 @@ class Stella::Testrun < Storable
     end
     
     if Hash === self.plan # When reconstituting from JSON
-      p [self.class, 999]
       self.plan = Stella::Testplan.from_hash(self.plan)
     end
     

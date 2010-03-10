@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2010-03-06}
+  s.date = %q{2010-03-08}
   s.default_executable = %q{stella}
   s.description = %q{Blame Stella for breaking your web application!}
   s.email = %q{delano@solutious.com}
@@ -51,7 +51,6 @@ Gem::Specification.new do |s|
      "lib/stella/engine/load.rb",
      "lib/stella/guidelines.rb",
      "lib/stella/logger.rb",
-     "lib/stella/service.rb",
      "lib/stella/testplan.rb",
      "lib/stella/utils.rb",
      "lib/stella/utils/httputil.rb",

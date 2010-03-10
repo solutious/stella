@@ -38,7 +38,7 @@ module Stella::Data::HTTP
       !@body.nil?
     end
     
-    def initialize (method, uri_str, version="1.1", &definition)
+    def initialize (method=nil, uri_str=nil, version="1.1", &definition)
       @uri = uri_str.to_s
       @http_method, @http_version = method, version
       @headers, @params, @response_handler = {}, {}, {}
@@ -51,6 +51,15 @@ module Stella::Data::HTTP
     
     def autofollow!
       @autofollow = true
+    end
+    
+    def self.from_hash(*args)
+      me = super(*args)
+      me.response_handler.keys.each do |status|
+        proc_str = me.response_handler[status]
+        me.response_handler[status] = eval "Proc.new #{proc_str}"
+      end
+      me
     end
     
     def auth(user=nil, pass=nil, domain=nil)
