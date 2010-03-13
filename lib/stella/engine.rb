@@ -158,7 +158,7 @@ class Stella::Testrun < Storable
     
     @duration ||= 0
     @repetitions ||= 0
-    
+    @id &&= Gibbler::Digest.new(@id)
     @clients &&= @clients.to_i
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
