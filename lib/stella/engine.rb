@@ -106,6 +106,7 @@ class Stella::Testrun < Storable
   field :hosts
   field :events
   field :log
+  field :status
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
@@ -149,6 +150,7 @@ class Stella::Testrun < Storable
       Stella.ld " Options: #{opts.inspect}"
     end
     
+    @status ||= "new"
     @events = [:response_time, :failed]
     @runinfo = {
       :user => Stella.sysinfo.user,
