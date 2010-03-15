@@ -26,6 +26,8 @@ STELLA, CHANGES
 * ADDED: Testrun#userid, Testrun#runinfo
 * ADDED: Default Testrun status is "new"
 * ADDED: Testrun#run now accepts an options hash which is passed to Engine#run
+* ADDED: Engine option: with_content (populate Testrun#log during a load test)
+* ADDED: First batch of requests store header content (for load tests)
 
 
 #### 0.8.2 (2010-03-05) ###############################

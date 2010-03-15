@@ -193,6 +193,9 @@ module Stella::Engine
         concurrency = @threads.select { |t| !t.status.nil? }.size
         batch, timeline = Benelux.timeline_updates, Benelux.timeline_chunk
         testrun.add_sample batch, concurrency, timeline
+        if batch == 1 # only save the first batch
+          testrun.log = Benelux.timeline.messages.filter(:kind => :log)
+        end
         testrun.save
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
         @failog.info Benelux.timeline.messages.filter(:kind => :timeout)
@@ -381,6 +384,18 @@ module Stella::Engine
     end
       
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
+      if @opts[:with_content]
+        log = Stella::Engine::Log.new Time.now.to_f, container.unique_id, client_id,
+                                      'testplanid',
+                                      usecase.id, req.id,
+                                      req.http_method, container.status, uri,
+                                      params, container.response.request.header.dump, 
+                                      container.response.header.dump, 
+                                      container.response.body.dump
+
+        Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
+      end
+      
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push usecase.id.shorter, req.id.shorter
       args.push req.http_method, container.status, uri

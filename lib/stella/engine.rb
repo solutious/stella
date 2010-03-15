@@ -115,6 +115,7 @@ class Stella::Testrun < Storable
   def id
     @id || self.digest
   end
+  def has_log?() !@log.nil? && !@log.empty? end
   def self.from_hash(hash={})
     me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
