@@ -10,13 +10,11 @@ module Stella::Engine
       counts = calculate_usecase_clients testrun
       packages = build_thread_package testrun, counts
       
-      if testrun.nologging
-        Stella::Logger.disable! 
-      else
+      unless Stella::Logger.disabled?
         Stella.stdout.info "Logging to #{testrun.log_dir}", $/
 
         latest = File.join(File.dirname(testrun.log_dir), 'latest')
-        if !testrun.nologging && Stella.sysinfo.os == :unix
+        if Stella.sysinfo.os == :unix
           File.unlink latest if File.exists? latest
           FileUtils.ln_sf File.basename(testrun.log_dir), latest
         end
@@ -83,7 +81,7 @@ module Stella::Engine
       generate_report @sumlog, testrun, test_time
       #report_time = tt.stats.group(:generate_report).mean
       
-      unless testrun.nologging
+      unless Stella::Logger.disabled?
         Stella.stdout.info File.read(@sumlog.path)
         Stella.stdout.info $/, "Log dir: #{testrun.log_dir}"
       end

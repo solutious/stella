@@ -98,7 +98,6 @@ class Stella::Testrun < Storable
   field :withheader => TrueClass
   field :notemplates => TrueClass
   field :nostats => TrueClass
-  field :nologging => TrueClass
   field :samples => Array
   field :stats => Hash
   field :mode  # verify or generate
@@ -158,7 +157,6 @@ class Stella::Testrun < Storable
     unless opts.empty?
       opts = {
         :hosts          => [],
-        :nologging      => false,
         :clients        => 1,
         :duration       => 0,
         :nowait         => false,
@@ -249,7 +247,7 @@ class Stella::Testrun < Storable
     stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
     stamp << "-#{self.plan.id.shorter}" unless self.plan.nil?
     l = File.join Stella::Config.project_dir, 'log', stamp
-    FileUtils.mkdir_p l unless File.exists?(l) || self.nologging
+    FileUtils.mkdir_p l unless File.exists?(l) || Stella::Logger.disabled?
     l
   end
   
@@ -277,9 +275,9 @@ class Stella::Testrun < Storable
   end
   
   def save
-    unless self.nologging
-      #path = log_path('stats')
-      #Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
+    unless Stella::Logger.disabled?
+      path = log_path('stats')
+      Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
     end
   end
   

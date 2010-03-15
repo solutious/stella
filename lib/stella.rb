@@ -101,8 +101,8 @@ module Stella
   def abort!()        @abort =  true  end
   
   def quiet?()        @quiet == true  end
-  def enable_quiet()  @quiet = true; @stdout.disable!;  end
-  def disable_quiet() @quiet = false; @stdout.enable!;  end
+  def enable_quiet()  @quiet = true; Stella::Logger.disable!;  end
+  def disable_quiet() @quiet = false; Stella::Logger.enable!;  end
   
   def add_global(n,v)
     Stella.ld "SETGLOBAL: #{n}=#{v}"

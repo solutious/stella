@@ -25,7 +25,7 @@ class Stella::CLI < Drydock::Command
     [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-    [:'notemplates', :'nostats', :'noheader', :'noparam', :nologging].each do |opt|
+    [:'notemplates', :'nostats', :'noheader', :'noparam'].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
     testrun = Stella::Testrun.new @testplan, opts

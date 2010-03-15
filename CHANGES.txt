@@ -25,7 +25,6 @@ STELLA, CHANGES
 * ADDED: Testrun objects are now frozen after the run
 * ADDED: Testrun#userid, Testrun#runinfo
 * ADDED: Default Testrun status is "new"
-* ADDED: New global option: nologging
 
 
 #### 0.8.2 (2010-03-05) ###############################
