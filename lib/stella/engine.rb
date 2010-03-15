@@ -88,7 +88,6 @@ class Stella::Testrun < Storable
   field :id => String, &gibbler_id_processor
   field :userid => String
   field :start_time => Integer
-  field :runinfo => Hash
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
@@ -179,10 +178,7 @@ class Stella::Testrun < Storable
     
     @status ||= "new"
     @events ||= [:response_time, :failed]
-    @runinfo ||= {
-      :user => Stella.sysinfo.user,
-      :host => Stella.sysinfo.hostname
-    }
+    
     @start_time ||= Time.now.to_i
     
     @events.collect! { |event| event.to_sym }
@@ -257,9 +253,6 @@ class Stella::Testrun < Storable
   
   
   def run
-    @runinfo[:time] = Time.now.to_i
-    @runinfo[:host] ||= Stella.sysinfo.hostname
-    @runinfo[:user] ||= Stella.sysinfo.user
     engine = case self.mode 
     when :verify 
       Stella::Engine::Functional.new
