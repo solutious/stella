@@ -47,7 +47,7 @@ module Stella::Engine
     def runid(plan)
       args = [Stella.sysinfo.hostname, Stella.sysinfo.user]
       args.push Stella::START_TIME, plan
-      args.digest
+      args.id
     end
     
     
@@ -111,13 +111,27 @@ class Stella::Testrun < Storable
   def initialize(plan=nil, opts={})
     @plan = plan
     process_options! opts if !plan.nil? && !opts.empty?
+    reset_stats
   end
-  
+  def id
+    @id || self.digest
+  end
   def self.from_hash(hash={})
     me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
-#    me.samples = 
+    pp [:patty, hash[:plan]["id"]]
+    pp [:patty, me.plan.id, me.plan.digest]
     me.process_options! unless me.plan.nil?
+    
+    #me.samples.collect! do |sample|
+    #  Stella::Testrun::Sample.from_hash(sample)
+    #end
+
+    #stats = {}
+    #me.stats.each_pair do |n1,v1|
+    #  stats[n1.to_sym] = v1
+    #end
+    #me.stats = stats
     me
   end
   
@@ -150,17 +164,24 @@ class Stella::Testrun < Storable
       Stella.ld " Options: #{opts.inspect}"
     end
     
+    @id &&= Gibbler::Digest.new(@id)
+    @plan &&= @plan.freeze
+    @samples ||= []
+    @stats ||= { :summary => {} }
+    
     @status ||= "new"
-    @events = [:response_time, :failed]
-    @runinfo = {
+    @events ||= [:response_time, :failed]
+    @runinfo ||= {
       :user => Stella.sysinfo.user,
       :host => Stella.sysinfo.hostname
     }
-    @start_time = Time.now.to_i
+    @start_time ||= Time.now.to_i
+    
+    @events.collect! { |event| event.to_sym }
     
     @duration ||= 0
     @repetitions ||= 0
-    @id &&= Gibbler::Digest.new(@id)
+    
     @clients &&= @clients.to_i
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
@@ -202,14 +223,21 @@ class Stella::Testrun < Storable
     
     @id ||= self.gibbler # populate id
     
-    reset_stats
+  end
+  
+  def freeze
+    return if frozen?
+    Stella.ld "FREEZE TESTRUN: #{self.id}"
+    plan.freeze
+    super
+    self
   end
   
   def log_dir
     # Don't use @start_time here b/c that won't be set 
     # until just before the actual testing starts. 
     stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
-    stamp <<"-#{self.plan.digest.shorter}"
+    stamp <<"-#{self.plan.id.shorter}"
     l = File.join Stella::Config.project_dir, 'log', stamp
     FileUtils.mkdir_p l unless File.exists? l
     l
@@ -233,6 +261,7 @@ class Stella::Testrun < Storable
       raise Stella::Error, "Unsupported mode: #{self.mode}"
     end
     engine.run self
+    @status = "done"
     self.freeze
     self
   end
@@ -245,14 +274,16 @@ class Stella::Testrun < Storable
   def reset_stats
     @samples = []
     @stats = { :summary => {} }
-    @plan.usecases.each do |uc|
-      @events.each do |event|
-        @stats[:summary][event] = Benelux::Stats::Calculator.new
-        @stats[uc.digest] ||= { :summary => {} }
-        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new
-        uc.requests.each do |req|
-          @stats[uc.digest][req.digest] ||= {}
-          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new
+    unless @plan.nil?
+      @plan.usecases.each do |uc|
+        @events.each do |event|
+          @stats[:summary][event] = Benelux::Stats::Calculator.new
+          @stats[uc.id] ||= { :summary => {} }
+          @stats[uc.id][:summary][event] = Benelux::Stats::Calculator.new
+          uc.requests.each do |req|
+            @stats[uc.id][req.id] ||= {}
+            @stats[uc.id][req.id][event] = Benelux::Stats::Calculator.new
+          end
         end
       end
     end
@@ -269,22 +300,24 @@ class Stella::Testrun < Storable
     
     sam = Stella::Testrun::Sample.new opts
     
+    #puts @stats.to_yaml
     @plan.usecases.uniq.each_with_index do |uc,i| 
-      sam.stats[uc.digest] ||= { }
+      sam.stats[uc.id] ||= { }
       uc.requests.each do |req| 
-        sam.stats[uc.digest][req.digest] ||= {}
-        filter = [uc.digest, req.digest]
+        sam.stats[uc.id][req.id] ||= {}
+        filter = [uc.id, req.id]
         @events.each_with_index do |event,idx|  # do_request, etc...
-          stats = tl.stats.group(event)[filter].merge
-          sam.stats[uc.digest][req.digest][event] = stats
+          stats = tl.stats.group(event)[filter].mean
+          sam.stats[uc.id][req.id][event] = stats
           # Tally request, usecase and total summaries at the same time. 
-          @stats[uc.digest][req.digest][event] += stats
-          @stats[uc.digest][:summary][event] += stats
-          @stats[:summary][event] += stats
+          #p [uc.id, req.id, event]
+          #@stats[uc.id][req.id][event] += stats
+          #@stats[uc.id][:summary][event] += stats
+          #@stats[:summary][event] += stats
         end
       end
     end
-    
+    pp tl.stats.group(:response_time)[]
     @samples << sam
     
     sam
@@ -303,6 +336,12 @@ class Stella::Testrun < Storable
         self.send("#{n}=", v) if has_field? n
       end
       @stats = { }
+    end
+    def from_hash(hash={})
+      p [:pooooop, hash]
+      me = super(hash)
+      #stats = {}
+      me
     end
   end
 end

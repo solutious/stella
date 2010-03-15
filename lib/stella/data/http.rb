@@ -39,6 +39,10 @@ module Stella::Data::HTTP
       !@body.nil?
     end
     
+    def id
+      Gibbler::Digest.new @id || self.digest
+    end
+    
     def initialize (method=nil, uri_str=nil, version="1.1", &definition)
       @uri = uri_str.to_s
       @http_method, @http_version = method, version
@@ -154,6 +158,7 @@ module Stella::Data::HTTP
     end
     
     def freeze
+      return if frozen?
       @params = convert_values_to_templates @params
       @headers = convert_values_to_templates @headers
       super

@@ -15,12 +15,12 @@ module Stella::Engine
         # Identify this thread to Benelux
         Benelux.current_track :functional
         
-        dig = Stella.stdout.lev > 1 ? testrun.plan.digest_cache : testrun.plan.digest_cache.shorter
+        dig = Stella.stdout.lev > 1 ? testrun.plan.id : testrun.plan.id.shorter
         Stella.stdout.info " %-65s  ".att(:reverse) % ["#{testrun.plan.desc}  (#{dig})"]
         testrun.plan.usecases.each_with_index do |uc,i|
           desc = (uc.desc || "Usecase ##{i+1}")
-          Benelux.add_thread_tags :usecase => uc.digest_cache
-          dig = Stella.stdout.lev > 1 ? uc.digest_cache : uc.digest_cache.shorter
+          Benelux.add_thread_tags :usecase => uc.id
+          dig = Stella.stdout.lev > 1 ? uc.id : uc.id.shorter
           Stella.stdout.info ' %-65s '.att(:reverse).bright % ["#{desc}  (#{dig}) "]
           Stella.rescue { client.execute uc }
         end
@@ -40,7 +40,7 @@ module Stella::Engine
     
     def update_prepare_request(client_id, usecase, req, counter)
       notice = "repeat: #{counter-1}" if counter > 1
-      dig = Stella.stdout.lev > 1 ? req.digest_cache : req.digest_cache.shorter
+      dig = Stella.stdout.lev > 1 ? req.id : req.id.shorter
       desc = "#{req.desc}  (#{dig}) "
       Stella.stdout.info2 "  %-46s %16s ".bright % [desc, notice]
     end
@@ -49,7 +49,7 @@ module Stella::Engine
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       log = Stella::Engine::Log.new Time.now.to_f, container.unique_id, client_id,
                                     'testplanid',
-                                    usecase.digest, req.digest,
+                                    usecase.id, req.id,
                                     req.http_method, container.status, uri,
                                     params, container.response.request.header.dump, 
                                     container.response.header.dump, 

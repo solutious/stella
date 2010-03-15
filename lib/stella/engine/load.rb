@@ -45,7 +45,7 @@ module Stella::Engine
       end
       
       Stella.stdout.head "Runid", "#{testrun.id.shorter}"
-      Stella.stdout.head 'Plan', "#{testrun.plan.desc} (#{testrun.plan.digest.shorter})"
+      Stella.stdout.head 'Plan', "#{testrun.plan.desc} (#{testrun.plan.id.shorter})"
       Stella.stdout.head 'Hosts', testrun.hosts.join(', ')
       Stella.stdout.head 'Clients', counts[:total]
       Stella.stdout.head 'Limit', timing
@@ -55,6 +55,7 @@ module Stella::Engine
       
       begin 
         Stella.stdout.status "Running" 
+        testrun.status = "running"
         testrun.start_time = Time.now.utc.to_i
         execute_test_plan packages, testrun
       rescue Interrupt
@@ -101,12 +102,12 @@ module Stella::Engine
           Thread.current[:real_reps] = 0
           Thread.current[:real_uctime] = Benelux::Stats::Calculator.new
           c, uc = package.client, package.usecase
-          Stella.stdout.info4 $/, "======== THREAD %s: START" % [c.digest.short]  
+          Stella.stdout.info4 $/, "======== THREAD %s: START" % [c.id.short]  
 
           # This thread will stay on this one track. 
-          Benelux.current_track c.digest
+          Benelux.current_track c.id
           
-          Benelux.add_thread_tags :usecase => uc.digest_cache
+          Benelux.add_thread_tags :usecase => uc.id
           Thread.current[:real_uctime].first_tick
           prev_ptime ||= Time.now
           testrun.repetitions.times { |rep| 
@@ -114,12 +115,12 @@ module Stella::Engine
             Thread.current[:real_reps] += 1
             # NOTE: It's important to not call digest or gibbler methods
             # on client object b/c it is not frozen. Always use digest_cache.
-            args = [c.digest_cache.short, uc.desc, uc.digest.short, Thread.current[:real_reps]]
+            args = [c.id.short, uc.desc, uc.id.short, Thread.current[:real_reps]]
             Stella.stdout.info4 $/, "======== THREAD %s: %s:%s (rep: %d)" % args
             
             Benelux.add_thread_tags :rep =>  rep
             #Stella.stdout.info [package.client.gibbler.shorter, package.usecase.gibbler.shorter, rep].inspect
-            Stella::Engine::Load.rescue(c.digest_cache) {
+            Stella::Engine::Load.rescue(c.id) {
               break if Stella.abort?
               print '.' if Stella.stdout.lev == 2
               stats = c.execute uc
@@ -208,7 +209,7 @@ module Stella::Engine
         return
       end
       
-      @sumlog.info " %-72s  ".att(:reverse) % ["#{testrun.plan.desc}  (#{testrun.plan.digest_cache.shorter})"]
+      @sumlog.info " %-72s  ".att(:reverse) % ["#{testrun.plan.desc}  (#{testrun.plan.id.shorter})"]
       testrun.plan.usecases.uniq.each_with_index do |uc,i| 
         
         # TODO: Create Ranges object, like Stats object
@@ -217,13 +218,13 @@ module Stella::Engine
         requests = 0 #global_timeline.ranges(:response_time).size
         
         desc = uc.desc || "Usecase ##{i+1} "
-        desc << "  (#{uc.digest_cache.shorter}) "
+        desc << "  (#{uc.id.shorter}) "
         str = ' ' << " %-66s %s   %d%% ".bright.att(:reverse)
         @sumlog.info str % [desc, '', uc.ratio_pretty]        
         uc.requests.each do |req| 
-          filter = [uc.digest_cache, req.digest_cache]
+          filter = [uc.id, req.id]
           desc = req.desc 
-          @sumlog.info "   %-72s ".bright % ["#{req.desc}  (#{req.digest_cache.shorter})"]
+          @sumlog.info "   %-72s ".bright % ["#{req.desc}  (#{req.id.shorter})"]
           @sumlog.info "    %s" % [req.to_s]
 
           Load.timers.each do |sname|
@@ -239,19 +240,19 @@ module Stella::Engine
         
         @sumlog.info "   Sub Total:".bright
         
-        stats = global_timeline.stats.group(:response_time)[uc.digest_cache].merge
-        failed = global_timeline.stats.group(:failed)[uc.digest_cache].merge
-        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.digest_cache]
+        stats = global_timeline.stats.group(:response_time)[uc.id].merge
+        failed = global_timeline.stats.group(:failed)[uc.id].merge
+        respgrp = global_timeline.stats.group(:execute_response_handler)[uc.id]
         resst = respgrp.tag_values(:status)
         
         Load.timers.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.digest_cache].merge
+          stats = global_timeline.stats.group(sname)[uc.id].merge
           @sumlog.info '      %-30s %.3fs %.3f(SD)' % [sname, stats.mean, stats.sd]
           @sumlog.flush
         end
         
         Load.counts.each do |sname|
-          stats = global_timeline.stats.group(sname)[uc.digest_cache].merge
+          stats = global_timeline.stats.group(sname)[uc.id].merge
           @sumlog.info '      %-30s %-12s (avg:%s)' % [sname, stats.sum.to_bytes, stats.mean.to_bytes]
           @sumlog.flush
         end
@@ -321,7 +322,7 @@ module Stella::Engine
         else
           (testrun.clients * usecase.ratio).to_i
         end
-        counts[usecase.digest_cache] = count
+        counts[usecase.id] = count
         counts[:total] += count
       end
       counts
@@ -331,13 +332,13 @@ module Stella::Engine
     def build_thread_package(testrun, counts)
       packages, pointer = Array.new(counts[:total]), 0
       testrun.plan.usecases.each do |usecase|
-        count = counts[usecase.digest_cache]
+        count = counts[usecase.id]
         Stella.ld "THREAD PACKAGE: #{usecase.desc} (#{pointer} + #{count})"
         # Fill the thread_package with the contents of the block
         packages.fill(pointer, count) do |index|
           client = Stella::Client.new testrun.hosts.first, testrun.client_options
           client.add_observer(self)
-          Stella.stdout.info4 "Created client #{client.digest.short}"
+          Stella.stdout.info4 "Created client #{client.id.short}"
           ThreadPackage.new(index+1, client, usecase)
         end
         pointer += count
@@ -359,7 +360,7 @@ module Stella::Engine
       
       testrun.plan.usecases.uniq.each_with_index do |uc,i| 
         uc.requests.each do |req| 
-          filter = [uc.digest_cache, req.digest_cache]
+          filter = [uc.id, req.id]
 
           Load.timers.each do |sname|
             stats = gt.stats.group(sname)[filter].merge
@@ -378,7 +379,7 @@ module Stella::Engine
       
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
-      args.push usecase.digest.shorter, req.digest.shorter
+      args.push usecase.id.shorter, req.id.shorter
       args.push req.http_method, container.status, uri
       args << params.to_a.collect { |el| 
         next if el[0].to_s == '__stella'
@@ -460,7 +461,7 @@ module Stella::Engine
     
     def update_authenticate client_id, usecase, req, domain, user, pass
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
-      args.push usecase.digest.shorter, req.digest.shorter
+      args.push usecase.id.shorter, req.id.shorter
       args.push 'AUTH', domain, user, pass
       Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
     end

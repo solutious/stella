@@ -34,14 +34,17 @@ module Stella
       #@cookie_file = File.new("cookies-#{index}", 'w')
       @proxy = OpenStruct.new
     end
+    def id
+      @id || self.digest
+    end
     def execute(usecase, &stat_collector)
 #      Gibbler.enable_debug
       # We need to make sure the digest cache has a value
-      self.digest if self.digest_cache.nil?
+      self.id = self.digest if self.digest_cache.nil?
       Gibbler.disable_debug
       http_client = create_http_client
       stats = {}
-      container = Container.new(self.digest_cache, usecase)
+      container = Container.new(self.id, usecase)
       counter = 0
       usecase.requests.each do |req|
         counter += 1
@@ -88,9 +91,9 @@ module Stella
           Stella.ld "TIMEOUT " << http_client.receive_timeout.to_s
           
           raise NoHostDefined, req.uri if uri.host.nil? || uri.host.empty?
-          stella_id = [Time.now.to_f, self.digest_cache, req.digest_cache, params, headers, counter].digest
+          stella_id = [Time.now.to_f, self.id, req.id, params, headers, counter].digest
         
-          Benelux.add_thread_tags :request => req.digest_cache
+          Benelux.add_thread_tags :request => req.id
           Benelux.add_thread_tags :retry => counter
           Benelux.add_thread_tags :stella_id => stella_id
           
@@ -196,7 +199,7 @@ module Stella
     end
     
     def update(kind, *args)
-      changed and notify_observers(kind, self.digest_cache, *args)
+      changed and notify_observers(kind, self.id, *args)
     end
   
     def run_sleeper(wait, already_waited=0)

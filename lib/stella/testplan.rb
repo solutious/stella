@@ -32,14 +32,14 @@ class Testplan < Storable
   attic :plan_path
   attic :description
   
-  field :id, &gibbler_id_processor
+  field :id => String, &gibbler_id_processor
   
   field :usecases => Array
   field :description => String
   #field :resources
   
   # TODO: Add Stellar::TOKEN to the calculation
-  gibbler :id, :usecases, :description
+  gibbler :usecases
   
   def initialize(*uris)
     uris.flatten!
@@ -84,10 +84,15 @@ class Testplan < Storable
   
   # make sure all clients share identical test plans
   def freeze
+    return if frozen?
     Stella.ld "FREEZE TESTPLAN: #{self.description}"
     @usecases.each { |uc| uc.freeze }
     super
     self
+  end
+  
+  def id
+    Gibbler::Digest.new(@id || self.digest)
   end
   
   def self.from_hash(*args)
@@ -215,6 +220,10 @@ class Testplan
       instance_eval &blk unless blk.nil?
     end
     
+    def id
+      Gibbler::Digest.new(@id || self.digest)
+    end
+    
     def self.from_hash(hash={})
       me = super(hash)
       me.requests.collect! { |req| Stella::Data::HTTP::Request.from_hash(req) }
@@ -289,7 +298,9 @@ class Testplan
     end
     
     def freeze
+      return if frozen?
       @requests.each { |r| r.freeze }
+      self.id ||= self.digest
       super
       self
     end
