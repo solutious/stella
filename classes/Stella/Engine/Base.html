@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Engine::Base [stella 0.8.2.003]</title>
+    <title>: Stella::Engine::Base [stella 0.8.3.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,13 +45,24 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000123">new</a></li>
+              <li><a href="#M000117">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000126">log_dir</a></li>
-              <li><a href="#M000125">runid</a></li>
-              <li><a href="#M000124">update</a></li>
+              <li><a href="#M000130">request_unhandled_exception</a></li>
+              <li><a href="#M000120">run</a></li>
+              <li><a href="#M000119">runid</a></li>
+              <li><a href="#M000118">update</a></li>
+              <li><a href="#M000128">update_error_execute_response_handler</a></li>
+              <li><a href="#M000127">update_execute_response_handler</a></li>
+              <li><a href="#M000124">update_prepare_request</a></li>
+              <li><a href="#M000126">update_receive_response</a></li>
+              <li><a href="#M000129">update_request_error</a></li>
+              <li><a href="#M000131">update_request_fail</a></li>
+              <li><a href="#M000122">update_request_repeat</a></li>
+              <li><a href="#M000125">update_send_request</a></li>
+              <li><a href="#M000123">update_stats</a></li>
+              <li><a href="#M000121">update_usecase_quit</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -89,57 +100,200 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000123'>
-                <a name='M000123'>      </a>
+              <div class='method public-class' id='method-M000117'>
+                <a name='M000117'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000123-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000117-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000123-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-ivar">@logdir</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000117-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-ivar">@logdir</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000126'>
-                <a name='M000126'>      </a>
+              <div class='method public-instance' id='method-M000130'>
+                <a name='M000130'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>log_dir</span>
-                  <span class='arguments'>(plan, file=nil)</span>
+                  <span class='name'>request_unhandled_exception</span>
+                  <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000130-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000126-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 55</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_dir</span>(<span class="ruby-identifier">plan</span>, <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">stamp</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">START_TIME</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-value str">&quot;%Y%m%d-%H-%M-%S&quot;</span>)&#x000A;      <span class="ruby-identifier">stamp</span> <span class="ruby-value str">&quot;      #stamp &lt;&lt; \&quot;STAMP\&quot;\n      l = File.join Stella::Config.project_dir, 'log', stamp\n      FileUtils.mkdir_p l unless File.exists? l\n      l\n    end\n    \n    def log_path(plan, file)\n      File.join log_dir(plan), file\n    end\n    \n    def process_options!(plan, opts={})\n      # Plan must be frozen before running (see freeze methods)\n      plan.frozen? || plan.freeze  \n      \n      opts = {\n        :hosts          =&gt; [],\n        :clients        =&gt; 1,\n        :duration       =&gt; 0,\n        :nowait         =&gt; false,\n        :arrival        =&gt; nil,\n        :repetitions    =&gt; 1\n      }.merge! opts\n      \n      Stella.ld \&quot; Options: \#{opts.inspect}\&quot;\n      \n      unless Array === opts[:hosts]\n        opts[:hosts] = [opts[:hosts]]\n      end\n      \n      opts[:hosts].collect! do |host|\n        if URI::Generic === host\n          host\n        else\n          URI.parse host\n        end\n      end\n      \n      opts[:clients] &amp;&amp;= opts[:clients].to_i\n      opts[:duration] &amp;&amp;= opts[:duration].to_i\n      opts[:arrival] &amp;&amp;= opts[:arrival].to_f\n      opts[:repetitions] &amp;&amp;= opts[:repetitions].to_i\n      opts[:clients] = plan.usecases.size if opts[:clients] &lt; plan.usecases.size\n      \n      if opts[:clients] &gt; @@client_limit\n        Stella.stdout.info2 \&quot;Client limit is \#{@@client_limit}\&quot;\n        opts[:clients] = @@client_limit\n      end\n      \n      # Parses 60m -&gt; 3600. See mixins. \n      if opts[:duration].in_seconds.nil?\n        raise Stella::WackyDuration, opts[:duration] \n      end\n      \n      opts[:duration] = opts[:duration].in_seconds\n      \n      Stella.stdout.info3 \&quot; Hosts: \&quot; &lt;&lt; opts[:hosts].join(', ')\n      opts\n    end\n    \n    \n    def run; raise; end\n    def update_usecase_quit(client_id, msg) raise end\n    def update_request_repeat(client_id, counter, total) raise end\n    def update_stats(client_id, http_client, usecase, req) raise end\n    def update_prepare_request(*args) raise end\n    def update_send_request(*args) raise end\n    def update_receive_response(*args) raise end\n    def update_execute_response_handler(*args) raise end\n    def update_error_execute_response_handler(*args) raise end\n    def update_request_error(*args) raise end\n    def request_unhandled_exception(*args) raise end\n    def update_request_fail(*args) raise end\n    \n  end\n  \n  autoload :Functional, 'stella/engine/functional'\n  autoload :Load, 'stella/engine/load'\n  \n  # These timers are interesting from a reporting perspective.\n  Benelux.add_counter    Stella::Client, :execute_response_handler\n  Benelux.add_timer          HTTPClient, :do_request, :response_time\n  ## These are contained in connect\n  #Benelux.add_timer HTTPClient::Session, :create_socket\n  #Benelux.add_timer HTTPClient::Session, :create_ssl_socket\n  Benelux.add_timer HTTPClient::Session, :connect, :socket_connect\n  Benelux.add_timer HTTPClient::Session, :query, :send_request\n  Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte, :first_byte\n  Benelux.add_timer HTTPClient::Session, :get_body, :receive_response\n\nend\n\nclass Stella::Testrun &lt; Storable\n  extend Attic\n  attic :remote_digest\n  field :samples =&gt; Array\n  field :plan\n  field :stats\n  field :hosts\n  field :events\n  field :mode  # (f)unctional or (l)oad\n  field :clients =&gt; Integer\n  field :duration =&gt; Integer\n  field :arrival =&gt; Float\n  field :repetitions =&gt; Integer\n  field :nowait =&gt; Integer\n  def initialize(plan, events, opts={})\n    @plan, @events = plan, events\n    @samples, @stats = nil, nil\n    opts.each_pair do |n,v|\n      self.send(\&quot;\#{n}=\&quot;, v) if has_field? n\n    end\n    reset\n  end\n  \n  def save(path)\n    Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) \n  end\n  \n  def reset\n    @samples = []\n    @stats = { :summary =&gt; {} }\n    @plan.usecases.each do |uc|\n      @events.each do |event|\n        @stats[:summary][event] = Benelux::Stats::Calculator.new\n        @stats[uc.digest] ||= { :summary =&gt; {} }\n        @stats[uc.digest][:summary][event] = Benelux::Stats::Calculator.new\n        uc.requests.each do |req|\n          @stats[uc.digest][req.digest] ||= {}\n          @stats[uc.digest][req.digest][event] = Benelux::Stats::Calculator.new\n        end\n      end\n    end\n  end\n  \n  def add_sample batch, concurrency, tl\n    \n    opts = {\n      :batch =&gt; batch, \n      :duration =&gt; tl.duration,\n      :stamp =&gt; Time.now.utc.to_i,\n      :concurrency =&gt; concurrency\n    }\n    \n    sam = Stella::Testrun::Sample.new opts\n    \n    @plan.usecases.uniq.each_with_index do |uc,i| \n      sam.stats[uc.digest] ||= { }\n      uc.requests.each do |req| \n        sam.stats[uc.digest][req.digest] ||= {}\n        filter = [uc.digest, req.digest]\n        @events.each_with_index do |event,idx|  # do_request, etc...\n          stats = tl.stats.group(event)[filter].merge\n          sam.stats[uc.digest][req.digest][event] = stats\n          # Tally request, usecase and total summaries at the same time. \n          @stats[uc.digest][req.digest][event] += stats\n          @stats[uc.digest][:summary][event] += stats\n          @stats[:summary][event] += stats\n        end\n      end\n    end\n    \n    @samples &lt;&lt; sam\n    \n    begin\n      if Stella::Engine.service\n        Stella::Engine.service.testrun_stats @stats, @samples\n      end\n    rescue =&gt; ex\n      Stella.stdout.info \&quot;Error syncing to \#{Stella::Engine.service.source}\&quot;\n      Stella.stdout.info ex.message, ex.backtrace if Stella.debug?\n    end\n    \n    sam\n  end\n  \n  \n  class Sample &lt; Storable\n    field :batch\n    field :concurrency\n    field :stamp\n    field :duration\n    field :stats =&gt; Hash\n    #gibbler :batch, :concurrency, :stamp, :duration\n    def initialize(opts={})\n      opts.each_pair do |n,v|\n        self.send(\&quot;\#{n}=\&quot;, v) if has_field? n\n      end\n      @stats = { }\n    end\n  end\nend\n&quot;</span></pre>
+                  <pre id='M000130-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 64</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">request_unhandled_exception</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000125'>
-                <a name='M000125'>      </a>
+              <div class='method public-instance' id='method-M000120'>
+                <a name='M000120'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>run</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000120-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000120-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>; <span class="ruby-identifier">raise</span>; <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000119'>
+                <a name='M000119'>      </a>
                 <div class='synopsis'>
                   <span class='name'>runid</span>
                   <span class='arguments'>(plan)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000119-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000125-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 49</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runid</span>(<span class="ruby-identifier">plan</span>)&#x000A;      <span class="ruby-identifier">args</span> = [<span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">hostname</span>, <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">user</span>]&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">START_TIME</span>, <span class="ruby-identifier">plan</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">digest</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000119-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 47</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runid</span>(<span class="ruby-identifier">plan</span>)&#x000A;      <span class="ruby-identifier">args</span> = [<span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">hostname</span>, <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">user</span>]&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">START_TIME</span>, <span class="ruby-identifier">plan</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">id</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000118'>
+                <a name='M000118'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000118-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000118-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 37</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-identifier">what</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> = <span class="ruby-identifier">args</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>)&#x000A;        <span class="ruby-comment cmt">#Stella.ld &quot;OBSERVER UPDATE: #{what}&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">rescue</span> { <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) }&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;NO UPDATE HANDLER FOR: #{what}&quot;</span> &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000128'>
+                <a name='M000128'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_error_execute_response_handler</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000128-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_error_execute_response_handler</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000127'>
+                <a name='M000127'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_execute_response_handler</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 61</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_execute_response_handler</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000124'>
                 <a name='M000124'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>update</span>
+                  <span class='name'>update_prepare_request</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000124-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000124-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 39</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-identifier">what</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> = <span class="ruby-identifier">args</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>)&#x000A;        <span class="ruby-comment cmt">#Stella.ld &quot;OBSERVER UPDATE: #{what}&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">rescue</span> { <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;update_#{what}&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) }&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;NO UPDATE HANDLER FOR: #{what}&quot;</span> &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000124-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 58</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_prepare_request</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000126'>
+                <a name='M000126'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_receive_response</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000126-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 60</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_receive_response</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000129'>
+                <a name='M000129'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_request_error</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 63</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_error</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000131'>
+                <a name='M000131'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_request_fail</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 65</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_fail</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000122'>
+                <a name='M000122'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_request_repeat</span>
+                  <span class='arguments'>(client_id, counter, total)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000122-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000122-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 56</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_repeat</span>(<span class="ruby-identifier">client_id</span>, <span class="ruby-identifier">counter</span>, <span class="ruby-identifier">total</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000125'>
+                <a name='M000125'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_send_request</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000125-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 59</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_send_request</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000123'>
+                <a name='M000123'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_stats</span>
+                  <span class='arguments'>(client_id, http_client, usecase, req)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000123-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000123-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 57</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_stats</span>(<span class="ruby-identifier">client_id</span>, <span class="ruby-identifier">http_client</span>, <span class="ruby-identifier">usecase</span>, <span class="ruby-identifier">req</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000121'>
+                <a name='M000121'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_usecase_quit</span>
+                  <span class='arguments'>(client_id, msg)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000121-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000121-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 55</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_usecase_quit</span>(<span class="ruby-identifier">client_id</span>, <span class="ruby-identifier">msg</span>) <span class="ruby-identifier">raise</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
