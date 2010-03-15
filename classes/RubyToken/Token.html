@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: RubyToken::Token [stella 0.8.3.001]</title>
+    <title>: RubyToken::Token [stella 0.8.3.002]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,8 +45,8 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000311">get_props</a></li>
-              <li><a href="#M000310">open_tag?</a></li>
+              <li><a href="#M000303">get_props</a></li>
+              <li><a href="#M000302">open_tag?</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -69,30 +69,30 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000311'>
-                <a name='M000311'>      </a>
+              <div class='method public-instance' id='method-M000303'>
+                <a name='M000303'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_props</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000311-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000303-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000311-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 31</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_props</span>&#x000A;    <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkReading2Token</span>[<span class="ruby-ivar">@name</span>]&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000303-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 31</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_props</span>&#x000A;    <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">TkReading2Token</span>[<span class="ruby-ivar">@name</span>]&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000310'>
-                <a name='M000310'>      </a>
+              <div class='method public-instance' id='method-M000302'>
+                <a name='M000302'>      </a>
                 <div class='synopsis'>
                   <span class='name'>open_tag?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000310-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000302-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000310-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 23</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_tag?</span>&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_props</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-identifier">a</span> = (<span class="ruby-identifier">get_props</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">EXPR_BEG</span>) <span class="ruby-operator">&amp;&amp;</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/_MOD/</span>  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-comment cmt"># ignore onliner if, unless, etc...</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-constant">FAKIES</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>)  &#x000A;    <span class="ruby-identifier">a</span> &#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000302-source'><span class="ruby-comment cmt"># File lib/proc_source.rb, line 23</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_tag?</span>&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">get_props</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-identifier">a</span> = (<span class="ruby-identifier">get_props</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">RubyToken</span><span class="ruby-operator">::</span><span class="ruby-constant">EXPR_BEG</span>) <span class="ruby-operator">&amp;&amp;</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/_MOD/</span>  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-comment cmt"># ignore onliner if, unless, etc...</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-constant">FAKIES</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>)  &#x000A;    <span class="ruby-identifier">a</span> &#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
