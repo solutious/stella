@@ -113,9 +113,14 @@ module Stella
           break
         end
         
+        
+        
         begin
+          
           send_request http_client, usecase, meth, uri, req, params, headers, container, counter
+          
           update(:receive_response, usecase, uri, req, params, headers, counter, container)
+          
           Benelux.add_thread_tags :status => container.status
           res = container.response
           [
@@ -126,6 +131,8 @@ module Stella
           ].each do |att|
             Benelux.thread_timeline.add_count att[0], att[1]
           end
+          
+          
           ret = execute_response_handler container, req
           
           asset_start = Time.now
@@ -147,11 +154,8 @@ module Stella
           next
         end
         
-        
         wait = (req.wait > 0) ? req.wait : @opts[:wait]
-        if (wait > 0) && !nowait?
-          run_sleeper(wait, asset_duration) 
-        end
+        run_sleeper(wait, asset_duration) if (wait > 0) && !nowait?
         
         # TODO: consider throw/catch
         case ret.class.to_s
