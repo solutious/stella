@@ -27,6 +27,7 @@ STELLA, CHANGES
 * ADDED: Default Testrun status is "new"
 * ADDED: New global option: nologging
 
+
 #### 0.8.2 (2010-03-05) ###############################
 
 * FIXED: Misc issues with usage via module (Stella::Engine.load)

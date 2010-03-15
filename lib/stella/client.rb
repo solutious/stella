@@ -40,7 +40,7 @@ module Stella
     def execute(usecase, &stat_collector)
 #      Gibbler.enable_debug
       # We need to make sure the digest cache has a value
-      self.id = self.digest if self.digest_cache.nil?
+      @id = self.digest if self.digest_cache.nil?
       Gibbler.disable_debug
       http_client = create_http_client
       stats = {}

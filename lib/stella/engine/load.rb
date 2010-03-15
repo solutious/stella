@@ -7,6 +7,8 @@ module Stella::Engine
     
     def run(testrun)
       @threads, @max_clients, @real_reps = [], 0, 0
+      counts = calculate_usecase_clients testrun
+      packages = build_thread_package testrun, counts
       
       if testrun.nologging
         Stella::Logger.disable! 
@@ -38,9 +40,7 @@ module Stella::Engine
       
       @dumper = prepare_dumper(testrun)
       
-      counts = calculate_usecase_clients testrun
       
-      packages = build_thread_package testrun, counts
       
       if testrun.duration > 0
         timing = "#{testrun.duration.seconds.to_i} seconds"
@@ -319,8 +319,8 @@ module Stella::Engine
         count = case testrun.clients
         when 0..9
           if (testrun.clients % testrun.plan.usecases.size > 0) 
-            msg = "Client count does not evenly match usecase count"
-            raise Stella::WackyRatio, msg
+            msg = "Client count (%d) does not evenly match usecase count (%d)"
+            raise Stella::WackyRatio, (msg % [testrun.clients, testrun.plan.usecases.size])
           else
             (testrun.clients / testrun.plan.usecases.size)
           end
