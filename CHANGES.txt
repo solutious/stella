@@ -11,7 +11,7 @@ STELLA, CHANGES
 * TODO: process templates for calls to set in get blocks
 
 
-#### 0.8.3 (2010-03-??) ###############################
+#### 0.8.3 (2010-03-15) ###############################
 
 * FIXED: Testrun digest handling
 * FIXED: Testrun.id will be converted to a Gibbler::Digest if it's a String. 
