@@ -25,11 +25,9 @@ class Stella::CLI < Drydock::Command
     [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
-
-    [:'notemplates', :'no-stats', :'no-header', :'no-param'].each do |opt|
+    [:'notemplates', :'nostats', :'noheader', :'noparam', :nologging].each do |opt|
       opts[opt] = @global.send(opt) unless @global.send(opt).nil?
     end
-    
     testrun = Stella::Testrun.new @testplan, opts
     testrun.run
     testrun
@@ -37,10 +35,11 @@ class Stella::CLI < Drydock::Command
   
   def generate
     testrun = run :generate
-    @exit_code = (testrun.stats[:summary][:failed].n == 0 ? 0 : 1)
+    @exit_code = (testrun.stats['summary']['failed'].n == 0 ? 0 : 1)
   end
   def verify
     testrun = run :verify
+    @exit_code = (testrun.stats['summary']['failed'].n == 0 ? 0 : 1)
   end
     
   def example
@@ -83,16 +82,16 @@ class Stella::CLI < Drydock::Command
     unless @option.testplan.nil? || File.exists?(@option.testplan)
       raise Stella::InvalidOption, "Bad path: #{@option.testplan}" 
     end
-    @hosts = @argv.collect { |uri|; 
-      uri = 'http://' << uri unless uri.match /^https?:\/\//i
-      URI.parse uri; 
-    }
     (@global.var || []).each do |var|
       n, v = *var.split('=')
       raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
       Stella::Testplan.global(n.to_sym, v)
     end
     if @option.testplan
+      @hosts = @argv.collect { |uri|; 
+        uri = 'http://' << uri unless uri.match /^https?:\/\//i
+        URI.parse uri; 
+      }
       @testplan = Stella::Testplan.load_file @option.testplan
     else
       opts = {}

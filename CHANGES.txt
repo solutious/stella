@@ -15,6 +15,7 @@ STELLA, CHANGES
 
 * FIXED: Testrun digest handling
 * FIXED: Testrun.id will be converted to a Gibbler::Digest if it's a String. 
+* FIXED: Reconstituting Testrun from a hash (samples and stats)
 * CHANGE: Removed dashes from CLI params: notemplate, nostats, nowait, withheader, withparam
 * CHANGE: Engine is now called via Testrun#run
 * CHANGE: Use the ID attribute (e.g. Testplan.id) instead of digest or digest_cache (which only
@@ -24,7 +25,7 @@ STELLA, CHANGES
 * ADDED: Testrun objects are now frozen after the run
 * ADDED: Testrun#userid, Testrun#runinfo
 * ADDED: Default Testrun status is "new"
-
+* ADDED: New global option: nologging
 
 #### 0.8.2 (2010-03-05) ###############################
 

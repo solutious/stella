@@ -8,18 +8,20 @@ module Stella
     attr_accessor :lev
     attr_reader :templates
     
+    @@disable = false
+    class << self
+      def disable!()  @@disable = true  end
+      def enable!()  @@disable = true  end
+      def disabled?()  @@disable == true end
+    end
+      
     def initialize(output=STDOUT)
       @mutex, @buffer = Mutex.new, StringIO.new
       @lev, @offset = 1, 0
       @templates = {}
       @autoflush = false
-      @disable = false
       self.output = output
     end
-    
-    def disable!()  @disable = true  end
-    def enable!()  @disable = true  end
-    def disabled?()  @disable == true end
       
     def autoflush!()  @autoflush = true   end
     def autoflush?()  @autoflush == true  end
@@ -37,14 +39,14 @@ module Stella
     end
     
     def print(level, *msg)
-      return if level > @lev || disabled?
+      return if level > @lev || self.class.disabled?
       @buffer.print *msg
       flush if autoflush?
       true
     end
     
     def puts(level, *msg)
-      return if level > @lev || disabled?
+      return if level > @lev || self.class.disabled?
       @buffer.puts *msg
       flush if autoflush?
       true
@@ -73,6 +75,7 @@ module Stella
     end
     
     def output=(o)
+      return if self.class.disabled?
       @mutex.synchronize do
         if o.kind_of? String
           o = File.open(o, File::CREAT|File::TRUNC|File::RDWR, 0644)
@@ -83,7 +86,7 @@ module Stella
     
     # TODO: There's a big when using print (no newline)
     def flush
-      return if disabled?
+      return if self.class.disabled?
       @mutex.synchronize do
         #return if @offset == @output.tell
         @buffer.seek @offset
@@ -99,7 +102,7 @@ module Stella
     end
     
     def clear
-      return if disabled?
+      return if self.class.disabled?
       flush
       @mutex.synchronize do
         @buffer.rewind
@@ -108,7 +111,7 @@ module Stella
     end
     
     def close
-      return if disabled?
+      return if self.class.disabled?
       flush
       @buffer.close
       @output.close
@@ -120,7 +123,7 @@ module Stella
   # Must call flush to send to output. 
   class SyncLogger < Logger
     def print(level, *msg)
-      return if level > @lev || disabled?
+      return if level > @lev || self.class.disabled?
       @mutex.synchronize { 
         @buffer.print *msg 
         flush if autoflush?
@@ -130,7 +133,7 @@ module Stella
 
     def puts(level, *msg)
       #Stella.ld [level, @lev, msg]
-      return if level > @lev || disabled?
+      return if level > @lev || self.class.disabled?
       @mutex.synchronize { 
         @buffer.puts *msg 
         flush if autoflush?

@@ -8,12 +8,16 @@ module Stella::Engine
     def run(testrun)
       @threads, @max_clients, @real_reps = [], 0, 0
       
-      Stella.stdout.info "Logging to #{testrun.log_dir}", $/
-      
-      latest = File.join(File.dirname(testrun.log_dir), 'latest')
-      if Stella.sysinfo.os == :unix
-        File.unlink latest if File.exists? latest
-        FileUtils.ln_sf File.basename(testrun.log_dir), latest
+      if testrun.nologging
+        Stella::Logger.disable! 
+      else
+        Stella.stdout.info "Logging to #{testrun.log_dir}", $/
+
+        latest = File.join(File.dirname(testrun.log_dir), 'latest')
+        if !testrun.nologging && Stella.sysinfo.os == :unix
+          File.unlink latest if File.exists? latest
+          FileUtils.ln_sf File.basename(testrun.log_dir), latest
+        end
       end
       
       @sumlog = Stella::Logger.new testrun.log_path('summary')
@@ -79,9 +83,10 @@ module Stella::Engine
       generate_report @sumlog, testrun, test_time
       #report_time = tt.stats.group(:generate_report).mean
       
-      Stella.stdout.info File.read(@sumlog.path)
-      
-      Stella.stdout.info $/, "Log dir: #{testrun.log_dir}"
+      unless testrun.nologging
+        Stella.stdout.info File.read(@sumlog.path)
+        Stella.stdout.info $/, "Log dir: #{testrun.log_dir}"
+      end
       
       testrun
     end

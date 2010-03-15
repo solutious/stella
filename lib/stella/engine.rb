@@ -88,6 +88,7 @@ class Stella::Testrun < Storable
   field :id => String, &gibbler_id_processor
   field :userid => String
   field :start_time => Integer
+  field :runinfo => Hash
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
@@ -97,9 +98,9 @@ class Stella::Testrun < Storable
   field :withheader => TrueClass
   field :notemplates => TrueClass
   field :nostats => TrueClass
+  field :nologging => TrueClass
   field :samples => Array
   field :stats => Hash
-  field :runinfo => Hash
   field :mode  # verify or generate
   field :plan
   field :stats
@@ -110,6 +111,7 @@ class Stella::Testrun < Storable
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
+    
     process_options! opts if !plan.nil? && !opts.empty?
     reset_stats
   end
@@ -119,28 +121,35 @@ class Stella::Testrun < Storable
   def self.from_hash(hash={})
     me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
-    pp [:patty, hash[:plan]["id"]]
-    pp [:patty, me.plan.id, me.plan.digest]
     me.process_options! unless me.plan.nil?
     
-    #me.samples.collect! do |sample|
-    #  Stella::Testrun::Sample.from_hash(sample)
-    #end
+    me.samples.collect! do |sample|
+      Stella::Testrun::Sample.from_hash(sample)
+    end
 
-    #stats = {}
-    #me.stats.each_pair do |n1,v1|
-    #  stats[n1.to_sym] = v1
-    #end
-    #me.stats = stats
+    me.plan.usecases.uniq.each_with_index do |uc,i| 
+      uc.requests.each do |req| 
+        me.events.each_with_index do |event,idx|  # do_request, etc...
+          event &&= event.to_s
+          me.stats[uc.id][req.id][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
+          me.stats[uc.id]['summary'][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats[uc.id]['summary'][event])
+          me.stats['summary'][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats['summary'][event])
+        end
+      end
+    end
+    
     me
   end
   
   def client_options
     opts = {
       :nowait => self.nowait || false,
+      :notemplates => self.notemplates || false,
       :withparam => self.withparam || false,
-      :withheader => self.withheader || false,
-      :notemplates => self.notemplates || false
+      :withheader => self.withheader || false
     }
   end
   
@@ -149,6 +158,7 @@ class Stella::Testrun < Storable
     unless opts.empty?
       opts = {
         :hosts          => [],
+        :nologging      => false,
         :clients        => 1,
         :duration       => 0,
         :nowait         => false,
@@ -165,7 +175,7 @@ class Stella::Testrun < Storable
     end
     
     @id &&= Gibbler::Digest.new(@id)
-    @plan &&= @plan.freeze
+    
     @samples ||= []
     @stats ||= { :summary => {} }
     
@@ -237,9 +247,9 @@ class Stella::Testrun < Storable
     # Don't use @start_time here b/c that won't be set 
     # until just before the actual testing starts. 
     stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
-    stamp <<"-#{self.plan.id.shorter}"
+    stamp << "-#{self.plan.id.shorter}" unless self.plan.nil?
     l = File.join Stella::Config.project_dir, 'log', stamp
-    FileUtils.mkdir_p l unless File.exists? l
+    FileUtils.mkdir_p l unless File.exists?(l) || self.nologging
     l
   end
   
@@ -267,19 +277,22 @@ class Stella::Testrun < Storable
   end
   
   def save
-    path = log_path('stats')
-    Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
+    unless self.nologging
+      #path = log_path('stats')
+      #Stella::Utils.write_to_file(path, self.to_json, 'w', 0644) 
+    end
   end
   
   def reset_stats
     @samples = []
-    @stats = { :summary => {} }
+    @stats = { 'summary' => {} }
     unless @plan.nil?
       @plan.usecases.each do |uc|
         @events.each do |event|
-          @stats[:summary][event] = Benelux::Stats::Calculator.new
-          @stats[uc.id] ||= { :summary => {} }
-          @stats[uc.id][:summary][event] = Benelux::Stats::Calculator.new
+          event &&= event.to_s
+          @stats['summary'][event] = Benelux::Stats::Calculator.new
+          @stats[uc.id] ||= { 'summary' => {} }
+          @stats[uc.id]['summary'][event] = Benelux::Stats::Calculator.new
           uc.requests.each do |req|
             @stats[uc.id][req.id] ||= {}
             @stats[uc.id][req.id][event] = Benelux::Stats::Calculator.new
@@ -300,24 +313,23 @@ class Stella::Testrun < Storable
     
     sam = Stella::Testrun::Sample.new opts
     
-    #puts @stats.to_yaml
     @plan.usecases.uniq.each_with_index do |uc,i| 
       sam.stats[uc.id] ||= { }
       uc.requests.each do |req| 
         sam.stats[uc.id][req.id] ||= {}
         filter = [uc.id, req.id]
         @events.each_with_index do |event,idx|  # do_request, etc...
-          stats = tl.stats.group(event)[filter].mean
+          event &&= event.to_s
+          stats = tl.stats.group(event.to_sym)[filter].merge
           sam.stats[uc.id][req.id][event] = stats
           # Tally request, usecase and total summaries at the same time. 
-          #p [uc.id, req.id, event]
-          #@stats[uc.id][req.id][event] += stats
-          #@stats[uc.id][:summary][event] += stats
-          #@stats[:summary][event] += stats
+          @stats[uc.id][req.id][event] += stats
+          @stats[uc.id]['summary'][event] += stats
+          @stats['summary'][event] += stats
         end
       end
     end
-    pp tl.stats.group(:response_time)[]
+    
     @samples << sam
     
     sam
@@ -337,10 +349,20 @@ class Stella::Testrun < Storable
       end
       @stats = { }
     end
-    def from_hash(hash={})
-      p [:pooooop, hash]
+    def self.from_hash(hash={})
       me = super(hash)
-      #stats = {}
+      stats = {}
+      me.stats.each_pair { |ucid,uchash| 
+        stats[ucid] = {}
+        uchash.each_pair { |reqid,reqhash|
+          stats[ucid][reqid] = {}
+          reqhash.each_pair { |event,stat|
+            tmp = Benelux::Stats::Calculator.from_hash(stat)
+            stats[ucid][reqid][event] = tmp
+          }
+        }
+      }
+      me.stats = stats
       me
     end
   end

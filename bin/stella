@@ -63,6 +63,9 @@ class Stella::CLI::Definition
   global :nostats, "Disable stat collection" do
     true
   end
+  global :nologging, "Disable log files" do
+    true
+  end
   global :notemplates, "Disable template parsing" do
     true
   end
