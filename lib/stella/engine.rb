@@ -254,12 +254,12 @@ class Stella::Testrun < Storable
   end
   
   
-  def run
+  def run(opts={})
     engine = case self.mode 
     when :verify 
-      Stella::Engine::Functional.new
+      Stella::Engine::Functional.new(opts)
     when :generate
-      Stella::Engine::Load.new
+      Stella::Engine::Load.new(opts)
     else
       raise Stella::Error, "Unsupported mode: #{self.mode}"
     end
