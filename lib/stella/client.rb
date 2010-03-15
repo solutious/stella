@@ -27,7 +27,8 @@ module Stella
         :nowait => false,
         :withparam => false,
         :withheader => false,
-        :notemplates => false
+        :notemplates => false,
+        :wait => 0
       }.merge! opts
       @opts = opts
       @base_uri, @index = base_uri, index
@@ -146,7 +147,11 @@ module Stella
           next
         end
         
-        run_sleeper(req.wait, asset_duration) if req.wait != 0 && !nowait?
+        
+        wait = (req.wait > 0) ? req.wait : @opts[:wait]
+        if (wait > 0) && !nowait?
+          run_sleeper(wait, asset_duration) 
+        end
         
         # TODO: consider throw/catch
         case ret.class.to_s

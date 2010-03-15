@@ -86,30 +86,29 @@ class Stella::Testrun < Storable
   CLIENT_LIMIT = 1000
   include Gibbler::Complex
   field :id => String, &gibbler_id_processor
+  field :status => String
   field :userid => String
   field :start_time => Integer
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
   field :repetitions => Integer
+  field :wait => Float
   field :nowait => TrueClass
   field :withparam => TrueClass
   field :withheader => TrueClass
   field :notemplates => TrueClass
   field :nostats => TrueClass
-  field :samples => Array
   field :stats => Hash
+  field :samples => Array
   field :mode  # verify or generate
   field :plan
-  field :stats
   field :hosts
   field :events
   field :log
-  field :status
-  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :start_time, :userid
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :start_time, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
-    
     process_options! opts if !plan.nil? && !opts.empty?
     reset_stats
   end
@@ -147,7 +146,8 @@ class Stella::Testrun < Storable
       :nowait => self.nowait || false,
       :notemplates => self.notemplates || false,
       :withparam => self.withparam || false,
-      :withheader => self.withheader || false
+      :withheader => self.withheader || false,
+      :wait => self.wait || 0
     }
   end
   
@@ -158,6 +158,7 @@ class Stella::Testrun < Storable
         :hosts          => [],
         :clients        => 1,
         :duration       => 0,
+        :wait           => 0,
         :nowait         => false,
         :arrival        => nil,
         :repetitions    => 1, 
@@ -190,6 +191,7 @@ class Stella::Testrun < Storable
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
     @repetitions &&= @repetitions.to_i
+    @wait &&= @wait.to_f
     
     @mode &&= @mode.to_sym
     
