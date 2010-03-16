@@ -396,7 +396,9 @@ module Stella::Engine
                                       params, container.response.request.header.dump, 
                                       container.response.header.dump, 
                                       container.response.body.dump
-                                      
+
+        # Fix for no data, but why??
+        log.response_body = container.response.body.dump
         Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
       end
       
