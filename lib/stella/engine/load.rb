@@ -155,6 +155,8 @@ module Stella::Engine
           
           pqueue << package  # return the package to the queue
         end
+
+        #p [testrun.arrival, 1/testrun.arrival]
         
         unless testrun.arrival.nil? || testrun.arrival.to_f <= 0
           # Create 1 second / users per second 
@@ -163,12 +165,14 @@ module Stella::Engine
           Stella.stdout.info3 $/, "-> NEW CLIENT: %s of %s" % args
           sleep 1/testrun.arrival
         end
+        
       }
       
       repscalc = Benelux::Stats::Calculator.new
       @threads.each { |t| t.join } # wait
       @threads.each { |t| repscalc.sample(t[:real_reps]) }
       @real_reps = repscalc.mean.to_i
+      
       
       #Stella.stdout.info "*** REPETITION #{@real_reps} of #{reps} ***"
       
@@ -382,17 +386,17 @@ module Stella::Engine
     def update_prepare_request(client_id, usecase, req, counter)
      
     end
-      
+    
     def update_receive_response(client_id, usecase, uri, req, params, headers, counter, container)
       if @opts[:with_content]
         log = Stella::Engine::Log.new Time.now.to_f, container.unique_id, client_id,
                                       'testplanid',
                                       usecase.id, req.id,
-                                      req.http_method, container.status, uri,
+                                      req.http_method, container.status, uri.to_s,
                                       params, container.response.request.header.dump, 
                                       container.response.header.dump, 
                                       container.response.body.dump
-
+                                      
         Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
       end
       

@@ -50,7 +50,7 @@ module Stella::Engine
       log = Stella::Engine::Log.new Time.now.to_f, container.unique_id, client_id,
                                     'testplanid',
                                     usecase.id, req.id,
-                                    req.http_method, container.status, uri,
+                                    req.http_method, container.status, uri.to_s,
                                     params, container.response.request.header.dump, 
                                     container.response.header.dump, 
                                     container.response.body.dump
