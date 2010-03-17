@@ -206,6 +206,7 @@ module Stella::Engine
         Benelux.timeline.clear if testrun.nostats
       end
       hand.finally do
+        testrun.end_time = Time.now.utc.to_i
         testrun.save
       end
       hand

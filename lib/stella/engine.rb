@@ -89,6 +89,7 @@ class Stella::Testrun < Storable
   field :status => String
   field :userid => String
   field :start_time => Integer
+  field :end_time => Integer
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
