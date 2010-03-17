@@ -117,6 +117,12 @@ class Stella::Testrun < Storable
     @id || self.digest
   end
   def has_log?() !@log.nil? && !@log.empty? end
+  def elapsed_seconds
+    return 0 if @start_time.nil? || @start_time <= 0
+    return Time.now.utc.to_i - @start_time if @end_time.nil? || @end_time <= 0
+    @end_time - @start_time
+  end
+  
   def self.from_hash(hash={})
     me = super(hash)
     me.plan = Stella::Testplan.from_hash(me.plan)
