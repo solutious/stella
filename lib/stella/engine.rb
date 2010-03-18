@@ -114,7 +114,16 @@ class Stella::Testrun < Storable
     reset_stats
   end
   def id
-    @id || self.digest
+    Gibbler::Digest.new(@id || self.digest)
+  end
+  def running?
+    (self.status.to_s == "running")
+  end
+  def done?
+    (self.status.to_s == "done")
+  end
+  def new?
+    (self.status.to_s == "new")
   end
   def has_log?() !@log.nil? && !@log.empty? end
   def elapsed_seconds

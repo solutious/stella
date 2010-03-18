@@ -15,9 +15,8 @@ STELLA, CHANGES
 
 * FIXED: There was no response body in Stella::Engine::Log objects
 * CHANGE: Store URIs as strings in Stella::Engine::Log objects
-* ADDED: Testrun#end_time
+* ADDED: Testrun#end_time, Testrun#running?
 * ADDED: Testrun.elapsed_seconds
-
 
 #### 0.8.3 (2010-03-15) ###############################
 
