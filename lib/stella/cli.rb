@@ -22,7 +22,7 @@ class Stella::CLI < Drydock::Command
   def run(mode)
     opts = { :mode => mode }
     opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :duration, :arrival].each do |opt|
+    [:nowait, :clients, :repetitions, :duration, :arrival, :granularity].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     [:'notemplates', :'nostats', :'noheader', :'noparam'].each do |opt|

@@ -84,6 +84,7 @@ end
 
 class Stella::Testrun < Storable
   CLIENT_LIMIT = 1000
+  GRANULARITY = 5
   include Gibbler::Complex
   field :id => String, &gibbler_id_processor
   field :status => String
@@ -96,6 +97,7 @@ class Stella::Testrun < Storable
   field :repetitions => Integer
   field :wait => Float
   field :nowait => TrueClass
+  field :granularity => Integer
   field :withparam => TrueClass
   field :withheader => TrueClass
   field :notemplates => TrueClass
@@ -110,6 +112,7 @@ class Stella::Testrun < Storable
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :start_time, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
+    @granularity = GRANULARITY
     process_options! opts if !plan.nil? && !opts.empty?
     reset_stats
   end
@@ -143,7 +146,7 @@ class Stella::Testrun < Storable
     me.samples.collect! do |sample|
       Stella::Testrun::Sample.from_hash(sample)
     end
-
+    
     me.plan.usecases.uniq.each_with_index do |uc,i| 
       uc.requests.each do |req| 
         me.events.each_with_index do |event,idx|  # do_request, etc...

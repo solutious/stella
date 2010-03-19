@@ -89,7 +89,6 @@ module Stella::Engine
       testrun
     end
     
-    ROTATE_TIMELINE = 5
     def execute_test_plan(packages, testrun)
       time_started = Time.now
       
@@ -133,7 +132,7 @@ module Stella::Engine
             Thread.current[:real_uctime].tick
             time_elapsed = (Time.now - time_started).to_i
             
-            if (Time.now - prev_ptime).to_i >= ROTATE_TIMELINE
+            if (Time.now - prev_ptime).to_i >= testrun.granularity
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
               if Stella.stdout.lev >= 2 && Thread.current == @threads.first 
                 args = [time_elapsed.to_i, ruct.n, ruct.mean, ruct.sd]
@@ -191,7 +190,7 @@ module Stella::Engine
     end
     
     def prepare_dumper(testrun)
-      hand = Stella::Hand.new(Load::ROTATE_TIMELINE, 2.seconds) do
+      hand = Stella::Hand.new(testrun.granularity, 2.seconds) do
         Benelux.update_global_timeline 
         # @threads contains only stella clients
         concurrency = @threads.select { |t| !t.status.nil? }.size

@@ -19,6 +19,8 @@ STELLA, CHANGES
 * CHANGE: Stella::Data::HTTP now uses @header instead of @headers
 * ADDED: Testrun#end_time, Testrun#running?
 * ADDED: Testrun.elapsed_seconds
+* ADDED: Testrun.granularity which replaces Load::ROTATE_TIMELINE
+
 
 #### 0.8.3 (2010-03-15) ###############################
 
