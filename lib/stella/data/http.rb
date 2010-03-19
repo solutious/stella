@@ -46,7 +46,7 @@ module Stella::Data::HTTP
     def initialize (method=nil, uri_str=nil, version="1.1", &definition)
       @uri = uri_str.to_s
       @http_method, @http_version = method, version
-      @headers, @params, @response_handler = {}, {}, {}
+      @header, @params, @response_handler = {}, {}, {}
       @resources = {}
       @autofollow = false
       @wait = 0
@@ -89,23 +89,26 @@ module Stella::Data::HTTP
     end
     
     def wait(*args)
+      args = [args].flatten.compact
       @wait = args.first unless args.empty?
       @wait
     end
     alias_method :sleep, :wait
     
     def headers(*args)
+      args = [args].flatten.compact
       unless args.empty?
         h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
-        @headers.merge! h unless h.empty?
+        @header.merge! h unless h.empty?
       end
-      @headers
+      @header
     end
     alias_method :header, :headers
     
     # Set a resource key value pair in the get, post block.
     # These will be process later in Stella::Client
     def set(*args)
+      args = [args].flatten.compact
       unless args.empty?
         h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
         @resources.merge! h unless h.empty?
@@ -115,6 +118,7 @@ module Stella::Data::HTTP
     alias_method :resources, :set
     
     def params(*args)
+      args = [args].flatten.compact
       unless args.empty?
         h = Hash === args[0] ? args[0] : {args[0]=> args[1]}
         @params.merge! h unless h.empty?
@@ -160,7 +164,7 @@ module Stella::Data::HTTP
     def freeze
       return if frozen?
       @params = convert_values_to_templates @params
-      @headers = convert_values_to_templates @headers
+      @header = convert_values_to_templates @header
       super
       self
     end

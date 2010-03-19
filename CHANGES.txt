@@ -13,8 +13,10 @@ STELLA, CHANGES
 
 #### 0.8.4 (2010-03-??) ###############################
 
+* FIXED: Misc issues getting and setting headers, params, and resources
 * FIXED: There was no response body in Stella::Engine::Log objects
 * CHANGE: Store URIs as strings in Stella::Engine::Log objects
+* CHANGE: Stella::Data::HTTP now uses @header instead of @headers
 * ADDED: Testrun#end_time, Testrun#running?
 * ADDED: Testrun.elapsed_seconds
 
