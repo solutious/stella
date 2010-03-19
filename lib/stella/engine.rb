@@ -125,6 +125,9 @@ class Stella::Testrun < Storable
   def new?
     (self.status.to_s == "new")
   end
+  def pending?
+    (self.status.to_s == "pending")
+  end
   def has_log?() !@log.nil? && !@log.empty? end
   def elapsed_seconds
     return 0 if @start_time.nil? || @start_time <= 0
