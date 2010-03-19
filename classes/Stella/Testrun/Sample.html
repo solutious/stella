@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Testrun::Sample [stella 0.8.3.002]</title>
+    <title>: Stella::Testrun::Sample [stella 0.8.4.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,28 +45,28 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000228">from_hash</a></li>
-              <li><a href="#M000227">new</a></li>
+              <li><a href="#M000233">from_hash</a></li>
+              <li><a href="#M000232">new</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000228'>
-                <a name='M000228'>      </a>
+              <div class='method public-class' id='method-M000233'>
+                <a name='M000233'>      </a>
                 <div class='synopsis'>
                   <span class='name'>from_hash</span>
                   <span class='arguments'>(hash={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000228-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000233-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000228-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 346</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">hash</span>={})&#x000A;      <span class="ruby-identifier">me</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">hash</span>)&#x000A;      <span class="ruby-identifier">stats</span> = {}&#x000A;      <span class="ruby-identifier">me</span>.<span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ucid</span>,<span class="ruby-identifier">uchash</span><span class="ruby-operator">|</span> &#x000A;        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>] = {}&#x000A;        <span class="ruby-identifier">uchash</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">reqid</span>,<span class="ruby-identifier">reqhash</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>][<span class="ruby-identifier">reqid</span>] = {}&#x000A;          <span class="ruby-identifier">reqhash</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">event</span>,<span class="ruby-identifier">stat</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">Benelux</span><span class="ruby-operator">::</span><span class="ruby-constant">Stats</span><span class="ruby-operator">::</span><span class="ruby-constant">Calculator</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">stat</span>)&#x000A;            <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>][<span class="ruby-identifier">reqid</span>][<span class="ruby-identifier">event</span>] = <span class="ruby-identifier">tmp</span>&#x000A;          }&#x000A;        }&#x000A;      }&#x000A;      <span class="ruby-identifier">me</span>.<span class="ruby-identifier">stats</span> = <span class="ruby-identifier">stats</span>&#x000A;      <span class="ruby-identifier">me</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000233-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 368</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">hash</span>={})&#x000A;      <span class="ruby-identifier">me</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">hash</span>)&#x000A;      <span class="ruby-identifier">stats</span> = {}&#x000A;      <span class="ruby-identifier">me</span>.<span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ucid</span>,<span class="ruby-identifier">uchash</span><span class="ruby-operator">|</span> &#x000A;        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>] = {}&#x000A;        <span class="ruby-identifier">uchash</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">reqid</span>,<span class="ruby-identifier">reqhash</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>][<span class="ruby-identifier">reqid</span>] = {}&#x000A;          <span class="ruby-identifier">reqhash</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">event</span>,<span class="ruby-identifier">stat</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">Benelux</span><span class="ruby-operator">::</span><span class="ruby-constant">Stats</span><span class="ruby-operator">::</span><span class="ruby-constant">Calculator</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">stat</span>)&#x000A;            <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">ucid</span>][<span class="ruby-identifier">reqid</span>][<span class="ruby-identifier">event</span>] = <span class="ruby-identifier">tmp</span>&#x000A;          }&#x000A;        }&#x000A;      }&#x000A;      <span class="ruby-identifier">me</span>.<span class="ruby-identifier">stats</span> = <span class="ruby-identifier">stats</span>&#x000A;      <span class="ruby-identifier">me</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000227'>
-                <a name='M000227'>      </a>
+              <div class='method public-class' id='method-M000232'>
+                <a name='M000232'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(opts={})</span>
@@ -77,10 +77,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000227-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000232-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000227-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 340</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{n}=&quot;</span>, <span class="ruby-identifier">v</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_field?</span> <span class="ruby-identifier">n</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@stats</span> = { }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000232-source'><span class="ruby-comment cmt"># File lib/stella/engine.rb, line 362</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{n}=&quot;</span>, <span class="ruby-identifier">v</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_field?</span> <span class="ruby-identifier">n</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@stats</span> = { }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
