@@ -13,6 +13,7 @@ STELLA, CHANGES
 
 #### 0.8.5 (2010-03-??) ###############################
 
+* CHANGE: Testrun#samples contains all data samples for each event in a given batch
 * ADDED: Testrun#logsize
 
 

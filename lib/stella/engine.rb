@@ -339,12 +339,15 @@ class Stella::Testrun < Storable
         filter = [uc.id, req.id]
         @events.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
-          stats = tl.stats.group(event.to_sym)[filter].merge
-          sam.stats[uc.id][req.id][event] = stats
+          stats = tl.stats.group(event.to_sym)[filter]
+          # When we don't merge the stats from benelux, 
+          # the each calculator contains just one sample. 
+          # So when we grab the sum, it's just one event sample. 
+          sam.stats[uc.id][req.id][event] = stats.collect {|c| c.sum }
           # Tally request, usecase and total summaries at the same time. 
-          @stats[uc.id][req.id][event] += stats
-          @stats[uc.id]['summary'][event] += stats
-          @stats['summary'][event] += stats
+          @stats[uc.id][req.id][event] += stats.merge
+          @stats[uc.id]['summary'][event] += stats.merge
+          @stats['summary'][event] += stats.merge
         end
       end
     end
@@ -370,18 +373,18 @@ class Stella::Testrun < Storable
     end
     def self.from_hash(hash={})
       me = super(hash)
-      stats = {}
-      me.stats.each_pair { |ucid,uchash| 
-        stats[ucid] = {}
-        uchash.each_pair { |reqid,reqhash|
-          stats[ucid][reqid] = {}
-          reqhash.each_pair { |event,stat|
-            tmp = Benelux::Stats::Calculator.from_hash(stat)
-            stats[ucid][reqid][event] = tmp
-          }
-        }
-      }
-      me.stats = stats
+      #stats = {}
+      #me.stats.each_pair { |ucid,uchash| 
+      #  stats[ucid] = {}
+      #  uchash.each_pair { |reqid,reqhash|
+      #    stats[ucid][reqid] = {}
+      #    reqhash.each_pair { |event,stat|
+      #      tmp = Benelux::Stats::Calculator.from_hash(stat)
+      #      stats[ucid][reqid][event] = tmp
+      #    }
+      #  }
+      #}
+      #me.stats = stats
       me
     end
   end
