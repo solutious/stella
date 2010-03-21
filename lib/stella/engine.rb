@@ -97,6 +97,7 @@ class Stella::Testrun < Storable
   field :repetitions => Integer
   field :wait => Float
   field :nowait => TrueClass
+  field :logsize => Integer
   field :granularity => Integer
   field :withparam => TrueClass
   field :withheader => TrueClass
@@ -113,6 +114,8 @@ class Stella::Testrun < Storable
   def initialize(plan=nil, opts={})
     @plan = plan
     @granularity = GRANULARITY
+    @logsize = 1
+    @log = []
     process_options! opts if !plan.nil? && !opts.empty?
     reset_stats
   end

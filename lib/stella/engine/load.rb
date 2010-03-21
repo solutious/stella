@@ -196,8 +196,10 @@ module Stella::Engine
         concurrency = @threads.select { |t| !t.status.nil? }.size
         batch, timeline = Benelux.timeline_updates, Benelux.timeline_chunk
         testrun.add_sample batch, concurrency, timeline
-        if batch == 1 # only save the first batch
-          testrun.log = Benelux.timeline.messages.filter(:kind => :log)
+        testrun.log = [] unless testrun.has_log?
+        if testrun.log.size < testrun.logsize
+          tmp = Benelux.timeline.messages.filter(:kind => :log)
+          testrun.log.push *tmp unless tmp.nil? || tmp.empty?
         end
         testrun.save
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)

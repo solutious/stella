@@ -11,7 +11,12 @@ STELLA, CHANGES
 * TODO: process templates for calls to set in get blocks
 
 
-#### 0.8.4 (2010-03-??) ###############################
+#### 0.8.5 (2010-03-??) ###############################
+
+* ADDED: Testrun#logsize
+
+
+#### 0.8.4 (2010-03-19) ###############################
 
 * FIXED: Misc issues getting and setting headers, params, and resources
 * FIXED: There was no response body in Stella::Engine::Log objects
