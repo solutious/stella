@@ -199,7 +199,10 @@ module Stella::Engine
         testrun.log = [] unless testrun.has_log?
         if testrun.log.size < testrun.logsize
           tmp = Benelux.timeline.messages.filter(:kind => :log)
-          testrun.log.push *tmp unless tmp.nil? || tmp.empty?
+          unless tmp.nil? || tmp.empty?
+            # grab only as many elements from the log as configured
+            testrun.log.push *tmp.first(testrun.logsize-testrun.log.size) 
+          end
         end
         testrun.save
         @failog.info Benelux.timeline.messages.filter(:kind => :exception)
