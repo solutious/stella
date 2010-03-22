@@ -67,7 +67,7 @@ class Stella::CLI::Definition
     true
   end
   global :V, :version, "Display version number" do
-    puts "Stella version: #{Stella::VERSION}"
+    puts "Stella version: #{Stella::VERSION.inspect}"
     exit 0
   end
 

@@ -19,6 +19,7 @@ STELLA, CHANGES
 * ADDED: Store HTTP status codes in Testrun#stats
 * ADDED: Store error messages in Sample#errors
 
+
 #### 0.8.4 (2010-03-19) ###############################
 
 * FIXED: Misc issues getting and setting headers, params, and resources
