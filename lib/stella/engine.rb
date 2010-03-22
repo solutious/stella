@@ -108,7 +108,7 @@ class Stella::Testrun < Storable
   field :mode  # verify or generate
   field :plan
   field :hosts
-  field :events
+  field :event_probes
   field :log
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :start_time, :userid
   def initialize(plan=nil, opts={})
@@ -178,11 +178,11 @@ class Stella::Testrun < Storable
     @stats ||= { :summary => {} }
     
     @status ||= "new"
-    @events ||= [:response_time, :failed]
+    @event_probes ||= [:response_time, :failed]
     
     @start_time ||= Time.now.to_i
     
-    @events.collect! { |event| event.to_sym }
+    @event_probes.collect! { |event| event.to_sym }
     
     @duration ||= 0
     @repetitions ||= 0
@@ -281,7 +281,7 @@ class Stella::Testrun < Storable
     @stats = { 'summary' => {} }
     unless @plan.nil?
       @plan.usecases.each do |uc|
-        @events.each do |event|
+        @event_probes.each do |event|
           event &&= event.to_s
           @stats['summary'][event] = Benelux::Stats::Calculator.new
           @stats[uc.id] ||= { 'summary' => {} }
@@ -310,7 +310,7 @@ class Stella::Testrun < Storable
     
     me.plan.usecases.uniq.each_with_index do |uc,i| 
       uc.requests.each do |req| 
-        me.events.each_with_index do |event,idx|  # do_request, etc...
+        me.event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           me.stats[uc.id][req.id][event] = 
             Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
@@ -319,13 +319,15 @@ class Stella::Testrun < Storable
           me.stats['summary'][event] = 
             Benelux::Stats::Calculator.from_hash(me.stats['summary'][event])
         end
-        me.stats[uc.id][req.id]['status'].each_pair do |status,value|
-          me.stats[uc.id][req.id]['status'].delete status
-          me.stats[uc.id]['summary']['status'].delete status
-          me.stats['summary']['status'].delete status
-          me.stats[uc.id][req.id]['status'][status.to_i] = value.to_i
-          me.stats[uc.id]['summary']['status'][status.to_i] = value.to_i
-          me.stats['summary']['status'][status.to_i] = value.to_i
+        if me.stats[uc.id][req.id].has_key? 'status'
+          me.stats[uc.id][req.id]['status'].each_pair do |status,value|
+            me.stats[uc.id][req.id]['status'].delete status
+            me.stats[uc.id]['summary']['status'].delete status
+            me.stats['summary']['status'].delete status
+            me.stats[uc.id][req.id]['status'][status.to_i] = value.to_i
+            me.stats[uc.id]['summary']['status'][status.to_i] = value.to_i
+            me.stats['summary']['status'][status.to_i] = value.to_i
+          end
         end
       end
     end
@@ -349,7 +351,7 @@ class Stella::Testrun < Storable
       uc.requests.each do |req| 
         sam.stats[uc.id][req.id] ||= {}
         filter = [uc.id, req.id]
-        @events.each_with_index do |event,idx|  # do_request, etc...
+        @event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
           # When we don't merge the stats from benelux, 
@@ -373,6 +375,10 @@ class Stella::Testrun < Storable
           @stats[uc.id]['summary']['status'][status.to_i] += count
           @stats['summary']['status'][status.to_i] += count
         end
+        tmp = tl.messages.filter([filter, :exception].flatten)
+        sam.errors[uc.id] ||= {}
+        sam.errors[uc.id][req.id] ||= []
+        sam.errors[uc.id][req.id].push *tmp        
       end
     end
     
@@ -388,12 +394,13 @@ class Stella::Testrun < Storable
     field :stamp
     field :duration
     field :stats => Hash
+    field :errors => Hash
     #gibbler :batch, :concurrency, :stamp, :duration
     def initialize(opts={})
       opts.each_pair do |n,v|
         self.send("#{n}=", v) if has_field? n
       end
-      @stats = { }
+      @stats, @errors = {}, {}
     end
     def self.from_hash(hash={})
       me = super(hash)

@@ -31,8 +31,6 @@ module Stella::Engine
         Load.counts  = [:request_header_size, :request_content_size]
         Load.counts += [:response_headers_size, :response_content_size]
       end
-      
-      events = [Load.timers, Load.counts, :failed].flatten
 
       testrun.save
       
@@ -431,6 +429,8 @@ module Stella::Engine
     end
     
     def update_error_execute_response_handler(client_id, ex, req, container)
+      Benelux.thread_timeline.add_message ex.message, :kind => :exception
+      Benelux.thread_timeline.add_count :exception, 1
       desc = "#{container.usecase.desc} > #{req.desc}"
       if Stella.stdout.lev == 2
         Stella.stdout.print 2, '.'.color(:red)
@@ -441,6 +441,8 @@ module Stella::Engine
     end
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
+      Benelux.thread_timeline.add_message ex.message, :kind => :exception
+      Benelux.thread_timeline.add_count :error, 1
       desc = "#{usecase.desc} > #{req.desc}"
       if Stella.stdout.lev == 2
         Stella.stdout.print 2, '.'.color(:red)
@@ -451,28 +453,23 @@ module Stella::Engine
     end
     
     def update_usecase_quit client_id, msg, req, container
-      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :quit, 1
-      args.push [req, container.status, 'QUIT', msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
+      Benelux.thread_timeline.add_message msg, :kind => :quit
       Stella.stdout.info3 "  Client-%s     QUIT   %s" % [client_id.shorter, msg]
     end
     
     def update_request_fail client_id, msg, req, container
-      args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       Benelux.thread_timeline.add_count :failed, 1
-      args.push [req, container.status, 'FAIL', msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
+      Benelux.thread_timeline.add_message msg, :kind => :fail
       Stella.stdout.info3 "  Client-%s     FAILED   %s" % [client_id.shorter, msg]
     end
     
     def update_request_error client_id, msg, req, container
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
-      Benelux.thread_timeline.add_count :error, 1
-      args.push [req, container.status, 'ERROR', msg, container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :kind => :exception
+      Benelux.thread_timeline.add_count :exception, 1
+      Benelux.thread_timeline.add_message msg, :kind => :exception
       if Stella.stdout.lev >= 3
-        Stella.le '  Client-%s %-45s %s' % [client_id.shorter, desc, ex.message]
+        Stella.le '  Client-%s %s' % [client_id.shorter, ex.message]
       end
     end
       
