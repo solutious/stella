@@ -312,6 +312,7 @@ class Stella::Testrun < Storable
       uc.requests.each do |req| 
         me.event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
+          next unless me.stats[uc.id][req.id].has_key?(event)
           me.stats[uc.id][req.id][event] = 
             Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
           me.stats[uc.id]['summary'][event] = 
