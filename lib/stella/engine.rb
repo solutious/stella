@@ -365,20 +365,22 @@ class Stella::Testrun < Storable
         end
         resp = tl.stats.group(:execute_response_handler)[filter]
         resp.tag_values(:status).each do |status|
-          @stats[uc.id][req.id]['status'] ||= {}
-          @stats[uc.id]['summary']['status'] ||= {}
-          @stats['summary']['status'] ||= {}
-          @stats[uc.id]['summary']['status'][status.to_i] ||= 0
-          @stats['summary']['status'][status.to_i] ||= 0
+          same.stats[uc.id][req.id]['status'] ||= {}
+          same.stats[uc.id]['summary']['status'] ||= {}
+          same.stats['summary']['status'] ||= {}
+          same.stats[uc.id]['summary']['status'][status.to_i] ||= 0
+          same.stats['summary']['status'][status.to_i] ||= 0
           count = resp[:status => status].size
-          @stats[uc.id][req.id]['status'][status.to_i] = count
-          @stats[uc.id]['summary']['status'][status.to_i] += count
-          @stats['summary']['status'][status.to_i] += count
+          same.stats[uc.id][req.id]['status'][status.to_i] = count
+          same.stats[uc.id]['summary']['status'][status.to_i] += count
+          same.stats['summary']['status'][status.to_i] += count
         end
         tmp = tl.messages.filter([filter, :exception].flatten)
-        sam.errors[uc.id] ||= {}
-        sam.errors[uc.id][req.id] ||= []
-        sam.errors[uc.id][req.id].push *tmp        
+        unless tmp.empty?
+          sam.errors[uc.id] ||= {}
+          sam.errors[uc.id][req.id] ||= []
+          sam.errors[uc.id][req.id].push *tmp        
+        end
       end
     end
     
