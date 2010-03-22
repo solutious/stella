@@ -319,16 +319,6 @@ class Stella::Testrun < Storable
           me.stats['summary'][event] = 
             Benelux::Stats::Calculator.from_hash(me.stats['summary'][event])
         end
-        if me.stats[uc.id][req.id].has_key? 'status'
-          me.stats[uc.id][req.id]['status'].each_pair do |status,value|
-            me.stats[uc.id][req.id]['status'].delete status
-            me.stats[uc.id]['summary']['status'].delete status
-            me.stats['summary']['status'].delete status
-            me.stats[uc.id][req.id]['status'][status.to_i] = value.to_i
-            me.stats[uc.id]['summary']['status'][status.to_i] = value.to_i
-            me.stats['summary']['status'][status.to_i] = value.to_i
-          end
-        end
       end
     end
     
@@ -366,14 +356,8 @@ class Stella::Testrun < Storable
         resp = tl.stats.group(:execute_response_handler)[filter]
         resp.tag_values(:status).each do |status|
           sam.stats[uc.id][req.id]['status'] ||= {}
-          sam.stats[uc.id]['summary']['status'] ||= {}
-          sam.stats['summary']['status'] ||= {}
-          sam.stats[uc.id]['summary']['status'][status.to_i] ||= 0
-          sam.stats['summary']['status'][status.to_i] ||= 0
           count = resp[:status => status].size
           sam.stats[uc.id][req.id]['status'][status.to_i] = count
-          sam.stats[uc.id]['summary']['status'][status.to_i] += count
-          sam.stats['summary']['status'][status.to_i] += count
         end
         tmp = tl.messages.filter([filter, :exception].flatten)
         unless tmp.empty?
@@ -405,21 +389,21 @@ class Stella::Testrun < Storable
       @stats, @errors = {}, {}
     end
     def has_errors?
-      !@errors.nil? && @errors.empty?
+      !@errors.nil? && !@errors.empty?
     end
     def self.from_hash(hash={})
       me = super(hash)
       #stats = {}
-      #me.stats.each_pair { |ucid,uchash| 
-      #  stats[ucid] = {}
-      #  uchash.each_pair { |reqid,reqhash|
-      #    stats[ucid][reqid] = {}
-      #    reqhash.each_pair { |event,stat|
-      #      tmp = Benelux::Stats::Calculator.from_hash(stat)
-      #      stats[ucid][reqid][event] = tmp
-      #    }
-      #  }
-      #}
+      me.stats.each_pair { |ucid,uchash| 
+        uchash.each_pair { |reqid,reqhash|
+          if me.stats[ucid][reqid].has_key? 'status'
+             me.stats[ucid][reqid]['status'].each_pair do |status,value|
+               me.stats[ucid][reqid]['status'].delete status
+               me.stats[ucid][reqid]['status'][status.to_i] = value.to_i
+             end
+           end
+         }
+      }
       #me.stats = stats
       me
     end
