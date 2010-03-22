@@ -365,15 +365,15 @@ class Stella::Testrun < Storable
         end
         resp = tl.stats.group(:execute_response_handler)[filter]
         resp.tag_values(:status).each do |status|
-          same.stats[uc.id][req.id]['status'] ||= {}
-          same.stats[uc.id]['summary']['status'] ||= {}
-          same.stats['summary']['status'] ||= {}
-          same.stats[uc.id]['summary']['status'][status.to_i] ||= 0
-          same.stats['summary']['status'][status.to_i] ||= 0
+          sam.stats[uc.id][req.id]['status'] ||= {}
+          sam.stats[uc.id]['summary']['status'] ||= {}
+          sam.stats['summary']['status'] ||= {}
+          sam.stats[uc.id]['summary']['status'][status.to_i] ||= 0
+          sam.stats['summary']['status'][status.to_i] ||= 0
           count = resp[:status => status].size
-          same.stats[uc.id][req.id]['status'][status.to_i] = count
-          same.stats[uc.id]['summary']['status'][status.to_i] += count
-          same.stats['summary']['status'][status.to_i] += count
+          sam.stats[uc.id][req.id]['status'][status.to_i] = count
+          sam.stats[uc.id]['summary']['status'][status.to_i] += count
+          sam.stats['summary']['status'][status.to_i] += count
         end
         tmp = tl.messages.filter([filter, :exception].flatten)
         unless tmp.empty?
