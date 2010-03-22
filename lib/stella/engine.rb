@@ -402,6 +402,9 @@ class Stella::Testrun < Storable
       end
       @stats, @errors = {}, {}
     end
+    def has_errors?
+      !@errors.nil? && @errors.empty?
+    end
     def self.from_hash(hash={})
       me = super(hash)
       #stats = {}
