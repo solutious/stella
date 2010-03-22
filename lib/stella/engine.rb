@@ -178,7 +178,7 @@ class Stella::Testrun < Storable
     @stats ||= { :summary => {} }
     
     @status ||= "new"
-    @event_probes ||= [:response_time, :failed]
+    @event_probes ||= [:response_time, :response_content_size]
     
     @start_time ||= Time.now.to_i
     
