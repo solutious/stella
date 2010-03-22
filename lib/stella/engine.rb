@@ -140,33 +140,7 @@ class Stella::Testrun < Storable
     return Time.now.utc.to_i - @start_time if @end_time.nil? || @end_time <= 0
     @end_time - @start_time
   end
-  
-  def self.from_hash(hash={})
-    me = super(hash)
-    me.plan = Stella::Testplan.from_hash(me.plan)
-    me.process_options! unless me.plan.nil?
-    
-    me.samples.collect! do |sample|
-      Stella::Testrun::Sample.from_hash(sample)
-    end
-    
-    me.plan.usecases.uniq.each_with_index do |uc,i| 
-      uc.requests.each do |req| 
-        me.events.each_with_index do |event,idx|  # do_request, etc...
-          event &&= event.to_s
-          me.stats[uc.id][req.id][event] = 
-            Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
-          me.stats[uc.id]['summary'][event] = 
-            Benelux::Stats::Calculator.from_hash(me.stats[uc.id]['summary'][event])
-          me.stats['summary'][event] = 
-            Benelux::Stats::Calculator.from_hash(me.stats['summary'][event])
-        end
-      end
-    end
-    
-    me
-  end
-  
+
   def client_options
     opts = {
       :nowait => self.nowait || false,
@@ -312,13 +286,51 @@ class Stella::Testrun < Storable
           @stats['summary'][event] = Benelux::Stats::Calculator.new
           @stats[uc.id] ||= { 'summary' => {} }
           @stats[uc.id]['summary'][event] = Benelux::Stats::Calculator.new
+          @stats[uc.id]['summary']['status'] ||= {}
+          @stats['summary']['status'] ||= {}
           uc.requests.each do |req|
             @stats[uc.id][req.id] ||= {}
             @stats[uc.id][req.id][event] = Benelux::Stats::Calculator.new
+            @stats[uc.id][req.id]['status'] ||= {} 
           end
         end
       end
     end
+  end
+  
+  
+  def self.from_hash(hash={})
+    me = super(hash)
+    me.plan = Stella::Testplan.from_hash(me.plan)
+    me.process_options! unless me.plan.nil?
+    
+    me.samples.collect! do |sample|
+      Stella::Testrun::Sample.from_hash(sample)
+    end
+    
+    me.plan.usecases.uniq.each_with_index do |uc,i| 
+      uc.requests.each do |req| 
+        me.events.each_with_index do |event,idx|  # do_request, etc...
+          event &&= event.to_s
+          me.stats[uc.id][req.id][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
+          me.stats[uc.id]['summary'][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats[uc.id]['summary'][event])
+          me.stats['summary'][event] = 
+            Benelux::Stats::Calculator.from_hash(me.stats['summary'][event])
+        end
+        me.stats[uc.id][req.id]['status'].each_pair do |status,value|
+          me.stats[uc.id][req.id]['status'].delete status
+          me.stats[uc.id]['summary']['status'].delete status
+          me.stats['summary']['status'].delete status
+          me.stats[uc.id][req.id]['status'][status.to_i] = value.to_i
+          me.stats[uc.id]['summary']['status'][status.to_i] = value.to_i
+          me.stats['summary']['status'][status.to_i] = value.to_i
+        end
+      end
+    end
+    
+    me
   end
   
   def add_sample batch, concurrency, tl
@@ -348,6 +360,18 @@ class Stella::Testrun < Storable
           @stats[uc.id][req.id][event] += stats.merge
           @stats[uc.id]['summary'][event] += stats.merge
           @stats['summary'][event] += stats.merge
+        end
+        resp = tl.stats.group(:execute_response_handler)[filter]
+        resp.tag_values(:status).each do |status|
+          @stats[uc.id][req.id]['status'] ||= {}
+          @stats[uc.id]['summary']['status'] ||= {}
+          @stats['summary']['status'] ||= {}
+          @stats[uc.id]['summary']['status'][status.to_i] ||= 0
+          @stats['summary']['status'][status.to_i] ||= 0
+          count = resp[:status => status].size
+          @stats[uc.id][req.id]['status'][status.to_i] = count
+          @stats[uc.id]['summary']['status'][status.to_i] += count
+          @stats['summary']['status'][status.to_i] += count
         end
       end
     end

@@ -15,6 +15,7 @@ STELLA, CHANGES
 
 * CHANGE: Testrun#samples contains all data samples for each event in a given batch
 * ADDED: Testrun#logsize
+* ADDED: Store HTTP status codes in Testrun#stats
 
 
 #### 0.8.4 (2010-03-19) ###############################
