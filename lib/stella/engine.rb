@@ -105,10 +105,10 @@ class Stella::Testrun < Storable
   field :nostats => TrueClass
   field :stats => Hash
   field :samples => Array
+  field :event_probes => Array
   field :mode  # verify or generate
   field :plan
   field :hosts
-  field :event_probes
   field :log
   gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :start_time, :userid
   def initialize(plan=nil, opts={})
@@ -350,9 +350,8 @@ class Stella::Testrun < Storable
         @event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
-          unless sam.stats[uc.id][req.id].has_key?(event)
-            sam.stats[uc.id][req.id][event] = {}
-          end
+          sam.stats[uc.id][req.id][event] ||= {}
+          @stats[uc.id][req.id][event] ||= {}
           # When we don't merge the stats from benelux, 
           # the each calculator contains just one sample. 
           # So when we grab the sum, it's just one event sample. 
