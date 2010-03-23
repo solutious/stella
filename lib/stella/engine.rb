@@ -326,6 +326,11 @@ class Stella::Testrun < Storable
     me
   end
   
+  def has_errors?
+    return false if @samples.nil? || @samples.empty?
+    @samples.each { |sam| return true if sam.has_errors? }
+  end
+  
   def add_sample batch, concurrency, tl
     
     opts = {

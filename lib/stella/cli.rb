@@ -35,11 +35,11 @@ class Stella::CLI < Drydock::Command
   
   def generate
     testrun = run :generate
-    @exit_code = (testrun.stats['summary']['failed'].n == 0 ? 0 : 1)
+    @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
   end
   def verify
     testrun = run :verify
-    @exit_code = (testrun.stats['summary']['failed'].n == 0 ? 0 : 1)
+    @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
   end
     
   def example
