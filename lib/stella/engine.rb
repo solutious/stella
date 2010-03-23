@@ -310,7 +310,9 @@ class Stella::Testrun < Storable
     
     me.plan.usecases.uniq.each_with_index do |uc,i| 
       uc.requests.each do |req| 
-        me.event_probes.each_with_index do |event,idx|  # do_request, etc...
+        event_probes = me.event_probes || []
+        event_probes.push *me.stats[uc.id][req.id].keys
+        event_probes.compact.flatten.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           next unless me.stats[uc.id][req.id].has_key?(event)
           me.stats[uc.id][req.id][event] = 
