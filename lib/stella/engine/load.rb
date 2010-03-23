@@ -209,13 +209,6 @@ module Stella::Engine
       end
       hand.finally do
         testrun.end_time = Time.now.utc.to_i
-        if testrun.log.size < testrun.logsize
-          tmp = Benelux.timeline.messages.filter(:kind => :log)
-          unless tmp.nil? || tmp.empty?
-            # grab only as many elements from the log as configured
-            testrun.log.push *tmp.first(testrun.logsize-testrun.log.size) 
-          end
-        end
         testrun.save
       end
       hand
