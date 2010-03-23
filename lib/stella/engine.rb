@@ -351,7 +351,6 @@ class Stella::Testrun < Storable
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
           sam.stats[uc.id][req.id][event] ||= {}
-          p event.class
           @stats[uc.id][req.id][event] ||= Benelux::Stats::Calculator.new
           @stats[uc.id]['summary'][event] ||= Benelux::Stats::Calculator.new
           @stats['summary'][event]||= Benelux::Stats::Calculator.new
