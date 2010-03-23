@@ -178,11 +178,11 @@ class Stella::Testrun < Storable
     @stats ||= { :summary => {} }
     
     @status ||= "new"
-    @event_probes ||= [:response_time, :response_content_size]
+    @event_probes ||= ['response_time', 'response_content_size']
     
     @start_time ||= Time.now.to_i
     
-    @event_probes.collect! { |event| event.to_sym }
+    @event_probes.collect! { |event| event.to_s }
     
     @duration ||= 0
     @repetitions ||= 0
@@ -351,7 +351,10 @@ class Stella::Testrun < Storable
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
           sam.stats[uc.id][req.id][event] ||= {}
-          @stats[uc.id][req.id][event] ||= {}
+          p event.class
+          @stats[uc.id][req.id][event] ||= Benelux::Stats::Calculator.new
+          @stats[uc.id]['summary'][event] ||= Benelux::Stats::Calculator.new
+          @stats['summary'][event]||= Benelux::Stats::Calculator.new
           # When we don't merge the stats from benelux, 
           # the each calculator contains just one sample. 
           # So when we grab the sum, it's just one event sample. 
