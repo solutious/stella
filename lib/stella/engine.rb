@@ -350,6 +350,9 @@ class Stella::Testrun < Storable
         @event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
+          unless sam.stats[uc.id][req.id].has_key?(event)
+            sam.stats[uc.id][req.id][event] = {}
+          end
           # When we don't merge the stats from benelux, 
           # the each calculator contains just one sample. 
           # So when we grab the sum, it's just one event sample. 
