@@ -178,7 +178,9 @@ class Stella::Testrun < Storable
     @stats ||= { :summary => {} }
     
     @status ||= "new"
-    @event_probes ||= ['response_time', 'response_content_size']
+    if @event_probes.nil? || @event_probes.empty?
+      @event_probes = ['response_time', 'response_content_size']
+    end
     
     @start_time ||= Time.now.to_i
     
@@ -310,11 +312,10 @@ class Stella::Testrun < Storable
     
     me.plan.usecases.uniq.each_with_index do |uc,i| 
       uc.requests.each do |req| 
-        event_probes = me.event_probes || []
-        event_probes.push *me.stats[uc.id][req.id].keys
-        event_probes.compact.flatten.each_with_index do |event,idx|  # do_request, etc...
+        me.event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           next unless me.stats[uc.id][req.id].has_key?(event)
+          next if Benelux::Stats::Calculator === me.stats[uc.id][req.id][event]
           me.stats[uc.id][req.id][event] = 
             Benelux::Stats::Calculator.from_hash(me.stats[uc.id][req.id][event])
           me.stats[uc.id]['summary'][event] = 
@@ -352,10 +353,12 @@ class Stella::Testrun < Storable
         @event_probes.each_with_index do |event,idx|  # do_request, etc...
           event &&= event.to_s
           stats = tl.stats.group(event.to_sym)[filter]
-          sam.stats[uc.id][req.id][event] ||= {}
-          @stats[uc.id][req.id][event] ||= Benelux::Stats::Calculator.new
-          @stats[uc.id]['summary'][event] ||= Benelux::Stats::Calculator.new
-          @stats['summary'][event]||= Benelux::Stats::Calculator.new
+          unless sam.stats[uc.id][req.id].has_key?(event)
+            stats[uc.id][req.id][event] ||= {}
+            @stats[uc.id][req.id][event] ||= Benelux::Stats::Calculator.new
+            @stats[uc.id]['summary'][event] ||= Benelux::Stats::Calculator.new
+            @stats['summary'][event] ||= Benelux::Stats::Calculator.new
+          end
           # When we don't merge the stats from benelux, 
           # the each calculator contains just one sample. 
           # So when we grab the sum, it's just one event sample. 
