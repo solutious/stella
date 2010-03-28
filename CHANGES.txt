@@ -11,13 +11,14 @@ STELLA, CHANGES
 * TODO: process templates for calls to set in get blocks
 
 
-#### 0.8.5 (2010-03-??) ###############################
+#### 0.8.5 (2010-03-27) ###############################
 
 * CHANGE: Testrun#samples contains all data samples for each event in a given batch
 * CHANGE: Renamed Testrun#events -> Testrun#event_probes
 * ADDED: Testrun#logsize
 * ADDED: Store HTTP status codes in Testrun#stats
 * ADDED: Store error messages in Sample#errors
+* ADDED: Stella.get now takes a block
 
 
 #### 0.8.4 (2010-03-19) ###############################

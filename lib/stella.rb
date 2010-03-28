@@ -127,10 +127,12 @@ module Stella
   autoload :Client, 'stella/client'
   autoload :Service, 'stella/service'
   
-  def get(uri, query={})
+  def get(uri, query={}, &blk)
     require 'stella/client'
     http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
-    http_client.get(uri, query).body.content
+    res = http_client.get(uri, query)
+    blk.call res unless blk.nil?
+    res.body.content
   rescue => ex
     STDERR.puts ex.message
     STDERR.puts ex.backtrace if Stella.debug?
