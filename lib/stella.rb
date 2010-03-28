@@ -131,8 +131,11 @@ module Stella
     require 'stella/client'
     http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
     res = http_client.get(uri, query)
-    blk.call res unless blk.nil?
-    res.body.content
+    if blk.nil?
+      res.body.content
+    else
+      blk.call res 
+    end
   rescue => ex
     STDERR.puts ex.message
     STDERR.puts ex.backtrace if Stella.debug?
