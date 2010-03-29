@@ -74,11 +74,12 @@ module Stella
   @debug   = false
   @abort   = false
   @quiet   = false
+  @agent   = "Stella/#{Stella::VERSION}"
   @log     = Stella::SyncLogger.new
   @stdout  = Stella::Logger.new STDOUT
     
   class << self
-    attr_accessor :log, :stdout
+    attr_accessor :log, :stdout, :agent
   end
   
   def le(*msg); stdout.info "  " << msg.join("#{$/}  ").colour(:red); end

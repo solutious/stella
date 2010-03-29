@@ -13,13 +13,14 @@ STELLA, CHANGES
 
 #### 0.8.5 (2010-03-27) ###############################
 
+* FIXED: Add User-Agent header if Stella.agent is not null and one is not already provided
 * CHANGE: Testrun#samples contains all data samples for each event in a given batch
 * CHANGE: Renamed Testrun#events -> Testrun#event_probes
 * ADDED: Testrun#logsize
 * ADDED: Store HTTP status codes in Testrun#stats
 * ADDED: Store error messages in Sample#errors
 * ADDED: Stella.get now takes a block
-
+* ADDED: Stella.agent
 
 #### 0.8.4 (2010-03-19) ###############################
 

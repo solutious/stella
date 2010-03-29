@@ -618,7 +618,7 @@ class HTTPClient
           req.version = $1.to_f
         end
       end
-      if @agent_name && req.header.get('User-Agent').nil?
+      if @agent_name && req.header.get('User-Agent').empty?
         req.header.set('User-Agent', "#{@agent_name}")
       end
       if @from

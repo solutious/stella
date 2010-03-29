@@ -228,7 +228,7 @@ module Stella
     def create_http_client
       opts = {
         :proxy       => @proxy.uri || nil, # a tautology for clarity
-        :agent_name  => "Stella/#{Stella::VERSION}",
+        :agent_name  => Stella.agent,
         :from        => nil
       }
       http_client = HTTPClient.new opts

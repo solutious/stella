@@ -106,6 +106,7 @@ class Stella::Testrun < Storable
   field :stats => Hash
   field :samples => Array
   field :event_probes => Array
+  field :agent => String
   field :mode  # verify or generate
   field :plan
   field :hosts
@@ -257,6 +258,7 @@ class Stella::Testrun < Storable
   
   
   def run(opts={})
+    Stella.agent = @agent unless @agent.nil? || @agent.empty?
     engine = case self.mode 
     when :verify 
       Stella::Engine::Functional.new(opts)
