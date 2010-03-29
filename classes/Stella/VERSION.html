@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::VERSION [stella 0.8.4.001]</title>
+    <title>: Stella::VERSION [stella 0.8.5.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -41,51 +41,51 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000143">inspect</a></li>
-              <li><a href="#M000144">load_config</a></li>
-              <li><a href="#M000142">to_s</a></li>
+              <li><a href="#M000148">inspect</a></li>
+              <li><a href="#M000149">load_config</a></li>
+              <li><a href="#M000147">to_s</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000143'>
-                <a name='M000143'>      </a>
+              <div class='method public-class' id='method-M000148'>
+                <a name='M000148'>      </a>
                 <div class='synopsis'>
                   <span class='name'>inspect</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000143-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000148-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000143-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inspect</span>&#x000A;      <span class="ruby-identifier">load_config</span>&#x000A;      [<span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MAJOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MINOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:PATCH</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:BUILD</span>]].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000148-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inspect</span>&#x000A;      <span class="ruby-identifier">load_config</span>&#x000A;      [<span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MAJOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MINOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:PATCH</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:BUILD</span>]].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000144'>
-                <a name='M000144'>      </a>
+              <div class='method public-class' id='method-M000149'>
+                <a name='M000149'>      </a>
                 <div class='synopsis'>
                   <span class='name'>load_config</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000144-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000149-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000144-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_config</span>&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'yaml'</span>&#x000A;      <span class="ruby-ivar">@version</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'VERSION.yml'</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000149-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_config</span>&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'yaml'</span>&#x000A;      <span class="ruby-ivar">@version</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'VERSION.yml'</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000142'>
-                <a name='M000142'>      </a>
+              <div class='method public-class' id='method-M000147'>
+                <a name='M000147'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000142-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000147-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000142-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 22</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-identifier">load_config</span>&#x000A;      [<span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MAJOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MINOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:PATCH</span>]].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000147-source'><span class="ruby-comment cmt"># File lib/stella.rb, line 22</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-identifier">load_config</span>&#x000A;      [<span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MAJOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:MINOR</span>], <span class="ruby-ivar">@version</span>[<span class="ruby-identifier">:PATCH</span>]].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
