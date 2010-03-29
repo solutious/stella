@@ -154,8 +154,8 @@ module Stella
           next
         end
         
-        wait = (req.wait > 0) ? req.wait : @opts[:wait]
-        run_sleeper(wait, asset_duration) if (wait > 0) && !nowait?
+        wait = (req.wait != 0) ? req.wait : @opts[:wait]
+        run_sleeper(wait, asset_duration) unless nowait?
         
         # TODO: consider throw/catch
         case ret.class.to_s
@@ -212,6 +212,7 @@ module Stella
     end
   
     def run_sleeper(wait, already_waited=0)
+      return if wait == 0
       # The time it took to download the assets can
       # be removed from the specified wait time.
       if wait.is_a?(::Range)

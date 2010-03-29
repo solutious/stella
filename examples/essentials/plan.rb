@@ -221,7 +221,7 @@ usecase 25, "YAML API" do
     # user should repeat this request 7 times.
     #
     response 200 do
-      repeat 7
+      repeat 3
     end
   end
   
@@ -238,7 +238,7 @@ usecase 10, "Self-serve API" do
     param :city => random(['Toronto', 'Vancouver', 'Montreal'])
     param :logo => file('logo.png')
     response 302 do
-      repeat 3
+      repeat 2
     end
   end
   
