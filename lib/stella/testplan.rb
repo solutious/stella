@@ -33,13 +33,13 @@ class Testplan < Storable
   attic :description
   
   field :id => String, &gibbler_id_processor
-  
+  field :userid => String
   field :usecases => Array
   field :description => String
   #field :resources
   
   # TODO: Add Stellar::TOKEN to the calculation
-  gibbler :usecases
+  gibbler :usecases, :userid
   
   def initialize(*uris)
     uris.flatten!
