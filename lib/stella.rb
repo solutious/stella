@@ -128,10 +128,23 @@ module Stella
   autoload :Client, 'stella/client'
   autoload :Service, 'stella/service'
   
-  def get(uri, query={}, &blk)
-    require 'stella/client'
-    http_client = HTTPClient.new :agent_name => "Opera/9.51 (Windows NT 5.1; U; en)"
-    res = http_client.get(uri, query)
+  def get(uri, params={}, headers={}, &blk)
+    http_client = HTTPClient.new :agent_name => Stella.agent
+    res = http_client.get(uri, params, headers)
+    if blk.nil?
+      res.body.content
+    else
+      blk.call res 
+    end
+  rescue => ex
+    STDERR.puts ex.message
+    STDERR.puts ex.backtrace if Stella.debug?
+    nil
+  end
+  
+  def post(uri, params={}, headers={}, &blk)
+    http_client = HTTPClient.new :agent_name => Stella.agent
+    res = http_client.post(uri, params, headers)
     if blk.nil?
       res.body.content
     else

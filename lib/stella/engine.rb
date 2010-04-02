@@ -425,7 +425,6 @@ class Stella::Testrun < Storable
            end
          }
       }
-      p [:inner, 4]
       #me.stats = stats
       me
     end

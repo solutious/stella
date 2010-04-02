@@ -12,8 +12,9 @@ STELLA, CHANGES
 
 #### 0.8.6 (2010-04-??) ###############################
 
-* ADDED: Stella::Testplan#userid
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
+* ADDED: Stella::Testplan#userid
+* ADDED: Stella.post
 
 
 #### 0.8.5 (2010-03-27) ###############################
