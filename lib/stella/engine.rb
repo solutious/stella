@@ -419,11 +419,11 @@ class Stella::Testrun < Storable
       me.stats.each_pair { |ucid,uchash| 
         p [:inner, 3, ucid, uchash]
         uchash.each_pair { |reqid,reqhash|
-          [:inner, 31, reqid, reqhash]
+          p [:inner, 31, reqid, reqhash]
           if me.stats[ucid][reqid].has_key? 'status'
-            [:inner, 32, true]
+            p [:inner, 32, true]
              me.stats[ucid][reqid]['status'].each_pair do |status,value|
-                [:inner, 33, status, value]
+              p [:inner, 33, status, value]
                me.stats[ucid][reqid]['status'].delete status
                me.stats[ucid][reqid]['status'][status.to_i] = value.to_i
              end
