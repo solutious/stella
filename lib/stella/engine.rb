@@ -412,16 +412,11 @@ class Stella::Testrun < Storable
       !@errors.nil? && !@errors.empty?
     end
     def self.from_hash(hash={})
-      p [:inner, 1]
       me = super(hash)
-      p [:inner, 2]
       #stats = {}
       me.stats.each_pair { |ucid,uchash| 
-        p [:inner, 3, ucid, uchash]
         uchash.each_pair { |reqid,reqhash|
-          p [:inner, 31, reqid, reqhash]
           if me.stats[ucid][reqid].has_key? 'status'
-            p [:inner, 32, me.stats[ucid][reqid]['status'].keys.size]
              me.stats[ucid][reqid]['status'].keys do |status|
                value = me.stats[ucid][reqid]['status'][status]
                me.stats[ucid][reqid]['status'].delete status
