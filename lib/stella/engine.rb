@@ -422,9 +422,8 @@ class Stella::Testrun < Storable
           p [:inner, 31, reqid, reqhash]
           if me.stats[ucid][reqid].has_key? 'status'
             p [:inner, 32, me.stats[ucid][reqid]['status'].keys.size]
-            exit
-             me.stats[ucid][reqid]['status'].each_pair do |status,value|
-              p [:inner, 33, status, value]
+             me.stats[ucid][reqid]['status'].keys do |status|
+               value = me.stats[ucid][reqid]['status'][status]
                me.stats[ucid][reqid]['status'].delete status
                me.stats[ucid][reqid]['status'][status.to_i] = value.to_i
              end
