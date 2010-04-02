@@ -417,6 +417,7 @@ class Stella::Testrun < Storable
       p [:inner, 2]
       #stats = {}
       me.stats.each_pair { |ucid,uchash| 
+        p [:inner, 3, ucid, uchash]
         uchash.each_pair { |reqid,reqhash|
           if me.stats[ucid][reqid].has_key? 'status'
              me.stats[ucid][reqid]['status'].each_pair do |status,value|
@@ -426,7 +427,7 @@ class Stella::Testrun < Storable
            end
          }
       }
-      p [:inner, 3]
+      p [:inner, 4]
       #me.stats = stats
       me
     end
