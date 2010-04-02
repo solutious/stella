@@ -53,8 +53,8 @@ module Stella::Engine
                                     req.http_method, container.status, uri.to_s,
                                     params, container.response.request.header.dump, 
                                     container.response.header.dump, 
-                                    container.response.body.dump
-
+                                    container.response.body.content
+      
       Benelux.thread_timeline.add_message log, :status => container.status, :kind => :log
       
       msg = '  %-6s %-53s ' % [req.http_method, uri]

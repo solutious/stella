@@ -412,7 +412,9 @@ class Stella::Testrun < Storable
       !@errors.nil? && !@errors.empty?
     end
     def self.from_hash(hash={})
+      p [:inner, 1]
       me = super(hash)
+      p [:inner, 2]
       #stats = {}
       me.stats.each_pair { |ucid,uchash| 
         uchash.each_pair { |reqid,reqhash|
@@ -424,6 +426,7 @@ class Stella::Testrun < Storable
            end
          }
       }
+      p [:inner, 3]
       #me.stats = stats
       me
     end

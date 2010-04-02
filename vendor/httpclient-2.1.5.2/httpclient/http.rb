@@ -233,9 +233,11 @@ module HTTP
         else
           str = response_status_line
         end
-        str + @header_item.collect { |key, value|
+        ret = str + @header_item.collect { |key, value|
           "#{ key }: #{ value }#{ CRLF }"
         }.join
+        #ret.force_encoding("ASCII-8BIT") if RUBY_VERSION >= "1.9"
+        ret
       end
 
       # Adds a header.  Addition order is preserved.
@@ -508,6 +510,7 @@ module HTTP
 
       # Returns a message body itself.
       def content
+        #@body.force_encoding("ASCII-8BIT") if RUBY_VERSION >= "1.9"
         @body
       end
 

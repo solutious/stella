@@ -590,12 +590,13 @@ class HTTPClient
         read_header if @state == :META
         return nil if @state != :DATA
         if @chunked
-          read_body_chunked(&block)
+          ret = read_body_chunked(&block)
         elsif @content_length
-          read_body_length(&block)
+          ret = read_body_length(&block)
         else
-          read_body_rest(&block)
+          ret = read_body_rest(&block)
         end
+        p [:ret, ret.encoding.name] if ret
       rescue
         close
         raise
