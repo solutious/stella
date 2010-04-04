@@ -13,6 +13,7 @@ STELLA, CHANGES
 #### 0.8.6 (2010-04-??) ###############################
 
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
+* CHANGE: Moved ProcSource to Storable
 * ADDED: Stella::Testplan#userid
 * ADDED: Stella.post
 
