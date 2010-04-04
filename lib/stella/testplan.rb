@@ -59,6 +59,10 @@ class Testplan < Storable
     end
   end
   
+  def postprocess
+    @id &&= Gibbler::Digest.new @id
+  end
+  
   def self.load_file(path)
     conf = File.read path
     plan = Stella::Testplan.new

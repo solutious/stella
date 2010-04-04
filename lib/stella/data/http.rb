@@ -21,16 +21,16 @@ module Stella::Data::HTTP
     attic :description
     field :description
     
-    field :header 
+    field :header => Hash
     field :uri
-    field :wait
-    field :params
+    field :wait => Float
+    field :params => Hash
     field :body 
     field :http_method
     field :http_version
     field :content_type
     field :http_auth
-    field :timeout
+    field :timeout => Float
     
     field :autofollow  # boolean. Was this an auto generated follow request. 
 

@@ -184,6 +184,7 @@ class Stella::Testrun < Storable
     end
     
     @start_time ||= Time.now.to_i
+    @end_time ||= 0
     
     @event_probes.collect! { |event| event.to_s }
     
