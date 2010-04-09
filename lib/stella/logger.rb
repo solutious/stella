@@ -58,6 +58,11 @@ module Stella
     def info3(*msg)  puts 3, *msg end
     def info4(*msg)  puts 4, *msg end
     
+    def debug(*msg)  
+      return unless Stella.debug?
+      puts 1, *msg 
+    end
+      
     def tinfo(templ, *args)
       info template(templ) % args
     end

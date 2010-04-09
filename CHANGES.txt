@@ -16,6 +16,7 @@ STELLA, CHANGES
 * CHANGE: Moved ProcSource to Storable
 * ADDED: Stella::Testplan#userid
 * ADDED: Stella.post
+* ADDED: Stella::Logger.debug
 
 
 #### 0.8.5 (2010-03-27) ###############################
