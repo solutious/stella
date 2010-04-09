@@ -17,6 +17,8 @@ require 'gibbler/aliases'  # important for run time digests and freezes
 require 'benelux'
 require 'proc_source'
 
+class OpenStruct;                include Gibbler::Object;    end
+
 module Stella
   module VERSION
     def self.to_s
