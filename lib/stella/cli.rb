@@ -22,7 +22,7 @@ class Stella::CLI < Drydock::Command
   def run(mode)
     opts = { :mode => mode }
     opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :duration, :arrival, :granularity].each do |opt|
+    [:nowait, :clients, :repetitions, :duration, :arrival, :granularity, :'wait'].each do |opt|
       opts[opt] = @option.send(opt) unless @option.send(opt).nil?
     end
     [:'notemplates', :'nostats', :'noheader', :'noparam'].each do |opt|
@@ -87,16 +87,14 @@ class Stella::CLI < Drydock::Command
       raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
       Stella::Testplan.global(n.to_sym, v)
     end
+    @hosts = @argv.collect { |uri|; 
+      uri = 'http://' << uri unless uri.match /^https?:\/\//i
+      URI.parse uri; 
+    }
     if @option.testplan
-      @hosts = @argv.collect { |uri|; 
-        uri = 'http://' << uri unless uri.match /^https?:\/\//i
-        URI.parse uri; 
-      }
       @testplan = Stella::Testplan.load_file @option.testplan
     else
-      opts = {}
-      opts[:wait] = @option.wait if @option.wait
-      @testplan = Stella::Testplan.new(@argv)
+      @testplan = Stella::Testplan.new(@hosts)
     end
     @testplan.check!  # raise errors, update usecase ratios
     @testplan.freeze  # cascades through usecases and requests

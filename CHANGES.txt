@@ -12,6 +12,7 @@ STELLA, CHANGES
 
 #### 0.8.6 (2010-04-??) ###############################
 
+* FIXED: Wait option and hosts on CLI were not being passed correctly
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
 * CHANGE: Moved ProcSource to Storable
 * ADDED: Stella::Testplan#userid
