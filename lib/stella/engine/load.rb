@@ -49,6 +49,7 @@ module Stella::Engine
       Stella.stdout.head 'Hosts', testrun.hosts.join(', ')
       Stella.stdout.head 'Clients', counts[:total]
       Stella.stdout.head 'Limit', timing
+      Stella.stdout.head 'Wait', testrun.wait
       Stella.stdout.head 'Arrival', testrun.arrival if testrun.arrival
       
       @dumper.start

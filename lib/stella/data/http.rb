@@ -23,7 +23,7 @@ module Stella::Data::HTTP
     
     field :header => Hash
     field :uri
-    field :wait => Float
+    field :wait => Range
     field :params => Hash
     field :body 
     field :http_method
@@ -49,7 +49,7 @@ module Stella::Data::HTTP
       @header, @params, @response_handler = {}, {}, {}
       @resources = {}
       @autofollow = false
-      @wait = 0
+      @wait = 0..0
       self.description = "Request"
       instance_eval &definition unless definition.nil?
     end

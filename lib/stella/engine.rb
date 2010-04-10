@@ -95,7 +95,7 @@ class Stella::Testrun < Storable
   field :duration => Integer
   field :arrival => Float
   field :repetitions => Integer
-  field :wait => Float
+  field :wait => Range
   field :nowait => TrueClass
   field :logsize => Integer
   field :granularity => Integer
@@ -195,7 +195,6 @@ class Stella::Testrun < Storable
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
     @repetitions &&= @repetitions.to_i
-    @wait &&= @wait.to_f unless Range === @wait
     
     @mode &&= @mode.to_sym
     

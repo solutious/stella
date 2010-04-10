@@ -16,6 +16,7 @@ STELLA, CHANGES
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
 * CHANGE: Moved ProcSource to Storable
 * CHANGE: Don't auto freeze testrun.
+* CHANGE: Store Stella::Data::HTTP::Request#wait as a Range
 * ADDED: Stella::Testplan#userid
 * ADDED: Stella.post
 * ADDED: Stella::Logger.debug
