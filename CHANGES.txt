@@ -19,6 +19,7 @@ STELLA, CHANGES
 * ADDED: Stella::Testplan#userid
 * ADDED: Stella.post
 * ADDED: Stella::Logger.debug
+* ADDED: Print wait time for each request at verbose level 3 (-vvv)
 
 
 #### 0.8.5 (2010-03-27) ###############################

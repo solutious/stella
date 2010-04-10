@@ -218,9 +218,12 @@ module Stella
       if wait.is_a?(::Range)
         ms = rand(wait.last * 1000).to_f 
         ms = wait.first if ms < wait.first
+        Stella.stdout.info3 "  WAIT1: #{ms}ms"
       else
         ms = wait * 1000
+        Stella.stdout.info3 "  WAIT2: #{ms}ms"
       end
+      
       sec = ms / 1000
       Stella.ld "WAIT ADJUSTED FROM %.1f TO: %.1f" % [sec, (sec - already_waited)]
       sleep (sec - already_waited) if (sec - already_waited) > 0
@@ -297,7 +300,12 @@ module Stella
       # $ stella verify -p plan.rb http://localhost/basicauth
       if URI::Generic === base_uri && base_uri.path
         if uri.path.nil? || uri.path.empty?
-          uri.path = base_uri.path
+          begin
+            uri.path = base_uri.path
+          rescue => ex
+            Stella.stdout.info "#{ex.class}: #{self.base_uri}"
+            exit
+          end
         else
           a = base_uri.path.gsub(/\/$/, '')
           b = uri.path.gsub(/^\//, '')
