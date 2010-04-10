@@ -195,7 +195,7 @@ class Stella::Testrun < Storable
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f
     @repetitions &&= @repetitions.to_i
-    @wait &&= @wait.to_f
+    @wait &&= @wait.to_f unless Range === @wait
     
     @mode &&= @mode.to_sym
     
@@ -270,7 +270,7 @@ class Stella::Testrun < Storable
     end
     engine.run self
     @status = "done"
-    self.freeze
+    #self.freeze
     self
   end
   

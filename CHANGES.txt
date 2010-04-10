@@ -15,6 +15,7 @@ STELLA, CHANGES
 * FIXED: Wait option and hosts on CLI were not being passed correctly
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
 * CHANGE: Moved ProcSource to Storable
+* CHANGE: Don't auto freeze testrun.
 * ADDED: Stella::Testplan#userid
 * ADDED: Stella.post
 * ADDED: Stella::Logger.debug
