@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Client::Follow [stella 0.8.5.001]</title>
+    <title>: Stella::Client::Follow [stella 0.8.6.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -55,11 +55,11 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000205">new</a></li>
+              <li><a href="#M000197">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000206">generate_request</a></li>
+              <li><a href="#M000198">generate_request</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -94,31 +94,31 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000205'>
-                <a name='M000205'>      </a>
+              <div class='method public-class' id='method-M000197'>
+                <a name='M000197'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(obj=nil,&amp;definition)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000205-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000197-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000205-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 412</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword kw">nil</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>)&#x000A;      <span class="ruby-ivar">@obj</span>, <span class="ruby-ivar">@definition</span> = <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">definition</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000197-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 425</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword kw">nil</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>)&#x000A;      <span class="ruby-ivar">@obj</span>, <span class="ruby-ivar">@definition</span> = <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">definition</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000206'>
-                <a name='M000206'>      </a>
+              <div class='method public-instance' id='method-M000198'>
+                <a name='M000198'>      </a>
                 <div class='synopsis'>
                   <span class='name'>generate_request</span>
                   <span class='arguments'>(req)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000206-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000198-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000206-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 415</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_request</span>(<span class="ruby-identifier">req</span>)&#x000A;      <span class="ruby-identifier">n</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Data</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">:GET</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">req</span>.<span class="ruby-identifier">http_version</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">description</span> = <span class="ruby-node">&quot;#{req.description || 'Request'} (autofollow)&quot;</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">http_auth</span> = <span class="ruby-identifier">req</span>.<span class="ruby-identifier">http_auth</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">response_handler</span> = <span class="ruby-identifier">req</span>.<span class="ruby-identifier">response_handler</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">autofollow!</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-identifier">n</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000198-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 428</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_request</span>(<span class="ruby-identifier">req</span>)&#x000A;      <span class="ruby-identifier">n</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Data</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">:GET</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">req</span>.<span class="ruby-identifier">http_version</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">description</span> = <span class="ruby-node">&quot;#{req.description || 'Request'} (autofollow)&quot;</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">http_auth</span> = <span class="ruby-identifier">req</span>.<span class="ruby-identifier">http_auth</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">response_handler</span> = <span class="ruby-identifier">req</span>.<span class="ruby-identifier">response_handler</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">autofollow!</span>&#x000A;      <span class="ruby-identifier">n</span>.<span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-identifier">n</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

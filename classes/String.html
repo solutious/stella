@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: String [stella 0.8.5.001]</title>
+    <title>: String [stella 0.8.6.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -51,37 +51,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000004">drydock_stub</a></li>
-              <li><a href="#M000005">in_seconds</a></li>
+              <li><a href="#M000001">drydock_stub</a></li>
+              <li><a href="#M000002">in_seconds</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000004'>
-                <a name='M000004'>      </a>
+              <div class='method public-instance' id='method-M000001'>
+                <a name='M000001'>      </a>
                 <div class='synopsis'>
                   <span class='name'>drydock_stub</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 83</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drydock_stub</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 83</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drydock_stub</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000005'>
-                <a name='M000005'>      </a>
+              <div class='method public-instance' id='method-M000002'>
+                <a name='M000002'>      </a>
                 <div class='synopsis'>
                   <span class='name'>in_seconds</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 94</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">in_seconds</span>&#x000A;    <span class="ruby-comment cmt"># &quot;60m&quot; =&gt; [&quot;60&quot;, &quot;m&quot;]</span>&#x000A;    <span class="ruby-identifier">q</span>,<span class="ruby-identifier">u</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/([\d\.]+)([s,m,h])?/</span>).<span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">u</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'s'</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">in_seconds</span>(<span class="ruby-identifier">u</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000002-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 94</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">in_seconds</span>&#x000A;    <span class="ruby-comment cmt"># &quot;60m&quot; =&gt; [&quot;60&quot;, &quot;m&quot;]</span>&#x000A;    <span class="ruby-identifier">q</span>,<span class="ruby-identifier">u</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/([\d\.]+)([s,m,h])?/</span>).<span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">u</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'s'</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">in_seconds</span>(<span class="ruby-identifier">u</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
