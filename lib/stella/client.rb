@@ -300,6 +300,7 @@ module Stella
       uri.scheme = base_uri.scheme if uri.scheme.nil?
       uri.host = base_uri.host if uri.host.nil?
       uri.port = base_uri.port if uri.port.nil?
+      uri.port = 443 if uri.port == 80 && uri.scheme == "https"
       
       # Support for specifying default path prefix:
       # $ stella verify -p plan.rb http://localhost/basicauth

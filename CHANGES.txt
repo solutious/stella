@@ -10,6 +10,10 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
+#### 0.8.7 (2010-04-??) ###############################
+
+* CHANGE: Enforce port 443 if port 80 and scheme is HTTPS. 
+
 #### 0.8.6 (2010-04-14) ###############################
 
 * FIXED: Wait option and hosts on CLI were not being passed correctly
