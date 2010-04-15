@@ -25,11 +25,11 @@ begin
     gem.email = "delano@solutious.com"
     gem.homepage = "http://blamestella.com/"
     gem.authors = ["Delano Mandelbaum"]
-    gem.add_dependency("gibbler",    ">= 0.7.6")
+    gem.add_dependency("gibbler",    ">= 0.8.1")
     gem.add_dependency("drydock",    ">= 0.6.9")
-    gem.add_dependency("benelux",    ">= 0.5.12")
+    gem.add_dependency("benelux",    ">= 0.5.15")
     gem.add_dependency('sysinfo',    '>= 0.7.3')
-    gem.add_dependency('storable',   '>= 0.6.4')
+    gem.add_dependency('storable',   '>= 0.7.3')
     gem.add_dependency("nokogiri")
 
     #gem.add_development_dependency("rspec", ">= 1.2.9")

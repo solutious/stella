@@ -10,7 +10,7 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
-#### 0.8.6 (2010-04-??) ###############################
+#### 0.8.6 (2010-04-14) ###############################
 
 * FIXED: Wait option and hosts on CLI were not being passed correctly
 * CHANGE: Stella::Testplan#userid now used in digest calculation.
