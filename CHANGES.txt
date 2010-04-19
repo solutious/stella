@@ -12,7 +12,9 @@ STELLA, CHANGES
 
 #### 0.8.7 (2010-04-??) ###############################
 
+* FIXED: sequential, rsequential, and random values were broken for Arrays
 * CHANGE: Enforce port 443 if port 80 and scheme is HTTPS. 
+
 
 #### 0.8.6 (2010-04-14) ###############################
 

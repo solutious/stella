@@ -244,9 +244,9 @@ class Stella::Client
     
     def random(*args)
       input, idxcol = *std_arg_processor(*args)
-    
-      if @random_value[input.object_id]
-        value = @random_value[input.object_id]
+      input.digest
+      if @random_value[input.digest_cache]
+        value = @random_value[input.digest_cache]
       else
         value = case input.class.to_s
         when "Symbol"
@@ -266,7 +266,7 @@ class Stella::Client
         Stella.ld "RANDVALUES: #{input} #{value.class} #{value.inspect}"
         value = value[ rand(value.size) ] if value.is_a?(Array)
         Stella.ld "SELECTED: #{value.class} #{value} "
-        @random_value[input.object_id] = value
+        @random_value[input.digest_cache] = value
       end
       
       # The resource may be an Array of Arrays (e.g. a CSV file)
@@ -284,9 +284,9 @@ class Stella::Client
     # NOTE: This is global across all users
     def sequential(*args)
       input, idxcol = *std_arg_processor(*args)
-            
-      if @sequential_value[input.object_id]
-        value = @sequential_value[input.object_id]
+      input.digest # prime the cache
+      if @sequential_value[input.digest_cache]
+        value = @sequential_value[input.digest_cache]
       else
         value = case input.class.to_s
         when "Symbol"
@@ -299,14 +299,15 @@ class Stella::Client
         when "Proc"
           input.call
         end
-        digest = value.object_id
+        digest = value.digest
         if value.is_a?(Array)
+          vsize = value.size
           idxrow = Stella::Client::Container.sequential_offset(digest, value.size-1)
           value = value[ idxrow ] 
-          Stella.ld "SELECTED(SEQ): #{value} #{idxrow} #{input} #{digest}"
+          Stella.ld "SELECTED(SEQ): #{value} #{idxrow} (of #{vsize-1}) #{input} #{digest}"
         end
         # I think this needs to be updated for global_sequential:
-        @sequential_value[input.object_id] = value
+        @sequential_value[input.digest_cache] = value
       end
       # The resource may be an Array of Arrays (e.g. a CSV file)
       if value.is_a?(Array) && !idxcol.nil?
@@ -322,9 +323,9 @@ class Stella::Client
     # NOTE: This is global across all users
     def rsequential(*args)
       input, idxcol = *std_arg_processor(*args)
-      
-      if @rsequential_value[input.object_id]
-        value = @rsequential_value[input.object_id]
+      input.digest
+      if @rsequential_value[input.digest_cache]
+        value = @rsequential_value[input.digest_cache]
       else
         value = case input.class.to_s
         when "Symbol"
@@ -337,7 +338,7 @@ class Stella::Client
         when "Proc"
           input.call
         end
-        digest = value.object_id
+        digest = value.digest
         if value.is_a?(Array)
           idxrow = Stella::Client::Container.rsequential_offset(digest, value.size-1)
           value = value[ idxrow ] 
@@ -345,7 +346,7 @@ class Stella::Client
         end
         
         # I think this needs to be updated for global_sequential:
-        @rsequential_value[input.object_id] = value
+        @rsequential_value[input.digest_cache] = value
       end
       # The resource may be an Array of Arrays (e.g. a CSV file)
       if value.is_a?(Array) && !idxcol.nil?
