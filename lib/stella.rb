@@ -139,8 +139,8 @@ module Stella
       blk.call res 
     end
   rescue => ex
-    STDERR.puts ex.message
-    STDERR.puts ex.backtrace if Stella.debug?
+    Stella.stdout.info "#{ex.message} (#{ex.class})"
+    Stella.stdout.info ex.backtrace if Stella.debug?
     nil
   end
   
@@ -153,8 +153,8 @@ module Stella
       blk.call res 
     end
   rescue => ex
-    STDERR.puts ex.message
-    STDERR.puts ex.backtrace if Stella.debug?
+    Stella.stdout.info ex.message
+    Stella.stdout.info ex.backtrace if Stella.debug?
     nil
   end
   
