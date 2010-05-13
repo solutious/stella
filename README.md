@@ -21,8 +21,8 @@ Stella is an integration and load testing tool. It fits well into an agile devel
 
 There are a few known limitations:
 
-* *SHOW-STOPPER*: An upper limit of around 200-300 concurrent virtual HTTP clients. There is a threading issue in the HTTPClient library which appears under high load. 
-* *SHOW-STOPPER (for some)*: No support for browser or UI based tests (a la Watir or Selenium). If this is a show stopper for you, check out [WatirGrid](http://github.com/90kts/watirgrid)
+* *POSSIBLE SHOW-STOPPER*: An upper limit of around 200-300 concurrent virtual HTTP clients. There is a threading issue in the HTTPClient library which appears under high load. 
+* *POSSIBLE SHOW-STOPPER*: No support for browser or UI based tests (a la Watir or Selenium). If this is a show stopper for you, check out [WatirGrid](http://github.com/90kts/watirgrid)
 * *ANNOYING*: File uploads do not work with some HTTP servers (WEBrick)
 * *ANNOYING*: Lack of documentation (see examples/ directory)
 * *ANNOYING*: Reporting is limited to log files and command-line output. You need to make your own graphs. 
@@ -94,6 +94,11 @@ Get it in one of the following ways:
     $ git clone git://github.com/solutious/stella.git
 
 You can also download via [tarball](http://github.com/solutious/stella/tarball/latest) or [zip](http://github.com/solutious/stella/zipball/latest). 
+
+NOTE: If you get errors about libxml2 or libxslt on Ubuntu, you need to install the following:
+
+    sudo apt-get install libxml2-dev
+    sudo apt-get install libxslt1-dev
 
 
 ## More Information
