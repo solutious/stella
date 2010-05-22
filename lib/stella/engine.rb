@@ -191,6 +191,9 @@ class Stella::Testrun < Storable
     @duration ||= 0
     @repetitions ||= 0
     
+    # Support durations in the form "30m", "2h", etc...
+    @duration = @duration.in_seconds if String === @duration
+    
     @clients &&= @clients.to_i
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f

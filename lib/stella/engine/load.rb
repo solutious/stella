@@ -36,8 +36,6 @@ module Stella::Engine
       
       @dumper = prepare_dumper(testrun)
       
-      
-      
       if testrun.duration > 0
         timing = "#{testrun.duration.seconds.to_i} seconds"
       else

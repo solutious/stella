@@ -10,9 +10,10 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
-#### 0.8.7 (2010-04-??) ###############################
+#### 0.8.7 (2010-05-21) ###############################
 
 * FIXED: sequential, rsequential, and random values were broken for Arrays
+* FIXED: Support for supplying test durations in the form "5m" (300 seconds)
 * CHANGE: Enforce port 443 if port 80 and scheme is HTTPS. 
 
 
