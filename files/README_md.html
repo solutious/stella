@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.md [stella 0.8.6.002]</title>
+    <title>File: README.md [stella 0.8.7.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2010-04-15 16:49:43 -0400</span>
+          <span class='datetime'>2010-05-21 20:56:21 -0400</span>
         </div>
       </div>
       <div id='content'>
@@ -87,12 +87,12 @@
             There are a few known limitations:
             </p>
             <ul>
-            <li><b>SHOW-STOPPER</b>: An upper limit of around 200-300 concurrent virtual
-            HTTP clients. There is a threading issue in the HTTPClient library which
-            appears under high load.
+            <li>*POSSIBLE SHOW-STOPPER*: An upper limit of around 200-300 concurrent
+            virtual HTTP clients. There is a threading issue in the HTTPClient library
+            which appears under high load.
             
             </li>
-            <li>*SHOW-STOPPER (for some)*: No support for browser or UI based tests (a la
+            <li>*POSSIBLE SHOW-STOPPER*: No support for browser or UI based tests (a la
             Watir or Selenium). If this is a show stopper for you, check out
             [WatirGrid](<a
             href="http://github.com/90kts/watirgrid">github.com/90kts/watirgrid</a>)
@@ -176,6 +176,11 @@
             or [zip](<a
             href="http://github.com/solutious/stella/zipball/latest">github.com/solutious/stella/zipball/latest</a>).
             </p>
+            <p>
+            NOTE: If you get errors about libxml2 or libxslt on Ubuntu, you need to
+            install the following:
+            </p>
+            <pre>sudo apt-get install libxml2-dev&#x000A;sudo apt-get install libxslt1-dev</pre>
             <p>
             ## More Information
             </p>
