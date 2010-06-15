@@ -6,6 +6,8 @@ module Stella::Engine
       client = Stella::Client.new testrun.hosts.first, testrun.client_options
       client.add_observer(self)
       
+      p testrun.client_options
+      
       Stella.stdout.info2 $/, "Starting test...", $/
       testrun.start_time = Time.now.utc.to_i
       

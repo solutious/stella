@@ -28,7 +28,8 @@ module Stella
         :withparam => false,
         :withheader => false,
         :notemplates => false,
-        :wait => 0
+        :wait => 0, 
+        :timeout => nil
       }.merge! opts
       @opts = opts
       @base_uri, @index = base_uri, index
@@ -86,8 +87,8 @@ module Stella
             http_client.set_auth(domain, user, pass)
           end
           
-          if tout = req.timeout || usecase.timeout
-            http_client.receive_timeout = tout
+          if tout = req.timeout || usecase.timeout || @opts[:timeout]
+            http_client.receive_timeout = tout if tout > 0
           end
           Stella.ld "TIMEOUT " << http_client.receive_timeout.to_s
           

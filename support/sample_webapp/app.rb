@@ -51,7 +51,6 @@ end
 
 get '/' do
   @title << " - Search"
-  #sleep 0.05
   erb :search_form
 end
 
@@ -132,6 +131,12 @@ get '/listings.yaml' do
   @listings.to_yaml
 end
 
+65.times do |time|
+  get "/timeout_#{time}" do
+    sleep time
+    'slept for %d' % time 
+  end
+end
 
 before do
   @cookie = request.cookies["bff-history"]

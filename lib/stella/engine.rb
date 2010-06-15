@@ -95,6 +95,7 @@ class Stella::Testrun < Storable
   field :duration => Integer
   field :arrival => Float
   field :repetitions => Integer
+  field :timeout => Integer
   field :wait => Range
   field :nowait => TrueClass
   field :logsize => Integer
@@ -148,7 +149,8 @@ class Stella::Testrun < Storable
       :notemplates => self.notemplates || false,
       :withparam => self.withparam || false,
       :withheader => self.withheader || false,
-      :wait => self.wait || 0
+      :wait => self.wait || 0, 
+      :timeout => self.timeout
     }
   end
   
@@ -194,6 +196,7 @@ class Stella::Testrun < Storable
     # Support durations in the form "30m", "2h", etc...
     @duration = @duration.in_seconds if String === @duration
     
+    @timeout &&= @timeout.to_f
     @clients &&= @clients.to_i
     @duration &&= @duration.to_i
     @arrival &&= @arrival.to_f

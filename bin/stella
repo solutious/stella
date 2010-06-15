@@ -45,6 +45,7 @@ class Stella::CLI::Definition
   global :W, :wait, Integer, "Seconds to wait before starting test"
   global :H, :withheader, "Include X-Stella-ID request header" 
   global :P, :withparam, "Include __stella query parameter header"
+  global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
   global :o, :output, String, "Write output to the given file" do |v|
     String.disable_color
     Stella.log.output = v
