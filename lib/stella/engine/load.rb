@@ -441,7 +441,7 @@ module Stella::Engine
     
     def update_request_unhandled_exception(client_id, usecase, uri, req, params, ex)
       Benelux.thread_timeline.add_message ex.message, :kind => :exception
-      Benelux.thread_timeline.add_count :error, 1
+      Benelux.thread_timeline.add_count :exception, 1
       desc = "#{usecase.desc} > #{req.desc}"
       if Stella.stdout.lev == 2
         Stella.stdout.print 2, '.'.color(:red)
@@ -491,12 +491,13 @@ module Stella::Engine
       Benelux.thread_timeline.add_message args.join('; '), :kind => :authentication
     end
     
-    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
-      Stella.stdout.info3 "  Client-%s     TIMEOUT   %-53s" % [client_id.shorter, uri]
-      Benelux.thread_timeline.add_count :failed, 1
+    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container, timeout)
+      msg = "  Client-%s     TIMEOUT(%.1f)   %-53s" % [client_id.shorter, timeout, uri]
+      Stella.stdout.info3 msg
+      Benelux.thread_timeline.add_count :exception, 1
       args = [Time.now.to_f, Stella.sysinfo.hostname, client_id.short]
       args.push [uri, 'TOUT', container.unique_id[0,10]]
-      Benelux.thread_timeline.add_message args.join('; '), :kind => :timeout
+      Benelux.thread_timeline.add_message msg , :kind => :exception
     end
     
     def self.rescue(client_id, &blk)
