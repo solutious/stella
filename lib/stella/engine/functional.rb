@@ -147,9 +147,9 @@ module Stella::Engine
       Stella.stdout.info "  AUTH   #{domain} (#{user}/#{pass})"
     end
     
-    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container)
+    def update_request_timeout(client_id, usecase, uri, req, params, headers, counter, container, timeout)
       Benelux.thread_timeline.add_count :failed, 1
-      Stella.stdout.info "  TIMEOUT   %-53s" % [uri]
+      Stella.stdout.info "  TIMEOUT(%f)   %-53s" % [uri, timeout]
     end
     
   end

@@ -14,6 +14,8 @@ STELLA, CHANGES
 
 * FIXED: Specifying a host w/ a path and no testplan no longer doubles up the path
 * ADDED: Global HTTP client timeout ("stella -T 60")
+* CHANGE: Timeouts are reported as exceptions. 
+
 
 #### 0.8.7 (2010-05-21) ###############################
 
