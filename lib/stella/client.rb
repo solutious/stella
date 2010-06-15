@@ -305,7 +305,7 @@ module Stella
       
       # Support for specifying default path prefix:
       # $ stella verify -p plan.rb http://localhost/basicauth
-      if URI::Generic === base_uri && base_uri.path
+      if URI::Generic === base_uri && base_uri.path && uri != base_uri
         if uri.path.nil? || uri.path.empty?
           begin
             uri.path = base_uri.path

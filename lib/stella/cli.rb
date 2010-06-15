@@ -89,7 +89,7 @@ class Stella::CLI < Drydock::Command
     end
     @hosts = @argv.collect { |uri|; 
       uri = 'http://' << uri unless uri.match /^https?:\/\//i
-      URI.parse uri; 
+      obj = URI.parse uri
     }
     if @option.testplan
       @testplan = Stella::Testplan.load_file @option.testplan

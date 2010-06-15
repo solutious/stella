@@ -38,7 +38,6 @@ class Testplan < Storable
   field :description => String
   #field :resources
   
-  # TODO: Add Stellar::TOKEN to the calculation
   gibbler :usecases, :userid
   
   def initialize(*uris)
