@@ -107,6 +107,7 @@ NOTE: If you get errors about libxml2 or libxslt on Ubuntu, you need to install 
 * [Codes](http://github.com/solutious/stella)
 * [RDocs](http://solutious.com/stella)
 * [Stellaaahhhh](http://stellaaahhhh.com)
+* [Using Stella for Web application testing](http://searchsoftwarequality.techtarget.com/tip/0,289483,sid92_gci1510488,00.html)
 
 
 ## Credits
