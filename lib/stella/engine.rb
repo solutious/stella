@@ -167,7 +167,7 @@ class Stella::Testrun < Storable
         :repetitions    => 1, 
         :mode           => :verify
       }.merge! opts      
-
+      
       opts.each_pair do |n,v|
         self.send("#{n}=", v) if has_field? n
       end
@@ -222,7 +222,7 @@ class Stella::Testrun < Storable
     
     @mode &&= @mode.to_sym
     
-    unless [:verify, :generate].member?(@mode)
+    unless [:verify, :generate, :checkup].member?(@mode)
       raise Stella::Error, "Unsupported mode: #{@mode}"
     end
     
@@ -270,6 +270,8 @@ class Stella::Testrun < Storable
       Stella::Engine::Functional.new(opts)
     when :generate
       Stella::Engine::Load.new(opts)
+    when :checkup
+      Stella::Engine::Checkup.new(opts)
     else
       raise Stella::Error, "Unsupported mode: #{self.mode}"
     end

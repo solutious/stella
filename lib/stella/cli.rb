@@ -41,7 +41,11 @@ class Stella::CLI < Drydock::Command
     testrun = run :verify
     @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
   end
-    
+  def checkup
+    testrun = run :checkup
+    @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
+  end
+  
   def example
     base_path = File.expand_path(File.join(STELLA_LIB_HOME, '..'))
     thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')

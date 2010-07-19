@@ -109,6 +109,13 @@ class Stella::CLI::Definition
   option :g, :granularity, Integer, "Amount of time (in seconds) between timeline rotations"
   command :verify => Stella::CLI
   
+  about "Checkup on a test plan"
+  usage "stella checkup [-p path/2/testplan.rb] URI"
+  usage "e.g."
+  usage "   $ stella checkup -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :p, :testplan, String, "Path to testplan" 
+  command :checkup => Stella::CLI
+  
   about "Generate requests"
   usage "stella generate [options] URI"
   #usage "stella load [options] URI"
