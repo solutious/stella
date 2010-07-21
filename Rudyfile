@@ -1,4 +1,4 @@
-  require 'stella'
+require 'stella'
 
 machines do
   

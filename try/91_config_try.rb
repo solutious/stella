@@ -29,6 +29,16 @@ class Testplan
       param[:monitor_uri] = session[:monitor_uri].random.href
     end
     
+    check_email ':email_address' do
+      
+    end
+    
   end
 end
 
+
+# GET /
+# X-An-Header: 100px
+# 
+# GET /login?
+# 

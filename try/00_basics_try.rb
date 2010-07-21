@@ -1,32 +1,21 @@
-require 'rubygems'
-require 'em-http'
-require 'pp'
-##
-@ret = :poop
-EventMachine.run {
-  multi = EventMachine::MultiRequest.new
+require 'stella'
 
-  # add multiple requests to the multi-handler
-  #multi.add(EventMachine::HttpRequest.new('http://www.google.com/').get)
-  multi.add(EventMachine::HttpRequest.new('http://www.yahoo.com/').get)
+## Create testplan w/ uri
+@tp = Stella::Testplan.new 'http://www.blamestella.com/'
+@tp.freeze
+@tp.usecases.size 
+#=> 1
 
-  multi.callback  {
-    @ret = multi.responses[:succeeded]
-    pp @ret
-    multi.responses[:failed]
+## has uri
+@tp.first_request.id
+# => '5ed1907264dcd19b0c99e38e64edfc36a92e0e3d'
 
-    EventMachine.stop
-  }
-}
-@ret
-# => @ret
+## has usecase
+@tp.usecases.first.id
+# => 'd4584d8cb4eb1933f98910cf079181db83f41368'
 
-# TEST 2
-a = 1
-# => 1
+## has consistent ID
+@tp.id
+# => '8a8c094565c37fee565c4bf57f7b10a0b240db88'
 
-GET /
-X-An-Header: 100px
-
-GET /login?
 
