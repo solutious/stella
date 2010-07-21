@@ -6,6 +6,7 @@ end
 
 require 'erb'
 require 'storable'
+require 'benelux'
 require 'gibbler/aliases'
 
 class Stella
@@ -52,6 +53,7 @@ class StellaError < RuntimeError
 end
 
 class Stella
+  require 'stella/utils'
   require 'stella/client'
   require 'stella/engine'
   require 'stella/testplan'

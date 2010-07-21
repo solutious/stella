@@ -2,7 +2,7 @@
 require 'socket'  # Why doesn't socket work with autoload?
 autoload :Timeout, 'timeout'
 
-module Stella
+class Stella
   
   # A motley collection of methods that Stella loves to call!
   module Utils

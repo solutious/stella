@@ -124,10 +124,10 @@ class Stella
     def start_time!
       @start_time = Stella.now
     end
-    @statuses = [:new, :pending, :running, :done, :failed, :cancelled]
     class << self
       attr_reader :statuses
     end
+    @statuses = [:new, :pending, :running, :done, :failed, :cancelled]
     @statuses.each do |status|
       define_method :"#{status}?" do
         @status == status
