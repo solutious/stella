@@ -31,7 +31,7 @@ class Stella
     end
     
     class Usecase < StellaObject
-      field :id                 => Gibbler::Digest, &gibbler_id_processor
+      field :id               => Gibbler::Digest, &gibbler_id_processor
       field :desc             => String
       field :ratio            => Float
       field :requests         => Array
@@ -56,8 +56,8 @@ class Stella
     end
     
     class RequestTemplate < EventTemplate
-      field :id                 => Gibbler::Digest, &gibbler_id_processor
-      field :protocol       => Symbol
+      field :id               => Gibbler::Digest, &gibbler_id_processor
+      field :protocol         => Symbol
       field :http_method
       field :http_version
       field :http_auth
@@ -85,4 +85,56 @@ class Stella
     RT = RequestTemplate
   end
   TP = Testplan
+end
+
+
+
+class Stella
+  class Testrun < StellaObject
+    field :id                 => Gibbler::Digest, &gibbler_id_processor
+    field :userid             => String
+    field :status             => Symbol
+    field :client_opts        => Hash
+    field :engine_opts        => Hash
+    field :mode               => Symbol
+    field :hosts
+    field :time_start         => Integer
+    field :time_end           => Integer
+    field :salt
+    field :planid
+    gibbler :salt, :planid, :userid, :hosts, :mode, :client_opts, :engine_opts, :start_time
+    attr_reader :plan
+    def initialize plan=nil, client_opts={}, engine_opts={}
+      @plan = plan
+      @client_opts, @engine_opts = client_opts, engine_opts
+      preprocess
+    end
+    def preprocess
+      @salt ||= rand.digest.short
+      @status ||= :new
+      @planid = @plan.id if @plan
+    end
+    def freeze
+      @id ||= self.digest
+      super
+    end
+    def start_time!
+      @start_time = Stella.now
+    end
+    def start_time!
+      @start_time = Stella.now
+    end
+    @statuses = [:new, :pending, :running, :done, :failed, :cancelled]
+    class << self
+      attr_reader :statuses
+    end
+    @statuses.each do |status|
+      define_method :"#{status}?" do
+        @status == status
+      end
+      define_method :"#{status}!" do
+        @status = status
+      end
+    end
+  end
 end
