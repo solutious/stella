@@ -7,105 +7,115 @@ end
 require 'storable'
 require 'gibbler/aliases'
 
-module Stella
-  extend self
+class StellaObject < Storable
+  include Gibbler::Complex
+  def id
+    @id ||= self.digest
+    @id
+  end
+end
+
+class StellaError < RuntimeError
+end
+
+class Stella
+  require 'stella/testplan'
   
-  require 'stella/metric'
-  
-  class StellaError < RuntimeError
+  attr_reader :plan
+  def initialize *args
+    @plan = Stella::TP === args.first ? 
+      args.first.clone : Stella::TP.new(args.first)
+    @plan.freeze
+    @runner
   end
   
-  def get(uri)
-    uri
-  end
-  
-  def checkup(uri)
-    tplan = Stella::Testplan.new uri
-    uri
-  end
-  
-  class Testplan < Storable
-    include Gibbler::Complex
-    field :id                 => Gibbler::Digest, &gibbler_id_processor
-    field :userid             => String
-    field :usecases           => Array
-    field :desc               => String
-    gibbler :userid, :usecases
-    def initialize(uri=nil)
-      preprocess
-      if uri
-        req = Stella::TP::RequestTemplate.new :get, uri
-        @usecases << Stella::TP::Usecase.new(req) 
+end 
+
+class Stella
+  module Engine
+    @modes = {}
+    class << self
+      attr_reader :modes
+      def mode?(name)
+        @mode.has_key? name
       end
+      def load(name)
+        @modes[name]
+      end
+    end
+    module Base
+      def self.included(obj)
+        obj.extend ClassMethods
+      end
+      module ClassMethods
+        def register(mode)
+          @mode = mode
+          Stella::Engine.modes[mode] = self
+        end
+        attr_reader :mode
+      end
+    end
+    module Checkup
+      include Engine::Base
+      register :checkup
+    end
+  end
+end
+
+class Stella
+  class Testrun < StellaObject
+    field :id                 => Gibbler::Digest, &gibbler_id_processor
+    field :userid => String
+    field :status => Symbol
+    field :client_opts => Hash
+    field :engine_opts => Hash
+    field :mode => Symbol
+    field :hosts
+    field :time_start => Integer
+    field :time_end => Integer
+    field :salt
+    field :planid
+    gibbler :salt, :planid, :userid, :hosts, :mode, :client_opts, :engine_opts, :start_time
+    attr_reader :plan
+    def initialize plan=nil, client_opts={}, engine_opts={}
+      @plan = plan
+      @client_opts, @engine_opts = client_opts, engine_opts
+      preprocess
     end
     def preprocess
-      @usecases ||= []
-    end
-    def first_request
-      return if @usecases.empty?
-      @usecases.first.requests.first
+      @salt ||= rand.digest.short
+      @status ||= :new
+      @planid = @plan.id if @plan
     end
     def freeze
-      return if frozen?
-      @usecases.each { |uc| uc.freeze }
       @id ||= self.digest
       super
-      self
     end
-    class Usecase < Storable
-      include Gibbler::Complex
-      field :id               => Gibbler::Digest, &gibbler_id_processor
-      field :desc             => String
-      field :ratio            => Float
-      field :requests         => Array
-      gibbler :requests
-      def initialize(req=nil)
-        preprocess
-        @requests << req if req
+    @statuses = [:new, :pending, :running, :done, :failed, :cancelled]
+    class << self
+      attr_reader :statuses
+    end
+    @statuses.each do |status|
+      define_method :"#{status}?" do
+        @status == status
       end
-      def preprocess
-        @requests ||= []
-      end
-      def freeze
-        return if frozen?
-        @requests.each { |r| r.freeze }
-        @id ||= self.digest
-        super
-        self
+      define_method :"#{status}!" do
+        @status = status
       end
     end
-    
-    class EventTemplate < Storable
-      include Gibbler::Complex
-      field :id             => Gibbler::Digest, &gibbler_id_processor
-    end
-    
-    class RequestTemplate < EventTemplate
-      field :http_method
-      field :http_version
-      field :http_auth
-      field :uri
-      field :params           => Array
-      field :headers          => Array
-      field :body
-      field :desc
-      field :wait             => Range
-      field :response_handler => Hash
-      gibbler :http_method, :uri, :http_version, :params, :headers, :body
-      def initialize(meth, uri)
-        @http_method, @uri = meth, uri
-      end
-      def freeze
-        return if frozen?
-        self.id ||= self.digest
-        super
-        self
-      end
-    end
-    
-    UC = Usecase
-    RT = RequestTemplate
   end
-  TP = Testplan
-  
+end
+
+
+class Stella
+  # static methods
+  class << self
+    def get(uri)
+      uri
+    end
+    def checkup(uri)
+      tplan = Stella::Testplan.new uri
+      uri
+    end
+  end
 end
