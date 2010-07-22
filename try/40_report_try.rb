@@ -1,24 +1,31 @@
 require 'stella'
 
-class Stella::Report
-  include Stella::Report::Traceroute
-  attr_reader :section
-  def initialize
-    @section = []
-  end
+Stella.debug = true
+
+## Stella::Report is aware of all available modes
+Stella::Report.plugins
+#=> { :headers => Stella::Report::Headers }
+
+## Headers has a mode
+Stella::Report::Headers.plugin
+#=> :headers
+
+
+## Can process a timline
+thread = Thread.new do
+  log = Stella::Engine
+  Benelux.thread_timeline.add_message(:kind => :http_log)
 end
-
-## has metrics
-report = Stella::Report.new
-
-report.section << 
+report = Stella::Report.new Benelux.thread_timeline
+report.process
+report.processed?
 #=> true
 
 
 # $ stella checkup http://solutious.com/
 # ......
 # 
-# Peformance
+# Metrics
 #  socket connect:     10ms
 #    send request:     20ms
 #      first byte:     30ms

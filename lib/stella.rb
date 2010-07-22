@@ -56,6 +56,8 @@ class Stella
   require 'stella/utils'
   require 'stella/client'
   require 'stella/engine'
+  require 'stella/report'
+  require 'stella/metric'
   require 'stella/testplan'
   attr_reader :plan
   def initialize *args
@@ -94,7 +96,7 @@ class Stella
       uri
     end
     def now
-      Time.now.utc.to_i
+      Time.now.utc.to_f
     end
     # http://blamestella.com/ => blamestella.com
     # https://blamestella.com/ => blamestella.com:443

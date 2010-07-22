@@ -4,7 +4,18 @@ require 'addressable/uri'
 
 Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 
+require 'pp'
+
 class Stella
+  class Session
+    attr_reader :events
+    def initialize
+      @events = SelectableArray.new
+    end
+    def current_event
+      @events.last
+    end
+  end
   class Client
     include Gibbler::Complex
     
@@ -23,19 +34,50 @@ class Stella
       @base_uri, @index = base_uri, index
       @proxy = OpenStruct.new
       @done = false
+      @session = Session.new
     end
-    
+
     def execute usecase
       http_client = create_http_client
+      tt = Benelux.thread_timeline
       usecase.requests.each_with_index do |req,idx|
         begin 
-          http_client.get(req.uri)
+          params = req.params
+          headers = req.headers
+          stella_id = [Stella.now, index, req.id, params, headers, idx].digest
+          built_uri = build_uri(req.uri)
+          
+          Benelux.add_thread_tags :request   => req.id
+          Benelux.add_thread_tags :stella_id => stella_id
+          
+          res = http_client.get(built_uri)
+          @session.events << stella_id
+          log = Stella::Log::HTTP.new Stella.now,  
+                   req.http_method, res.status, built_uri, params, 
+                   res.request.header.dump, res.request.body.content, 
+                   res.header.dump, res.body.content
+                   
+          tt.add_message log, :status => res.status, :kind => :http_log
+        
+        rescue HTTPClient::ConnectTimeoutError, 
+               HTTPClient::SendTimeoutError,
+               HTTPClient::ReceiveTimeoutError,
+               Errno::ECONNRESET => ex
+          Stella.le ex.message, ex.backtrace
+          #update(:request_timeout, usecase, uri, req, params, headers, counter, container, http_client.receive_timeout)
+          Benelux.remove_thread_tags :status, :request, :stella_id
+          next
         rescue => ex
-          update(:request_unhandled_exception, usecase, uri, req, params, ex)
-          Benelux.remove_thread_tags :status, :retry, :request, :stella_id
+          Stella.le ex.message, ex.backtrace
+          #update(:request_unhandled_exception, usecase, uri, req, params, ex)
+          Benelux.remove_thread_tags :status, :request, :stella_id
           break
         end
       end
+    end
+    
+    def build_uri uri
+      uri
     end
     
     def create_http_client

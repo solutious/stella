@@ -5,7 +5,7 @@ class Stella
     class << self
       attr_reader :modes
       def mode?(name)
-        @mode.has_key? name
+        @modes.has_key? name
       end
       def load(name)
         @modes[name]
@@ -26,27 +26,32 @@ class Stella
         end
       end
     end
-
   end
 
+  
   module Engine
     module Checkup
       include Engine::Base
       extend self
       def run testrun, options={}
+        reps = testrun.options.repetitions || 1
         
         thread = Thread.new do
-          # Identify this thread to Benelux
-          Benelux.current_track :functional
+          Benelux.current_track :checkup
           client = Stella::Client.new
-          testrun.start_time!
-          testrun.plan.usecases.each_with_index do |uc,i|
-            Stella.rescue { client.execute uc }
+          testrun.time_start!
+          reps.times do |idx|
+            testrun.plan.usecases.each_with_index do |uc,i|
+              Benelux.add_thread_tags :usecase => uc.id
+              Stella.rescue { client.execute uc }
+              Benelux.remove_thread_tags :usecase
+            end
           end
         end
         thread.join
-        
-        p thread.timeline
+        report = Stella::Report.new thread.timeline
+        report.process
+        report
       end
 
       Benelux.add_timer          HTTPClient, :do_request, :response_time

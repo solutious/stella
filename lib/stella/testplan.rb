@@ -94,15 +94,14 @@ class Stella
     field :id                 => Gibbler::Digest, &gibbler_id_processor
     field :userid             => String
     field :status             => Symbol
-    field :client_opts        => Hash
-    field :engine_opts        => Hash
+    field :options            => Hash
     field :mode               => Symbol
     field :hosts
     field :time_start         => Integer
     field :time_end           => Integer
     field :salt
     field :planid
-    gibbler :salt, :planid, :userid, :hosts, :mode, :client_opts, :engine_opts, :start_time
+    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :time_start
     attr_reader :plan
     def initialize plan=nil, client_opts={}, engine_opts={}
       @plan = plan
@@ -113,16 +112,17 @@ class Stella
       @salt ||= rand.digest.short
       @status ||= :new
       @planid = @plan.id if @plan
+      @options ||= OpenStruct.new
     end
     def freeze
       @id ||= self.digest
       super
     end
-    def start_time!
-      @start_time = Stella.now
+    def time_start!
+      @time_start = Stella.now
     end
-    def start_time!
-      @start_time = Stella.now
+    def time_end!
+      @time_end = Stella.now
     end
     class << self
       attr_reader :statuses

@@ -1,8 +1,21 @@
-require 'storable'
-require 'selectable'
 
-module Stella
 
+class Stella
+  class Log 
+    class HTTP < StellaObject
+      include Selectable::Object
+      field :stamp
+      field :httpmethod
+      field :httpstatus
+      field :uri     
+      field :request_params
+      field :request_headers
+      field :request_body
+      field :response_headers
+      field :response_body
+    end
+  end
+  
     class Metrics < SelectableArray
       
       attr_accessor :name
