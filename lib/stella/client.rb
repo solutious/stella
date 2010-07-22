@@ -16,6 +16,7 @@ class Stella
       @events.last
     end
   end
+  
   class Client
     include Gibbler::Complex
     

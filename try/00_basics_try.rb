@@ -13,9 +13,16 @@ Stella::Engine::Checkup.mode
 ## Can run checkup
 @plan = Stella::Testplan.new TEST_URI
 @run = Stella::Testrun.new @plan
-report = Stella::Engine::Checkup.run @run
-report.processed?
+@report = Stella::Engine::Checkup.run @run
+@report.processed?
 #=> true
 
+## Knows about errors
+@report.errors?
+#=> false
+
+## Can be yaml
+@report.to_yaml.size > 100
+#=> true
 
 

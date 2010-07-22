@@ -1,6 +1,7 @@
 
 require 'socket'  # Why doesn't socket work with autoload?
 autoload :Timeout, 'timeout'
+autoload :IPAddr, 'ipaddr'
 
 class Stella
   
@@ -8,6 +9,48 @@ class Stella
   module Utils
     extend self
     include Socket::Constants
+
+    @addr_local = IPAddr.new("127.0.0.0/8")
+    @addr_classA = IPAddr.new("10.0.0.0/8")
+    @addr_classB = IPAddr.new("172.16.0.0/16")
+    @addr_classC = IPAddr.new("192.168.0.0/24")
+
+    def ipaddr(host)
+      host = host.host if host.kind_of?(URI)
+      begin
+        Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][3]
+      rescue => ex
+        Stella.ld "Error getting ip address for #{host}: #{ex.message} (#{ex.class})"
+        Stella.ld ex.backtrace
+        nil
+      end
+    end
+
+    def local_ipaddr?(addr)
+      addr = IPAddr.new(addr) if String === addr
+      @addr_local.include?(addr)
+    end
+     
+    def private_ipaddr?(addr)
+      addr = IPAddr.new(addr) if String === addr
+      @addr_classA.include?(addr) ||
+      @addr_classB.include?(addr) ||
+      @addr_classC.include?(addr)
+    end
+    
+    def valid_hostname?(uri)
+      begin 
+        if String === uri
+          uri = "http://#{uri}" unless uri.match(/^https?:\/\//)
+          uri = URI.parse(uri)
+        end
+        hostname = Socket.gethostbyname(uri.host).first
+        true
+      rescue SocketError => ex
+        Stella.ld "#{uri.host}: #{ex.message}"
+        false
+      end
+    end
     
     # Return the external IP address (the one seen by the internet)
     def external_ip_address

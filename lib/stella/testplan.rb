@@ -1,12 +1,29 @@
 
 
 class Stella
-  
+  module Common
+    module PrivacyMethods
+      def private?
+        privacy == true
+      end
+      def public?
+        !private?
+      end
+      def private!
+        @privacy = true
+      end
+      def public!
+        @privacy = false
+      end
+    end
+  end
   class Testplan < StellaObject
+    include Common::PrivacyMethods
     field :id                 => Gibbler::Digest, &gibbler_id_processor
     field :userid             => String
     field :usecases           => Array
     field :desc               => String
+    field :privacy            => Boolean
     gibbler :userid, :usecases
     def initialize(uri=nil)
       preprocess
@@ -17,6 +34,7 @@ class Stella
     end
     def preprocess
       @usecases ||= []
+      @privacy = false
     end
     def first_request
       return if @usecases.empty?
@@ -91,6 +109,7 @@ end
 
 class Stella
   class Testrun < StellaObject
+    include Common::PrivacyMethods
     field :id                 => Gibbler::Digest, &gibbler_id_processor
     field :userid             => String
     field :status             => Symbol
@@ -101,6 +120,7 @@ class Stella
     field :time_end           => Integer
     field :salt
     field :planid
+    field :privacy            => Boolean
     gibbler :salt, :planid, :userid, :hosts, :mode, :options, :time_start
     attr_reader :plan
     def initialize plan=nil, client_opts={}, engine_opts={}

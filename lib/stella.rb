@@ -8,6 +8,7 @@ require 'erb'
 require 'storable'
 require 'benelux'
 require 'gibbler/aliases'
+require 'stella/core_ext'
 
 class Stella
   module VERSION
@@ -26,6 +27,9 @@ class Stella
   end
 end
 
+class MatchData
+  include Gibbler::String
+end
 
 class OpenStruct
   include Gibbler::Object
@@ -57,7 +61,6 @@ class Stella
   require 'stella/client'
   require 'stella/engine'
   require 'stella/report'
-  require 'stella/metric'
   require 'stella/testplan'
   attr_reader :plan
   def initialize *args

@@ -1,5 +1,19 @@
 
 class Stella
+  class Log
+    class HTTP < StellaObject
+      include Selectable::Object
+      field :stamp
+      field :httpmethod
+      field :httpstatus
+      field :uri     
+      field :request_params
+      field :request_headers
+      field :request_body
+      field :response_headers
+      field :response_body
+    end
+  end
   class Report
     @plugins = {}
     class << self
@@ -21,6 +35,10 @@ class Stella
       def processed?
         @processed == true
       end
+      attr_reader :timeline
+      def initialize(timeline)
+        @timeline = timeline
+      end
       module ClassMethods
         attr_reader :plugin
           def register(plugin)
@@ -33,11 +51,38 @@ class Stella
       end
     end
 
+    class Errors < StellaObject
+      include Report::Plugin
+      field :exceptions
+      field :timeouts
+      def process(filter={})
+        @exceptions = timeline.messages.filter(:kind => :exception)
+        @timeouts = timeline.messages.filter(:kind => :timeout)
+        processed!
+      end
+      def errors?
+        !@exceptions.empty? || !@timeouts.empty?
+      end
+      def all 
+        [@exceptions, @timeouts].flatten
+      end
+      register :errors
+    end
+    
+    class Statuses < StellaObject
+      include Report::Plugin
+      field :status_200
+      def process(filter={})
+        processed!
+      end
+      register :statuses
+    end
+    
     class Headers < StellaObject
       include Report::Plugin
       field :request_headers
       field :response_headers
-      def process(timeline)
+      def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
         @request_headers = log.first.request_headers
@@ -51,7 +96,7 @@ class Stella
       include Report::Plugin
       field :request_body
       field :response_body
-      def process(timeline)
+      def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
         @request_body = log.first.request_body
@@ -69,7 +114,11 @@ class Stella
       field :send_request
       field :receive_response
       field :page_size
-      def process(timeline)
+      field :request_headers_size
+      field :request_body_size
+      field :response_headers_size
+      field :response_body_size
+      def process(filter={})
         @response_time = timeline.stats.group(:response_time).merge
         @socket_connect = timeline.stats.group(:socket_connect).merge
         @first_byte = timeline.stats.group(:first_byte).merge
@@ -77,33 +126,40 @@ class Stella
         @receive_response = timeline.stats.group(:receive_response).merge
         log = timeline.messages.filter(:kind => :http_log)
         unless log.empty?
-          @page_size = log.first.response_body.size
+          @request_headers_size = log.first.request_headers.size
+          @request_body_size = log.first.request_body.size
+          @response_headers_size = log.first.response_headers.size
+          @response_body_size = log.first.response_body.size
         end
         processed!
       end
       register :metrics
     end
     
-    attr_reader :section, :timeline
-    def initialize(timeline)
-      @timeline = timeline
+    attr_reader :section, :timeline, :filter
+    def initialize(timeline, filter={})
+      @timeline, @filter = timeline, filter
       @section = {}
       @processed = false
     end
     def process
       self.class.plugins.each_pair do |name,klass|
         Stella.ld "processing #{name}"
-        plugin = klass.new
-        plugin.process(timeline)
+        plugin = klass.new timeline
+        plugin.process(filter)
         @section[name] = plugin
       end
-
-      #
-      ##p thread.timeline.messages.filter(:kind => :exception)
-      ##p thread.timeline.messages.filter(:kind => :timeout)
-      #
-
       @processed = true
+    end
+    def errors?
+      return false unless processed?
+      @section[:errors].errors?
+    end
+    def to_yaml
+      @section.to_yaml
+    end
+    def to_json
+      @section.to_json
     end
     def processed?
       @processed == true
