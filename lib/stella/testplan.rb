@@ -24,6 +24,10 @@ class Stella
     field :usecases           => Array
     field :desc               => String
     field :privacy            => Boolean
+    field :favicon            => String
+    field :last_run           => Integer
+    # Don't include provacy in the gibbler calculation because it
+    # doesn't make sense to have both a public and private testplan.
     gibbler :userid, :usecases
     def initialize(uri=nil)
       preprocess
@@ -32,6 +36,7 @@ class Stella
         @usecases << Stella::TP::Usecase.new(req) 
       end
     end
+    def favicon?() !@favicon.nil? && !@favicon.empty? end
     def preprocess
       @usecases ||= []
       @privacy = false if @privacy.nil?

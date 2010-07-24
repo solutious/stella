@@ -40,7 +40,7 @@ TEST_URI = 'http://www.blamestella.com/'
 
 ## Testplan can go to JSON
 @tp.to_json.gibbler
-#=> '0ab2adb8bb0ef26ecc66480b7d40f02114b0309b'
+#=> 'fee6e18920e70293201bd730c6e1bdb225b94ea7'
 
 ## Can come back from JSON
 @tr2 = Stella::Testrun.from_json @tr.to_json
