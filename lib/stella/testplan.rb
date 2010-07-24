@@ -41,6 +41,9 @@ class Stella
       @usecases ||= []
       @privacy = false if @privacy.nil?
     end
+    def postprocess
+      @id = Gibbler::Digest.new(@id) if String === @id
+    end
     def first_request
       return if @usecases.empty?
       @usecases.first.requests.first
@@ -133,7 +136,7 @@ class Stella
     field :start_time         => Integer
     field :end_time           => Integer
     field :salt
-    field :planid
+    field :planid             => Gibbler::Digest
     field :privacy            => Boolean
     gibbler :salt, :planid, :userid, :hosts, :mode, :options, :start_time
     attr_reader :plan
@@ -149,6 +152,7 @@ class Stella
       @planid = @plan.id if @plan
       @options ||= {}
     end
+
     def freeze
       @id ||= self.digest
       super
