@@ -4,7 +4,7 @@ Stella.debug = true
 
 ## Stella::Report is aware of all available modes
 Stella::Report.plugins
-#=> { :headers => Stella::Report::Headers }
+#=> {:errors=>Stella::Report::Errors, :statuses=>Stella::Report::Statuses, :headers=>Stella::Report::Headers, :content=>Stella::Report::Content, :metrics=>Stella::Report::Metrics}
 
 ## Headers has a mode
 Stella::Report::Headers.plugin

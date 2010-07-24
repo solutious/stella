@@ -87,7 +87,7 @@ module Stella::Engine
     end
     
     def execute_test_plan(packages, testrun)
-      time_started = Time.now
+      start_timeed = Time.now
       
       pqueue = Queue.new
       packages.each { |p| pqueue << p  }
@@ -127,7 +127,7 @@ module Stella::Engine
             Benelux.remove_thread_tags :rep
             
             Thread.current[:real_uctime].tick
-            time_elapsed = (Time.now - time_started).to_i
+            time_elapsed = (Time.now - start_timeed).to_i
             
             if (Time.now - prev_ptime).to_i >= testrun.granularity
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]

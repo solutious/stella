@@ -39,8 +39,8 @@ TEST_URI = 'http://www.blamestella.com/'
 #=> true
 
 ## Testplan can go to JSON
-@tp.to_json
-#=> '{"id":"8a8c094565c37fee565c4bf57f7b10a0b240db88","userid":null,"usecases":[{"id":"d4584d8cb4eb1933f98910cf079181db83f41368","desc":null,"ratio":null,"requests":[{"id":"5ed1907264dcd19b0c99e38e64edfc36a92e0e3d","protocol":"http","http_method":"get","http_version":null,"http_auth":null,"uri":"http://www.blamestella.com/","params":null,"headers":null,"body":null,"desc":null,"wait":null,"response_handler":null}]}],"desc":null}'
+@tp.to_json.gibbler
+#=> '0ab2adb8bb0ef26ecc66480b7d40f02114b0309b'
 
 ## Can come back from JSON
 @tr2 = Stella::Testrun.from_json @tr.to_json

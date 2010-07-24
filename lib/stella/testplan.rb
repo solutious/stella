@@ -34,7 +34,7 @@ class Stella
     end
     def preprocess
       @usecases ||= []
-      @privacy = false
+      @privacy = false if @privacy.nil?
     end
     def first_request
       return if @usecases.empty?
@@ -47,7 +47,11 @@ class Stella
       super
       self
     end
-    
+    def self.from_hash(*args)
+      me = super(*args)
+      me.usecases.collect! { |uc| Stella::Testplan::Usecase.from_hash(uc) }
+      me
+    end
     class Usecase < StellaObject
       field :id               => Gibbler::Digest, &gibbler_id_processor
       field :desc             => String
@@ -68,6 +72,11 @@ class Stella
         super
         self
       end
+      def self.from_hash(*args)
+        me = super(*args)
+        me.requests.collect! { |req| Stella::Testplan::RequestTemplate.from_hash(req) }
+        me
+      end
     end
     
     class EventTemplate < StellaObject
@@ -87,7 +96,7 @@ class Stella
       field :wait             => Range
       field :response_handler => Hash
       gibbler :http_method, :uri, :http_version, :params, :headers, :body
-      def initialize(meth, uri)
+      def initialize(meth=nil, uri=nil)
         @protocol = :http
         @http_method, @uri = meth, uri
       end
@@ -116,33 +125,34 @@ class Stella
     field :options            => Hash
     field :mode               => Symbol
     field :hosts
-    field :time_start         => Integer
-    field :time_end           => Integer
+    field :start_time         => Integer
+    field :end_time           => Integer
     field :salt
     field :planid
     field :privacy            => Boolean
-    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :time_start
+    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :start_time
     attr_reader :plan
-    def initialize plan=nil, client_opts={}, engine_opts={}
+    def initialize plan=nil, options={}
       @plan = plan
-      @client_opts, @engine_opts = client_opts, engine_opts
+      @options = {
+      }.merge options
       preprocess
     end
     def preprocess
       @salt ||= rand.digest.short
       @status ||= :new
       @planid = @plan.id if @plan
-      @options ||= OpenStruct.new
+      @options ||= {}
     end
     def freeze
       @id ||= self.digest
       super
     end
-    def time_start!
-      @time_start = Stella.now
+    def start_time!
+      @start_time = Stella.now
     end
-    def time_end!
-      @time_end = Stella.now
+    def end_time!
+      @end_time = Stella.now
     end
     class << self
       attr_reader :statuses

@@ -34,12 +34,12 @@ class Stella
       include Engine::Base
       extend self
       def run testrun, options={}
-        reps = testrun.options.repetitions || 1
+        reps = testrun.options[:repetitions] || 1
         
         thread = Thread.new do
           Benelux.current_track :checkup
           client = Stella::Client.new
-          testrun.time_start!
+          testrun.start_time!
           reps.times do |idx|
             testrun.plan.usecases.each_with_index do |uc,i|
               Benelux.add_thread_tags :usecase => uc.id
