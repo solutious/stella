@@ -159,7 +159,13 @@ class Stella
       @section.to_yaml
     end
     def to_json
-      @section.to_json
+      if YAJL_LOADED
+        Yajl::Encoder.encode(@section)
+      elsif JSON_LOADED
+        obj.to_json
+      else
+        raise "no JSON parser loaded"
+      end
     end
     def processed?
       @processed == true

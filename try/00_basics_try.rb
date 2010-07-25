@@ -12,7 +12,7 @@ Stella::Engine::Checkup.mode
 
 ## Can run checkup
 @plan = Stella::Testplan.new TEST_URI
-@run = Stella::Testrun.new @plan
+@run = Stella::Testrun.new @plan, :checkup
 @report = Stella::Engine::Checkup.run @run
 @report.processed?
 #=> true

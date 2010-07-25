@@ -138,10 +138,11 @@ class Stella
     field :salt
     field :planid             => Gibbler::Digest
     field :privacy            => Boolean
+    field :report             => Stella::Report
     gibbler :salt, :planid, :userid, :hosts, :mode, :options, :start_time
     attr_reader :plan
-    def initialize plan=nil, options={}
-      @plan = plan
+    def initialize plan=nil, mode=nil, options={}
+      @plan, @mode = plan, mode
       @options = {
       }.merge options
       preprocess
@@ -152,11 +153,12 @@ class Stella
       @planid = @plan.id if @plan
       @options ||= {}
     end
-    def run mode=nil
-      @mode = mode unless mode.nil?
+    def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
       engine = Stella::Engine.load(@mode)
-      engine.run @run
+      self.report = engine.run self, opts
+      save if respond_to? :save
+      self.report
     end
     def start_time!
       @start_time = Stella.now
