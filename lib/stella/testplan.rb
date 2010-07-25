@@ -147,15 +147,16 @@ class Stella
       preprocess
     end
     def preprocess
-      @salt ||= rand.digest.short
+      @salt ||= Stella.now.digest.short
       @status ||= :new
       @planid = @plan.id if @plan
       @options ||= {}
     end
-
-    def freeze
-      @id ||= self.digest
-      super
+    def run mode=nil
+      @mode = mode unless mode.nil?
+      raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
+      engine = Stella::Engine.load(@mode)
+      engine.run @run
     end
     def start_time!
       @start_time = Stella.now
@@ -173,6 +174,7 @@ class Stella
       end
       define_method :"#{status}!" do
         @status = status
+        save if respond_to? :save
       end
     end
   end

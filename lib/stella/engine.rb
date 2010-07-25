@@ -35,7 +35,7 @@ class Stella
       extend self
       def run testrun, options={}
         reps = testrun.options[:repetitions] || 1
-        
+        testrun.running!
         thread = Thread.new do
           Benelux.current_track :checkup
           client = Stella::Client.new
@@ -48,6 +48,7 @@ class Stella
             end
           end
         end
+        testrun.done!
         thread.join
         report = Stella::Report.new thread.timeline
         report.process
