@@ -133,17 +133,19 @@ class Stella
     field :options            => Hash
     field :mode               => Symbol
     field :hosts
+    field :ctime              => Float
     field :stime              => Float
     field :etime              => Float
     field :salt
     field :planid             => Gibbler::Digest
     field :privacy            => Boolean
     field :report             => Stella::Report
-    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :stime
+    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :ctime
     attr_reader :plan
     alias_method :start_time, :stime
     alias_method :end_time, :etime
     def initialize plan=nil, mode=nil, options={}
+      @ctime = Stella.now
       @plan, @mode = plan, mode
       @options = {
       }.merge options
