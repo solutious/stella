@@ -26,6 +26,7 @@ class Stella
     field :privacy            => Boolean
     field :favicon            => String
     field :last_run           => Integer
+    sensitive_fields :userid, :privacy
     # Don't include provacy in the gibbler calculation because it
     # doesn't make sense to have both a public and private testplan.
     gibbler :userid, :usecases
@@ -140,6 +141,7 @@ class Stella
     field :planid             => Gibbler::Digest
     field :privacy            => Boolean
     field :report             => Stella::Report
+    sensitive_fields :userid, :salt, :privacy
     gibbler :salt, :planid, :userid, :hosts, :mode, :options, :ctime
     attr_reader :plan
     alias_method :start_time, :stime
