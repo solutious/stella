@@ -9,9 +9,9 @@ module Stella::Engine
       p testrun.client_options
       
       Stella.stdout.info2 $/, "Starting test...", $/
-      testrun.start_time = Time.now.utc.to_i
+      testrun.stime = Time.now.utc.to_i
       
-      start_time = Time.now.utc
+      stime = Time.now.utc
       
       thread = Thread.new do
         # Identify this thread to Benelux
@@ -30,7 +30,7 @@ module Stella::Engine
       
       thread.join
       
-      test_time = Time.now.utc - start_time
+      test_time = Time.now.utc - stime
       
       # Need to use thread timeline b/c the clients are running in the
       # main thread which Benelux.update_global_timeline does not touch.

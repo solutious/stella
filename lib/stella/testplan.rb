@@ -133,14 +133,16 @@ class Stella
     field :options            => Hash
     field :mode               => Symbol
     field :hosts
-    field :start_time         => Integer
-    field :end_time           => Integer
+    field :stime              => Float
+    field :etime              => Float
     field :salt
     field :planid             => Gibbler::Digest
     field :privacy            => Boolean
     field :report             => Stella::Report
-    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :start_time
+    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :stime
     attr_reader :plan
+    alias_method :start_time, :stime
+    alias_method :end_time, :etime
     def initialize plan=nil, mode=nil, options={}
       @plan, @mode = plan, mode
       @options = {
@@ -152,6 +154,10 @@ class Stella
       @status ||= :new
       @planid = @plan.id if @plan
       @options ||= {}
+      @privacy ||= false
+    end
+    def postprocess
+      @privacy = plan.privacy if Stella::Testplan === plan
     end
     def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
@@ -159,12 +165,6 @@ class Stella
       self.report = engine.run self, opts
       save if respond_to? :save
       self.report
-    end
-    def start_time!
-      @start_time = Stella.now
-    end
-    def end_time!
-      @end_time = Stella.now
     end
     class << self
       attr_reader :statuses

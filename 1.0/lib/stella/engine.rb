@@ -89,8 +89,8 @@ class Stella::Testrun < Storable
   field :id => String, &gibbler_id_processor
   field :status => String
   field :userid => String
-  field :start_time => Integer
-  field :end_time => Integer
+  field :stime => Integer
+  field :etime => Integer
   field :clients => Integer
   field :duration => Integer
   field :arrival => Float
@@ -112,7 +112,7 @@ class Stella::Testrun < Storable
   field :plan
   field :hosts
   field :log
-  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :start_time, :userid
+  gibbler :plan, :hosts, :mode, :clients, :duration, :repetitions, :wait, :stime, :userid
   def initialize(plan=nil, opts={})
     @plan = plan
     @granularity = GRANULARITY
@@ -138,9 +138,9 @@ class Stella::Testrun < Storable
   end
   def has_log?() !@log.nil? && !@log.empty? end
   def elapsed_seconds
-    return 0 if @start_time.nil? || @start_time <= 0
-    return Time.now.utc.to_i - @start_time if @end_time.nil? || @end_time <= 0
-    @end_time - @start_time
+    return 0 if @stime.nil? || @stime <= 0
+    return Time.now.utc.to_i - @stime if @etime.nil? || @etime <= 0
+    @etime - @stime
   end
 
   def client_options
@@ -185,8 +185,8 @@ class Stella::Testrun < Storable
       @event_probes = ['response_time', 'response_content_size']
     end
     
-    @start_time ||= Time.now.to_i
-    @end_time ||= 0
+    @stime ||= Time.now.to_i
+    @etime ||= 0
     
     @event_probes.collect! { |event| event.to_s }
     
@@ -249,7 +249,7 @@ class Stella::Testrun < Storable
   end
   
   def log_dir
-    # Don't use @start_time here b/c that won't be set 
+    # Don't use @stime here b/c that won't be set 
     # until just before the actual testing starts. 
     stamp = Stella::START_TIME.strftime("%Y%m%d-%H-%M-%S")
     stamp << "-#{self.plan.id.shorter}" unless self.plan.nil?

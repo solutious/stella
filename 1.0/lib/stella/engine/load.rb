@@ -55,7 +55,7 @@ module Stella::Engine
       begin 
         Stella.stdout.status "Running" 
         testrun.status = "running"
-        testrun.start_time = Time.now.utc.to_i
+        testrun.stime = Time.now.utc.to_i
         execute_test_plan packages, testrun
       rescue Interrupt
         Stella.stdout.info $/, "Stopping test"
@@ -87,7 +87,7 @@ module Stella::Engine
     end
     
     def execute_test_plan(packages, testrun)
-      start_timeed = Time.now
+      stimeed = Time.now
       
       pqueue = Queue.new
       packages.each { |p| pqueue << p  }
@@ -127,7 +127,7 @@ module Stella::Engine
             Benelux.remove_thread_tags :rep
             
             Thread.current[:real_uctime].tick
-            time_elapsed = (Time.now - start_timeed).to_i
+            time_elapsed = (Time.now - stimeed).to_i
             
             if (Time.now - prev_ptime).to_i >= testrun.granularity
               prev_ptime, ruct = Time.now, Thread.current[:real_uctime]
@@ -207,7 +207,7 @@ module Stella::Engine
         Benelux.timeline.clear if testrun.nostats
       end
       hand.finally do
-        testrun.end_time = Time.now.utc.to_i
+        testrun.etime = Time.now.utc.to_i
         testrun.save
       end
       hand

@@ -35,11 +35,11 @@ class Stella
       extend self
       def run testrun, options={}
         reps = testrun.options[:repetitions] || 1
-        testrun.running!
         thread = Thread.new do
           Benelux.current_track :checkup
           client = Stella::Client.new
-          testrun.start_time!
+          testrun.stime = Stella.now
+          testrun.running!
           reps.times do |idx|
             testrun.plan.usecases.each_with_index do |uc,i|
               Benelux.add_thread_tags :usecase => uc.id
@@ -47,8 +47,9 @@ class Stella
               Benelux.remove_thread_tags :usecase
             end
           end
+          testrun.etime = Stella.now
+          testrun.done!
         end
-        testrun.done!
         thread.join
         report = Stella::Report.new thread.timeline
         report.process

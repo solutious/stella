@@ -95,8 +95,9 @@ class Stella
       uri
     end
     def checkup(uri)
-      tplan = Stella::Testplan.new uri
-      uri
+      plan = Stella::Testplan.new uri
+      run = Stella::Testrun.new plan
+      run
     end
     def now
       Time.now.utc.to_f
