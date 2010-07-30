@@ -41,7 +41,7 @@ class Stella
       end
       module ClassMethods
         attr_reader :plugin
-          def register(plugin)
+        def register(plugin)
           @plugin = plugin
           Stella::Report.plugins[plugin] = self
         end
@@ -82,11 +82,15 @@ class Stella
       include Report::Plugin
       field :request_headers
       field :response_headers
+      field :request_headers_digest
+      field :response_headers_digest
       def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
         @request_headers = log.first.request_headers
         @response_headers = log.first.response_headers
+        @request_headers_digest = log.first.request_headers.digest
+        @response_headers_digest = log.first.response_headers.digest
         processed!
       end
       register :headers
@@ -96,11 +100,15 @@ class Stella
       include Report::Plugin
       field :request_body
       field :response_body
+      field :request_body_digest
+      field :response_body_digest
       def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
         @request_body = log.first.request_body
         @response_body = log.first.response_body
+        @request_body_digest = log.first.request_body.digest
+        @response_body_digest = log.first.response_body.digest
         processed!
       end
       register :content
@@ -141,6 +149,10 @@ class Stella
       @timeline, @filter = timeline, filter
       @section = {}
       @processed = false
+    end
+    def metric(name)
+      return unless @section[:metrics] && @section[:metrics].respond_to?(name)
+      @section[:metrics].send(name)
     end
     def process
       self.class.plugins.each_pair do |name,klass|
