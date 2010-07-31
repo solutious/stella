@@ -1,6 +1,12 @@
 STELLA, CHANGES
 
+#### 0.2.0 (2010-XX-XX) ###############################
+
+
 #### 0.8.X (XXXX-XX-XX) ###############################
+
+NOTE: We're now focusing our effort on 2.0, so these features are still 
+      outstanding for a 1.x release (they probably won't be worked on).
 
 * TODO: Force response block content type. 
 * TODO: Add option to dump full request/response output to a file by client

@@ -20,16 +20,16 @@ class Stella
   class Testplan < StellaObject
     include Common::PrivacyMethods
     field :id                 => Gibbler::Digest, &gibbler_id_processor
-    field :userid             => String
+    field :custid             => String
     field :usecases           => Array
     field :desc               => String
     field :privacy            => Boolean
     field :favicon            => String
     field :last_run           => Integer
-    sensitive_fields :userid, :privacy
+    sensitive_fields :custid, :privacy
     # Don't include provacy in the gibbler calculation because it
     # doesn't make sense to have both a public and private testplan.
-    gibbler :userid, :usecases
+    gibbler :custid, :usecases
     def initialize(uri=nil)
       preprocess
       if uri
@@ -129,7 +129,7 @@ class Stella
   class Testrun < StellaObject
     include Common::PrivacyMethods
     field :id                 => Gibbler::Digest, &gibbler_id_processor
-    field :userid             => String
+    field :custid             => String
     field :status             => Symbol
     field :options            => Hash
     field :mode               => Symbol
@@ -141,8 +141,8 @@ class Stella
     field :planid             => Gibbler::Digest
     field :privacy            => Boolean
     field :report             => Stella::Report
-    sensitive_fields :userid, :salt, :privacy
-    gibbler :salt, :planid, :userid, :hosts, :mode, :options, :ctime
+    sensitive_fields :custid, :salt, :privacy
+    gibbler :salt, :planid, :custid, :hosts, :mode, :options, :ctime
     attr_reader :plan
     alias_method :start_time, :stime
     alias_method :end_time, :etime

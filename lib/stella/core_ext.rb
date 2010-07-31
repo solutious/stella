@@ -181,6 +181,11 @@ end
 
 class Numeric
   include Time::Units
+  
+  def to_ms
+    (self*1000).to_i
+  end
+  
   # TODO: Use 1024?
   def to_bytes
     args = case self.abs.to_i
