@@ -1,3 +1,7 @@
+begin
+  require 'pismo'
+rescue LoadError
+end
 
 class Stella
   class Log
@@ -102,13 +106,30 @@ class Stella
       field :response_body
       field :request_body_digest
       field :response_body_digest
+      field :keywords => Array
+      field :title
+      field :favicon
+      field :author
+      field :lede
+      field :description
       def process(filter={})
+        
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
         @request_body = log.first.request_body
         @response_body = log.first.response_body
         @request_body_digest = log.first.request_body.digest
         @response_body_digest = log.first.response_body.digest
+        if defined?(Pismo) && @response_body
+          str = RUBY_VERSION >= "1.9.0" ? @response_body.force_encoding("UTF-8") : @response_body
+          doc = Pismo::Document.new str
+          @keywords = doc.keywords
+          @title = doc.title
+          @favicon = doc.favicon
+          @author = doc.author
+          @lede = doc.lede
+          @description = doc.description
+        end
         processed!
       end
       register :content
