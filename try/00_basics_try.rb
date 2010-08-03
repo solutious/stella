@@ -1,6 +1,6 @@
 require 'stella'
 
-TEST_URI = 'http://www.yellowpages.ca/search/si/1/food/richmond'
+TEST_URI = 'http://bff.heroku.com/'
 
 ## Stella::Engine is aware of all available modes
 Stella::Engine.modes
@@ -12,17 +12,17 @@ Stella::Engine::Checkup.mode
 
 ## Can run checkup
 @plan = Stella::Testplan.new TEST_URI
-@run = Stella::Testrun.new @plan, :checkup
+@run = Stella::Testrun.new @plan, :checkup, :repetitions => 3, :agent => :poop
 @report = Stella::Engine::Checkup.run @run
 @report.processed?
 #=> true
 
 ## Knows about errors
-p @report.section[:content].title
 @report.errors?
 #=> false
 
 ## Can be yaml
+puts @report.to_yaml
 @report.to_yaml.size > 100
 #=> true
 

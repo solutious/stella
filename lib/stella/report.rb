@@ -116,13 +116,14 @@ class Stella
         
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
+        body = RUBY_VERSION >= "1.9.0" ? 
+                log.first.response_body.force_encoding("UTF-8") : @response_body
         @request_body = log.first.request_body
-        @response_body = log.first.response_body
         @request_body_digest = log.first.request_body.digest
-        @response_body_digest = log.first.response_body.digest
+        @response_body = body
+        @response_body_digest = body.digest
         if defined?(Pismo) && @response_body
-          str = RUBY_VERSION >= "1.9.0" ? @response_body.force_encoding("UTF-8") : @response_body
-          doc = Pismo::Document.new str
+          doc = Pismo::Document.new @response_body
           @keywords = doc.keywords
           @title = doc.title
           @favicon = doc.favicon
