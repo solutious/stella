@@ -77,7 +77,7 @@ class Stella
   @debug   = false
   @abort   = false
   @quiet   = false
-  @agent   = "Stella/#{Stella::VERSION}"  
+  @agent   = "Mozilla/5.0 (compatible; Stella/#{Stella::VERSION}; +http://solutious.com/projects/stella)"  
   # static methods
   class << self
     attr_accessor :log, :stdout, :agent, :debug, :quiet
