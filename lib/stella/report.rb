@@ -113,23 +113,26 @@ class Stella
       field :lede
       field :description
       def process(filter={})
-        
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
-        body = RUBY_VERSION >= "1.9.0" ? 
-                log.first.response_body.force_encoding("UTF-8") : @response_body
         @request_body = log.first.request_body
         @request_body_digest = log.first.request_body.digest
-        @response_body = body
-        @response_body_digest = body.digest
-        if defined?(Pismo) && @response_body
-          doc = Pismo::Document.new @response_body
-          @keywords = doc.keywords
-          @title = doc.title
-          @favicon = doc.favicon
-          @author = doc.author
-          @lede = doc.lede
-          @description = doc.description
+        @response_body = log.first.response_body
+        @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+        @response_body_digest = @response_body.digest
+        begin 
+          if defined?(Pismo) && @response_body
+            doc = Pismo::Document.new @response_body
+            @keywords = doc.keywords
+            @title = doc.title
+            @favicon = doc.favicon
+            @author = doc.author
+            @lede = doc.lede
+            @description = doc.description
+          end
+        rescue => ex
+          # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
+          #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
         end
         processed!
       end
@@ -175,6 +178,10 @@ class Stella
     def metric(name)
       return unless @section[:metrics] && @section[:metrics].respond_to?(name)
       @section[:metrics].send(name)
+    end
+    def content(name)
+      return unless @section[:content] && @section[:content].respond_to?(name)
+      @section[:content].send(name)
     end
     def process
       self.class.plugins.each_pair do |name,klass|
