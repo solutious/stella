@@ -153,6 +153,10 @@ class Stella
       }.merge options
       preprocess
     end
+    def duration
+      return 0 unless @stime
+      (@etime || Stella.now) - @stime
+    end
     def preprocess
       @salt ||= Stella.now.digest.short
       @status ||= :new

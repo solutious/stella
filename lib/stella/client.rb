@@ -83,12 +83,11 @@ class Stella
     
     def create_http_client
       opts = {
-        :proxy       => @proxy.uri || nil, # a tautology for clarity
         :agent_name  => Stella.agent,
         :from        => nil
       }
       http_client = HTTPClient.new opts
-      http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
+      #http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       #http_client.debug_dev = STDOUT if Stella.debug?
       http_client.protocol_version = "HTTP/1.1"
       #http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE

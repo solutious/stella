@@ -47,6 +47,8 @@ class Stella
         attr_reader :plugin
         def register(plugin)
           @plugin = plugin
+          extra_methods = eval "#{self}::ReportMethods" rescue nil
+          Stella::Report.send(:include, extra_methods) if extra_methods
           Stella::Report.plugins[plugin] = self
         end
         def process *args
@@ -136,6 +138,12 @@ class Stella
         end
         processed!
       end
+      module ReportMethods
+        def content(name)
+          return unless @section[:content] && @section[:content].respond_to?(name)
+          @section[:content].send(name)
+        end
+      end
       register :content
     end
     
@@ -144,9 +152,9 @@ class Stella
       field :response_time
       field :socket_connect
       field :first_byte
+      field :last_byte
       field :send_request
       field :receive_response
-      field :page_size
       field :request_headers_size
       field :request_body_size
       field :response_headers_size
@@ -156,15 +164,44 @@ class Stella
         @socket_connect = timeline.stats.group(:socket_connect).merge
         @first_byte = timeline.stats.group(:first_byte).merge
         @send_request = timeline.stats.group(:send_request).merge
+        STDERR.puts "TODO: update last_byte calculation after socket_connect fix"
+        @last_byte = Benelux::Stats::Calculator.new 
+        @last_byte.sample @response_time.mean - @socket_connect.mean - @first_byte.mean
         @receive_response = timeline.stats.group(:receive_response).merge
         log = timeline.messages.filter(:kind => :http_log)
+        @request_headers_size = Benelux::Stats::Calculator.new 
+        @request_body_size = Benelux::Stats::Calculator.new 
+        @response_headers_size = Benelux::Stats::Calculator.new 
+        @response_body_size = Benelux::Stats::Calculator.new 
         unless log.empty?
-          @request_headers_size = log.first.request_headers.size
-          @request_body_size = log.first.request_body.size
-          @response_headers_size = log.first.response_headers.size
-          @response_body_size = log.first.response_body.size
+          log.each do |entry|
+            @request_headers_size.sample entry.request_headers.size
+            @request_body_size.sample entry.request_body.size
+            @response_headers_size.sample entry.response_headers.size
+            @response_body_size.sample entry.response_body.size
+          end
         end
         processed!
+      end
+      module ReportMethods
+        def metric(name)
+          return unless @section[:metrics] && @section[:metrics].respond_to?(name)
+          @section[:metrics].send(name)
+        end
+        def metrics_pretty
+          return unless @section[:metrics]
+          pretty = ['Metrics']
+          [:socket_connect, :send_request, :first_byte, :last_byte, :receive_response, :response_time].each do |fname|
+            val = @section[:metrics].send(fname)
+            pretty << ('%20s: %5dms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
+          end
+          pretty << ''
+          [:response_body_size].each do |fname|
+            val = @section[:metrics].send(fname)
+            pretty << ('%20s: %8s' % [fname.to_s.tr('_', ' '), val.mean.to_bytes])
+          end
+          pretty.join $/
+        end
       end
       register :metrics
     end
@@ -174,14 +211,6 @@ class Stella
       @timeline, @filter = timeline, filter
       @section = {}
       @processed = false
-    end
-    def metric(name)
-      return unless @section[:metrics] && @section[:metrics].respond_to?(name)
-      @section[:metrics].send(name)
-    end
-    def content(name)
-      return unless @section[:content] && @section[:content].respond_to?(name)
-      @section[:content].send(name)
     end
     def process
       self.class.plugins.each_pair do |name,klass|

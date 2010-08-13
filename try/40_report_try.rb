@@ -29,7 +29,8 @@ report.processed?
 #  socket connect:     10ms
 #    send request:     20ms
 #      first byte:     30ms
-#   response time:    100ms
+#       last byte:     10ms
+#   response time:     70ms
 # 
 # Content
 #   page size:       6237kb      

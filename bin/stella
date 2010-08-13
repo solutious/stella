@@ -1,0 +1,21 @@
+#!/usr/bin/ruby
+
+# Put our local lib in first place
+BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
+lib_dir = File.join(BASE_PATH, 'lib')
+$:.unshift lib_dir
+
+require 'stella'
+
+abort "Usage: stella URI" if ARGV.size != 1
+
+if ARGV.first =~ /-V|--version/
+  puts Stella::VERSION.inspect
+else
+  uri = URI.parse ARGV.first
+  @plan = Stella::Testplan.new uri
+  @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1
+  @report = Stella::Engine::Checkup.run @run
+  puts @report.metrics_pretty
+end
+
