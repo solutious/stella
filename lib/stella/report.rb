@@ -72,14 +72,30 @@ class Stella
       def all 
         [@exceptions, @timeouts].flatten
       end
+      module ReportMethods
+        # expects Statuses plugin is loaded
+        def errors?
+          return false unless processed?
+          errstatus = statuses.select { |status| status.to_i >= 400 }
+          @section[:errors].errors? || !errstatus.empty?
+        end
+      end
       register :errors
     end
     
     class Statuses < StellaObject
       include Report::Plugin
-      field :status_200
+      field :statuses => Array
       def process(filter={})
+        log = timeline.messages.filter(:kind => :http_log)
+        @statuses = log.collect { |entry| entry.tag_values(:status) }.flatten
         processed!
+      end
+      module ReportMethods
+        def statuses
+          return false unless processed?
+          @section[:statuses].statuses
+        end
       end
       register :statuses
     end
@@ -218,10 +234,6 @@ class Stella
         @section[name] = plugin
       end
       @processed = true
-    end
-    def errors?
-      return false unless processed?
-      @section[:errors].errors?
     end
     def to_yaml
       @section.to_yaml

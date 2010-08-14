@@ -64,7 +64,7 @@ class Stella
                    res.header.dump, res.body.content
                    
           tt.add_message log, :status => res.status, :kind => :http_log
-        
+          
         rescue HTTPClient::ConnectTimeoutError, 
                HTTPClient::SendTimeoutError,
                HTTPClient::ReceiveTimeoutError,
