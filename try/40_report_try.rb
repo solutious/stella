@@ -1,5 +1,20 @@
 require 'stella'
 
+# 
+# require 'socket'
+# 
+# class TCPSocket
+#   
+#   def write(*args)
+#     STDOUT.puts caller
+#     STDOUT.puts [args].inspect
+#     super
+#   end
+#   
+# end
+# 
+
+
 Stella.debug = true
 
 ## Stella::Report is aware of all available modes
@@ -102,3 +117,5 @@ report.processed?
 #   16  209.249.11.37.available.above.net (209.249.11.37)  98.160 ms  98.714 ms  97.471 ms
 #   17  vlan905.core5.iad2.rackspace.net (72.4.122.10)  99.976 ms  99.873 ms  99.243 ms
 #   18  aggr301a-1-core5.iad2.rackspace.net (72.4.122.121)  97.807 ms  100.763 ms  99.974 ms
+
+

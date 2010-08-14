@@ -164,6 +164,8 @@ class Stella
         @first_byte = timeline.stats.group(:first_byte).merge
         @send_request = timeline.stats.group(:send_request).merge
         @last_byte = timeline.stats.group(:last_byte).merge
+        #@response_time2 = Benelux::Stats::Calculator.new 
+        #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
         log = timeline.messages.filter(:kind => :http_log)
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_body_size = Benelux::Stats::Calculator.new 
@@ -189,10 +191,10 @@ class Stella
           pretty = ['Metrics']
           [:socket_connect, :send_request, :first_byte, :last_byte, :response_time].each do |fname|
             val = @section[:metrics].send(fname)
-            pretty << ('%20s: %5dms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
+            pretty << ('%20s: %5sms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
           end
           pretty << ''
-          [:response_body_size].each do |fname|
+          [:request_headers_size, :response_body_size].each do |fname|
             val = @section[:metrics].send(fname)
             pretty << ('%20s: %8s' % [fname.to_s.tr('_', ' '), val.mean.to_bytes])
           end

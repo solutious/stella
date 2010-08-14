@@ -43,15 +43,20 @@ class Stella
       tt = Benelux.thread_timeline
       usecase.requests.each_with_index do |req,idx|
         begin 
-          params = req.params
-          headers = req.headers
+          params = req.params || {}
+          headers = req.headers || {}
           stella_id = [Stella.now, index, req.id, params, headers, idx].digest
           built_uri = build_uri(req.uri)
           
           Benelux.add_thread_tags :request   => req.id
           Benelux.add_thread_tags :stella_id => stella_id
           
-          res = http_client.get(built_uri)
+          ## Useful for testing larger large request header
+          ## 50.times do |idx|
+          ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
+          ## end
+          
+          res = http_client.get(built_uri, params, headers)
           @session.events << stella_id
           log = Stella::Log::HTTP.new Stella.now,  
                    req.http_method, res.status, built_uri, params, 

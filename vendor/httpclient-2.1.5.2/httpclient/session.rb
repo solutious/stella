@@ -524,6 +524,10 @@ class HTTPClient
     # Send a request to the server
     def query(req)
       connect if @state == :INIT
+      send_request(req)
+    end
+    
+    def send_request(req)
       req.header.request_via_proxy = !@proxy.nil?
       begin
         timeout(@send_timeout, SendTimeoutError) do
@@ -550,7 +554,7 @@ class HTTPClient
       @next_connection = nil
       @requests.push(req)
     end
-
+    
     def close
       if !@socket.nil? and !@socket.closed?
         # @socket.flush may block when it the socket is already closed by
