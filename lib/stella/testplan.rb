@@ -169,6 +169,7 @@ class Stella
     end
     def postprocess
       @privacy = plan.privacy if Stella::Testplan === plan
+      @report = Stella::Report.from_hash @report if Hash === @report
     end
     def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)

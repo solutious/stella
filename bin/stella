@@ -17,5 +17,7 @@ else
   @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1
   @report = Stella::Engine::Checkup.run @run; nil
   puts @report.metrics_pretty
+  puts
+  puts @report.statuses_pretty
 end
 

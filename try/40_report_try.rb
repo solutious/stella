@@ -37,6 +37,16 @@ report.processed?
 #=> true
 
 
+#  uri = URI.parse ARGV.first
+#  @plan = Stella::Testplan.new uri
+#  @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1
+#  @report = Stella::Engine::Checkup.run @run; nil
+#  run = Stella::Testrun.from_yaml @run.to_yaml
+#  puts @run.to_yaml
+#  puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+#  puts run.to_yaml
+#  puts @run.errors?, run.errors?, run.report.errors?, run.report.statuses.nonsuccessful
+
 # $ stella checkup http://solutious.com/
 # ......
 # 

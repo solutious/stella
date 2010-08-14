@@ -18,7 +18,7 @@ class Stella
       field :response_body
     end
   end
-  class Report
+  class Report < Storable
     @plugins = {}
     class << self
       attr_reader :plugins
@@ -32,6 +32,7 @@ class Stella
     module Plugin
       def self.included(obj)
         obj.extend ClassMethods
+        obj.field :processed => Boolean
       end
       def processed!
         @processed = true
@@ -40,7 +41,7 @@ class Stella
         @processed == true
       end
       attr_reader :timeline
-      def initialize(timeline)
+      def initialize(timeline=nil)
         @timeline = timeline
       end
       module ClassMethods
@@ -49,6 +50,7 @@ class Stella
           @plugin = plugin
           extra_methods = eval "#{self}::ReportMethods" rescue nil
           Stella::Report.send(:include, extra_methods) if extra_methods
+          Stella::Report.field plugin => self
           Stella::Report.plugins[plugin] = self
         end
         def process *args
@@ -75,9 +77,8 @@ class Stella
       module ReportMethods
         # expects Statuses plugin is loaded
         def errors?
-          return false unless processed?
-          errstatus = statuses.select { |status| status.to_i >= 400 }
-          @section[:errors].errors? || !errstatus.empty?
+          return false unless processed? && errors
+          errors.errors? || !statuses.nonsuccessful.empty?
         end
       end
       register :errors
@@ -85,16 +86,28 @@ class Stella
     
     class Statuses < StellaObject
       include Report::Plugin
-      field :statuses => Array
+      field :values => Array
       def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
-        @statuses = log.collect { |entry| entry.tag_values(:status) }.flatten
+        @values = log.collect { |entry| entry.tag_values(:status) }.flatten
         processed!
       end
+      def nonsuccessful
+        @values.select { |status| status.to_i >= 400 }
+      end
+      def successful
+        @values.select { |status| status.to_i < 400 }
+      end
       module ReportMethods
-        def statuses
-          return false unless processed?
-          @section[:statuses].statuses
+        def statuses_pretty
+          pretty = ["Statuses"]
+          if statuses.successful.size > 0
+            pretty << '%20s: %s' % ['successful', statuses.successful.join(', ')] 
+          end
+          if statuses.nonsuccessful.size > 0
+            pretty << '%20s: %s' % ['nonsuccessful', statuses.nonsuccessful.join(', ')] 
+          end
+          pretty.join $/
         end
       end
       register :statuses
@@ -155,7 +168,7 @@ class Stella
         processed!
       end
       module ReportMethods
-        def content(name)
+        def content2(name)
           return unless @section[:content] && @section[:content].respond_to?(name)
           @section[:content].send(name)
         end
@@ -199,19 +212,19 @@ class Stella
       end
       module ReportMethods
         def metric(name)
-          return unless @section[:metrics] && @section[:metrics].respond_to?(name)
-          @section[:metrics].send(name)
+          return unless metrics && metrics.respond_to?(name)
+          metrics.send(name)
         end
         def metrics_pretty
-          return unless @section[:metrics]
+          return unless metrics
           pretty = ['Metrics']
           [:socket_connect, :send_request, :first_byte, :last_byte, :response_time].each do |fname|
-            val = @section[:metrics].send(fname)
-            pretty << ('%20s: %5sms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
+            val = metrics.send(fname)
+            pretty << ('%20s: %8sms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
           end
           pretty << ''
           [:request_headers_size, :response_body_size].each do |fname|
-            val = @section[:metrics].send(fname)
+            val = metrics.send(fname)
             pretty << ('%20s: %8s' % [fname.to_s.tr('_', ' '), val.mean.to_bytes])
           end
           pretty.join $/
@@ -220,32 +233,27 @@ class Stella
       register :metrics
     end
     
-    attr_reader :section, :timeline, :filter
-    def initialize(timeline, filter={})
+    field :processed => Boolean
+    
+    attr_reader :timeline, :filter
+    def initialize(timeline=nil, filter={})
       @timeline, @filter = timeline, filter
-      @section = {}
       @processed = false
+    end
+    def postprocess
+      self.class.plugins.each_pair do |name,klass|
+        val = klass.from_hash(self.send(name))
+        self.send("#{name}=", val)
+      end
     end
     def process
       self.class.plugins.each_pair do |name,klass|
         Stella.ld "processing #{name}"
         plugin = klass.new timeline
         plugin.process(filter)
-        @section[name] = plugin
+        self.send("#{name}=", plugin)
       end
       @processed = true
-    end
-    def to_yaml
-      @section.to_yaml
-    end
-    def to_json
-      if YAJL_LOADED
-        Yajl::Encoder.encode(@section)
-      elsif JSON_LOADED
-        obj.to_json
-      else
-        raise "no JSON parser loaded"
-      end
     end
     def processed?
       @processed == true
