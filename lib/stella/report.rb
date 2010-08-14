@@ -18,7 +18,7 @@ class Stella
       field :response_body
     end
   end
-  class Report < Storable
+  class Report < StellaObject
     @plugins = {}
     class << self
       attr_reader :plugins
@@ -178,16 +178,17 @@ class Stella
     
     class Metrics < StellaObject
       include Report::Plugin
-      field :response_time
-      field :socket_connect
-      field :first_byte
-      field :last_byte
-      field :send_request
-      field :request_headers_size
-      field :request_body_size
-      field :response_headers_size
-      field :response_body_size
+      field :response_time            => Benelux::Stats::Calculator
+      field :socket_connect           => Benelux::Stats::Calculator
+      field :first_byte               => Benelux::Stats::Calculator
+      field :last_byte                => Benelux::Stats::Calculator
+      field :send_request             => Benelux::Stats::Calculator
+      field :request_headers_size     => Benelux::Stats::Calculator
+      field :request_content_size     => Benelux::Stats::Calculator
+      field :response_headers_size    => Benelux::Stats::Calculator
+      field :response_content_size    => Benelux::Stats::Calculator
       def process(filter={})
+        return if processed?
         @response_time = timeline.stats.group(:response_time).merge
         @socket_connect = timeline.stats.group(:socket_connect).merge
         @first_byte = timeline.stats.group(:first_byte).merge
@@ -197,24 +198,27 @@ class Stella
         #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
         log = timeline.messages.filter(:kind => :http_log)
         @request_headers_size = Benelux::Stats::Calculator.new 
-        @request_body_size = Benelux::Stats::Calculator.new 
+        @request_content_size = Benelux::Stats::Calculator.new 
         @response_headers_size = Benelux::Stats::Calculator.new 
-        @response_body_size = Benelux::Stats::Calculator.new 
+        @response_content_size = Benelux::Stats::Calculator.new 
         unless log.empty?
           log.each do |entry|
             @request_headers_size.sample entry.request_headers.size
-            @request_body_size.sample entry.request_body.size
+            @request_content_size.sample entry.request_body.size
             @response_headers_size.sample entry.response_headers.size
-            @response_body_size.sample entry.response_body.size
+            @response_content_size.sample entry.response_body.size
           end
         end
         processed!
       end
-      module ReportMethods
-        def metric(name)
-          return unless metrics && metrics.respond_to?(name)
-          metrics.send(name)
+      def postprocess
+        self.class.field_names.each do |fname|
+          next unless self.class.field_types[fname] == Benelux::Stats::Calculator
+          val = Benelux::Stats::Calculator.from_hash send(fname)
+          send("#{fname}=", val)
         end
+      end
+      module ReportMethods
         def metrics_pretty
           return unless metrics
           pretty = ['Metrics']
@@ -223,7 +227,7 @@ class Stella
             pretty << ('%20s: %8sms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
           end
           pretty << ''
-          [:request_headers_size, :response_body_size].each do |fname|
+          [:request_headers_size, :response_content_size].each do |fname|
             val = metrics.send(fname)
             pretty << ('%20s: %8s' % [fname.to_s.tr('_', ' '), val.mean.to_bytes])
           end

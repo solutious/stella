@@ -170,6 +170,8 @@ class Stella
     def postprocess
       @privacy = plan.privacy if Stella::Testplan === plan
       @report = Stella::Report.from_hash @report if Hash === @report
+      @id &&= Gibbler::Digest.new(@id)
+      @planid &&= Gibbler::Digest.new(@planid)
     end
     def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
