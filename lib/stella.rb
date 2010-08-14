@@ -124,9 +124,9 @@ class Stella
     rescue StellaError => ex
       Stella.le ex.message
       Stella.ld ex.backtrace
-    rescue => ex
-      Stella.le ex.message
-      Stella.le ex.backtrace
+    #rescue => ex
+    #  Stella.le ex.message
+    #  Stella.le ex.backtrace
     end
     
   end

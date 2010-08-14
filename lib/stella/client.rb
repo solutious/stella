@@ -28,11 +28,11 @@ class Stella
     gibbler :index, :opts, :base_uri, :proxy, :created
     
     @@client_index = 0
-    def initialize(base_uri=nil, opts={})
+    def initialize(opts={})
       @index = @@client_index += 1
       @created = Time.now.to_f
       @opts = opts
-      @base_uri, @index = base_uri, index
+      @base_uri, @index = opts[:base_uri] || opts['base_uri'], index
       @proxy = OpenStruct.new
       @done = false
       @session = Session.new
@@ -87,11 +87,11 @@ class Stella
     end
     
     def create_http_client
-      opts = {
-        :agent_name  => Stella.agent,
+      http_client_opts = {
+        :agent_name  => @opts[:agent] || @opts['agent'] || Stella.agent,
         :from        => nil
       }
-      http_client = HTTPClient.new opts
+      http_client = HTTPClient.new create_http_client
       #http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
       #http_client.debug_dev = STDOUT if Stella.debug?
       http_client.protocol_version = "HTTP/1.1"

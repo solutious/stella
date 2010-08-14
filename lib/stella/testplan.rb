@@ -170,6 +170,7 @@ class Stella
     def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
       engine = Stella::Engine.load(@mode)
+      opts.merge! @options
       self.report = engine.run self, opts
       save if respond_to? :save
       self.report
@@ -177,7 +178,7 @@ class Stella
     class << self
       attr_reader :statuses
     end
-    @statuses = [:new, :pending, :running, :done, :failed, :cancelled]
+    @statuses = [:new, :pending, :running, :done, :failed, :fubar, :cancelled]
     @statuses.each do |status|
       define_method :"#{status}?" do
         @status == status

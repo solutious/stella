@@ -33,22 +33,27 @@ class Stella
     module Checkup
       include Engine::Base
       extend self
-      def run testrun, options={}
-        reps = testrun.options[:repetitions] || 1
+      def run testrun, opts={}
+        reps = testrun.options[:repetitions] || testrun.options['repetitions'] || 1
         thread = Thread.new do
           Benelux.current_track :checkup
-          client = Stella::Client.new
+          client = Stella::Client.new testrun.options
           testrun.stime = Stella.now
           testrun.running!
-          reps.times do |idx|
-            testrun.plan.usecases.each_with_index do |uc,i|
-              Benelux.add_thread_tags :usecase => uc.id
-              Stella.rescue { client.execute uc }
-              Benelux.remove_thread_tags :usecase
+          begin
+            reps.times do |idx|
+              testrun.plan.usecases.each_with_index do |uc,i|
+                Benelux.add_thread_tags :usecase => uc.id
+                Stella.rescue { client.execute uc }
+                Benelux.remove_thread_tags :usecase
+              end
             end
+            testrun.etime = Stella.now
+            testrun.done!
+          rescue => ex
+            testrun.etime = Stella.now
+            testrun.fubar!
           end
-          testrun.etime = Stella.now
-          testrun.done!
         end
         thread.join
         report = Stella::Report.new thread.timeline
