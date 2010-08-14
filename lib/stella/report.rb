@@ -154,7 +154,6 @@ class Stella
       field :first_byte
       field :last_byte
       field :send_request
-      field :receive_response
       field :request_headers_size
       field :request_body_size
       field :response_headers_size
@@ -164,10 +163,7 @@ class Stella
         @socket_connect = timeline.stats.group(:socket_connect).merge
         @first_byte = timeline.stats.group(:first_byte).merge
         @send_request = timeline.stats.group(:send_request).merge
-        STDERR.puts "TODO: update last_byte calculation after socket_connect fix"
-        @last_byte = Benelux::Stats::Calculator.new 
-        @last_byte.sample @response_time.mean - @socket_connect.mean - @first_byte.mean
-        @receive_response = timeline.stats.group(:receive_response).merge
+        @last_byte = timeline.stats.group(:last_byte).merge
         log = timeline.messages.filter(:kind => :http_log)
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_body_size = Benelux::Stats::Calculator.new 
@@ -191,7 +187,7 @@ class Stella
         def metrics_pretty
           return unless @section[:metrics]
           pretty = ['Metrics']
-          [:socket_connect, :send_request, :first_byte, :last_byte, :receive_response, :response_time].each do |fname|
+          [:socket_connect, :send_request, :first_byte, :last_byte, :response_time].each do |fname|
             val = @section[:metrics].send(fname)
             pretty << ('%20s: %5dms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])
           end

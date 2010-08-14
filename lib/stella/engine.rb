@@ -60,7 +60,7 @@ class Stella
       Benelux.add_timer HTTPClient::Session, :connect, :socket_connect
       Benelux.add_timer HTTPClient::Session, :query, :send_request
       Benelux.add_timer HTTPClient::Session, :socket_gets_first_byte, :first_byte
-      Benelux.add_timer HTTPClient::Session, :get_body, :receive_response
+      Benelux.add_timer HTTPClient::Session, :get_body, :last_byte
       
       register :checkup
     end
