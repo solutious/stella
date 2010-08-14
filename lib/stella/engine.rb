@@ -56,9 +56,9 @@ class Stella
           end
         end
         thread.join
-        report = Stella::Report.new thread.timeline
-        report.process
-        report
+        testrun.report = Stella::Report.new thread.timeline
+        testrun.report.process
+        testrun.report
       end
 
       Benelux.add_timer          HTTPClient, :do_request, :response_time

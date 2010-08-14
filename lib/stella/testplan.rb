@@ -157,6 +157,9 @@ class Stella
       return 0 unless @stime
       (@etime || Stella.now) - @stime
     end
+    def errors?
+      @report && @report.errors?
+    end
     def preprocess
       @salt ||= Stella.now.digest.short
       @status ||= :new
@@ -171,7 +174,7 @@ class Stella
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
       engine = Stella::Engine.load(@mode)
       opts.merge! @options
-      self.report = engine.run self, opts
+      engine.run self, opts
       save if respond_to? :save
       self.report
     end
