@@ -214,7 +214,8 @@ class Stella
       def postprocess
         self.class.field_names.each do |fname|
           next unless self.class.field_types[fname] == Benelux::Stats::Calculator
-          val = Benelux::Stats::Calculator.from_hash send(fname)
+          hash = send(fname)
+          val = Benelux::Stats::Calculator.from_hash hash
           send("#{fname}=", val)
         end
       end

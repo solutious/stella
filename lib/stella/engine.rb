@@ -49,6 +49,8 @@ class Stella
               end
             end
             testrun.etime = Stella.now
+            testrun.report = Stella::Report.new thread.timeline
+            testrun.report.process
             testrun.done!
           rescue => ex
             testrun.etime = Stella.now
@@ -56,8 +58,6 @@ class Stella
           end
         end
         thread.join
-        testrun.report = Stella::Report.new thread.timeline
-        testrun.report.process
         testrun.report
       end
 
