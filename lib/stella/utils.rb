@@ -9,8 +9,6 @@ class Stella
   
   # A motley collection of methods that Stella loves to call!
   module Utils
-    
-    
     extend self
     include Socket::Constants
 
@@ -19,9 +17,12 @@ class Stella
     @addr_classB = IPAddr.new("172.16.0.0/16")
     @addr_classC = IPAddr.new("192.168.0.0/24")
     
-    def self.image?(name, contents)
-       ext = IMAGE_EXT.include?(File.extname(name.downcase))
-       ext && (bmp?(contents) || jpg?(contents) || png?(contents) || gif?(contents) || ico?(contents))
+    def image_ext?(name)
+      IMAGE_EXT.include?(File.extname(name.downcase))
+    end
+    
+    def image?(contents)
+       (bmp?(contents) || jpg?(contents) || png?(contents) || gif?(contents) || ico?(contents))
     end
     
     # Checks if the file has more than 30% non-ASCII characters.

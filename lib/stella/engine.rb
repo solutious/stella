@@ -53,6 +53,8 @@ class Stella
             testrun.report.process
             testrun.done!
           rescue => ex
+            puts ex.message
+            puts ex.backtrace if Stella.debug?
             testrun.etime = Stella.now
             testrun.fubar!
           end

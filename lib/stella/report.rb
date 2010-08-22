@@ -143,14 +143,28 @@ class Stella
       field :author
       field :lede
       field :description
+      field :is_binary => Boolean
+      field :is_image => Boolean
+      def binary?
+        @is_binary == true
+      end
+      def image?
+        @is_image == true
+      end
       def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
-        @request_body = log.first.request_body
+        unless Stella::Utils.binary?(log.first.request_body) || Stella::Utils.image?(log.first.request_body)
+          @request_body = log.first.request_body 
+        end
         @request_body_digest = log.first.request_body.digest
-        @response_body = log.first.response_body
-        @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-        @response_body_digest = @response_body.digest
+        @is_binary = Stella::Utils.binary?(log.first.response_body)
+        @is_image = Stella::Utils.image?(log.first.response_body)
+        unless binary? || image?
+          @response_body = log.first.response_body
+          @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+        end
+        @response_body_digest = log.first.response_body.digest
         begin 
           if defined?(Pismo) && @response_body
             doc = Pismo::Document.new @response_body
@@ -162,6 +176,7 @@ class Stella
             @description = doc.description
           end
         rescue => ex
+          puts ex.message
           # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
           #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
         end
