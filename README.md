@@ -113,6 +113,7 @@ NOTE: If you get errors about libxml2 or libxslt on Ubuntu, you need to install 
 ## Credits
 
 * [Delano Mandelbaum](http://solutious.com)
+* [Daniel J. Berger] for file logic borrowed from ptools[http://raa.ruby-lang.org/project/ptools/]
 
 
 ## Thanks 

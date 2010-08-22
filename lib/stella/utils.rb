@@ -5,8 +5,12 @@ autoload :IPAddr, 'ipaddr'
 
 class Stella
   
+  IMAGE_EXT = %w/.bmp .gif .jpg .jpeg .png .ico/ unless defined?(Stella::IMAGE_EXT)
+  
   # A motley collection of methods that Stella loves to call!
   module Utils
+    
+    
     extend self
     include Socket::Constants
 
@@ -14,7 +18,50 @@ class Stella
     @addr_classA = IPAddr.new("10.0.0.0/8")
     @addr_classB = IPAddr.new("172.16.0.0/16")
     @addr_classC = IPAddr.new("192.168.0.0/24")
+    
+    def self.image?(name, contents)
+       ext = IMAGE_EXT.include?(File.extname(name.downcase))
+       ext && (bmp?(contents) || jpg?(contents) || png?(contents) || gif?(contents) || ico?(contents))
+    end
+    
+    # Checks if the file has more than 30% non-ASCII characters.
+    # NOTE: how to determine the difference between non-latin and binary?
+    def binary?(s)
+      s = s.to_s.split(//) unless Array === s
+      s.slice!(0, 4096)  # limit to a typcial blksize
+      ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
+    end
+    
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def bmp?(a)
+      possible = ['BM6', 'BM' << 226.chr]
+      possible.member? a.slice(0, 3)
+    end
 
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def jpg?(a)
+      a.slice(0, 10) == "\377\330\377\340\000\020JFIF"
+    end
+
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def png?(a)
+      a.slice(0, 4) == "\211PNG"
+    end
+
+    def ico?(a)
+      a.slice(0, 3) == [0.chr, 0.chr, 1.chr].join
+    end
+
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def gif?(a)
+      ['GIF89a', 'GIF97a'].include?(a.slice(0, 6))
+    end
+    
+    
     def ipaddr(host)
       host = host.host if host.kind_of?(URI)
       begin
