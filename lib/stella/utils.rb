@@ -28,7 +28,8 @@ class Stella
     # Checks if the file has more than 30% non-ASCII characters.
     # NOTE: how to determine the difference between non-latin and binary?
     def binary?(s)
-      s = s.to_s.split(//) unless Array === s
+      puts "TODO: fix encoding issue in 1.9"
+      s = s.to_s.split(//) rescue [] unless Array === s
       s.slice!(0, 4096)  # limit to a typcial blksize
       ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
     end

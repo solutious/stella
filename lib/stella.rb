@@ -1,3 +1,4 @@
+# encoding: utf-8
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
 %w{tryouts benelux}.each do |dir|
