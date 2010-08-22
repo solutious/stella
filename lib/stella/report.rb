@@ -161,7 +161,11 @@ class Stella
         @is_binary = Stella::Utils.binary?(log.first.response_body)
         @is_image = Stella::Utils.image?(log.first.response_body)
         unless binary? || image?
-          @response_body = log.first.response_body
+          @response_body = log.first.response_body.to_s
+          if @response_body.size >= 250_000
+            @response_body = @response_body.slice 0, 249_999
+            @response_body << ' [truncated]'
+          end
           @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
         end
         @response_body_digest = log.first.response_body.digest
