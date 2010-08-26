@@ -152,6 +152,9 @@ class Stella::Template
   def result(binding)
     @template.result(binding)
   end
+  def self.from_file(path)
+    new File.read(path)
+  end
   def to_s() src end
 end
 

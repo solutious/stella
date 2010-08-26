@@ -65,8 +65,8 @@ class Stella
       field :exceptions
       field :timeouts
       def process(filter={})
-        @exceptions = timeline.messages.filter(:state => :exception)
-        @timeouts = timeline.messages.filter(:state => :timeout)
+        @exceptions = timeline.messages.filter(:kind => :http_log, :state => :exception)
+        @timeouts = timeline.messages.filter(:kind => :http_log, :state => :timeout)
         processed!
       end
       def exceptions?
@@ -171,9 +171,11 @@ class Stella
       def process(filter={})
         log = timeline.messages.filter(:kind => :http_log)
         return if log.empty?
+        
         unless Stella::Utils.binary?(log.first.request_body) || Stella::Utils.image?(log.first.request_body)
           @request_body = log.first.request_body 
         end
+        
         @request_body_digest = log.first.request_body.digest
         @is_binary = Stella::Utils.binary?(log.first.response_body)
         @is_image = Stella::Utils.image?(log.first.response_body)
@@ -223,6 +225,7 @@ class Stella
       field :request_content_size     => Benelux::Stats::Calculator
       field :response_headers_size    => Benelux::Stats::Calculator
       field :response_content_size    => Benelux::Stats::Calculator
+      field :requests                 => Integer
       def process(filter={})
         return if processed?
         @response_time = timeline.stats.group(:response_time).merge
@@ -233,16 +236,17 @@ class Stella
         #@response_time2 = Benelux::Stats::Calculator.new 
         #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
         log = timeline.messages.filter(:kind => :http_log)
+        @requests = log.size
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_content_size = Benelux::Stats::Calculator.new 
         @response_headers_size = Benelux::Stats::Calculator.new 
         @response_content_size = Benelux::Stats::Calculator.new 
         unless log.empty?
           log.each do |entry|
-            @request_headers_size.sample entry.request_headers.size
-            @request_content_size.sample entry.request_body.size
-            @response_headers_size.sample entry.response_headers.size
-            @response_content_size.sample entry.response_body.size
+            @request_headers_size.sample entry.request_headers.size if entry.request_headers
+            @request_content_size.sample entry.request_body.size if entry.request_body
+            @response_headers_size.sample entry.response_headers.size if entry.response_headers
+            @response_content_size.sample entry.response_body.size if entry.response_body
           end
         end
         processed!

@@ -71,7 +71,7 @@ class Stella
                HTTPClient::SendTimeoutError,
                HTTPClient::ReceiveTimeoutError,
                Errno::ECONNRESET => ex
-          Stella.le ex.message, ex.backtrace
+          Stella.ld "[#{ex.class}] #{ex.message}"
           log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
           if res 
             log.request_headers = res.request.header.dump if res.request 
@@ -80,11 +80,12 @@ class Stella
             log.response_headers = res.header.dump if res.content
             log.response_body = res.body.content if res.body
           end
-          log.msg = http_client.receive_timeout
+          log.msg = "#{ex.class} (#{http_client.receive_timeout})"
           tt.add_message log, :kind => :http_log, :state => :timeout
           Benelux.remove_thread_tags :status, :request, :stella_id
           next
         rescue Stella::HTTPError => ex
+          Stella.ld "[#{ex.class}] #{ex.message}"
           log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
           if res 
             log.request_headers = res.request.header.dump if res.request 
@@ -98,7 +99,7 @@ class Stella
           Benelux.remove_thread_tags :status, :request, :stella_id
           break
         rescue => ex
-          Stella.le ex.message, ex.backtrace
+          Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace
           break
         end
       end
@@ -118,6 +119,11 @@ class Stella
       #http_client.debug_dev = STDOUT if Stella.debug?
       http_client.protocol_version = "HTTP/1.1"
       #http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE
+      if @opts[:timeout]
+        http_client.connect_timeout = @opts[:timeout]
+        http_client.send_timeout = @opts[:timeout]
+        http_client.receive_timeout = @opts[:timeout]
+      end
       http_client
     end
     

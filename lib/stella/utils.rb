@@ -21,13 +21,15 @@ class Stella
       IMAGE_EXT.include?(File.extname(name.downcase))
     end
     
-    def image?(contents)
-       (bmp?(contents) || jpg?(contents) || png?(contents) || gif?(contents) || ico?(contents))
+    def image?(s)
+      return false if s.nil?
+      (bmp?(s) || jpg?(s) || png?(s) || gif?(s) || ico?(s))
     end
     
     # Checks if the file has more than 30% non-ASCII characters.
     # NOTE: how to determine the difference between non-latin and binary?
     def binary?(s)
+      return false if s.nil?
       puts "TODO: fix encoding issue in 1.9"
       s = s.to_s.split(//) rescue [] unless Array === s
       s.slice!(0, 4096)  # limit to a typcial blksize
