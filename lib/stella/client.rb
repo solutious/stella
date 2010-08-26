@@ -58,11 +58,13 @@ class Stella
           
           res = http_client.get(built_uri, params, headers)
           @session.events << stella_id
+          
+          raise Stella::HTTPError, res.status if res.status >= 400
+          
           log = Stella::Log::HTTP.new Stella.now,  
-                   req.http_method, res.status, built_uri, params, 
-                   res.request.header.dump, res.request.body.content, 
-                   res.header.dump, res.body.content
-                   
+                   req.http_method, built_uri, params, res.request.header.dump, 
+                   res.request.body.content, res.status, res.header.dump, res.body.content
+          
           tt.add_message log, :status => res.status, :kind => :http_log
           
         rescue HTTPClient::ConnectTimeoutError, 
@@ -70,13 +72,33 @@ class Stella
                HTTPClient::ReceiveTimeoutError,
                Errno::ECONNRESET => ex
           Stella.le ex.message, ex.backtrace
-          #update(:request_timeout, usecase, uri, req, params, headers, counter, container, http_client.receive_timeout)
+          log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
+          if res 
+            log.request_headers = res.request.header.dump if res.request 
+            log.request_body = res.request.body.content if res.request 
+            log.response_status = res.status
+            log.response_headers = res.header.dump if res.content
+            log.response_body = res.body.content if res.body
+          end
+          log.msg = http_client.receive_timeout
+          tt.add_message log, :kind => :http_log, :state => :timeout
           Benelux.remove_thread_tags :status, :request, :stella_id
           next
+        rescue Stella::HTTPError => ex
+          log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
+          if res 
+            log.request_headers = res.request.header.dump if res.request 
+            log.request_body = res.request.body.content if res.request 
+            log.response_status = res.status
+            log.response_headers = res.header.dump if res.content
+            log.response_body = res.body.content if res.body
+          end
+          log.msg = ex.message
+          tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
+          Benelux.remove_thread_tags :status, :request, :stella_id
+          break
         rescue => ex
           Stella.le ex.message, ex.backtrace
-          #update(:request_unhandled_exception, usecase, uri, req, params, ex)
-          Benelux.remove_thread_tags :status, :request, :stella_id
           break
         end
       end

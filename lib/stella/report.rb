@@ -9,13 +9,14 @@ class Stella
       include Selectable::Object
       field :stamp
       field :httpmethod
-      field :httpstatus
       field :uri     
       field :request_params
       field :request_headers
       field :request_body
+      field :response_status
       field :response_headers
       field :response_body
+      field :msg
     end
   end
   class Report < StellaObject
@@ -64,12 +65,15 @@ class Stella
       field :exceptions
       field :timeouts
       def process(filter={})
-        @exceptions = timeline.messages.filter(:kind => :exception)
-        @timeouts = timeline.messages.filter(:kind => :timeout)
+        @exceptions = timeline.messages.filter(:state => :exception)
+        @timeouts = timeline.messages.filter(:state => :timeout)
         processed!
       end
-      def errors?
-        !@exceptions.empty? || !@timeouts.empty?
+      def exceptions?
+        !@exceptions.empty?
+      end
+      def timeouts?
+        !@timeouts.empty?
       end
       def all 
         [@exceptions, @timeouts].flatten
@@ -77,8 +81,15 @@ class Stella
       module ReportMethods
         # expects Statuses plugin is loaded
         def errors?
+          exceptions? || timeouts? || !statuses.nonsuccessful.empty?
+        end
+        def exceptions?
           return false unless processed? && errors
-          errors.errors? || !statuses.nonsuccessful.empty?
+          errors.exceptions?
+        end
+        def timeouts?
+          return false unless processed? && errors
+          errors.timeouts?
         end
       end
       register :errors
@@ -98,7 +109,13 @@ class Stella
       def successful
         @values.select { |status| status.to_i < 400 }
       end
+      def success?
+        nonsuccessful.empty?
+      end
       module ReportMethods
+        def success?
+          statuses.success?
+        end
         def statuses_pretty
           pretty = ["Statuses"]
           if statuses.successful.size > 0

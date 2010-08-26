@@ -58,6 +58,15 @@ class StellaError < RuntimeError
 end
 
 class Stella
+  class HTTPError < StellaError
+    attr_reader :status
+    def initialize(status)
+      @status = status
+    end
+    def message
+      "#{status} error"
+    end
+  end
   require 'stella/utils'
   require 'stella/client'
   require 'stella/engine'
