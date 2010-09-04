@@ -41,7 +41,7 @@ class Stella
         opts[:concurrency].times do 
           threads << Thread.new do |thread|
             client = Stella::Client.new testrun.options
-            Benelux.current_track "client#{client.gibbler.shorten}"
+            Benelux.current_track "client_#{client.gibbler.shorten}"
             begin
               opts[:repetitions].times do |idx|
                 testrun.plan.usecases.each_with_index do |uc,i|
@@ -53,8 +53,6 @@ class Stella
             rescue => ex
               puts ex.message
               puts ex.backtrace if Stella.debug?
-              testrun.etime = Stella.now
-              testrun.fubar!
             end
           end
         end
