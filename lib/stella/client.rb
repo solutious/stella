@@ -67,7 +67,8 @@ class Stella
           
           tt.add_message log, :status => res.status, :kind => :http_log
           
-        rescue HTTPClient::ConnectTimeoutError, 
+        rescue SocketError, 
+               HTTPClient::ConnectTimeoutError, 
                HTTPClient::SendTimeoutError,
                HTTPClient::ReceiveTimeoutError,
                Errno::ECONNRESET => ex

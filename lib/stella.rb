@@ -1,7 +1,7 @@
 # encoding: utf-8
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
-%w{tryouts benelux}.each do |dir|
+%w{tryouts benelux em-http-request}.each do |dir|
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 end
 
@@ -10,9 +10,6 @@ require 'storable'
 require 'benelux'
 require 'gibbler/aliases'
 require 'stella/core_ext'
-require 'em-http'
-require 'em-http_ext'
-p 1
 
 class Stella
   module VERSION

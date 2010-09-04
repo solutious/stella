@@ -34,18 +34,16 @@ class Stella
       include Engine::Base
       extend self
       def run testrun, opts={}
-        reps = (testrun.options[:repetitions] || testrun.options['repetitions'] || 1).to_i
-        conc = (testrun.options[:concurrency] || testrun.options['concurrency'] || 1).to_i
+        opts = parse_opts testrun.options, opts
         threads = []
-        
         testrun.stime = Stella.now
         testrun.running!
-        conc.times do 
+        opts[:concurrency].times do 
           threads << Thread.new do |thread|
             client = Stella::Client.new testrun.options
             Benelux.current_track "client#{client.gibbler.shorten}"
             begin
-              reps.times do |idx|
+              opts[:repetitions].times do |idx|
                 testrun.plan.usecases.each_with_index do |uc,i|
                   Benelux.current_track.add_tags :usecase => uc.id
                   Stella.rescue { client.execute uc }
@@ -62,7 +60,6 @@ class Stella
         end
         threads.each { |thread| thread.join }
         timeline = Benelux.merge_tracks
-        p Benelux.tracks.keys
         begin
           testrun.etime = Stella.now
           testrun.report = Stella::Report.new timeline
@@ -75,6 +72,13 @@ class Stella
           testrun.fubar!
         end
         testrun.report
+      end
+
+      private 
+      def parse_opts(runopts, opts)
+        runopts[:repetitions] ||= (runopts['repetitions'] || 1).to_i
+        runopts[:concurrency] ||= (runopts['concurrency'] || 1).to_i
+        runopts.merge opts
       end
 
       Benelux.add_timer          HTTPClient, :do_request, :response_time
