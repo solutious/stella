@@ -34,32 +34,46 @@ class Stella
       include Engine::Base
       extend self
       def run testrun, opts={}
-        reps = testrun.options[:repetitions] || testrun.options['repetitions'] || 1
-        thread = Thread.new do
-          Benelux.current_track :checkup
-          client = Stella::Client.new testrun.options
-          testrun.stime = Stella.now
-          testrun.running!
-          begin
-            reps.times do |idx|
-              testrun.plan.usecases.each_with_index do |uc,i|
-                Benelux.add_thread_tags :usecase => uc.id
-                Stella.rescue { client.execute uc }
-                Benelux.remove_thread_tags :usecase
+        reps = (testrun.options[:repetitions] || testrun.options['repetitions'] || 1).to_i
+        conc = (testrun.options[:concurrency] || testrun.options['concurrency'] || 1).to_i
+        threads = []
+        
+        testrun.stime = Stella.now
+        testrun.running!
+        conc.times do 
+          threads << Thread.new do |thread|
+            client = Stella::Client.new testrun.options
+            Benelux.current_track "client#{client.gibbler.shorten}"
+            begin
+              reps.times do |idx|
+                testrun.plan.usecases.each_with_index do |uc,i|
+                  Benelux.current_track.add_tags :usecase => uc.id
+                  Stella.rescue { client.execute uc }
+                  Benelux.current_track.remove_tags :usecase
+                end
               end
+            rescue => ex
+              puts ex.message
+              puts ex.backtrace if Stella.debug?
+              testrun.etime = Stella.now
+              testrun.fubar!
             end
-            testrun.etime = Stella.now
-            testrun.report = Stella::Report.new thread.timeline
-            testrun.report.process
-            testrun.done!
-          rescue => ex
-            puts ex.message
-            puts ex.backtrace if Stella.debug?
-            testrun.etime = Stella.now
-            testrun.fubar!
           end
         end
-        thread.join
+        threads.each { |thread| thread.join }
+        timeline = Benelux.merge_tracks
+        p Benelux.tracks.keys
+        begin
+          testrun.etime = Stella.now
+          testrun.report = Stella::Report.new timeline
+          testrun.report.process
+          testrun.done!
+        rescue => ex
+          puts ex.message
+          puts ex.backtrace if Stella.debug?
+          testrun.etime = Stella.now
+          testrun.fubar!
+        end
         testrun.report
       end
 

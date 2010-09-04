@@ -40,7 +40,7 @@ class Stella
 
     def execute usecase
       http_client = create_http_client
-      tt = Benelux.thread_timeline
+      tt = Benelux.current_track.timeline
       usecase.requests.each_with_index do |req,idx|
         begin 
           params = req.params || {}
@@ -48,8 +48,8 @@ class Stella
           stella_id = [Stella.now, index, req.id, params, headers, idx].digest
           built_uri = build_uri(req.uri)
           
-          Benelux.add_thread_tags :request   => req.id
-          Benelux.add_thread_tags :stella_id => stella_id
+          Benelux.current_track.add_tags :request   => req.id
+          Benelux.current_track.add_tags :stella_id => stella_id
           
           ## Useful for testing larger large request header
           ## 50.times do |idx|
@@ -82,7 +82,7 @@ class Stella
           end
           log.msg = "#{ex.class} (#{http_client.receive_timeout})"
           tt.add_message log, :kind => :http_log, :state => :timeout
-          Benelux.remove_thread_tags :status, :request, :stella_id
+          Benelux.current_track.remove_tags :status, :request, :stella_id
           next
         rescue Stella::HTTPError => ex
           Stella.ld "[#{ex.class}] #{ex.message}"
@@ -96,7 +96,7 @@ class Stella
           end
           log.msg = ex.message
           tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
-          Benelux.remove_thread_tags :status, :request, :stella_id
+          Benelux.current_track.remove_tags :status, :request, :stella_id
           break
         rescue => ex
           Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace

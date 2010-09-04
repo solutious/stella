@@ -10,6 +10,9 @@ require 'storable'
 require 'benelux'
 require 'gibbler/aliases'
 require 'stella/core_ext'
+require 'em-http'
+require 'em-http_ext'
+p 1
 
 class Stella
   module VERSION
