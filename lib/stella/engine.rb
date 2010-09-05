@@ -35,12 +35,13 @@ class Stella
       extend self
       def run testrun, opts={}
         opts = parse_opts testrun.options, opts
+        Stella.ld "testrun opts: #{opts.inspect}"
         threads = []
         testrun.stime = Stella.now
         testrun.running!
         opts[:concurrency].times do 
           threads << Thread.new do
-            client = Stella::Client.new testrun.options
+            client = Stella::Client.new opts
             Benelux.current_track "client_#{client.clientid.shorten}"
             begin
               opts[:repetitions].times do |idx|
@@ -91,9 +92,15 @@ class Stella
 
       private 
       def parse_opts(runopts, opts)
-        runopts[:repetitions] ||= (runopts['repetitions'] || 1).to_i
-        runopts[:concurrency] ||= (runopts['concurrency'] || 1).to_i
-        runopts[:wait] ||= (runopts['wait'] || 1).to_i
+        runopts.keys.each do |key|
+          runopts[key.to_sym] = runopts.delete(key) if String === key
+        end
+        opts.keys.each do |key|
+          opts[key.to_sym] = opts.delete(key) if String === key
+        end
+        runopts[:repetitions] ||= 1
+        runopts[:concurrency] ||= 1
+        runopts[:wait] ||= 1
         runopts.merge opts
       end
 

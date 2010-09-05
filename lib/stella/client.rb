@@ -108,7 +108,7 @@ class Stella
             log.response_headers = @session.res.header.dump if @session.res.content
             log.response_body = @session.res.body.content if @session.res.body
           end
-          log.msg = "#{ex.class} (#{http_client.receive_timeout})"
+          log.msg = "#{ex.class} (#{@session.http_client.receive_timeout})"
           tt.add_message log, :kind => :http_log, :state => :timeout
           Benelux.current_track.remove_tags :status, :request, :stella_id
           next
