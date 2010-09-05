@@ -58,6 +58,8 @@ class StellaError < RuntimeError
 end
 
 class Stella
+  class MissingURIVar < StellaError
+  end
   class HTTPError < StellaError
     attr_reader :status
     def initialize(status)

@@ -7,13 +7,129 @@ Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 require 'pp'
 
 class Stella
-  class Session
-    attr_reader :events
-    def initialize
+  class Session < Hash
+    attr_reader :events, :response_handler
+    attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri
+    def initialize(base_uri=nil)
+      @base_uri = base_uri
+      @base_uri &&= Addressable::URI.parse(@base_uri) if String === @base_uri
       @events = SelectableArray.new
     end
     def current_event
       @events.last
+    end
+    alias_method :param, :params
+    alias_method :header, :headers
+    def session
+      self
+    end    
+    def prepare_request req
+      @req = req
+      @params, @headers = req.params, req.headers
+      instance_exec(&req.callback) unless req.callback.nil?
+      @uri = if @redirect_uri
+        @params = {}
+        @headers = {}
+        tmp = [@redirect_uri.scheme || 'http', '://', @redirect_uri.host].join
+        tmp << ":#{@redirect_uri.port}" unless [80,443].member?(@redirect_uri.port)
+        @base_uri = Addressable::URI.parse(tmp)
+        @redirect_uri
+      else
+        build_uri
+      end
+      @redirect_uri = nil  # one time deal
+    end
+    def generate_request(event_id)
+      Stella.ld "#{@req.http_method} #{@req.uri} -> #{uri}"
+      Stella.ld " #{@params.inspect}" unless @params.empty?
+      Stella.ld " #{@headers.inspect}" unless @headers.empty? 
+      @res =  http_client.send(@req.http_method, @uri, params, headers)
+      @events << event_id
+      @res
+    end
+    def location
+      @location ||= Addressable::URI.parse(@res.header['location'].first || '')
+      @location
+    end
+    def redirect?
+      @res && (300..399).member?(@res.status)
+    end
+    def doc
+      return @doc unless @doc.nil?
+      return nil if @res.content.nil? || @res.content.empty?
+      str = RUBY_VERSION >= "1.9.0" ? @res.content.force_encoding("UTF-8") : @res.content
+      # NOTE: It's important to parse the document on every 
+      # request because this container is available for the
+      # entire life of a usecase. 
+      @doc = case (@res.header['Content-Type'] || []).first
+      when /text\/html/
+        Nokogiri::HTML(str)
+      when /text\/xml/
+        Nokogiri::XML(str)
+      when /text\/yaml/
+        YAML.load(str)
+      when /application\/json/
+        JSON.load(str)
+      end
+    end
+    def handle_response
+      return unless response_handler?
+      instance_exec(&find_response_handler(@res.status))
+    end
+    def find_response_handler(status)
+      return if response_handler.nil?
+      key = response_handler.keys.select { |range| range.member?(status) }.first
+      response_handler[key] if key
+    end
+    def response_handler?
+      status = (@res.status || 0).to_i
+      !find_response_handler(status).nil?
+    end
+    def response_handler(range=nil, &blk)
+      return @response_handler if range.nil?
+      @response_handler ||= {}
+      range = range.to_i..range.to_i unless Range === range
+      @response_handler[range] = blk unless blk.nil?
+      @response_handler[range]
+    end
+    def clear_previous_request
+      [:doc, :location, :res, :req, :params, :headers, :response_handler].each do |n|
+        instance_variable_set :"@#{n}", nil
+      end
+    end
+    private 
+    def build_uri
+      uri = @req.uri.clone # need to clone b/c we modify uri in scan.
+      @req.uri.scan(/([:\$])([a-z_]+)/i) do |inst|
+        val = find_replacement_value(inst[1])
+        Stella.ld " FOUND VAR: #{inst[0]}#{inst[1]} (value: #{val})"
+        if val.nil?
+          raise Stella::MissingURIVar, "#{inst[0]}#{inst[1]} in #{@req.uri}"
+        end
+        re = Regexp.new "\\#{inst[0]}#{inst[1]}"
+        uri.gsub! re, val.to_s unless val.nil?
+      end
+      uri = Addressable::URI.parse(uri)
+      uri.scheme ||= base_uri.scheme
+      uri.host ||= base_uri.host
+      uri
+    end
+    # Testplan URIs can contain variables in the form <tt>:varname</tt>. 
+    # This method looks at the request parameters and then at the 
+    # usecase's resource hash for a replacement value. 
+    # If not found, returns nil. 
+    def find_replacement_value(name)
+      #Stella.ld "REPLACE: #{name}"
+      #Stella.ld "PARAMS: #{params.inspect}"
+      #Stella.ld "IVARS: #{container.instance_variables}"
+      value = if @params.has_key?(name.to_sym)
+        @params.delete name.to_sym
+      elsif self.has_key?(name)
+        self[name]
+      elsif Stella::Testplan.global?(name)
+        Stella::Testplan.global(name)
+      end
+      value
     end
   end
   
@@ -35,18 +151,18 @@ class Stella
       @base_uri, @index = opts[:base_uri] || opts['base_uri'], index
       @proxy = OpenStruct.new
       @done = false
-      @session = Session.new
+      @session = Session.new @base_uri
+      @redirect_count = 0
     end
 
-    def execute usecase
-      http_client = create_http_client
+    def execute usecase, &each_request
+      @session.http_client = create_http_client
       tt = Benelux.current_track.timeline
       usecase.requests.each_with_index do |req,idx|
         begin 
-          params = req.params || {}
-          headers = req.headers || {}
-          stella_id = [Stella.now, index, req.id, params, headers, idx].digest
-          built_uri = build_uri(req.uri)
+          @session.prepare_request req 
+          
+          stella_id = [Stella.now, index, req.id, @session.uri.to_s, @session.params, @session.headers, idx].digest
           
           Benelux.current_track.add_tags :request   => req.id
           Benelux.current_track.add_tags :stella_id => stella_id
@@ -56,16 +172,36 @@ class Stella
           ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
           ## end
           
-          res = http_client.get(built_uri, params, headers)
-          @session.events << stella_id
+          res = @session.generate_request stella_id
           
-          raise Stella::HTTPError, res.status if res.status >= 400
+          each_request.call(@session) unless each_request.nil?
+          
+          if @session.response_handler?
+            @session.handle_response
+          elsif res.status >= 400
+            raise Stella::HTTPError, res.status 
+          end
           
           log = Stella::Log::HTTP.new Stella.now,  
-                   req.http_method, built_uri, params, res.request.header.dump, 
+                   req.http_method, @session.uri, @session.params, res.request.header.dump, 
                    res.request.body.content, res.status, res.header.dump, res.body.content
           
           tt.add_message log, :status => res.status, :kind => :http_log
+          
+          if req.follow && @session.redirect? && @redirect_count < 10
+            # TODO: warn when redirecting from https to http
+            Stella.ld " FOUND REDIRECT: #{@session.location}"
+            raise ForcedRedirect, @session.location
+          end
+          
+          @redirect_count = 0
+          @session.clear_previous_request
+          
+        rescue ForcedRedirect => ex  
+          @redirect_count += 1
+          @session.clear_previous_request
+          @session.redirect_uri = ex.location
+          retry
           
         rescue SocketError, 
                HTTPClient::ConnectTimeoutError, 
@@ -136,5 +272,11 @@ class Stella
       @done == true
     end
     
+    class ForcedRedirect < Exception
+      attr_accessor :location
+      def initialize(l)
+        @location = l
+      end
+    end
   end
 end

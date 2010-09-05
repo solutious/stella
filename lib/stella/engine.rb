@@ -46,7 +46,11 @@ class Stella
               opts[:repetitions].times do |idx|
                 testrun.plan.usecases.each_with_index do |uc,i|
                   Benelux.current_track.add_tags :usecase => uc.id
-                  Stella.rescue { client.execute uc }
+                  Stella.rescue { 
+                    client.execute uc do |session|
+                      #puts session.doc.css('#navigation')
+                    end
+                  }
                   Benelux.current_track.remove_tags :usecase
                 end
               end

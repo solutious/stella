@@ -73,6 +73,13 @@ class Stella
       def plan?(name)
         !plan(name).nil?
       end
+      def global?(name)
+        global.has_key?(name)
+      end
+      def global
+        @global ||= {}
+        @global
+      end
     end
   end
   class Usecase < StellaObject
@@ -117,12 +124,13 @@ class Stella
               @usecases ||= []
               @usecases
             end
-            def checkup(opts={})
-              run Stella::Engine::Checkup 
+            def checkup(base_uri, opts={})
+              opts[:base_uri] = base_uri
+              run Stella::Engine::Checkup, opts
             end
             def run(engine, opts={})
-              run = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode
-              report = engine.run run; nil
+              testrun = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode, opts
+              report = engine.run testrun
             end
           end
         end
@@ -137,6 +145,10 @@ class Stella
       [:get, :put, :head, :post, :delete].each do |meth|
         define_method meth do |path,opts={},&definition|
           create_request_template meth, path, opts, &definition
+        end
+      end
+      [:xget, :xput, :xhead, :xpost, :xdelete].each do |ignore|
+        define_method ignore do |*args|
         end
       end
       private 
@@ -190,7 +202,6 @@ class Stella
       @headers ||= {}
       @follow ||= false
       @callback = definition
-      #instance_exec(&definition) unless definition.nil?
     end
     def postprocess
       unless response_handler.nil?
@@ -208,14 +219,6 @@ class Stella
     end
     alias_method :param, :params
     alias_method :header, :headers
-    
-    def response_handler(range=nil, &blk)
-      return @response_handler if range.nil?
-      @response_handler ||= {}
-      range = range.to_i..range.to_i unless Range === range
-      @response_handler[range] = blk unless blk.nil?
-      @response_handler[range]
-    end
   end
     
   TP = Testplan
