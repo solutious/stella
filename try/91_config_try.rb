@@ -11,14 +11,12 @@ class TestSuite
       end
     end
     
-    get '/'
-    
-    xpost '/login', :follow => true do
+    post '/login', :follow => true do
       param[:shrimp] = session[:shrimp]
       param[:u] = 'trebek' #session[:user]
       param[:p] = '' #session[:pass]
       response_handler 200 do
-        puts session.status
+        puts res.status, doc.css('#navigation')
         session[:redirect_uri] = header[:Location]
       end
     end

@@ -8,8 +8,8 @@ require 'pp'
 
 class Stella
   class Session < Hash
-    attr_reader :events, :response_handler
-    attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri
+    attr_reader :events, :response_handler, :res, :req
+    attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method
     def initialize(base_uri=nil)
       @base_uri = base_uri
       @base_uri &&= Addressable::URI.parse(@base_uri) if String === @base_uri
@@ -25,25 +25,28 @@ class Stella
     end    
     def prepare_request req
       @req = req
-      @params, @headers = req.params, req.headers
+      @http_method, @params, @headers = req.http_method, req.params, req.headers
       instance_exec(&req.callback) unless req.callback.nil?
       @uri = if @redirect_uri
         @params = {}
         @headers = {}
-        tmp = [@redirect_uri.scheme || 'http', '://', @redirect_uri.host].join
-        tmp << ":#{@redirect_uri.port}" unless [80,443].member?(@redirect_uri.port)
-        @base_uri = Addressable::URI.parse(tmp)
-        @redirect_uri
+        @http_method = :get
+        if @redirect_uri.scheme
+          tmp = [@redirect_uri.scheme, '://', @redirect_uri.host].join
+          tmp << ":#{@redirect_uri.port}" unless [80,443].member?(@redirect_uri.port)
+          @base_uri = Addressable::URI.parse(tmp)
+        end
+        build_uri @redirect_uri
       else
-        build_uri
+        build_uri @req.uri
       end
       @redirect_uri = nil  # one time deal
     end
     def generate_request(event_id)
-      Stella.ld "#{@req.http_method} #{@req.uri} -> #{uri}"
+      Stella.ld "#{@http_method} #{uri} (#{@req.id.short})"
       Stella.ld " #{@params.inspect}" unless @params.empty?
       Stella.ld " #{@headers.inspect}" unless @headers.empty? 
-      @res =  http_client.send(@req.http_method, @uri, params, headers)
+      @res =  http_client.send(@http_method, @uri, params, headers)
       @events << event_id
       @res
     end
@@ -93,14 +96,14 @@ class Stella
       @response_handler[range]
     end
     def clear_previous_request
-      [:doc, :location, :res, :req, :params, :headers, :response_handler].each do |n|
+      [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method].each do |n|
         instance_variable_set :"@#{n}", nil
       end
     end
     private 
-    def build_uri
-      uri = @req.uri.clone # need to clone b/c we modify uri in scan.
-      @req.uri.scan(/([:\$])([a-z_]+)/i) do |inst|
+    def build_uri(reqtempl)
+      uri = reqtempl.clone # need to clone b/c we modify uri in scan.
+      reqtempl.to_s.scan(/([:\$])([a-z_]+)/i) do |inst|
         val = find_replacement_value(inst[1])
         Stella.ld " FOUND VAR: #{inst[0]}#{inst[1]} (value: #{val})"
         if val.nil?
@@ -176,21 +179,21 @@ class Stella
           
           each_request.call(@session) unless each_request.nil?
           
-          if @session.response_handler?
-            @session.handle_response
-          elsif res.status >= 400
+          if res.status >= 400
             raise Stella::HTTPError, res.status 
           end
           
+          
+          # Needs to happen before handle response incase it raises an exception
           log = Stella::Log::HTTP.new Stella.now,  
-                   req.http_method, @session.uri, @session.params, res.request.header.dump, 
+                   @session.http_method, @session.uri, @session.params, res.request.header.dump, 
                    res.request.body.content, res.status, res.header.dump, res.body.content
           
           tt.add_message log, :status => res.status, :kind => :http_log
           
-          if req.follow && @session.redirect? && @redirect_count < 10
-            # TODO: warn when redirecting from https to http
-            Stella.ld " FOUND REDIRECT: #{@session.location}"
+          @session.handle_response if @session.response_handler?
+          
+          if req.follow && @session.redirect?
             raise ForcedRedirect, @session.location
           end
           
@@ -198,10 +201,14 @@ class Stella
           @session.clear_previous_request
           
         rescue ForcedRedirect => ex  
-          @redirect_count += 1
-          @session.clear_previous_request
-          @session.redirect_uri = ex.location
-          retry
+          # TODO: warn when redirecting from https to http
+          Stella.ld " FOUND REDIRECT: #{@session.location}"
+          if @redirect_count < 10
+            @redirect_count += 1
+            @session.clear_previous_request
+            @session.redirect_uri = ex.location
+            retry
+          end
           
         rescue SocketError, 
                HTTPClient::ConnectTimeoutError, 
@@ -209,7 +216,7 @@ class Stella
                HTTPClient::ReceiveTimeoutError,
                Errno::ECONNRESET => ex
           Stella.ld "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
           if res 
             log.request_headers = res.request.header.dump if res.request 
             log.request_body = res.request.body.content if res.request 
@@ -223,7 +230,7 @@ class Stella
           next
         rescue Stella::HTTPError => ex
           Stella.ld "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, req.http_method, built_uri, params
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
           if res 
             log.request_headers = res.request.header.dump if res.request 
             log.request_body = res.request.body.content if res.request 
