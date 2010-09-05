@@ -58,7 +58,9 @@ class StellaError < RuntimeError
 end
 
 class Stella
-  class MissingURIVar < StellaError
+  class UsecaseError < StellaError
+  end
+  class PageError < StellaError
   end
   class HTTPError < StellaError
     attr_reader :status

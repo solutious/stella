@@ -47,8 +47,9 @@ class Stella
                 testrun.plan.usecases.each_with_index do |uc,i|
                   Benelux.current_track.add_tags :usecase => uc.id
                   Stella.rescue { 
+                    puts ' %-60s %s' % [uc.desc, uc.id.short]
                     client.execute uc do |session|
-                      puts session.uri
+                      puts '  %-64s  %d' % [session.uri, session.status]
                     end
                   }
                   Benelux.current_track.remove_tags :usecase
@@ -80,6 +81,7 @@ class Stella
       def parse_opts(runopts, opts)
         runopts[:repetitions] ||= (runopts['repetitions'] || 1).to_i
         runopts[:concurrency] ||= (runopts['concurrency'] || 1).to_i
+        runopts[:wait] ||= (runopts['wait'] || 1).to_i
         runopts.merge opts
       end
 

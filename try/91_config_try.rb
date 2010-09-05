@@ -1,10 +1,25 @@
 # export trebekpass=''
-Stella.debug=true
+#Stella.debug=true
 
-class TestSuite
-  class SimpleUsecase < Stella::Usecase
+class Anonymous
+  class FindMonitor < Stella::Usecase
+
+    get '/' do
+      response_handler 200 do
+        session[:monitor_uri] = doc.css('#headingMonitoring a').first['href'] rescue nil
+        raise Stella::PageError, "No value for :monitor_uri" if session[:monitor_uri].to_s.empty?
+      end
+    end
     
-    xget '/' 
+    get ':monitor_uri'
+    
+  end
+end
+
+class Authorized
+  class Login < Stella::Usecase
+    
+    get '/' 
     
     get '/login', :follow => true do
       response_handler 200 do
@@ -16,30 +31,15 @@ class TestSuite
       param[:shrimp] = session[:shrimp]
       param[:u] = 'trebek'
       param[:p] = ENV['trebekpass']
-      response_handler 200 do
-        puts res.status, doc.css('#navigation')
-        session[:redirect_uri] = header[:Location]
-      end
-    end
-    
-    xget ':redirect_uri' do
-      param[:redirect_uri] = session[:redirect_uri]
-      response_handler 200 do
-        session[:monitor_uris] = doc.css('monitors a')
-      end
-    end
-    
-    xget ':monitor_uri' do
-      param[:monitor_uri] = '<%= session[:monitor_uris].random.href %>'
     end
     
   end
 end
-
 
 #puts Stella::Testplan.plans[:TestSuite].usecases.first
 #h = TestSuite::SimpleUsecase.new.class.instance.to_hash
 #c = Stella::Usecase.from_hash h
 #p c.requests[2].response_handler.to_hash
 
-TestSuite.checkup "http://www.blamestella.com/", :wait => 2..4
+@report = Anonymous.checkup "http://www.blamestella.com/"
+pp @report.errors.all

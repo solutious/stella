@@ -44,6 +44,7 @@ class Stella
       tt = Benelux.current_track.timeline
       usecase.requests.each_with_index do |req,idx|
         begin 
+          debug "request start (session: #{@session.object_id})"
           @session.prepare_request req 
           
           debug "#{@session.http_method} #{@session.uri} (#{req.id.short})"
@@ -99,28 +100,28 @@ class Stella
                HTTPClient::ReceiveTimeoutError,
                Errno::ECONNRESET => ex
           debug "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
-          if res 
-            log.request_headers = res.request.header.dump if res.request 
-            log.request_body = res.request.body.content if res.request 
-            log.response_status = res.status
-            log.response_headers = res.header.dump if res.content
-            log.response_body = res.body.content if res.body
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
+          if @session.res 
+            log.request_headers = @session.res.request.header.dump if @session.res.request 
+            log.request_body = @session.res.request.body.content if @session.res.request 
+            log.response_status = @session.res.status
+            log.response_headers = @session.res.header.dump if @session.res.content
+            log.response_body = @session.res.body.content if @session.res.body
           end
           log.msg = "#{ex.class} (#{http_client.receive_timeout})"
           tt.add_message log, :kind => :http_log, :state => :timeout
           Benelux.current_track.remove_tags :status, :request, :stella_id
           next
           
-        rescue Stella::HTTPError => ex
+        rescue StellaError => ex
           debug "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
-          if res 
-            log.request_headers = res.request.header.dump if res.request 
-            log.request_body = res.request.body.content if res.request 
-            log.response_status = res.status
-            log.response_headers = res.header.dump if res.content
-            log.response_body = res.body.content if res.body
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
+          if @session.res 
+            log.request_headers = @session.res.request.header.dump if @session.res.request 
+            log.request_body = @session.res.request.body.content if @session.res.request 
+            log.response_status = @session.res.status
+            log.response_headers = @session.res.header.dump if @session.res.content
+            log.response_body = @session.res.body.content if @session.res.body
           end
           log.msg = ex.message
           tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
@@ -270,6 +271,9 @@ class Stella
         instance_variable_set :"@#{n}", nil
       end
     end
+    def status
+      @res.status
+    end
     private 
     def build_uri(reqtempl)
       uri = reqtempl.clone # need to clone b/c we modify uri in scan.
@@ -277,7 +281,7 @@ class Stella
         val = find_replacement_value(inst[1])
         Stella.ld " FOUND VAR: #{inst[0]}#{inst[1]} (value: #{val})"
         if val.nil?
-          raise Stella::MissingURIVar, "#{inst[0]}#{inst[1]} in #{@req.uri}"
+          raise Stella::UsecaseError, "no value for #{inst[0]}#{inst[1]} in '#{@req.uri}'"
         end
         re = Regexp.new "\\#{inst[0]}#{inst[1]}"
         uri.gsub! re, val.to_s unless val.nil?
@@ -294,8 +298,8 @@ class Stella
     def find_replacement_value(name)
       value = if @params.has_key?(name.to_sym)
         @params.delete name.to_sym
-      elsif self.has_key?(name)
-        self[name]
+      elsif self.has_key?(name.to_sym) || self.has_key?(name)
+        self[name.to_sym] || self[name]
       elsif Stella::Testplan.global?(name)
         Stella::Testplan.global(name)
       end
