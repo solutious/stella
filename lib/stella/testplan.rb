@@ -95,6 +95,9 @@ class Stella
     def preprocess
       @requests ||= []
     end
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+    end
     def freeze
       return if frozen?
       @requests.each { |r| r.freeze }
@@ -143,7 +146,8 @@ class Stella
         Stella::Testplan.plans[planclass].usecases.last.desc = ucname
       end
       [:get, :put, :head, :post, :delete].each do |meth|
-        define_method meth do |path,opts={},&definition|
+        define_method meth do |*args,&definition|
+          path, opts = *args
           create_request_template meth, path, opts, &definition
         end
       end
@@ -204,6 +208,7 @@ class Stella
       @callback = definition
     end
     def postprocess
+      @id &&= Gibbler::Digest.new(@id)
       unless response_handler.nil?
         response_handler.keys.each do |range|
           proc = response_handler[range]

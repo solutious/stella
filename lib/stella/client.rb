@@ -137,7 +137,7 @@ class Stella
     end
     
     def run_sleeper dur
-      return unless dur
+      return unless dur && dur > 0
       dur = (rand * (dur.last-dur.first) + dur.first) if Range === dur
       debug "sleep: #{dur}"
       sleep dur

@@ -39,28 +39,28 @@ class Stella
         testrun.stime = Stella.now
         testrun.running!
         opts[:concurrency].times do 
-          threads << Thread.new do |thread|
+          threads << Thread.new do
             client = Stella::Client.new testrun.options
-            Benelux.current_track "client_#{client.gibbler.shorten}"
+            Benelux.current_track "client_#{client.clientid.shorten}"
             begin
               opts[:repetitions].times do |idx|
-                puts '%-61s %s' % [testrun.plan.desc, testrun.plan.id.short]
+                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.id.short]
                 testrun.plan.usecases.each_with_index do |uc,i|
                   Benelux.current_track.add_tags :usecase => uc.id
                   Stella.rescue { 
-                    puts ' %-60s %s' % [uc.desc, uc.id.short]
+                    Stella.li ' %-60s %s' % [uc.desc, uc.id.short]
                     client.execute uc do |session|
-                      puts '  %-63s %d' % [session.uri, session.status]
+                      Stella.li '  %-63s %d' % [session.uri, session.status]
                     end
                   }
                   Benelux.current_track.remove_tags :usecase
                 end
               end
             rescue Interrupt
-              puts "Skipping..."
+              Stella.li "Skipping..."
             rescue => ex
-              puts ex.message
-              puts ex.backtrace if Stella.debug?
+              Stella.li ex.message
+              Stella.li ex.backtrace if Stella.debug?
             end
           end
         end
