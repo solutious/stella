@@ -14,7 +14,7 @@ if ARGV.first =~ /-V|--version/
 else
   uri = URI.parse ARGV.first
   @plan = Stella::Testplan.new uri
-  @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1, :concurrency => 20
+  @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1, :concurrency => 1
   @report = Stella::Engine::Checkup.run @run; nil
   puts @report.metrics_pretty
   puts

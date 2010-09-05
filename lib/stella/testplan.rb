@@ -106,18 +106,33 @@ class Stella
         names = self.to_s.split('::')
         planname, ucname = case names.size
         when 1 then [:default, names.last]
-        else        [names[-2], names[-1]] end
-        [planname.to_sym, ucname.to_sym]
+        else        [names[0..-2].join('::'), names[-1]] end
+        [eval(planname), ucname.to_sym]
       end
       def inherited(obj)
-        planname, ucname = *obj.names
-        unless Stella::Testplan.plan? planname
-          Stella::Testplan.plans[planname] = Stella::Testplan.new
-          Stella::Testplan.plans[planname].desc = planname
+        planclass, ucname = *obj.names
+        planclass.module_eval do
+          class << self
+            def usecases
+              @usecases ||= []
+              @usecases
+            end
+            def checkup(opts={})
+              run Stella::Engine::Checkup 
+            end
+            def run(engine, opts={})
+              run = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode
+              report = engine.run run; nil
+            end
+          end
+        end
+        unless Stella::Testplan.plan? planclass
+          Stella::Testplan.plans[planclass] = Stella::Testplan.new
+          Stella::Testplan.plans[planclass].desc = planclass
         end
         obj.instance = Stella::Usecase.new
-        Stella::Testplan.plan(planname).usecases << obj.instance
-        Stella::Testplan.plan(planname).usecases.last.desc = ucname
+        Stella::Testplan.plans[planclass].usecases << obj.instance
+        Stella::Testplan.plans[planclass].usecases.last.desc = ucname
       end
       [:get, :put, :head, :post, :delete].each do |meth|
         define_method meth do |path,opts={},&definition|
@@ -136,17 +151,6 @@ class Stella
   end
     
   class EventTemplate < StellaObject
-    module SessionProcs
-      extend self
-      def [](name)
-        StringTemplate.new ['<%= session[:', name, '] %>'].join  # <%= session(:shrimp) %>
-      end
-      alias_method :get, :[]
-      def get!(name)
-        StringTemplate.new ['<%= session![:', name, '] %>'].join
-      end
-    end
-    
   end
   
   class StringTemplate
@@ -176,6 +180,7 @@ class Stella
     field :wait             => Range
     field :response_handler => Hash, &hash_proc_processor
     field :follow           => Boolean
+    attr_accessor :callback
     gibbler :http_method, :uri, :http_version, :params, :headers, :body
     def initialize(meth=nil, uri=nil, opts={}, &definition)
       @protocol = :http
@@ -184,7 +189,8 @@ class Stella
       @params ||= {}
       @headers ||= {}
       @follow ||= false
-      instance_exec(&definition) unless definition.nil?
+      @callback = definition
+      #instance_exec(&definition) unless definition.nil?
     end
     def postprocess
       unless response_handler.nil?
@@ -202,9 +208,7 @@ class Stella
     end
     alias_method :param, :params
     alias_method :header, :headers
-    def session
-      EventTemplate::SessionProcs
-    end
+    
     def response_handler(range=nil, &blk)
       return @response_handler if range.nil?
       @response_handler ||= {}

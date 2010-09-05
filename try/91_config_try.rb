@@ -1,4 +1,5 @@
 Stella.debug=true
+
 class TestSuite
   class SimpleUsecase < Stella::Usecase
     
@@ -7,7 +8,6 @@ class TestSuite
     get '/login' do
       response_handler 200 do
         session[:shrimp] = body.css['#login input[name="shrimp"]']
-        check 
       end
     end
     
@@ -34,7 +34,10 @@ class TestSuite
   end
 end
 
+
 #puts Stella::Testplan.plans[:TestSuite].usecases.first
-h = TestSuite::SimpleUsecase.new.class.instance.to_hash
-c = Stella::Usecase.from_hash h
-p c.requests[2].response_handler.to_hash
+#h = TestSuite::SimpleUsecase.new.class.instance.to_hash
+#c = Stella::Usecase.from_hash h
+#p c.requests[2].response_handler.to_hash
+
+TestSuite.checkup
