@@ -42,4 +42,8 @@ end
 #p c.requests[2].response_handler.to_hash
 
 @report = Anonymous.checkup "http://www.blamestella.com/"
-pp @report.errors.all
+pp @report.errors.all if @report.errors?
+
+@report = Authorized.checkup "http://www.blamestella.com/"
+pp @report.errors.all if @report.errors?
+
