@@ -48,6 +48,7 @@ class Stella
                   Benelux.current_track.add_tags :usecase => uc.id
                   Stella.rescue { 
                     client.execute uc do |session|
+                      puts session.uri
                     end
                   }
                   Benelux.current_track.remove_tags :usecase

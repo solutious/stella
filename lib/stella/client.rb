@@ -7,6 +7,179 @@ Stella::Utils.require_vendor "httpclient", '2.1.5.2'
 require 'pp'
 
 class Stella
+  
+  class Client
+    include Gibbler::Complex
+    
+    attr_reader :index
+    attr_accessor :base_uri
+    attr_accessor :proxy
+    attr_accessor :created 
+    attr_reader :clientid
+    
+    gibbler :index, :opts, :base_uri, :proxy, :created
+    
+    @@client_index = 0
+    
+    # Options:
+    # 
+    # * :timeout (Integer) => 30
+    # * :ssl_verify_mode (Class) => nil (possible values: OpenSSL::SSL::VERIFY_NONE)
+    #
+    def initialize(opts={})
+      @index = @@client_index += 1
+      @created = Stella.now
+      @opts = opts
+      @opts[:timeout] ||= 30
+      @base_uri, @index = opts[:base_uri] || opts['base_uri'], index
+      @proxy = OpenStruct.new
+      @done = false
+      @session = Session.new @base_uri
+      @redirect_count = 0
+      @clientid = [@session.object_id, created, index, opts].digest
+    end
+
+    def execute usecase, &each_request
+      @session.http_client = create_http_client
+      tt = Benelux.current_track.timeline
+      usecase.requests.each_with_index do |req,idx|
+        begin 
+          @session.prepare_request req 
+          
+          debug "#{@session.http_method} #{@session.uri} (#{req.id.short})"
+          debug " #{@session.params.inspect}" unless @session.params.empty?
+          debug " #{@session.headers.inspect}" unless @session.headers.empty?
+          
+          stella_id = [clientid, req.id, @session.uri.to_s, @session.params, @session.headers, idx].digest
+          
+          Benelux.current_track.add_tags :request   => req.id
+          Benelux.current_track.add_tags :stella_id => stella_id
+          
+          ## Useful for testing larger large request header
+          ## 50.times do |idx|
+          ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
+          ## end
+          
+          res = @session.generate_request stella_id
+          each_request.call(@session) unless each_request.nil?
+          
+          # Needs to happen before handle response incase it raises an exception
+          log = Stella::Log::HTTP.new Stella.now,  
+                   @session.http_method, @session.uri, @session.params, res.request.header.dump, 
+                   res.request.body.content, res.status, res.header.dump, res.body.content
+          
+          tt.add_message log, :status => res.status, :kind => :http_log
+          
+          run_sleeper @opts[:wait]
+          
+          if @session.response_handler?
+            @session.handle_response
+          elsif res.status >= 400
+            raise Stella::HTTPError, res.status 
+          elsif req.follow && @session.redirect?
+            raise ForcedRedirect, @session.location
+          end
+          
+          @redirect_count = 0
+          @session.clear_previous_request
+          
+        rescue ForcedRedirect => ex  
+          # TODO: warn when redirecting from https to http
+          debug " FOUND REDIRECT: #{@session.location}"
+          if @redirect_count < 10
+            @redirect_count += 1
+            @session.clear_previous_request
+            @session.redirect_uri = ex.location
+            retry
+          end
+          
+        rescue SocketError, 
+               HTTPClient::ConnectTimeoutError, 
+               HTTPClient::SendTimeoutError,
+               HTTPClient::ReceiveTimeoutError,
+               Errno::ECONNRESET => ex
+          debug "[#{ex.class}] #{ex.message}"
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
+          if res 
+            log.request_headers = res.request.header.dump if res.request 
+            log.request_body = res.request.body.content if res.request 
+            log.response_status = res.status
+            log.response_headers = res.header.dump if res.content
+            log.response_body = res.body.content if res.body
+          end
+          log.msg = "#{ex.class} (#{http_client.receive_timeout})"
+          tt.add_message log, :kind => :http_log, :state => :timeout
+          Benelux.current_track.remove_tags :status, :request, :stella_id
+          next
+          
+        rescue Stella::HTTPError => ex
+          debug "[#{ex.class}] #{ex.message}"
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
+          if res 
+            log.request_headers = res.request.header.dump if res.request 
+            log.request_body = res.request.body.content if res.request 
+            log.response_status = res.status
+            log.response_headers = res.header.dump if res.content
+            log.response_body = res.body.content if res.body
+          end
+          log.msg = ex.message
+          tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
+          Benelux.current_track.remove_tags :status, :request, :stella_id
+          break
+          
+        rescue => ex
+          Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace
+          break
+          
+        end
+      end
+    end
+    
+    def run_sleeper dur
+      return unless dur
+      dur = (rand * (dur.last-dur.first) + dur.first) if Range === dur
+      debug "sleep: #{dur}"
+      sleep dur
+    end
+    
+    def debug(msg)
+      Stella.ld " #{clientid.short} #{msg}"
+    end
+    
+    def create_http_client
+      http_client = HTTPClient.new(
+        :agent_name  => @opts[:agent] || @opts['agent'] || Stella.agent,
+        :from        => nil
+      )
+      #http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
+      #http_client.debug_dev = STDOUT if Stella.debug?
+      http_client.protocol_version = "HTTP/1.1"
+      if @opts[:ssl_verify_mode]
+        http_client.ssl_config.verify_mode = @opts[:ssl_verify_mode]
+      end
+      http_client.connect_timeout = @opts[:timeout]
+      http_client.send_timeout = @opts[:timeout]
+      http_client.receive_timeout = @opts[:timeout]
+      http_client
+    end
+    
+    def done!
+      @done = true
+    end
+    
+    def done?
+      @done == true
+    end
+    
+    class ForcedRedirect < Exception
+      attr_accessor :location
+      def initialize(l)
+        @location = l
+      end
+    end
+    
+  end
+  
   class Session < Hash
     attr_reader :events, :response_handler, :res, :req
     attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method
@@ -43,9 +216,6 @@ class Stella
       @redirect_uri = nil  # one time deal
     end
     def generate_request(event_id)
-      Stella.ld "#{@http_method} #{uri} (#{@req.id.short})"
-      Stella.ld " #{@params.inspect}" unless @params.empty?
-      Stella.ld " #{@headers.inspect}" unless @headers.empty? 
       @res =  http_client.send(@http_method, @uri, params, headers)
       @events << event_id
       @res
@@ -122,9 +292,6 @@ class Stella
     # usecase's resource hash for a replacement value. 
     # If not found, returns nil. 
     def find_replacement_value(name)
-      #Stella.ld "REPLACE: #{name}"
-      #Stella.ld "PARAMS: #{params.inspect}"
-      #Stella.ld "IVARS: #{container.instance_variables}"
       value = if @params.has_key?(name.to_sym)
         @params.delete name.to_sym
       elsif self.has_key?(name)
@@ -133,157 +300,6 @@ class Stella
         Stella::Testplan.global(name)
       end
       value
-    end
-  end
-  
-  class Client
-    include Gibbler::Complex
-    
-    attr_reader :index
-    attr_accessor :base_uri
-    attr_accessor :proxy
-    attr_accessor :created 
-    
-    gibbler :index, :opts, :base_uri, :proxy, :created
-    
-    @@client_index = 0
-    def initialize(opts={})
-      @index = @@client_index += 1
-      @created = Time.now.to_f
-      @opts = opts
-      @base_uri, @index = opts[:base_uri] || opts['base_uri'], index
-      @proxy = OpenStruct.new
-      @done = false
-      @session = Session.new @base_uri
-      @redirect_count = 0
-    end
-
-    def execute usecase, &each_request
-      @session.http_client = create_http_client
-      tt = Benelux.current_track.timeline
-      usecase.requests.each_with_index do |req,idx|
-        begin 
-          @session.prepare_request req 
-          
-          stella_id = [Stella.now, index, req.id, @session.uri.to_s, @session.params, @session.headers, idx].digest
-          
-          Benelux.current_track.add_tags :request   => req.id
-          Benelux.current_track.add_tags :stella_id => stella_id
-          
-          ## Useful for testing larger large request header
-          ## 50.times do |idx|
-          ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
-          ## end
-          
-          res = @session.generate_request stella_id
-          
-          each_request.call(@session) unless each_request.nil?
-          
-          if res.status >= 400
-            raise Stella::HTTPError, res.status 
-          end
-          
-          
-          # Needs to happen before handle response incase it raises an exception
-          log = Stella::Log::HTTP.new Stella.now,  
-                   @session.http_method, @session.uri, @session.params, res.request.header.dump, 
-                   res.request.body.content, res.status, res.header.dump, res.body.content
-          
-          tt.add_message log, :status => res.status, :kind => :http_log
-          
-          @session.handle_response if @session.response_handler?
-          
-          if req.follow && @session.redirect?
-            raise ForcedRedirect, @session.location
-          end
-          
-          @redirect_count = 0
-          @session.clear_previous_request
-          
-        rescue ForcedRedirect => ex  
-          # TODO: warn when redirecting from https to http
-          Stella.ld " FOUND REDIRECT: #{@session.location}"
-          if @redirect_count < 10
-            @redirect_count += 1
-            @session.clear_previous_request
-            @session.redirect_uri = ex.location
-            retry
-          end
-          
-        rescue SocketError, 
-               HTTPClient::ConnectTimeoutError, 
-               HTTPClient::SendTimeoutError,
-               HTTPClient::ReceiveTimeoutError,
-               Errno::ECONNRESET => ex
-          Stella.ld "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
-          if res 
-            log.request_headers = res.request.header.dump if res.request 
-            log.request_body = res.request.body.content if res.request 
-            log.response_status = res.status
-            log.response_headers = res.header.dump if res.content
-            log.response_body = res.body.content if res.body
-          end
-          log.msg = "#{ex.class} (#{http_client.receive_timeout})"
-          tt.add_message log, :kind => :http_log, :state => :timeout
-          Benelux.current_track.remove_tags :status, :request, :stella_id
-          next
-        rescue Stella::HTTPError => ex
-          Stella.ld "[#{ex.class}] #{ex.message}"
-          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, params
-          if res 
-            log.request_headers = res.request.header.dump if res.request 
-            log.request_body = res.request.body.content if res.request 
-            log.response_status = res.status
-            log.response_headers = res.header.dump if res.content
-            log.response_body = res.body.content if res.body
-          end
-          log.msg = ex.message
-          tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
-          Benelux.current_track.remove_tags :status, :request, :stella_id
-          break
-        rescue => ex
-          Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace
-          break
-        end
-      end
-    end
-    
-    def build_uri uri
-      uri
-    end
-    
-    def create_http_client
-      client_opts = {
-        :agent_name  => @opts[:agent] || @opts['agent'] || Stella.agent,
-        :from        => nil
-      }
-      http_client = HTTPClient.new client_opts
-      #http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
-      #http_client.debug_dev = STDOUT if Stella.debug?
-      http_client.protocol_version = "HTTP/1.1"
-      #http_client.ssl_config.verify_mode = ::OpenSSL::SSL::VERIFY_NONE
-      if @opts[:timeout]
-        http_client.connect_timeout = @opts[:timeout]
-        http_client.send_timeout = @opts[:timeout]
-        http_client.receive_timeout = @opts[:timeout]
-      end
-      http_client
-    end
-    
-    def done!
-      @done = true
-    end
-    
-    def done?
-      @done == true
-    end
-    
-    class ForcedRedirect < Exception
-      attr_accessor :location
-      def initialize(l)
-        @location = l
-      end
     end
   end
 end

@@ -1,3 +1,4 @@
+# export trebekpass=''
 Stella.debug=true
 
 class TestSuite
@@ -13,8 +14,8 @@ class TestSuite
     
     post '/login', :follow => true do
       param[:shrimp] = session[:shrimp]
-      param[:u] = 'trebek' #session[:user]
-      param[:p] = '' #session[:pass]
+      param[:u] = 'trebek'
+      param[:p] = ENV['trebekpass']
       response_handler 200 do
         puts res.status, doc.css('#navigation')
         session[:redirect_uri] = header[:Location]
@@ -41,4 +42,4 @@ end
 #c = Stella::Usecase.from_hash h
 #p c.requests[2].response_handler.to_hash
 
-TestSuite.checkup "http://www.blamestella.com/"
+TestSuite.checkup "http://www.blamestella.com/", :wait => 2..4
