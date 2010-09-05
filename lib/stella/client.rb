@@ -221,7 +221,7 @@ class Stella
       @redirect_uri = nil  # one time deal
     end
     def generate_request(event_id)
-      @res =  http_client.send(@http_method, @uri, params, headers)
+      @res = http_client.send(@http_method.to_s.downcase, @uri, params, headers)
       @events << event_id
       @res
     end
