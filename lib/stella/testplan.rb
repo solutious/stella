@@ -52,7 +52,7 @@ class Stella
     def freeze
       return if frozen?
       @usecases.each { |uc| uc.freeze }
-      @id ||= self.digest
+      @id &&= Gibbler::Digest.new(@id || self.digest)
       super
       self
     end
@@ -101,7 +101,7 @@ class Stella
     def freeze
       return if frozen?
       @requests.each { |r| r.freeze }
-      @id ||= self.digest
+      @id &&= Gibbler::Digest.new(@id || self.digest)
       super
       self
     end
@@ -218,7 +218,7 @@ class Stella
     end
     def freeze
       return if frozen?
-      self.id ||= self.digest
+      @id &&= Gibbler::Digest.new(@id || self.digest)
       super
       self
     end
