@@ -59,6 +59,9 @@ class Stella
               end
             rescue Interrupt
               Stella.li "Skipping..."
+              testrun.etime = Stella.now
+              testrun.fubar!
+              exit 1
             rescue => ex
               Stella.li ex.message
               Stella.li ex.backtrace if Stella.debug?
@@ -71,15 +74,20 @@ class Stella
           timeline = Benelux.merge_tracks
         rescue Interrupt
           puts "Skipping..."
+          testrun.etime = Stella.now
+          testrun.fubar!
+          exit 1
         end
         
         begin
           testrun.etime = Stella.now
           testrun.report = Stella::Report.new timeline
           testrun.report.process
-          testrun.done!
+          testrun.report.fubars? ? testrun.fubar! : testrun.done! 
         rescue Interrupt
           puts "Exiting..."
+          testrun.etime = Stella.now
+          testrun.fubar!
           exit 1
         rescue => ex
           puts ex.message

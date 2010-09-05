@@ -67,6 +67,8 @@ class Stella
       @location = l
     end
   end
+  class TimeoutError < StellaError
+  end
   class UsecaseError < StellaError
   end
   class PageError < StellaError

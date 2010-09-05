@@ -10,6 +10,7 @@ class Stella
   
   class Client
     include Gibbler::Complex
+    include HTTPClient::Timeout
     
     attr_reader :index
     attr_accessor :base_uri
@@ -61,7 +62,12 @@ class Stella
           ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
           ## end
           
-          res = @session.generate_request stella_id
+          # if hard_timeout is nil this will do nothing
+          timeout(@opts[:hard_timeout], TimeoutError) do
+            @session.generate_request stella_id
+          end
+          res = @session.res
+          
           each_request.call(@session) unless each_request.nil?
           
           # Needs to happen before handle response incase it raises an exception
@@ -98,6 +104,7 @@ class Stella
                HTTPClient::ConnectTimeoutError, 
                HTTPClient::SendTimeoutError,
                HTTPClient::ReceiveTimeoutError,
+               TimeoutError,
                Errno::ECONNRESET => ex
           debug "[#{ex.class}] #{ex.message}"
           log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
@@ -130,6 +137,10 @@ class Stella
           
         rescue => ex
           Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
+          log.msg = ex.message
+          tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :fubar
+          Benelux.current_track.remove_tags :status, :request, :stella_id
           break
           
         end

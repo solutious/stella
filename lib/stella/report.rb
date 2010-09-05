@@ -64,24 +64,29 @@ class Stella
       include Report::Plugin
       field :exceptions
       field :timeouts
+      field :fubars
       def process(filter={})
         @exceptions = timeline.messages.filter(:kind => :http_log, :state => :exception)
         @timeouts = timeline.messages.filter(:kind => :http_log, :state => :timeout)
+        @fubars = timeline.messages.filter(:kind => :http_log, :state => :fubar)
         processed!
       end
       def exceptions?
-        !@exceptions.empty?
+        !@exceptions.nil? && !@exceptions.empty?
       end
       def timeouts?
-        !@timeouts.empty?
+        !@timeouts.nil? && !@timeouts.empty?
+      end
+      def fubars?
+        !@fubars.nil? && !@fubars.empty?
       end
       def all 
-        [@exceptions, @timeouts].flatten
+        [@exceptions, @timeouts, @fubars].flatten
       end
       module ReportMethods
         # expects Statuses plugin is loaded
         def errors?
-          exceptions? || timeouts? || (statuses && !statuses.nonsuccessful.empty?)
+          exceptions? || timeouts? || fubars? || (statuses && !statuses.nonsuccessful.empty?)
         end
         def exceptions?
           return false unless processed? && errors
@@ -90,6 +95,10 @@ class Stella
         def timeouts?
           return false unless processed? && errors
           errors.timeouts?
+        end
+        def fubars?
+          return false unless processed? && errors
+          errors.fubars?
         end
       end
       register :errors
