@@ -81,7 +81,7 @@ class Stella
       module ReportMethods
         # expects Statuses plugin is loaded
         def errors?
-          exceptions? || timeouts? || !statuses.nonsuccessful.empty?
+          exceptions? || timeouts? || (statuses && !statuses.nonsuccessful.empty?)
         end
         def exceptions?
           return false unless processed? && errors
@@ -235,7 +235,7 @@ class Stella
         @last_byte = timeline.stats.group(:last_byte).merge
         #@response_time2 = Benelux::Stats::Calculator.new 
         #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
-        log = timeline.messages.filter(:kind => :http_log)
+        log = timeline.messages.filter(:kind => :http_log, :status => 200)
         @requests = log.size
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_content_size = Benelux::Stats::Calculator.new 
@@ -262,7 +262,7 @@ class Stella
       module ReportMethods
         def metrics_pretty
           return unless metrics
-          pretty = ['Metrics']
+          pretty = ['Metrics   (across %d requests)' % metrics.requests]
           [:socket_connect, :send_request, :first_byte, :last_byte, :response_time].each do |fname|
             val = metrics.send(fname)
             pretty << ('%20s: %8sms' % [fname.to_s.tr('_', ' '), val.mean.to_ms])

@@ -30,7 +30,7 @@ class Stella
     # NOTE: how to determine the difference between non-latin and binary?
     def binary?(s)
       return false if s.nil?
-      puts "TODO: fix encoding issue in 1.9"
+      #puts "TODO: fix encoding issue in 1.9"
       s = s.to_s.split(//) rescue [] unless Array === s
       s.slice!(0, 4096)  # limit to a typcial blksize
       ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30

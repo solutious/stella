@@ -44,30 +44,42 @@ class Stella
             Benelux.current_track "client_#{client.gibbler.shorten}"
             begin
               opts[:repetitions].times do |idx|
+                puts '%-61s %s' % [testrun.plan.desc, testrun.plan.id.short]
                 testrun.plan.usecases.each_with_index do |uc,i|
                   Benelux.current_track.add_tags :usecase => uc.id
                   Stella.rescue { 
                     puts ' %-60s %s' % [uc.desc, uc.id.short]
                     client.execute uc do |session|
-                      puts '  %-64s  %d' % [session.uri, session.status]
+                      puts '  %-63s %d' % [session.uri, session.status]
                     end
                   }
                   Benelux.current_track.remove_tags :usecase
                 end
               end
+            rescue Interrupt
+              puts "Skipping..."
             rescue => ex
               puts ex.message
               puts ex.backtrace if Stella.debug?
             end
           end
         end
-        threads.each { |thread| thread.join }
-        timeline = Benelux.merge_tracks
+        
+        begin
+          threads.each { |thread| thread.join }
+          timeline = Benelux.merge_tracks
+        rescue Interrupt
+          puts "Skipping..."
+        end
+        
         begin
           testrun.etime = Stella.now
           testrun.report = Stella::Report.new timeline
           testrun.report.process
           testrun.done!
+        rescue Interrupt
+          puts "Exiting..."
+          exit 1
         rescue => ex
           puts ex.message
           puts ex.backtrace if Stella.debug?

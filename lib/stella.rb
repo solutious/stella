@@ -57,7 +57,16 @@ end
 class StellaError < RuntimeError
 end
 
+class StellaBehavior < Exception
+end
+
 class Stella
+  class ForcedRedirect < StellaBehavior
+    attr_accessor :location
+    def initialize(l)
+      @location = l
+    end
+  end
   class UsecaseError < StellaError
   end
   class PageError < StellaError

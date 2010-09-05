@@ -5,9 +5,9 @@ class Anonymous
   class FindMonitor < Stella::Usecase
 
     get '/' do
-      response_handler 200 do
+      response 200 do
         session[:monitor_uri] = doc.css('#headingMonitoring a').first['href'] rescue nil
-        raise Stella::PageError, "No value for :monitor_uri" if session[:monitor_uri].to_s.empty?
+        raise PageError, "No value for :monitor_uri" if session[:monitor_uri].to_s.empty?
       end
     end
     
@@ -22,15 +22,18 @@ class Authorized
     get '/' 
     
     get '/login', :follow => true do
-      response_handler 200 do
+      response 200 do
         session[:shrimp] = (doc.css('#login input[name="shrimp"]').first || {})['value']
       end
     end
     
-    post '/login', :follow => true do
+    post '/login' do
       param[:shrimp] = session[:shrimp]
       param[:u] = 'trebek'
       param[:p] = ENV['trebekpass']
+      response 300..399 do
+        raise ForcedRedirect, session.location
+      end
     end
     
   end
@@ -41,9 +44,14 @@ end
 #c = Stella::Usecase.from_hash h
 #p c.requests[2].response_handler.to_hash
 
-@report = Anonymous.checkup "http://www.blamestella.com/"
-pp @report.errors.all if @report.errors?
+#@report = Anonymous.checkup "http://www.blamestella.com/"
+#pp @report.errors.all if @report.errors?
 
 @report = Authorized.checkup "http://www.blamestella.com/"
-pp @report.errors.all if @report.errors?
-
+if @report.errors?
+  puts  @report.errors.all 
+else
+  puts @report.metrics_pretty
+  puts
+  puts @report.statuses_pretty
+end

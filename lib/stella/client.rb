@@ -172,13 +172,6 @@ class Stella
       @done == true
     end
     
-    class ForcedRedirect < Exception
-      attr_accessor :location
-      def initialize(l)
-        @location = l
-      end
-    end
-    
   end
   
   class Session < Hash
@@ -266,6 +259,7 @@ class Stella
       @response_handler[range] = blk unless blk.nil?
       @response_handler[range]
     end
+    alias_method :response, :response_handler
     def clear_previous_request
       [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method].each do |n|
         instance_variable_set :"@#{n}", nil
