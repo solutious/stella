@@ -218,10 +218,6 @@ class Stella
         processed!
       end
       module ReportMethods
-        def content(name)
-          return unless @section[:content] && @section[:content].respond_to?(name)
-          @section[:content].send(name)
-        end
       end
       register :content
     end
