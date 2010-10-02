@@ -33,7 +33,7 @@ class Stella
     def initialize(uri=nil)
       preprocess
       if uri
-        req = Stella::RequestTemplate.new :get, uri
+        req = Stella::RequestTemplate.new :get, Stella.canonical_uri(uri)
         @usecases << Stella::Usecase.new(req) 
       end
     end

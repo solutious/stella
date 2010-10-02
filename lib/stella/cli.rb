@@ -16,7 +16,7 @@ class Stella::CLI < Drydock::Command
     uri = Stella.canonical_uri(@argv.first)
     @plan = Stella::Testplan.new uri
     @run = Stella::Testrun.new @plan, :checkup, :repetitions => @option.repetitions, :concurrency => @option.concurrency
-    @report = Stella::Engine::Checkup.run @run; nil
+    @report = Stella::Engine.run @run; nil
     metrics = @report.metrics_pack
     unless Stella.quiet?
       case @global.format

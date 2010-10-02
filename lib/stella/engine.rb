@@ -10,6 +10,14 @@ class Stella
       def load(name)
         @modes[name]
       end
+      def run testrun, opts={}
+        case testrun.mode.to_sym
+        when :checkup
+          Stella::Engine::Checkup.run testrun, opts
+        else
+          Stella.le "Unknown Engine: #{testrun.mode}"
+        end
+      end
     end
     module Base
       def self.included(obj)
@@ -20,9 +28,6 @@ class Stella
           def register(mode)
           @mode = mode
           Stella::Engine.modes[mode] = self
-        end
-        def run *args
-          raise StellaError, "Must override run"
         end
       end
     end
@@ -81,8 +86,8 @@ class Stella
         
         begin
           testrun.etime = Stella.now
-          testrun.report = Stella::Report.new timeline
-          testrun.report.process
+          testrun.report = Stella::Report.new timeline, testrun.id
+          testrun.report.process 
           testrun.report.fubars? ? testrun.fubar! : testrun.done! 
         rescue Interrupt
           puts "Exiting..."

@@ -161,6 +161,7 @@ class Stella
         uri = Addressable::URI.parse(uri)
       end
       uri.scheme ||= 'http'
+      uri.path = '/' if uri.path.to_s.empty?
       uri
     end
     

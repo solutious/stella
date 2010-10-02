@@ -291,9 +291,11 @@ class Stella
         re = Regexp.new "\\#{inst[0]}#{inst[1]}"
         uri.gsub! re, val.to_s unless val.nil?
       end
-      uri = Addressable::URI.parse(uri)
-      uri.scheme ||= base_uri.scheme
-      uri.host ||= base_uri.host
+      uri = Stella.canonical_uri(uri)
+      if base_uri
+        uri.scheme ||= base_uri.scheme
+        uri.host ||= base_uri.host
+      end
       uri
     end
     # Testplan URIs can contain variables in the form <tt>:varname</tt>. 

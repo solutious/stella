@@ -271,7 +271,7 @@ class Stella
         def metrics_pack
           return unless metrics
           pack = ::MetricsPack.new
-          pack.update Stella.now, '', metrics.requests, metrics.response_time, metrics.socket_connect, metrics.send_request,
+          pack.update Stella.now, runid.shorten, metrics.requests, metrics.response_time, metrics.socket_connect, metrics.send_request.to_f.to_s,
                       metrics.first_byte, metrics.last_byte, metrics.request_headers_size, metrics.request_content_size,
                       metrics.response_headers_size, metrics.response_content_size, 0, error_count
           pack
@@ -296,9 +296,9 @@ class Stella
     
     field :processed => Boolean
     
-    attr_reader :timeline, :filter
-    def initialize(timeline=nil, filter={})
-      @timeline, @filter = timeline, filter
+    attr_reader :runid, :timeline, :filter
+    def initialize(timeline=nil, runid=nil)
+      @timeline, @runid = timeline, runid
       @processed = false
     end
     def postprocess
