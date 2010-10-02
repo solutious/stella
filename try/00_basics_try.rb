@@ -22,7 +22,6 @@ Stella::Engine::Checkup.mode
 #=> false
 
 ## Can be yaml
-puts @report.to_yaml
 @report.to_yaml.size > 100
 #=> true
 

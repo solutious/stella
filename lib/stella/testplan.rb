@@ -188,7 +188,7 @@ class Stella
     field :http_method
     field :http_version
     field :http_auth
-    field :uri
+    field :uri              => String do |v| v.to_s end
     field :params           => Hash
     field :headers          => Hash
     field :body

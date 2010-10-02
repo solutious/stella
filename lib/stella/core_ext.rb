@@ -208,3 +208,86 @@ end
 
 
 
+# A simple class for really fast serialized timing data.
+# NOTE: We're storing the serialized data directly to a
+# redis sorted set so it's important that each chunk of 
+# data in unique. Also, it's possible to grab the stamp 
+# from the zrange using :with_scores. 
+# NOTE2: We bypass Storable's #to_csv and #from_csv for 
+# speed. TODO: test speed difference.
+class MetricsPack < Storable
+  unless defined?(MetricsPack::METRICS)
+    METRICS = [:rt, :sc, :sr, :fb, :lb, :rscs, :rshs, :rqcs, :rqhs]
+  end
+  field :stamp => Float
+  field :uid => String
+  field :n => Integer
+  field :rt => Float
+  field :sc => Float
+  field :sr => Float
+  field :fb => Float
+  field :lb => Float
+  field :rqhs => Integer
+  field :rqcs => Integer
+  field :rshs => Integer
+  field :rscs => Integer
+  field :score => Float
+  field :errors => Integer
+  def initialize(stamp=nil, uid=nil, n=nil)
+    @stamp, @uid, @n = stamp, uid, n
+    @stamp &&= @stamp.utc.to_i if Time === @stamp      
+    self.class.field_names.each do |fname|
+      self.send("#{fname}=", 0) unless fname == :id || self.send(fname)
+    end                                                
+    @score ||= 1.0
+    @errors ||= 0
+  end
+  def kind
+    :metric
+  end
+  
+  # should be in the same order as the fields are defined (i.e. MetricsPack.field_names)
+  def update(*args)
+    field_names.each_with_index do |field,idx| 
+      val = args[idx]
+      val = case field_types[field].to_s
+      when 'Float' 
+        val.to_f
+      when 'Integer'
+        val.to_i
+      else
+        val
+      end
+      send("#{field}=", val)
+    end
+    self
+  end
+  
+  def pack
+    to_s
+  end
+  
+  # @stamp                    => 1281355304 (2010-08-09-12-01-44)
+  # quantize_stamp(1.day)     => 1281312000 (2010-08-09)
+  # quantize_stamp(1.hour)    => 1281355200 (2010-08-09-12)
+  # quantize_stamp(1.minute)  => 1281355260 (2010-08-09-12-01)
+  def quantize_stamp(quantum)
+    @stamp - (@stamp % quantum)
+  end
+  def self.unpack(str)
+    a = str.split(',')
+    me = new
+    me.update *a
+  end
+  def to_a
+    field_names.collect { |field| send(field) || ((field_types[field].kind_of?(String)) ? 'unknown' : 0.0) }
+  end
+  def to_s
+    to_a.join(',')
+  end
+  def self.from_json(str)
+    unpack(str)
+  end
+end
+
+

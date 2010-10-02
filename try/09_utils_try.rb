@@ -62,6 +62,6 @@ Stella::Utils.ico?(a)
 
 ## Knows an image
 a = File.read('try/support/file.ico')
-Stella::Utils.image?('try/support/file.ico', a)
+Stella::Utils.image?(a)
 #=>true
 

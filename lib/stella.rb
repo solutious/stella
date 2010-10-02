@@ -32,6 +32,12 @@ class MatchData
   include Gibbler::String
 end
 
+module Addressable
+  class URI
+    include Gibbler::String
+  end
+end
+
 class OpenStruct
   include Gibbler::Object
 end
@@ -100,12 +106,13 @@ end
 class Stella
   @sysinfo = nil
   @debug   = false
+  @noise   = 1
   @abort   = false
   @quiet   = false
   @agent   = "Mozilla/5.0 (compatible; Stella/#{Stella::VERSION}; +http://solutious.com/projects/stella)"  
   # static methods
   class << self
-    attr_accessor :log, :stdout, :agent, :debug, :quiet
+    attr_accessor :log, :stdout, :agent, :debug, :quiet, :noise
     def debug?()        @debug == true  end
     def quiet?()        @quiet == true  end
     def li(*msg) STDOUT.puts *msg unless quiet? end
@@ -144,6 +151,19 @@ class Stella
       str.downcase
     end
   
+    def canonical_uri(uri)
+      if uri.kind_of?(URI)
+        uri = Addressable::URI.parse uri.to_s
+      elsif uri.kind_of?(String)
+        uri &&= uri.to_s
+        uri.strip! unless uri.frozen?
+        uri = "http://#{uri}" unless uri.match(/^https?:\/\//)
+        uri = Addressable::URI.parse(uri)
+      end
+      uri.scheme ||= 'http'
+      uri
+    end
+    
     def rescue(&blk)
       blk.call
     rescue StellaError => ex

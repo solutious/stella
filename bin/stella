@@ -1,23 +1,125 @@
 #!/usr/bin/ruby
 
+# = Stella
+# 
+# === Your friend in web app performance testing
+#
+# Config (default paths):
+# 
+#     ./.stella/config   (current directory)
+#     ~/.stella/config   (your home directory)
+#
+# Usage:
+# 
+#     $ stella -h
+#     $ stella checkup -p plans/basic.rb http://stellaaahhhh.com/
+#
+#--
+
 # Put our local lib in first place
 BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
 lib_dir = File.join(BASE_PATH, 'lib')
-$:.unshift lib_dir
+$:.unshift lib_dir  
 
+require 'drydock'
 require 'stella'
+require 'stella/cli'
 
-abort "Usage: stella URI" if ARGV.size != 1
+# Command-line interface for bin/stella
+class Stella::CLI::Definition
+  extend Drydock
+  
+  debug :off
+  
+  # ----------------------------------------  STELLA GLOBALS  --------
+  # ------------------------------------------------------------------
+  
+  #global :A, :apikey, String, "API Key"
+  #global :S, :secret, String, "Secret Key"
+  global :D, :debug, "Enable debug mode" do
+    Drydock.debug true
+    Stella.debug = true
+  end
+  global :P, :pause, Integer, "Seconds to wait before starting test"
+  #global :H, :withheader, "Include X-Stella-ID request header" 
+  #global :P, :withparam, "Include __stella query parameter header"
+  global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
+  global :f, :format, String, "Output format (partial support)"
+  global :n, :nocolor, "Disable output colors" do
+    String.disable_color
+  end
+  global :q, :quiet, "Be quiet!" do
+    Stella.quiet = true
+  end
+  global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
+    Stella.noise += 1
+  end
+  global :V, :version, "Display version number" do
+    puts "Stella version: #{Stella::VERSION.inspect}"
+    exit 0
+  end
 
-if ARGV.first =~ /-V|--version/
-  puts Stella::VERSION.inspect
-else
-  uri = URI.parse ARGV.first
-  @plan = Stella::Testplan.new uri
-  @run = Stella::Testrun.new @plan, :checkup, :repetitions => 1, :concurrency => 1
-  @report = Stella::Engine::Checkup.run @run; nil
-  puts @report.metrics_pretty
-  puts
-  puts @report.statuses_pretty
+  
+  # ------------------------------------------------  STELLA  --------
+  # ------------------------------------------------------------------
+  about "Instructions for running the example app and test"
+  usage "stella example"
+  command :example => Stella::CLI
+  
+  about "Run a checkup"
+  usage "stella checkup [options] URI"
+  usage "e.g. "
+  usage "   $ stella checkup -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :c, :concurrency, Integer, "Maximum number of virtual clients"
+  #option :a, :arrival, Float, "Arrival rate (new clients per second)"
+  option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
+  option :W, :nowait, "Ignore wait times"
+  #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
+  option :p, :testplan, String, "Path to testplan" 
+  command :checkup => Stella::CLI
+  
+  
+  # ----------------------------------  STELLA MISCELLANEOUS  --------
+  # ------------------------------------------------------------------
+  before do |obj|
+    #puts $$
+    @start = Time.now
+    if obj.global.pause
+      obj.global.pause.to_i.times do |i|
+        print "Waiting for %s" % [(obj.global.pause-i)]
+        sleep 1
+        print "\r%30s\r" % ''  # clear line
+      end
+    end
+  end
+
+  after do |obj|  
+    @elapsed = Time.now - @start
+    if @elapsed > 0.1 && Stella.noise > 1
+      puts 2, "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
+    end
+    code = obj.exit_code if obj.respond_to? :exit_code
+    exit code ||= 0
+  end
+  
 end
 
+begin
+  Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Drydock::ArgError, Drydock::OptError => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.usage
+rescue Drydock::InvalidArgument => ex
+  STDERR.puts ex.message
+rescue Drydock::UnknownCommand => ex
+  STDERR.puts "Unknown command: %s" % ex.name
+rescue StellaError => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.backtrace if Stella.debug?
+rescue Interrupt
+  puts $/, "Exiting... "
+  exit 1
+rescue => ex
+  STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
+  STDERR.puts ex.backtrace if Stella.debug?
+end

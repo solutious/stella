@@ -96,6 +96,9 @@ class Stella
           return false unless processed? && errors
           errors.timeouts?
         end
+        def error_count
+          errors.all.size
+        end
         def fubars?
           return false unless processed? && errors
           errors.fubars?
@@ -195,27 +198,27 @@ class Stella
             @response_body << ' [truncated]'
           end
           @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+          begin 
+            if defined?(Pismo) && @response_body
+              doc = Pismo::Document.new @response_body
+              @keywords = doc.keywords rescue nil  # BUG: undefined method `downcase' for nil:NilClass
+              @title = doc.title
+              @favicon = doc.favicon
+              @author = doc.author
+              @lede = doc.lede
+              @description = doc.description
+            end
+          rescue => ex
+            puts ex.message
+            # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
+            #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
+          end
         end
         @response_body_digest = log.first.response_body.digest
-        begin 
-          if defined?(Pismo) && @response_body
-            doc = Pismo::Document.new @response_body
-            @keywords = doc.keywords
-            @title = doc.title
-            @favicon = doc.favicon
-            @author = doc.author
-            @lede = doc.lede
-            @description = doc.description
-          end
-        rescue => ex
-          puts ex.message
-          # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
-          #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
-        end
         processed!
       end
       module ReportMethods
-        def content2(name)
+        def content(name)
           return unless @section[:content] && @section[:content].respond_to?(name)
           @section[:content].send(name)
         end
@@ -269,6 +272,14 @@ class Stella
         end
       end
       module ReportMethods
+        def metrics_pack
+          return unless metrics
+          pack = ::MetricsPack.new
+          pack.update Stella.now, '', metrics.requests, metrics.response_time, metrics.socket_connect, metrics.send_request,
+                      metrics.first_byte, metrics.last_byte, metrics.request_headers_size, metrics.request_content_size,
+                      metrics.response_headers_size, metrics.response_content_size, 0, error_count
+          pack
+        end
         def metrics_pretty
           return unless metrics
           pretty = ['Metrics   (across %d requests)' % metrics.requests]
