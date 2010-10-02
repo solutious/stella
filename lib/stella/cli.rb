@@ -18,14 +18,17 @@ class Stella::CLI < Drydock::Command
     @run = Stella::Testrun.new @plan, :checkup, :repetitions => @option.repetitions, :concurrency => @option.concurrency
     @report = Stella::Engine::Checkup.run @run; nil
     metrics = @report.metrics_pack
-    case @global.format
-    when 'json'
-      puts metrics.to_json
-    when 'yaml'
-      puts metrics.to_yaml
-    else
-      puts metrics.to_s
+    unless Stella.quiet?
+      case @global.format
+      when 'json'
+        puts metrics.to_json
+      when 'yaml'
+        puts metrics.to_yaml
+      else
+        puts metrics.to_s
+      end
     end
+    @exit_code = @report.error_count
   end
 
   def example
