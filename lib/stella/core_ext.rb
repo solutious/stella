@@ -218,6 +218,7 @@ end
 class MetricsPack < Storable
   unless defined?(MetricsPack::METRICS)
     METRICS = [:rt, :sc, :sr, :fb, :lb, :rscs, :rshs, :rqcs, :rqhs]
+    TALLIES = [:n, :errors]
   end
   field :stamp => Float
   field :uid => String
@@ -233,6 +234,7 @@ class MetricsPack < Storable
   field :rscs => Integer
   field :score => Float
   field :errors => Integer
+  field :rtsd => Float # response time stdev
   def initialize(stamp=nil, uid=nil, n=nil)
     @stamp, @uid, @n = stamp, uid, n
     @stamp &&= @stamp.utc.to_i if Time === @stamp      
@@ -274,16 +276,22 @@ class MetricsPack < Storable
   def quantize_stamp(quantum)
     @stamp - (@stamp % quantum)
   end
-  def self.unpack(str)
-    a = str.split(',')
-    me = new
-    me.update *a
-  end
   def to_a
     field_names.collect { |field| send(field) || ((field_types[field].kind_of?(String)) ? 'unknown' : 0.0) }
   end
   def to_s
     to_a.join(',')
+  end
+  def to_csv
+    to_s
+  end
+  def self.from_csv(str)
+    unpack str
+  end
+  def self.unpack(str)
+    a = str.split(',')
+    me = new
+    me.update *a
   end
   def self.from_json(str)
     unpack(str)
