@@ -243,7 +243,7 @@ class Stella
         @last_byte = timeline.stats.group(:last_byte).merge
         #@response_time2 = Benelux::Stats::Calculator.new 
         #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
-        log = timeline.messages.filter(:kind => :http_log, :status => 200)
+        log = timeline.messages.filter(:kind => :http_log)  # , :status => 200
         @requests = log.size
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_content_size = Benelux::Stats::Calculator.new 
