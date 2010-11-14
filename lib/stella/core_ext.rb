@@ -3,7 +3,6 @@
 $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
 
-
 # A hash with indifferent access and magic predicates.
 #
 #   hash = Thor::CoreExt::HashWithIndifferentAccess.new 'foo' => 'bar', 'baz' => 'bee', 'force' => true
@@ -77,7 +76,6 @@ end
 
 
 # Assumes Time::Units and Numeric mixins are available. 
-
 class String
   
   def in_seconds
@@ -181,28 +179,25 @@ end
 
 class Numeric
   include Time::Units
-  
+
   def to_ms
-    (self*1000)
+    (self*1000).to_i
   end
   
   # TODO: Use 1024?
   def to_bytes
     args = case self.abs.to_i
-    when 0..1000
-      [self.to_i.to_s, 'B']
     when (1000)..(1000**2)
-      [(self / 1000.to_f).to_s, 'KB']
+      '%3.2f%s' % [(self / 1000.to_f).to_s, 'KB']
     when (1000**2)..(1000**3)
-      [(self / (1000**2).to_f).to_s, 'MB']
+      '%3.2f%s' % [(self / (1000**2).to_f).to_s, 'MB']
     when (1000**3)..(1000**4)
-      [(self / (1000**3).to_f).to_s, 'GB']
+      '%3.2f%s' % [(self / (1000**3).to_f).to_s, 'GB']
     when (1000**4)..(1000**6)
-      [(self / (1000**4).to_f).to_s, 'TB']
+      '%3.2f%s' % [(self / (1000**4).to_f).to_s, 'TB']
     else
-      [self, 'B']
+      [self, 'B'].join
     end
-    '%3.2f%s' % args
   end
 end
 
