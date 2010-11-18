@@ -75,7 +75,7 @@ class Stella
                    @session.http_method, @session.uri, @session.params, res.request.header.dump, 
                    res.request.body.content, res.status, res.header.dump, res.body.content
           
-          tt.add_message log, :status => res.status, :kind => :http_log
+          tt.add_count :requests, 1, :kind => :http
           
           run_sleeper @opts[:wait]
           
@@ -86,6 +86,8 @@ class Stella
           elsif req.follow && @session.redirect?
             raise ForcedRedirect, @session.location
           end
+
+          tt.add_message log, :status => res.status, :kind => :http_log, :state => :nominal
           
           @redirect_count = 0
           @session.clear_previous_request

@@ -41,9 +41,9 @@ class Stella
       def processed?
         @processed == true
       end
-      attr_reader :timeline
-      def initialize(timeline=nil)
-        @timeline = timeline
+      attr_reader :report
+      def initialize(report)
+        @report = report
       end
       module ClassMethods
         attr_reader :plugin
@@ -66,9 +66,9 @@ class Stella
       field :timeouts
       field :fubars
       def process(filter={})
-        @exceptions = timeline.messages.filter(:kind => :http_log, :state => :exception)
-        @timeouts = timeline.messages.filter(:kind => :http_log, :state => :timeout)
-        @fubars = timeline.messages.filter(:kind => :http_log, :state => :fubar)
+        @exceptions = report.timeline.messages.filter(:kind => :http_log, :state => :exception)
+        @timeouts = report.timeline.messages.filter(:kind => :http_log, :state => :timeout)
+        @fubars = report.timeline.messages.filter(:kind => :http_log, :state => :fubar)
         processed!
       end
       def exceptions?
@@ -107,12 +107,85 @@ class Stella
       register :errors
     end
     
+    class Content < StellaObject
+      include Report::Plugin
+      field :request_body
+      field :response_body
+      field :request_body_digest
+      field :response_body_digest
+      field :keywords => Array
+      field :title
+      field :favicon
+      field :author
+      field :lede
+      field :description
+      field :is_binary => Boolean
+      field :is_image => Boolean
+      field :log => Array
+      def binary?
+        @is_binary == true
+      end
+      def image?
+        @is_image == true
+      end
+      def process(filter={})
+        if report.errors.exceptions?
+          @log = report.errors.exceptions
+        elsif report.errors.fubars?
+          @log = report.errors.fubars
+        elsif report.errors.timeouts?
+          @log = report.errors.timeouts
+        else
+          @log = report.timeline.messages.filter(:kind => :http_log, :state => :nominal)
+        end
+        return if @log.empty?
+        
+        unless Stella::Utils.binary?(@log.first.request_body) || Stella::Utils.image?(@log.first.request_body)
+          @request_body = @log.first.request_body 
+        end
+        
+        @request_body_digest = @log.first.request_body.digest
+        @is_binary = Stella::Utils.binary?(@log.first.response_body)
+        @is_image = Stella::Utils.image?(@log.first.response_body)
+        unless binary? || image?
+          @response_body = @log.first.response_body.to_s
+          if @response_body.size >= 250_000
+            @response_body = @response_body.slice 0, 249_999
+            @response_body << ' [truncated]'
+          end
+          @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+          begin 
+            if defined?(Pismo) && @response_body
+              doc = Pismo::Document.new @response_body
+              @keywords = doc.keywords rescue nil  # BUG: undefined method `downcase' for nil:NilClass
+              @title = doc.title
+              @favicon = doc.favicon
+              @author = doc.author
+              @lede = doc.lede
+              @description = doc.description
+            end
+          rescue => ex
+            puts ex.message
+            # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
+            #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
+          end
+        end
+        @response_body_digest = @log.first.response_body.digest
+        processed!
+      end
+      module ReportMethods
+        def log
+          content.log
+        end
+      end
+      register :content
+    end
+    
     class Statuses < StellaObject
       include Report::Plugin
       field :values => Array
       def process(filter={})
-        log = timeline.messages.filter(:kind => :http_log)
-        @values = log.collect { |entry| entry.tag_values(:status) }.flatten
+        @values = report.content.log.collect { |entry| entry.tag_values(:status) }.flatten
         processed!
       end
       def nonsuccessful
@@ -149,77 +222,14 @@ class Stella
       field :request_headers_digest
       field :response_headers_digest
       def process(filter={})
-        log = timeline.messages.filter(:kind => :http_log)
-        return if log.empty?
-        @request_headers = log.first.request_headers
-        @response_headers = log.first.response_headers
-        @request_headers_digest = log.first.request_headers.digest
-        @response_headers_digest = log.first.response_headers.digest
+        return if report.content.log.empty?
+        @request_headers = report.content.log.first.request_headers
+        @response_headers = report.content.log.first.response_headers
+        @request_headers_digest = report.content.log.first.request_headers.digest
+        @response_headers_digest = report.content.log.first.response_headers.digest
         processed!
       end
       register :headers
-    end
-    
-    class Content < StellaObject
-      include Report::Plugin
-      field :request_body
-      field :response_body
-      field :request_body_digest
-      field :response_body_digest
-      field :keywords => Array
-      field :title
-      field :favicon
-      field :author
-      field :lede
-      field :description
-      field :is_binary => Boolean
-      field :is_image => Boolean
-      def binary?
-        @is_binary == true
-      end
-      def image?
-        @is_image == true
-      end
-      def process(filter={})
-        log = timeline.messages.filter(:kind => :http_log)
-        return if log.empty?
-        
-        unless Stella::Utils.binary?(log.first.request_body) || Stella::Utils.image?(log.first.request_body)
-          @request_body = log.first.request_body 
-        end
-        
-        @request_body_digest = log.first.request_body.digest
-        @is_binary = Stella::Utils.binary?(log.first.response_body)
-        @is_image = Stella::Utils.image?(log.first.response_body)
-        unless binary? || image?
-          @response_body = log.first.response_body.to_s
-          if @response_body.size >= 250_000
-            @response_body = @response_body.slice 0, 249_999
-            @response_body << ' [truncated]'
-          end
-          @response_body.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-          begin 
-            if defined?(Pismo) && @response_body
-              doc = Pismo::Document.new @response_body
-              @keywords = doc.keywords rescue nil  # BUG: undefined method `downcase' for nil:NilClass
-              @title = doc.title
-              @favicon = doc.favicon
-              @author = doc.author
-              @lede = doc.lede
-              @description = doc.description
-            end
-          rescue => ex
-            puts ex.message
-            # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
-            #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
-          end
-        end
-        @response_body_digest = log.first.response_body.digest
-        processed!
-      end
-      module ReportMethods
-      end
-      register :content
     end
     
     class Metrics < StellaObject
@@ -236,21 +246,20 @@ class Stella
       field :requests                 => Integer
       def process(filter={})
         return if processed?
-        @response_time = timeline.stats.group(:response_time).merge
-        @socket_connect = timeline.stats.group(:socket_connect).merge
-        @first_byte = timeline.stats.group(:first_byte).merge
-        @send_request = timeline.stats.group(:send_request).merge
-        @last_byte = timeline.stats.group(:last_byte).merge
+        @response_time = report.timeline.stats.group(:response_time).merge
+        @socket_connect = report.timeline.stats.group(:socket_connect).merge
+        @first_byte = report.timeline.stats.group(:first_byte).merge
+        @send_request = report.timeline.stats.group(:send_request).merge
+        @last_byte = report.timeline.stats.group(:last_byte).merge
         #@response_time2 = Benelux::Stats::Calculator.new 
         #@response_time2.sample @socket_connect.mean + @send_request.mean + @first_byte.mean + @last_byte.mean
-        log = timeline.messages.filter(:kind => :http_log)  # , :status => 200
-        @requests = log.size
+        @requests = report.timeline.stats.group(:requests).merge.n
         @request_headers_size = Benelux::Stats::Calculator.new 
         @request_content_size = Benelux::Stats::Calculator.new 
         @response_headers_size = Benelux::Stats::Calculator.new 
         @response_content_size = Benelux::Stats::Calculator.new 
-        unless log.empty?
-          log.each do |entry|
+        unless report.content.log.empty?
+          report.content.log.each do |entry|
             @request_headers_size.sample entry.request_headers.size if entry.request_headers
             @request_content_size.sample entry.request_body.size if entry.request_body
             @response_headers_size.sample entry.response_headers.size if entry.response_headers
@@ -310,7 +319,7 @@ class Stella
     def process
       self.class.plugins.each_pair do |name,klass|
         Stella.ld "processing #{name}"
-        plugin = klass.new timeline
+        plugin = klass.new self
         plugin.process(filter)
         self.send("#{name}=", plugin)
       end
