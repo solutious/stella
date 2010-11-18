@@ -42,7 +42,7 @@ class Stella
         @processed == true
       end
       attr_reader :report
-      def initialize(report)
+      def initialize(report=nil)
         @report = report
       end
       module ClassMethods
