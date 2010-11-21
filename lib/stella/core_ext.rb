@@ -181,7 +181,7 @@ class Numeric
   include Time::Units
 
   def to_ms
-    (self*1000).to_i
+    (self*1000.to_f)
   end
   
   # TODO: Use 1024?
