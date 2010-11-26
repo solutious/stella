@@ -130,7 +130,11 @@ class Time
     def in_minutes()      seconds / PER_MINUTE         end
     def in_milliseconds() seconds / PER_MILLISECOND    end
     def in_microseconds() seconds / PER_MICROSECOND   end
-
+    
+    def in_time
+      Time.at(self).utc
+    end
+    
     def in_seconds(u=nil)
       case u.to_s
       when /\A(y)|(years?)\z/
