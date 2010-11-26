@@ -146,9 +146,9 @@ class Stella
         host = "http://#{host}" unless host.match(/^https?:\/\//)
         uri = URI.parse(host)
       end
-      str = "#{uri.host}"
-      str << ":#{uri.port}" if uri.port && uri.port != 80 
-      str.downcase
+      str = "#{uri.host}".downcase 
+      #str << ":#{uri.port}" if uri.port && uri.port != 80 
+      str
     end
   
     def canonical_uri(uri)
