@@ -65,18 +65,48 @@ class Stella
       ['GIF89a', 'GIF97a'].include?(a.slice(0, 6))
     end
     
+    def whois(host_or_ip)
+      begin
+        raw = Whois.whois(host_or_ip)
+        info = raw.content.split("\n").select { |line| line !~ /\A[\#\%]/ && !line.empty? }
+        info.join("\n")
+      rescue => ex
+        Stella.ld "Error fetching whois for #{host_or_ip}: #{ex.message}"
+        Stella.ld ex.backtrace
+      end
+    end
     
+    # Returns an Array of ip addresses or nil
     def ipaddr(host)
+      require 'resolv'
       host = host.host if host.kind_of?(URI)
       begin
-        Socket::getaddrinfo(host, "echo", Socket::AF_INET, Socket::SOCK_DGRAM)[0][3]
+        resolv = Resolv::DNS.new # { :nameserver => [] }
+        resolv.getaddresses(host).collect { |addr| addr.to_s }
       rescue => ex
         Stella.ld "Error getting ip address for #{host}: #{ex.message} (#{ex.class})"
         Stella.ld ex.backtrace
         nil
       end
     end
-
+    
+    # * Resolv::DNS::Resource::IN::ANY
+    # * Resolv::DNS::Resource::IN::NS
+    # * Resolv::DNS::Resource::IN::CNAME
+    # * Resolv::DNS::Resource::IN::SOA
+    # * Resolv::DNS::Resource::IN::HINFO
+    # * Resolv::DNS::Resource::IN::MINFO
+    # * Resolv::DNS::Resource::IN::MX
+    # * Resolv::DNS::Resource::IN::TXT
+    # * Resolv::DNS::Resource::IN::ANY
+    # * Resolv::DNS::Resource::IN::A
+    # * Resolv::DNS::Resource::IN::WKS
+    # * Resolv::DNS::Resource::IN::PTR
+    # * Resolv::DNS::Resource::IN::AAAA
+    def resolv(host)
+      
+    end
+    
     def local_ipaddr?(addr)
       addr = IPAddr.new(addr) if String === addr
       @addr_local.include?(addr)
