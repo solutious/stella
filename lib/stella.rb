@@ -1,6 +1,11 @@
 # encoding: utf-8
 STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA_LIB_HOME)
 
+if RUBY_VERSION =~ /1.9/
+    Encoding.default_external = Encoding::UTF_8
+    Encoding.default_internal = Encoding::UTF_8
+end
+
 %w{tryouts benelux storable}.each do |dir|
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 end

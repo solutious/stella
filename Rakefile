@@ -31,6 +31,7 @@ begin
     gem.add_dependency('sysinfo',    '>= 0.7.3')
     gem.add_dependency('storable',   '>= 0.8.2')
     gem.add_dependency("nokogiri")
+    gem.add_dependency("public_suffix_service")
     gem.add_dependency("whois")
 
     #gem.add_development_dependency("rspec", ">= 1.2.9")
