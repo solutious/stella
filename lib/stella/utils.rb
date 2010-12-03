@@ -65,6 +65,17 @@ class Stella
       ['GIF89a', 'GIF97a'].include?(a.slice(0, 6))
     end
     
+    def domain(host)
+      require 'public_suffix_service'
+      begin
+        domain = PublicSuffixService.parse host
+        domain.domain
+      rescue => ex
+        Stella.ld "Error determining domain for #{host}: #{ex.message}"
+        Stella.ld ex.backtrace
+      end
+    end
+    
     def whois(host_or_ip)
       require 'whois'
       begin
