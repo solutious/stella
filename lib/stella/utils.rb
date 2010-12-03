@@ -90,6 +90,7 @@ class Stella
       end
     end
     
+    # http://www.opensource.apple.com/source/ruby/ruby-4/ruby/lib/resolv.rb
     # * Resolv::DNS::Resource::IN::ANY
     # * Resolv::DNS::Resource::IN::NS
     # * Resolv::DNS::Resource::IN::CNAME
@@ -103,8 +104,19 @@ class Stella
     # * Resolv::DNS::Resource::IN::WKS
     # * Resolv::DNS::Resource::IN::PTR
     # * Resolv::DNS::Resource::IN::AAAA
-    def resolv(host)
-      
+    
+    # Returns a cname or nil
+    def cname(host)
+      require 'resolv'
+      host = host.host if host.kind_of?(URI)
+      begin
+        resolv = Resolv::DNS.new # { :nameserver => [] }
+        resolv.getresources(host, Resolv::DNS::Resource::IN::CNAME).collect { |cname| cname.name.to_s }.first
+      rescue => ex
+        Stella.ld "Error getting CNAME for #{host}: #{ex.message} (#{ex.class})"
+        Stella.ld ex.backtrace
+        nil
+      end
     end
     
     def local_ipaddr?(addr)
