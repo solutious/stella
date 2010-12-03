@@ -66,6 +66,7 @@ class Stella
     end
     
     def whois(host_or_ip)
+      require 'whois'
       begin
         raw = Whois.whois(host_or_ip)
         info = raw.content.split("\n").select { |line| line !~ /\A[\#\%]/ && !line.empty? }
