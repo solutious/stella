@@ -200,7 +200,7 @@ class Numeric
     when (1000**4)..(1000**6)
       '%3.2f%s' % [(self / (1000**4).to_f).to_s, 'TB']
     else
-      [self, 'B'].join
+      [self.to_i, 'B'].join
     end
   end
 end
