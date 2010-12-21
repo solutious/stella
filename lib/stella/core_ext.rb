@@ -74,28 +74,13 @@ class HashWithIndifferentAccess < ::Hash #:nodoc:
 
 end
 
-
-# Assumes Time::Units and Numeric mixins are available. 
-class String
-  
-  def in_seconds
-    # "60m" => ["60", "m"]
-    q,u = self.scan(/([\d\.]+)([s,m,h])?/).flatten
-    q &&= q.to_f and u ||= 's'
-    q &&= q.in_seconds(u)
-  end
-  
-end
-
 class Symbol
-  
   def downcase
     self.to_s.downcase.to_sym
   end
   def upcase
     self.to_s.upcase.to_sym
   end
-
 end
 
 # Fix for eventmachine in Ruby 1.9
@@ -105,6 +90,16 @@ class Thread
   end
 end
 
+
+# Assumes Time::Units and Numeric mixins are available. 
+class String
+  def in_seconds
+    # "60m" => ["60", "m"]
+    q,u = self.scan(/([\d\.]+)([s,m,h])?/).flatten
+    q &&= q.to_f and u ||= 's'
+    q &&= q.in_seconds(u)
+  end
+end
 
 class Time
   module Units

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "2.0.0.005"
+  s.version = "2.0.0.016"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2010-09-05}
+  s.date = %q{2010-12-20}
   s.default_executable = %q{stella}
   s.description = %q{Blame Stella for breaking your web application!}
   s.email = %q{delano@solutious.com}
@@ -22,38 +22,6 @@ Gem::Specification.new do |s|
   s.files = [
     ".gitignore",
      ".gitmodules",
-     "1.0/bin/stella",
-     "1.0/examples/cookies/plan.rb",
-     "1.0/examples/csvdata/plan.rb",
-     "1.0/examples/csvdata/search_terms.csv",
-     "1.0/examples/dynamic/plan.rb",
-     "1.0/examples/essentials/logo.png",
-     "1.0/examples/essentials/plan.rb",
-     "1.0/examples/essentials/search_terms.txt",
-     "1.0/examples/exceptions/plan.rb",
-     "1.0/examples/timeout/plan.rb",
-     "1.0/examples/variables/plan.rb",
-     "1.0/lib/stella.rb",
-     "1.0/lib/stella/cli.rb",
-     "1.0/lib/stella/client.rb",
-     "1.0/lib/stella/client/container.rb",
-     "1.0/lib/stella/common.rb",
-     "1.0/lib/stella/data.rb",
-     "1.0/lib/stella/data/http.rb",
-     "1.0/lib/stella/engine.rb",
-     "1.0/lib/stella/engine/functional.rb",
-     "1.0/lib/stella/engine/load.rb",
-     "1.0/lib/stella/guidelines.rb",
-     "1.0/lib/stella/logger.rb",
-     "1.0/lib/stella/testplan.rb",
-     "1.0/lib/stella/utils/httputil.rb",
-     "1.0/tryouts/01_numeric_mixins_tryouts.rb",
-     "1.0/tryouts/12_digest_tryouts.rb",
-     "1.0/tryouts/70_module_usage.rb",
-     "1.0/tryouts/api/10_functional.rb",
-     "1.0/tryouts/configs/failed_requests.rb",
-     "1.0/tryouts/configs/global_sequential.rb",
-     "1.0/tryouts/proofs/thread_queue.rb",
      "CHANGES.txt",
      "LICENSE.txt",
      "README.md",
@@ -63,6 +31,7 @@ Gem::Specification.new do |s|
      "VERSION.yml",
      "bin/stella",
      "lib/stella.rb",
+     "lib/stella/cli.rb",
      "lib/stella/client.rb",
      "lib/stella/core_ext.rb",
      "lib/stella/engine.rb",
@@ -117,23 +86,29 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<drydock>, [">= 0.6.9"])
       s.add_runtime_dependency(%q<benelux>, [">= 0.6.0"])
       s.add_runtime_dependency(%q<sysinfo>, [">= 0.7.3"])
-      s.add_runtime_dependency(%q<storable>, [">= 0.8.0"])
+      s.add_runtime_dependency(%q<storable>, [">= 0.8.2"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
+      s.add_runtime_dependency(%q<public_suffix_service>, [">= 0"])
+      s.add_runtime_dependency(%q<whois>, [">= 0"])
     else
       s.add_dependency(%q<gibbler>, [">= 0.8.1"])
       s.add_dependency(%q<drydock>, [">= 0.6.9"])
       s.add_dependency(%q<benelux>, [">= 0.6.0"])
       s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
-      s.add_dependency(%q<storable>, [">= 0.8.0"])
+      s.add_dependency(%q<storable>, [">= 0.8.2"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
+      s.add_dependency(%q<public_suffix_service>, [">= 0"])
+      s.add_dependency(%q<whois>, [">= 0"])
     end
   else
     s.add_dependency(%q<gibbler>, [">= 0.8.1"])
     s.add_dependency(%q<drydock>, [">= 0.6.9"])
     s.add_dependency(%q<benelux>, [">= 0.6.0"])
     s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
-    s.add_dependency(%q<storable>, [">= 0.8.0"])
+    s.add_dependency(%q<storable>, [">= 0.8.2"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
+    s.add_dependency(%q<public_suffix_service>, [">= 0"])
+    s.add_dependency(%q<whois>, [">= 0"])
   end
 end
 
