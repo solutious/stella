@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2010-12-20}
+  s.date = %q{2010-12-24}
   s.default_executable = %q{stella}
   s.description = %q{Blame Stella for breaking your web application!}
   s.email = %q{delano@solutious.com}
@@ -82,30 +82,30 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<gibbler>, [">= 0.8.1"])
+      s.add_runtime_dependency(%q<gibbler>, [">= 0.8.6"])
       s.add_runtime_dependency(%q<drydock>, [">= 0.6.9"])
       s.add_runtime_dependency(%q<benelux>, [">= 0.6.0"])
       s.add_runtime_dependency(%q<sysinfo>, [">= 0.7.3"])
-      s.add_runtime_dependency(%q<storable>, [">= 0.8.2"])
+      s.add_runtime_dependency(%q<storable>, [">= 0.8.4"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
       s.add_runtime_dependency(%q<public_suffix_service>, [">= 0"])
       s.add_runtime_dependency(%q<whois>, [">= 0"])
     else
-      s.add_dependency(%q<gibbler>, [">= 0.8.1"])
+      s.add_dependency(%q<gibbler>, [">= 0.8.6"])
       s.add_dependency(%q<drydock>, [">= 0.6.9"])
       s.add_dependency(%q<benelux>, [">= 0.6.0"])
       s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
-      s.add_dependency(%q<storable>, [">= 0.8.2"])
+      s.add_dependency(%q<storable>, [">= 0.8.4"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<public_suffix_service>, [">= 0"])
       s.add_dependency(%q<whois>, [">= 0"])
     end
   else
-    s.add_dependency(%q<gibbler>, [">= 0.8.1"])
+    s.add_dependency(%q<gibbler>, [">= 0.8.6"])
     s.add_dependency(%q<drydock>, [">= 0.6.9"])
     s.add_dependency(%q<benelux>, [">= 0.6.0"])
     s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
-    s.add_dependency(%q<storable>, [">= 0.8.2"])
+    s.add_dependency(%q<storable>, [">= 0.8.4"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<public_suffix_service>, [">= 0"])
     s.add_dependency(%q<whois>, [">= 0"])
