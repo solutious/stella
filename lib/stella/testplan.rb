@@ -18,7 +18,10 @@ class Stella
     end
   end
   class Testplan < StellaObject
+    include Familia
     include Common::PrivacyMethods
+    prefix :testplan
+    index :id
     field :id                 => Gibbler::Digest, &gibbler_id_processor
     field :custid             => String
     field :usecases           => Array
@@ -26,11 +29,14 @@ class Stella
     field :privacy            => Boolean
     field :favicon            => String
     field :last_run           => Integer
-    sensitive_fields :custid, :privacy
+    field :notify => Boolean
+    include Familia::Stamps
+    sensitive_fields :custid, :privacy, :notify
     # Don't include provacy in the gibbler calculation because it
     # doesn't make sense to have both a public and private testplan.
     gibbler :custid, :usecases
     def initialize(uri=nil)
+      initialize_redis_objects
       preprocess
       if uri
         req = Stella::RequestTemplate.new :get, Stella.canonical_uri(uri)
@@ -42,9 +48,6 @@ class Stella
       @usecases ||= []
       @privacy = false if @privacy.nil?
     end
-    def postprocess
-      @id = Gibbler::Digest.new(@id) if String === @id
-    end
     def first_request
       return if @usecases.empty?
       @usecases.first.requests.first
@@ -55,6 +58,39 @@ class Stella
       @id &&= Gibbler::Digest.new(@id || self.digest)
       super
       self
+    end
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+      @notify ||= false 
+      @notify &&= false if @notify == 'false'
+    end
+    def cust
+      @cust ||= Customer.from_redis @custid
+      @cust || Customer.anonymous
+    end
+    def monitor
+      MonitorInfo.from_redis @id
+    end
+    def monitored?
+      mon = monitor
+      mon && mon.enabled
+    end
+    def host
+      h = @host.nil? || frozen? ? HostInfo.load_or_create(hostid) : @host
+      frozen? ? h : (@host=h)
+    end
+    def hostid
+      h = @hostid.nil? || frozen? ? Stella.canonical_host(first_request.uri) : @hostid
+      frozen? ? h : (@hostid=h)
+    end
+    def destroy!
+      raise BS::Problem, "Monitor exists #{index}" if MonitorInfo.exists?(index)
+      host.remove_testplan self.id unless host.nil?
+      cust.remove_testplan self.id unless cust.nil?
+      super
+    end
+    def owner?(guess)
+      custid != nil && cust.custid?(guess)
     end
     class << self
       attr_reader :plans
@@ -237,6 +273,10 @@ end
 
 class Stella
   class Testrun < StellaObject
+    include Familia
+    prefix :testrun
+    index :id
+    include Familia::Stamps
     include Common::PrivacyMethods
     field :id                 => Gibbler::Digest, &gibbler_id_processor
     field :custid             => String
@@ -257,6 +297,7 @@ class Stella
     alias_method :start_time, :stime
     alias_method :end_time, :etime
     def initialize plan=nil, mode=nil, options={}
+      initialize_redis_objects
       @ctime = Stella.now
       @plan, @mode = plan, mode
       @options = {
@@ -278,9 +319,9 @@ class Stella
       @privacy ||= false
     end
     def postprocess
+      @id &&= Gibbler::Digest.new(@id)
       @privacy = plan.privacy if Stella::Testplan === plan
       @report = Stella::Report.from_hash @report if Hash === @report
-      @id &&= Gibbler::Digest.new(@id)
       @planid &&= Gibbler::Digest.new(@planid)
     end
     def run opts={}
@@ -290,6 +331,38 @@ class Stella
       engine.run self, opts
       save if respond_to? :save
       self.report
+    end
+    def checkup?
+      @mode == :checkup
+    end
+    def monitor?
+      @mode == :monitor
+    end
+    def destroy!
+      VendorInfo.global.remove_checkup self.id
+      host.remove_checkup self.id if host
+      plan.remove_checkup self.id if plan
+      cust.remove_checkup self.id if cust
+      super
+    end
+    def plan
+      if @plan.nil? 
+        @plan = Stella::Testplan.from_redis @planid
+        @plan.freeze
+      end
+      @plan
+    end
+    def owner?(obj)
+      obj = Customer === obj ? obj.custid : obj
+      cust.username?(obj)
+    end
+    def cust
+      @cust ||= Customer.from_redis @custid
+      @cust || Customer.anonymous
+    end
+    def host
+      @host ||= plan.host if plan
+      @host
     end
     class << self
       attr_reader :statuses

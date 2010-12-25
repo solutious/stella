@@ -25,6 +25,7 @@ begin
     gem.email = "delano@solutious.com"
     gem.homepage = "http://blamestella.com/"
     gem.authors = ["Delano Mandelbaum"]
+    gem.add_dependency('familia',    '>= 0.6.2')
     gem.add_dependency("gibbler",    ">= 0.8.6")
     gem.add_dependency("drydock",    ">= 0.6.9")
     gem.add_dependency("benelux",    ">= 0.6.0")

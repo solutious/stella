@@ -15,6 +15,7 @@ require 'storable'
 require 'benelux'
 require 'gibbler/aliases'
 require 'stella/core_ext'
+require 'familia'
 
 class Stella
   module VERSION
