@@ -20,9 +20,9 @@ class Stella
     end
   end
   class Report < StellaObject
-    @plugins = {}
+    @plugins, @plugin_order = {}, []
     class << self
-      attr_reader :plugins
+      attr_reader :plugins, :plugin_order
       def plugin?(name)
         @plugins.has_key? name
       end
@@ -53,6 +53,7 @@ class Stella
           Stella::Report.send(:include, extra_methods) if extra_methods
           Stella::Report.field plugin => self
           Stella::Report.plugins[plugin] = self
+          Stella::Report.plugin_order << plugin
         end
         def process *args
           raise StellaError, "Must override run"
@@ -318,7 +319,8 @@ class Stella
       end
     end
     def process
-      self.class.plugins.each_pair do |name,klass|
+      self.class.plugin_order.each do |name|
+        klass = self.class.plugins[name]
         Stella.ld "processing #{name}"
         plugin = klass.new self
         plugin.process(filter)
