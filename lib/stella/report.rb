@@ -138,6 +138,7 @@ class Stella
         else
           @log = report.timeline.messages.filter(:kind => :http_log, :state => :nominal)
         end
+        
         return if @log.empty?
         
         unless Stella::Utils.binary?(@log.first.request_body) || Stella::Utils.image?(@log.first.request_body)

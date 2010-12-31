@@ -35,8 +35,7 @@ class Stella
     # Don't include provacy in the gibbler calculation because it
     # doesn't make sense to have both a public and private testplan.
     gibbler :custid, :usecases
-    def initialize(uri=nil)
-      initialize_redis_objects
+    def init(uri=nil)
       preprocess
       if uri
         req = Stella::RequestTemplate.new :get, Stella.canonical_uri(uri)
@@ -296,8 +295,7 @@ class Stella
     attr_reader :plan
     alias_method :start_time, :stime
     alias_method :end_time, :etime
-    def initialize plan=nil, mode=nil, options={}
-      initialize_redis_objects
+    def init plan=nil, mode=nil, options={}
       @ctime = Stella.now
       @plan, @mode = plan, mode
       @options = {
