@@ -20,6 +20,7 @@ class Stella
     end
   end
   class Report < StellaObject
+    CRLF = "\r\n" unless defined?(Report::CRLF)
     @plugins, @plugin_order = {}, []
     class << self
       attr_reader :plugins, :plugin_order
@@ -196,10 +197,19 @@ class Stella
       def successful
         @values.select { |status| status.to_i < 400 }
       end
+      def redirected
+        @values.select { |status| (300..399).member?(status.to_i) }
+      end
       def success?
         nonsuccessful.empty?
       end
+      def redirect?
+        @values.size == redirected.size
+      end
       module ReportMethods
+        def redirect?
+          statuses.redirect?
+        end
         def success?
           statuses.success?
         end
@@ -223,6 +233,10 @@ class Stella
       field :response_headers
       field :request_headers_digest
       field :response_headers_digest
+      def init *args
+        @request_headers_hash = {}
+        @response_headers_hash = {}
+      end
       def process(filter={})
         return if report.content.log.empty?
         @request_headers = report.content.log.first.request_headers
@@ -230,6 +244,27 @@ class Stella
         @request_headers_digest = report.content.log.first.request_headers.digest
         @response_headers_digest = report.content.log.first.response_headers.digest
         processed!
+      end
+      def request_header name=nil
+        if @request_headers_hash.nil?
+          @request_headers_hash = parse @request_headers
+        end
+        name.nil? ? @request_headers_hash : @request_headers_hash[name.to_s.upcase]
+      end
+      def response_header name=nil
+        if @response_headers_hash.nil?
+          @response_headers_hash = parse @response_headers
+        end
+        name.nil? ? @response_headers_hash : @response_headers_hash[name.to_s.upcase]
+      end
+      private 
+      def parse str
+        headers = {}
+        str.split(CRLF).each do|line|
+          key, value = line.split(/\s*:\s*/, 2)
+          headers[key.upcase] = value
+        end
+        headers
       end
       register :headers
     end
