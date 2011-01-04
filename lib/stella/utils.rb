@@ -1,7 +1,8 @@
-
 require 'socket'  # Why doesn't socket work with autoload?
 autoload :Timeout, 'timeout'
 autoload :IPAddr, 'ipaddr'
+autoload :Whois, 'whois'
+autoload :PublicSuffixService, 'public_suffix_service'
 
 class Stella
   
@@ -66,18 +67,19 @@ class Stella
     end
     
     def domain(host)
-      require 'public_suffix_service'
       begin
-        domain = PublicSuffixService.parse host
-        domain.domain
+        PublicSuffixService.parse host
+      rescue PublicSuffixService::DomainInvalid => ex
+        Stella.ld ex.message
+        nil
       rescue => ex
-        Stella.ld "Error determining domain for #{host}: #{ex.message}"
+        Stella.li "Error determining domain for #{host}: #{ex.message} (#{ex.class})"
         Stella.ld ex.backtrace
+        nil
       end
     end
     
     def whois(host_or_ip)
-      require 'whois'
       begin
         raw = Whois.whois(host_or_ip)
         info = raw.content.split("\n").select { |line| line !~ /\A[\#\%]/ && !line.empty? }
