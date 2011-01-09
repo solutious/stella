@@ -234,6 +234,7 @@ class Stella
       field :request_headers_digest
       field :response_headers_digest
       def init *args
+        # TODO: This doesn't seem to be called anymore.
         @request_headers_hash = {}
         @response_headers_hash = {}
       end
@@ -246,14 +247,16 @@ class Stella
         processed!
       end
       def request_header name=nil
-        if @request_headers_hash.nil?
-          @request_headers_hash = parse @request_headers
+        @request_headers_hash ||= {}
+        if @request_headers_hash.empty? && @request_headers
+          @request_headers_hash = parse(@request_headers)
         end
         name.nil? ? @request_headers_hash : @request_headers_hash[name.to_s.upcase]
       end
       def response_header name=nil
-        if @response_headers_hash.nil?
-          @response_headers_hash = parse @response_headers
+        @response_headers_hash ||= {}
+        if @response_headers_hash.empty? && @response_headers
+          @response_headers_hash = parse(@response_headers)
         end
         name.nil? ? @response_headers_hash : @response_headers_hash[name.to_s.upcase]
       end
