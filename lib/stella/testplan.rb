@@ -84,8 +84,8 @@ class Stella
     end
     def destroy!
       raise BS::Problem, "Monitor exists #{index}" if MonitorInfo.exists?(index)
-      host.remove_testplan self.id unless host.nil?
-      cust.remove_testplan self.id unless cust.nil?
+      host.testplans.rem self unless host.nil?
+      cust.testplans.rem self unless cust.nil?
       super
     end
     def owner?(guess)
@@ -337,10 +337,10 @@ class Stella
       @mode == :monitor
     end
     def destroy!
-      VendorInfo.global.remove_checkup self.id
-      host.remove_checkup self.id if host
-      plan.remove_checkup self.id if plan
-      cust.remove_checkup self.id if cust
+      VendorInfo.global.checkups.remove self
+      host.checkups.remove self if host
+      plan.checkups.remove self if plan
+      cust.checkups.remove self if cust
       super
     end
     def plan
