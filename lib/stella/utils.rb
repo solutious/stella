@@ -13,10 +13,42 @@ class Stella
     extend self
     include Socket::Constants
 
-    @addr_local = IPAddr.new("127.0.0.0/8")
-    @addr_classA = IPAddr.new("10.0.0.0/8")
-    @addr_classB = IPAddr.new("172.16.0.0/16")
-    @addr_classC = IPAddr.new("192.168.0.0/24")
+    ADDR_LOCAL = IPAddr.new("127.0.0.0/8")
+    ADDR_CLASSA = IPAddr.new("10.0.0.0/8")
+    ADDR_CLASSB = IPAddr.new("172.16.0.0/16")
+    ADDR_CLASSC = IPAddr.new("192.168.0.0/24")
+    
+    ADDR_EC2_US_EAST = %w{
+      216.182.224.0/20
+      72.44.32.0/19
+      67.202.0.0/18
+      75.101.128.0/17
+      174.129.0.0/16
+      204.236.192.0/18
+      184.73.0.0/16
+      184.72.128.0/17
+      184.72.64.0/18
+      50.16.0.0/15
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_US_WEST = %w{
+      204.236.128.0/18
+      184.72.0.0/18
+      50.18.0.0/18
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_EU_WEST = %w{
+      79.125.0.0/17
+      46.51.128.0/18
+      46.51.192.0/20
+      46.137.0.0/17
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_AP_EAST = %w{
+      175.41.128.0/18
+      122.248.192.0/18
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
     
     def image_ext?(name)
       IMAGE_EXT.include?(File.extname(name.downcase))
@@ -135,14 +167,53 @@ class Stella
     
     def local_ipaddr?(addr)
       addr = IPAddr.new(addr) if String === addr
-      @addr_local.include?(addr)
+      ADDR_LOCAL.include?(addr)
     end
      
     def private_ipaddr?(addr)
       addr = IPAddr.new(addr) if String === addr
-      @addr_classA.include?(addr) ||
-      @addr_classB.include?(addr) ||
-      @addr_classC.include?(addr)
+      ADDR_CLASSA.include?(addr) ||
+      ADDR_CLASSB.include?(addr) ||
+      ADDR_CLASSC.include?(addr)
+    end
+    
+    def ec2_cname_to_ipaddr(cname)
+      return unless cname =~ /\Aec2-(\d+)-(\d+)-(\d+)-(\d+)\./
+      [$1, $2, $3, $4].join '.'
+    end
+    
+    def ec2_ipaddr?(addr)
+      ec2_us_east_ipaddr?(addr) || ec2_us_west_ipaddr?(addr) ||
+      ec2_eu_west_ipaddr?(addr) || ec2_ap_east_ipaddr?(addr)
+    end
+    
+    def ec2_us_east_ipaddr?(addr)
+      ADDR_EC2_US_EAST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_us_west_ipaddr?(addr)
+      ADDR_EC2_US_WEST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_eu_west_ipaddr?(addr)
+      ADDR_EC2_EU_WEST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_ap_east_ipaddr?(addr)
+      ADDR_EC2_AP_EAST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    
+    def hosted_at_ec2?(hostname, region=nil)
+      meth = region.nil? ? :ec2_ipaddr? : :"ec2_#{region}_ipaddr?"
+      cname = Stella::Utils.cname(hostname)
+      if !cname.nil? && cname.first
+        addr = Stella::Utils.ec2_cname_to_ipaddr(cname.first)
+      else
+        addresses = Stella::Utils.ipaddr(hostname) || []
+        addr = addresses.first
+      end
+      addr.nil? ? false : Stella::Utils.send(meth, addr)
     end
     
     def valid_hostname?(uri)
@@ -288,6 +359,9 @@ class Stella
       indent = str.split($/).each {|line| !line.strip.empty? }.map {|line| line.index(/[^\s]/) }.compact.min
       str.gsub(/^[[:blank:]]{#{indent}}/, '')
     end
+    
+    
+    IPAddr.new("127.0.0.0/8")
     
   end
 end
