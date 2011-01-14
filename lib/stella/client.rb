@@ -144,6 +144,14 @@ class Stella
           tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
           Benelux.current_track.remove_tags :status, :request, :stella_id
           break
+        
+        rescue OpenSSL::SSL::SSLError => ex
+          debug "[#{ex.class}] #{ex.message}"
+          log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
+          log.msg = ex.message
+          tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
+          Benelux.current_track.remove_tags :status, :request, :stella_id
+          break
           
         rescue => ex
           Stella.le "[#{ex.class}] #{ex.message}", ex.backtrace

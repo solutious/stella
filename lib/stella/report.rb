@@ -260,6 +260,9 @@ class Stella
         end
         name.nil? ? @response_headers_hash : @response_headers_hash[name.to_s.upcase]
       end
+      def empty?
+        @response_headers.to_s.empty?
+      end
       private 
       def parse str
         headers = {}
