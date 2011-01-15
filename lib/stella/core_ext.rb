@@ -81,6 +81,11 @@ class Symbol
   def upcase
     self.to_s.upcase.to_sym
   end
+  unless method_defined?(:empty?)
+    def empty?
+      self.to_s.empty?
+    end
+  end
 end
 
 # Fix for eventmachine in Ruby 1.9
@@ -100,6 +105,56 @@ class String
     q &&= q.in_seconds(u)
   end
 end
+
+
+class String
+  def encode_fix(enc="UTF-8")
+    if RUBY_VERSION >= "1.9"
+      begin
+        encode!(enc, :undef => :replace, :invalid => :replace, :replace => '?')
+      rescue Encoding::CompatibilityError
+        BS.info "String#encode_fix: resorting to US-ASCII"
+        encode!("US-ASCII", :undef => :replace, :invalid => :replace, :replace => '?')
+      end
+    end
+    self
+  end
+  def plural(int=1)
+    int > 1 || int.zero? ? "#{self}s" : self
+  end
+  def shorten(len=50)
+    return self if size <= len
+    self[0..len] + "..."
+  end
+  def to_file(filename, mode, chmod=0744)
+    mode = (mode == :append) ? 'a' : 'w'
+    f = File.open(filename,mode)
+    f.puts self
+    f.close
+    raise "Provided chmod is not a Fixnum (#{chmod})" unless chmod.is_a?(Fixnum)
+    File.chmod(chmod, filename)
+  end
+  
+  # via: http://www.est1985.nl/design/2-design/96-linkify-urls-in-ruby-on-rails
+  def linkify!
+    self.gsub!(/\b((https?:\/\/|ftps?:\/\/|mailto:|www\.|status\.)([A-Za-z0-9\-_=%&amp;@\?\.\/]+(\/\s)?))\b/) {
+      match = $1
+      tail  = $3
+      case match
+      when /^(www|status)/     then  "<a href=\"http://#{match.strip}\">#{match}</a>"
+      when /^mailto/  then  "<a href=\"#{match.strip}\">#{tail}</a>"
+      else                  "<a href=\"#{match.strip}\">#{match}</a>"
+      end
+    }
+    self
+  end
+
+  def linkify
+     self.dup.linkify!
+  end
+  
+end
+
 
 unless defined?(Time::Units)
   class Time
@@ -273,7 +328,14 @@ class MetricsPack < Storable
     @stamp - (@stamp % quantum)
   end
   def to_a
-    field_names.collect { |field| send(field) || ((field_types[field].kind_of?(String)) ? 'unknown' : 0.0) }
+    field_names.collect { |field| 
+      v = send(field) 
+      if v.nil?
+        field_types[field] == String ? 'unknown' : 0.0
+      else
+        field_types[field] == Float ? v.fineround : v
+      end
+    }
   end
   def to_s
     to_a.join(',')
@@ -296,3 +358,166 @@ class MetricsPack < Storable
 end
 
 
+#############################
+# Statistics Module for Ruby
+# (C) Derrick Pallas
+#
+# Authors: Derrick Pallas
+# Website: http://derrick.pallas.us/ruby-stats/
+# License: Academic Free License 3.0
+# Version: 2007-10-01b
+#
+
+class Numeric
+  def square ; self * self ; end
+  def fineround(len=6.0)
+    v = (self * (10.0**len)).round / (10.0**len)
+    v.zero? ? 0 : v
+  end
+end
+
+class Array
+  def sum ; self.inject(0){|a,x| next if x.nil? || a.nil?; x+a} ; end
+  def mean; self.sum.to_f/self.size ; end
+  def median
+    case self.size % 2
+      when 0 then self.sort[self.size/2-1,2].mean
+      when 1 then self.sort[self.size/2].to_f
+    end if self.size > 0
+  end
+  def histogram ; self.sort.inject({}){|a,x|a[x]=a[x].to_i+1;a} ; end
+  def mode
+    map = self.histogram
+    max = map.values.max
+    map.keys.select{|x|map[x]==max}
+  end
+  def squares ; self.inject(0){|a,x|x.square+a} ; end
+  def variance ; self.squares.to_f/self.size - self.mean.square; end
+  def deviation ; Math::sqrt( self.variance ) ; end
+  alias_method :sd, :deviation
+  def permute ; self.dup.permute! ; end
+  def permute!
+    (1...self.size).each do |i| ; j=rand(i+1)
+      self[i],self[j] = self[j],self[i] if i!=j
+    end;self
+  end
+  def sample n=1 ; (0...n).collect{ self[rand(self.size)] } ; end
+
+  def random
+    self[rand(self.size)]
+  end
+  def percentile(perc)
+    self.sort[percentile_index(perc)]
+  end
+  def percentile_index(perc)
+    (perc * self.length).ceil - 1
+  end
+end
+
+
+class Array
+  def dump(format)
+    respond_to?(:"to_#{format}") ? send(:"to_#{format}") : raise("Unknown format: #{format}")
+  end
+  
+  def to_json
+    Yajl::Encoder.encode(self)
+  end
+  def self.from_json(str)
+    Yajl::Parser.parse(str, :check_utf8 => false)
+  end
+end
+
+class Float
+  
+  # Returns true if a float has a fractional part; i.e. <tt>f == f.to_i</tt>
+  def fractional_part?
+    fractional_part != 0.0
+  end
+  
+  # Returns the fractional part of a float. For example, <tt>(6.67).fractional_part == 0.67</tt>
+  def fractional_part
+    (self - self.truncate).abs
+  end
+  
+end
+
+
+class Hash
+  
+  unless method_defined?(:to_json)
+    def to_json(*args)
+      Yajl::Encoder.encode(self)
+    end
+  end
+  
+  # Courtesy of Julien Genestoux
+  def flatten
+    params = {}
+    stack = []
+
+    each do |k, v|
+      if v.is_a?(Hash)
+        stack << [k,v]
+      elsif v.is_a?(Array)
+        stack << [k,Hash.from_array(v)]
+      else
+        params[k] =  v
+      end
+    end
+
+    stack.each do |parent, hash|
+      hash.each do |k, v|
+        if v.is_a?(Hash)
+          stack << ["#{parent}[#{k}]", v]
+        else
+          params["#{parent}[#{k}]"] = v
+        end
+      end
+    end
+
+    params
+  end
+  
+  def dump(format)
+    respond_to?(:"to_#{format}") ? send(:"to_#{format}") : raise("Unknown format")
+  end
+  
+  # Courtesy of Julien Genestoux
+  # See: http://stackoverflow.com/questions/798710/how-to-turn-a-ruby-hash-into-http-params
+  def to_params
+    params = ''
+    stack = []
+
+    each do |k, v|
+      if v.is_a?(Hash)
+        stack << [k,v]
+      elsif v.is_a?(Array)
+        stack << [k,Hash.from_array(v)]
+      else
+        params << "#{k}=#{v}&"
+      end
+    end
+
+    stack.each do |parent, hash|
+      hash.each do |k, v|
+        if v.is_a?(Hash)
+          stack << ["#{parent}[#{k}]", v]
+        else
+          params << "#{parent}[#{k}]=#{v}&"
+        end
+      end
+    end
+
+    params.chop! 
+    params
+  end
+  def self.from_array(array = [])
+    h = Hash.new
+    array.size.times do |t|
+      h[t] = array[t]
+    end
+    h
+  end
+
+end
