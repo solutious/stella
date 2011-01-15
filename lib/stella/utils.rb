@@ -18,6 +18,7 @@ class Stella
     ADDR_CLASSB = IPAddr.new("172.16.0.0/16")
     ADDR_CLASSC = IPAddr.new("192.168.0.0/24")
     
+    # See: https://forums.aws.amazon.com/ann.jspa?annID=877
     ADDR_EC2_US_EAST = %w{
       216.182.224.0/20
       72.44.32.0/19

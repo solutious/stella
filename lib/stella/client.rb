@@ -187,6 +187,11 @@ class Stella
       if @opts[:ssl_verify_mode]
         http_client.ssl_config.verify_mode = @opts[:ssl_verify_mode]
       end
+      
+      # See: http://ghouston.blogspot.com/2006/03/using-ssl-with-ruby-http-access2.html
+      http_client.ssl_config.clear_cert_store
+      http_client.ssl_config.set_trust_ca File.join(STELLA_LIB_HOME, '..', 'certs', 'stella-master.crt')
+      
       http_client.connect_timeout = @opts[:timeout]
       http_client.send_timeout = @opts[:timeout]
       http_client.receive_timeout = @opts[:timeout]
