@@ -101,8 +101,8 @@ class Stella
             @session.redirect_uri = ex.location
             retry
           end
-          
-        rescue SocketError, 
+        
+        rescue Errno::ETIMEDOUT, SocketError, 
                HTTPClient::ConnectTimeoutError, 
                HTTPClient::SendTimeoutError,
                HTTPClient::ReceiveTimeoutError,
