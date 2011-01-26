@@ -9,6 +9,10 @@ require 'pp'
 class Stella
   
   class Client
+    unless defined?(SSL_CERT_PATH)
+      SSL_CERT_PATH = File.join(STELLA_LIB_HOME, '..', 'certs', 'stella-master.crt').freeze
+    end
+    
     include Gibbler::Complex
     include HTTPClient::Timeout
     
@@ -190,7 +194,7 @@ class Stella
       
       # See: http://ghouston.blogspot.com/2006/03/using-ssl-with-ruby-http-access2.html
       http_client.ssl_config.clear_cert_store
-      http_client.ssl_config.set_trust_ca File.join(STELLA_LIB_HOME, '..', 'certs', 'stella-master.crt')
+      http_client.ssl_config.set_trust_ca SSL_CERT_PATH
       
       http_client.connect_timeout = @opts[:timeout]
       http_client.send_timeout = @opts[:timeout]
