@@ -6,7 +6,7 @@ if RUBY_VERSION =~ /1.9/
   Encoding.default_internal = Encoding::UTF_8
 end
 
-%w{tryouts benelux storable gibbler}.each do |dir|
+%w{tryouts benelux storable gibbler familia bluth}.each do |dir|
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 end
 
