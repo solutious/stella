@@ -482,7 +482,7 @@ class Hash
   def dump(format)
     respond_to?(:"to_#{format}") ? send(:"to_#{format}") : raise("Unknown format")
   end
-  
+
   # Courtesy of Julien Genestoux
   # See: http://stackoverflow.com/questions/798710/how-to-turn-a-ruby-hash-into-http-params
   def to_params
@@ -502,9 +502,9 @@ class Hash
     stack.each do |parent, hash|
       hash.each do |k, v|
         if v.is_a?(Hash)
-          stack << ["#{parent}[#{k}]", v]
+          stack << ["#{parent}[#{k}]", URI::Escape.escape(v)]
         else
-          params << "#{parent}[#{k}]=#{v}&"
+          params << "#{parent}[#{k}]=#{URI::Escape.escape(v)}&"
         end
       end
     end
