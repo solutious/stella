@@ -485,7 +485,8 @@ class Hash
 
   # Courtesy of Julien Genestoux
   # See: http://stackoverflow.com/questions/798710/how-to-turn-a-ruby-hash-into-http-params
-  def to_params
+  # NOTE: conflicts w/ HTTParty 0.7.3 when named "to_params"
+  def to_http_params
     params = ''
     stack = []
 
