@@ -57,13 +57,13 @@ Gem::Specification.new do |s|
      "support/sample_webapp/app.rb",
      "support/sample_webapp/config.ru",
      "support/useragents.txt",
-     "tryouts/01_numeric_mixins_tryouts.rb",
-     "tryouts/12_digest_tryouts.rb",
-     "tryouts/70_module_usage.rb",
-     "tryouts/api/10_functional.rb",
-     "tryouts/configs/failed_requests.rb",
-     "tryouts/configs/global_sequential.rb",
-     "tryouts/proofs/thread_queue.rb",
+     "try/01_numeric_mixins_tryouts.rb",
+     "try/12_digest_tryouts.rb",
+     "try/70_module_usage.rb",
+     "try/api/10_functional.rb",
+     "try/configs/failed_requests.rb",
+     "try/configs/global_sequential.rb",
+     "try/proofs/thread_queue.rb",
      "vendor/httpclient-2.1.5.2/httpclient.rb",
      "vendor/httpclient-2.1.5.2/httpclient/auth.rb",
      "vendor/httpclient-2.1.5.2/httpclient/cacert.p7s",
@@ -80,7 +80,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{stella}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.5.2}
   s.summary = %q{Blame Stella for breaking your web application!}
   s.test_files = [
     "examples/cookies/plan.rb",
@@ -93,20 +93,19 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<gibbler>, [">= 0.8.1"])
       s.add_runtime_dependency(%q<drydock>, [">= 0.6.9"])
-      s.add_runtime_dependency(%q<benelux>, ["= 0.5.15"])
+      s.add_runtime_dependency(%q<benelux>, [">= 0.5.15"])
       s.add_runtime_dependency(%q<sysinfo>, [">= 0.7.3"])
       s.add_runtime_dependency(%q<storable>, [">= 0.7.3"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
     else
       s.add_dependency(%q<gibbler>, [">= 0.8.1"])
       s.add_dependency(%q<drydock>, [">= 0.6.9"])
-      s.add_dependency(%q<benelux>, ["= 0.5.15"])
+      s.add_dependency(%q<benelux>, [">= 0.5.15"])
       s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
       s.add_dependency(%q<storable>, [">= 0.7.3"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
@@ -114,7 +113,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<gibbler>, [">= 0.8.1"])
     s.add_dependency(%q<drydock>, [">= 0.6.9"])
-    s.add_dependency(%q<benelux>, ["= 0.5.15"])
+    s.add_dependency(%q<benelux>, [">= 0.5.15"])
     s.add_dependency(%q<sysinfo>, [">= 0.7.3"])
     s.add_dependency(%q<storable>, [">= 0.7.3"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
