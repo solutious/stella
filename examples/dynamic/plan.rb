@@ -22,7 +22,7 @@ usecase "Dynamic Data" do
   # Specify a username, password, and optional value
   # to use for the authentication domain. If no domain
   # is specifed, the root URI will be used. 
-  #auth :user, :password, 'http://domain/'
+  #http_auth :user, :password, 'http://domain/'
   
   # Retrieve a list of listings and store
   # them in a resource called listing_ids.
