@@ -80,6 +80,7 @@
 desc "Product Finder"
 
 usecase 65, "Simple search" do
+  auth :user, :password, 'http://domain/'
   
   # An important factor in simulating traffic
   # is using real, dynamic data. You can load
