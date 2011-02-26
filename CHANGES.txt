@@ -10,6 +10,10 @@ STELLA, CHANGES
 * TODO: request block conditions. 
 * TODO: process templates for calls to set in get blocks
 
+#### 0.8.8 (2011-02-26) ###############################
+
+* FIXED: Require benelux 0.5.17 (fixed for Ruby 1.9.2)
+
 #### 0.8.7.002 (2010-06-14) ###############################
 
 * FIXED: Specifying a host w/ a path and no testplan no longer doubles up the path

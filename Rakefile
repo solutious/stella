@@ -27,7 +27,7 @@ begin
     gem.authors = ["Delano Mandelbaum"]
     gem.add_dependency("gibbler",    ">= 0.8.1")
     gem.add_dependency("drydock",    ">= 0.6.9")
-    gem.add_dependency("benelux",    "= 0.5.15")
+    gem.add_dependency("benelux",    "= 0.5.17")
     gem.add_dependency('sysinfo',    '>= 0.7.3')
     gem.add_dependency('storable',   '>= 0.7.3')
     gem.add_dependency("nokogiri")
