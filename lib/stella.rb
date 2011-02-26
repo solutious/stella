@@ -5,7 +5,7 @@ STELLA_LIB_HOME = File.expand_path File.dirname(__FILE__) unless defined?(STELLA
 #  $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 #end
 
-autoload :SysInfo, 'sysinfo'
+require 'sysinfo'
 autoload :Drydock, 'drydock'
 autoload :URI, 'uri'
 autoload :OpenStruct, 'ostruct'
