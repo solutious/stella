@@ -129,13 +129,16 @@ class Stella
       li("#{prefix}#{msg.join("#{$/}#{prefix}")}")
     end
     
-    def get(uri)
-      uri
+    def get(uri, opts={})
+      opts[:concurrency] ||= 1
+      opts[:repetitions] ||= 1
+      report = checkup uri, opts
+      report.content.response_body if report.processed? && report.content
     end
-    def checkup(uri)
+    def checkup(uri, opts={})
       plan = Stella::Testplan.new uri
-      run = Stella::Testrun.new plan
-      run
+      run = Stella::Testrun.new plan, :checkup, opts
+      report = Stella::Engine.run run
     end
     def now
       Time.now.utc.to_f
