@@ -100,6 +100,7 @@ class Stella
           testrun.etime = Stella.now
           testrun.fubar!
         end
+        Benelux.reset # If we run again, the old stats still remain
         testrun.report
       end
 
