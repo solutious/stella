@@ -133,7 +133,11 @@ class Stella
       opts[:concurrency] ||= 1
       opts[:repetitions] ||= 1
       report = checkup uri, opts
-      report.content.response_body if report.processed? && report.content
+      if report.processed? && report.content && report.statuses.success?
+        report.content.response_body 
+      else
+        nil
+      end
     end
     def checkup(uri, opts={})
       plan = Stella::Testplan.new uri
