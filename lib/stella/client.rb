@@ -43,7 +43,7 @@ class Stella
       @redirect_count = 0
       @clientid = [@session.object_id, created, index, opts].digest
     end
-
+    
     def execute usecase, &each_request
       @session.http_client = create_http_client
       tt = Benelux.current_track.timeline
@@ -65,6 +65,9 @@ class Stella
           ## 50.times do |idx|
           ##   headers["X-header-#{idx}"] = (1000 << 1000).to_s
           ## end
+          
+          # Mis-behaving HTTP servers will fail w/o an Accept header
+          @session.headers["Accept"] ||= '*/*'
           
           # if hard_timeout is nil this will do nothing
           timeout(@opts[:hard_timeout], TimeoutError) do
