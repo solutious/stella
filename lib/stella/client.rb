@@ -196,8 +196,13 @@ class Stella
       end
       
       # See: http://ghouston.blogspot.com/2006/03/using-ssl-with-ruby-http-access2.html
-      http_client.ssl_config.clear_cert_store
-      http_client.ssl_config.set_trust_ca SSL_CERT_PATH
+      puts SSL_CERT_PATH
+      begin 
+        http_client.ssl_config.clear_cert_store
+        http_client.ssl_config.set_trust_ca SSL_CERT_PATH
+      rescue => ex
+        puts ex.class, ex.message, ex.backtrace
+      end
       
       http_client.connect_timeout = @opts[:timeout]
       http_client.send_timeout = @opts[:timeout]
