@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "2.0.0.023"
+  s.version = "2.0.0.024"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2011-01-15}
+  s.date = %q{2011-04-11}
   s.default_executable = %q{stella}
   s.description = %q{Blame Stella for breaking your web application!}
   s.email = %q{delano@solutious.com}
@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
     ".gitignore",
      ".gitmodules",
      "CHANGES.txt",
+     "Gemfile",
+     "Gemfile.lock",
      "LICENSE.txt",
      "README.md",
      "Rakefile",
@@ -35,6 +37,8 @@ Gem::Specification.new do |s|
      "certs/gd-class2-root.crt",
      "certs/gd_bundle.crt",
      "certs/gd_intermediate.crt",
+     "certs/startssl-ca.pem",
+     "certs/startssl-sub.class1.server.ca.pem",
      "certs/stella-master.crt",
      "lib/stella.rb",
      "lib/stella/cli.rb",
@@ -80,11 +84,10 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{stella}
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.5.2}
   s.summary = %q{Blame Stella for breaking your web application!}
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
