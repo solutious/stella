@@ -21,8 +21,8 @@ BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
 lib_dir = File.join(BASE_PATH, 'lib')
 $:.unshift lib_dir  
 
-require 'drydock'
 require 'stella'
+require 'drydock'
 require 'stella/cli'
 
 # Command-line interface for bin/stella

@@ -16,6 +16,7 @@ GEM
     gibbler (0.8.9)
       attic (>= 0.4.0)
     ipaddress (0.7.0)
+    multi_json (0.0.5)
     nokogiri (1.4.4)
     public_suffix_service (0.8.1)
     redis (2.2.0)
@@ -37,6 +38,7 @@ DEPENDENCIES
   familia (= 0.7.0)
   gibbler (= 0.8.9)
   ipaddress (= 0.7.0)
+  multi_json
   nokogiri
   public_suffix_service (= 0.8.1)
   redis (= 2.2.0)
