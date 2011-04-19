@@ -372,7 +372,11 @@ class Stella
       end
       define_method :"#{status}!" do
         @status = status
-        save if respond_to? :save
+        begin
+          save if respond_to? :save
+        rescue Errno::ECONNREFUSED => ex
+          Stella.ld ex.message
+        end
       end
     end
   end
