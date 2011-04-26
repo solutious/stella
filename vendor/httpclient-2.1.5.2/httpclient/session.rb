@@ -600,7 +600,6 @@ class HTTPClient
         else
           ret = read_body_rest(&block)
         end
-        p [:ret, ret.encoding.name] if ret
       rescue
         close
         raise

@@ -123,7 +123,7 @@ class Stella
     attr_accessor :log, :stdout, :agent, :debug, :quiet, :noise
     def debug?()        @debug == true  end
     def quiet?()        @quiet == true  end
-    def li(*msg) STDOUT.puts *msg unless quiet? end
+    def li(*msg) STDERR.puts *msg unless quiet? end
     def le(*msg); li "  " << msg.join("#{$/}  ") end
     def ld(*msg)
       return unless Stella.debug?

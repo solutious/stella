@@ -20,23 +20,13 @@ class Stella::CLI < Drydock::Command
     @run.options[:concurrency] = @option.concurrency
     @report = Stella::Engine.run @run; nil
     unless Stella.quiet?
-      if @option.report
-        case @global.format
-        when 'yaml'
-          puts @report.to_yaml
-        else
-          puts @report.to_json
-        end
+      if @global.verbose == 2
+        puts @report.dump(@global.format || 'json')
+      elsif @global.verbose >= 3
+        puts @run.dump(@global.format || 'json')
       else
         metrics = @report.metrics_pack
-        case @global.format
-        when 'json'
-          puts metrics.to_json
-        when 'yaml'
-          puts metrics.to_yaml
-        else
-          puts metrics.to_s
-        end
+        puts @metrics.dump(@global.format || 'string')
       end
     end
     @exit_code = @report.error_count

@@ -168,7 +168,7 @@ class Stella
               @description = doc.description
             end
           rescue => ex
-            puts ex.message
+            Stella.li ex.message
             # /Library/Ruby/Gems/1.8/gems/nokogiri-1.4.1/lib/nokogiri/xml/fragment_handler.rb:37: [BUG] Segmentation fault
             #  ruby 1.8.7 (2008-08-11 patchlevel 72) [universal-darwin10.0]
           end

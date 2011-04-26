@@ -78,7 +78,7 @@ class Stella
           threads.each { |thread| thread.join }
           timeline = Benelux.merge_tracks
         rescue Interrupt
-          puts "Skipping..."
+          Stella.li "Skipping..."
           testrun.etime = Stella.now
           testrun.fubar!
           exit 1
@@ -90,13 +90,13 @@ class Stella
           testrun.report.process 
           testrun.report.fubars? ? testrun.fubar! : testrun.done! 
         rescue Interrupt
-          puts "Exiting..."
+          Stella.li "Exiting..."
           testrun.etime = Stella.now
           testrun.fubar!
           exit 1
         rescue => ex
-          puts ex.message
-          puts ex.backtrace if Stella.debug?
+          Stella.li ex.message
+          Stella.li ex.backtrace if Stella.debug?
           testrun.etime = Stella.now
           testrun.fubar!
         end
