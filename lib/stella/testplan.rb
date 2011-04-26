@@ -318,7 +318,8 @@ class Stella
     end
     def postprocess
       @id &&= Gibbler::Digest.new(@id)
-      @privacy = plan.privacy if Stella::Testplan === plan
+      # Calling plan calls Redis. 
+      #@privacy = plan.privacy if Stella::Testplan === plan
       @report = Stella::Report.from_hash @report if Hash === @report
       @planid &&= Gibbler::Digest.new(@planid)
     end
