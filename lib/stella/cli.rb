@@ -26,7 +26,7 @@ class Stella::CLI < Drydock::Command
         puts @run.dump(@global.format || 'json')
       else
         metrics = @report.metrics_pack
-        puts @metrics.dump(@global.format || 'string')
+        puts metrics.dump(@global.format || 'string')
       end
     end
     @exit_code = @report.error_count
