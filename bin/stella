@@ -76,7 +76,9 @@ class Stella::CLI::Definition
   option :W, :nowait, "Ignore wait times"
   #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
   option :p, :testplan, String, "Path to testplan" 
+  option :R, :report, "Return the entire report"
   command :checkup => Stella::CLI
+  
   
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
