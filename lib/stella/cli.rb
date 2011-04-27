@@ -19,7 +19,9 @@ class Stella::CLI < Drydock::Command
     @run.options[:repetitions] = @option.repetition
     @run.options[:concurrency] = @option.concurrency
     @report = Stella::Engine.run @run; nil
-    unless Stella.quiet?
+    if Stella.quiet?
+      @exit_code = @report.error_count
+    else
       if @global.verbose == 2
         puts @report.dump(@global.format || 'json')
       elsif @global.verbose >= 3
@@ -29,7 +31,6 @@ class Stella::CLI < Drydock::Command
         puts metrics.dump(@global.format || 'string')
       end
     end
-    @exit_code = @report.error_count
   end
 
   def example
