@@ -168,7 +168,7 @@ class Stella
     end
   
     def canonical_uri(uri)
-      return nil if host.nil?
+      return nil if uri.nil?
       if uri.kind_of?(URI)
         uri = Addressable::URI.parse uri.to_s
       elsif uri.kind_of?(String)
