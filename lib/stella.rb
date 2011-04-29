@@ -152,6 +152,7 @@ class Stella
     # http://blamestella.com/ => blamestella.com
     # https://blamestella.com/ => blamestella.com:443
     def canonical_host(host)
+      return nil if host.nil?
       if host.kind_of?(URI)
         uri = host
       else
@@ -167,6 +168,7 @@ class Stella
     end
   
     def canonical_uri(uri)
+      return nil if host.nil?
       if uri.kind_of?(URI)
         uri = Addressable::URI.parse uri.to_s
       elsif uri.kind_of?(String)

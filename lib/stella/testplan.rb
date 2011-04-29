@@ -288,6 +288,7 @@ class Stella
     field :etime              => Float
     field :salt
     field :planid             => Gibbler::Digest
+    field :hostid
     field :privacy            => Boolean
     field :report             => Stella::Report
     sensitive_fields :custid, :salt, :privacy
@@ -312,7 +313,10 @@ class Stella
     def preprocess
       @salt ||= Stella.now.digest.short
       @status ||= :new
-      @planid = @plan.id if @plan
+      if @plan
+        @planid = @plan.id 
+        @hostid = @plan.hostid
+      end
       @options ||= {}
       @privacy ||= false
     end
@@ -322,6 +326,11 @@ class Stella
       #@privacy = plan.privacy if Stella::Testplan === plan
       @report = Stella::Report.from_hash @report if Hash === @report
       @planid &&= Gibbler::Digest.new(@planid)
+    end
+    def hostid
+      # NOTE: This method is needed only until May 30 or so.
+      # (there was an issue where incidents were not including a hostid)
+      @hostid || (plan.nil? ? nil : plan.hostid)
     end
     def run opts={}
       raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
