@@ -174,6 +174,7 @@ class Stella
           end
         end
         @response_body_digest = @log.first.response_body.digest
+        @log.each { |entry| entry.response_body = ''; entry.request_body = '' }
         processed!
       end
       module ReportMethods
