@@ -275,7 +275,7 @@ class Stella
       end
       register :headers
     end
-    
+
     class Metrics < StellaObject
       include Report::Plugin
       field :response_time            => Benelux::Stats::Calculator
@@ -302,14 +302,21 @@ class Stella
         @request_content_size = Benelux::Stats::Calculator.new 
         @response_headers_size = Benelux::Stats::Calculator.new 
         @response_content_size = Benelux::Stats::Calculator.new 
-        unless report.content.log.empty?
-          report.content.log.each do |entry|
-            @request_headers_size.sample entry.request_headers.size if entry.request_headers
-            @request_content_size.sample entry.request_body.size if entry.request_body
-            @response_headers_size.sample entry.response_headers.size if entry.response_headers
-            @response_content_size.sample entry.response_body.size if entry.response_body
-          end
-        end
+
+        @request_content_size.sample report.content.request_body.size unless report.content.request_body.to_s.empty?
+        @response_content_size.sample report.content.response_body.size unless report.content.response_body.to_s.empty?
+
+        @request_headers_size.sample report.headers.request_headers.size unless report.headers.request_headers.to_s.empty?
+        @response_headers_size.sample report.headers.response_headers.size unless report.headers.response_headers.to_s.empty?
+
+        # unless report.content.log.empty?
+        #   report.content.log.each do |entry|
+        #     @request_headers_size.sample entry.request_headers.size if entry.request_headers
+        #     @request_content_size.sample entry.request_body.size if entry.request_body
+        #     @response_headers_size.sample entry.response_headers.size if entry.response_headers
+        #     @response_content_size.sample entry.response_body.size if entry.response_body
+        #   end
+        # end
         processed!
       end
       def postprocess
