@@ -105,7 +105,7 @@ class Stella
   def initialize *args
     @plan = Stella::TP === args.first ? 
       args.first.clone : Stella::TP.new(args.first)
-    @plan.freeze
+    #@plan.freeze
     @runner
   end
 end 

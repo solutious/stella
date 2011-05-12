@@ -29,9 +29,11 @@ Stella::Report::Headers.plugin
 ## Can process a timline
 thread = Thread.new do
   log = Stella::Engine
-  Benelux.thread_timeline.add_message(:kind => :http_log)
+  Benelux.timeline.add_message(:kind => :http_log)
 end
-report = Stella::Report.new Benelux.thread_timeline
+thread.join
+timeline = Benelux.merge_tracks
+report = Stella::Report.new timeline
 report.process
 report.processed?
 #=> true

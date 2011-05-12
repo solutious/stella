@@ -5,15 +5,15 @@ TEST_URI = 'http://www.blamestella.com/'
 ## Create testplan w/ uri
 @tp = Stella::Testplan.new TEST_URI
 @tp.id
-#=> '8a8c094565c37fee565c4bf57f7b10a0b240db88'
+#=> '9c7d56020ffa632dd1c798a6ee1990a656d59b59'
 
 ## has consistent usecase ID
 @tp.usecases.first.id
-# => 'd4584d8cb4eb1933f98910cf079181db83f41368'
+# => '77b98a7a840c8f58bc51a8fdb07874a4ecb752a3'
 
 ## can access first request
 @tp.first_request.id
-# => '5ed1907264dcd19b0c99e38e64edfc36a92e0e3d'
+# => '8cb1d7467eb28ae519bbbc448911b617e5e40130'
 
 ## Request is http
 @tp.first_request.protocol
@@ -39,8 +39,8 @@ TEST_URI = 'http://www.blamestella.com/'
 #=> true
 
 ## Testplan can go to JSON
-@tp.to_json.gibbler
-#=> 'fee6e18920e70293201bd730c6e1bdb225b94ea7'
+@tp.to_json
+##=> ''
 
 ## Can come back from JSON
 @tr2 = Stella::Testrun.from_json @tr.to_json
