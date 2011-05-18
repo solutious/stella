@@ -163,6 +163,27 @@ class Stella
       super
       self
     end
+    module ClassMethods
+      [:get, :put, :head, :post, :delete].each do |meth|
+        define_method meth do |*args,&definition|
+          path, opts = *args
+          create_request_template meth, path, opts, &definition
+        end
+      end
+      [:xget, :xput, :xhead, :xpost, :xdelete].each do |ignore|
+        define_method ignore do |*args|
+        end
+      end
+      private 
+      def create_request_template meth, path, opts=nil, &definition
+        opts ||= {}
+        planname, ucname = names
+        uc = Stella::Testplan.plans[planname].usecases.last
+        Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
+        req = RequestTemplate.new meth, path, opts, &definition
+        uc.requests << req
+      end
+    end
     class << self 
       attr_accessor :instance
       def from_hash(*args)
@@ -188,25 +209,7 @@ class Stella
         obj.instance = Stella::Usecase.new
         Stella::Testplan.plans[planclass].usecases << obj.instance
         Stella::Testplan.plans[planclass].usecases.last.desc = ucname
-      end
-      [:get, :put, :head, :post, :delete].each do |meth|
-        define_method meth do |*args,&definition|
-          path, opts = *args
-          create_request_template meth, path, opts, &definition
-        end
-      end
-      [:xget, :xput, :xhead, :xpost, :xdelete].each do |ignore|
-        define_method ignore do |*args|
-        end
-      end
-      private 
-      def create_request_template meth, path, opts=nil, &definition
-        opts ||= {}
-        planname, ucname = names
-        uc = Stella::Testplan.plans[planname].usecases.last
-        Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
-        req = RequestTemplate.new meth, path, opts, &definition
-        uc.requests << req
+        obj.extend ClassMethods
       end
     end
   end
