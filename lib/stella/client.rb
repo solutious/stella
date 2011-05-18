@@ -50,7 +50,7 @@ class Stella
       usecase.requests.each_with_index do |req,idx|
         begin 
           debug "request start (session: #{@session.object_id})"
-          @session.prepare_request req 
+          @session.prepare_request usecase, req 
           
           debug "#{@session.http_method} #{@session.uri} (#{req.id.short})"
           debug " #{@session.params.inspect}" unless @session.params.empty?
@@ -237,7 +237,7 @@ class Stella
     def session
       self
     end    
-    def prepare_request req
+    def prepare_request uc, req
       @req = req
       @http_method, @params, @headers = req.http_method, req.params, req.headers
       instance_exec(&req.callback) unless req.callback.nil?
@@ -253,6 +253,13 @@ class Stella
         build_uri @redirect_uri
       else
         build_uri @req.uri
+      end
+      if !uc.http_auth.nil? && !uc.http_auth.empty?
+        Stella.ld " HTTP AUTH: #{uc.http_auth.inspect}"
+        user, pass, domain = *uc.http_auth
+        domain ||= '%s://%s:%d%s' % [base_uri.scheme, base_uri.host, base_uri.port, '/'] 
+        http_client.set_auth domain, user, pass
+        Stella.ld "   #{http_client.www_auth.inspect}"
       end
       @redirect_uri = nil  # one time deal
     end
@@ -300,12 +307,14 @@ class Stella
       !find_response_handler(status).nil?
     end
     def response_handler(range=nil, &blk)
-      return @response_handler if range.nil?
       @response_handler ||= {}
+      return @response_handler if range.nil? && blk.nil?
+      range = 0..999 if range.nil? || range.zero?
       range = range.to_i..range.to_i unless Range === range
       @response_handler[range] = blk unless blk.nil?
       @response_handler[range]
     end
+    alias_method :handler, :response_handler
     alias_method :response, :response_handler
     def clear_previous_request
       [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method].each do |n|
@@ -315,6 +324,14 @@ class Stella
     def status
       @res.status
     end
+    
+    #def wait(t); sleep t; end
+    #def quit(msg=nil); Quit.new(msg); end
+    #def fail(msg=nil); Fail.new(msg); end
+    #def error(msg=nil); Error.new(msg); end
+    #def repeat(t=1); Repeat.new(t); end
+    def follow(uri=nil,&blk); Follow.new(uri,&blk); end
+    
     private 
     def build_uri(reqtempl)
       uri = reqtempl.clone # need to clone b/c we modify uri in scan.

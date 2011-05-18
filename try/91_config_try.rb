@@ -8,7 +8,8 @@ end
 
 module Anonymous
   class FindMonitor < Stella::Usecase
-
+    http_auth :delano, 'token'
+    
     get '/' do
       response 200 do
         session[:monitor_uri] = doc.css('#headingMonitoring a').first['href']
@@ -46,8 +47,8 @@ end
 
 #p Stella::Testplan.plan?(DefaultTestplan)  # created by DefaultExample above.
 
-#puts Anonymous.testplan.to_yaml
-puts Anonymous.checkup('http://bs.com:3000/').statuses_pretty
+puts Anonymous.testplan.to_yaml
+puts Anonymous.checkup('http://bs.com:3000/').to_yaml
 
 #@report = Anonymous.checkup "http://www.blamestella.com/"
 #pp @report.errors.all if @report.errors?

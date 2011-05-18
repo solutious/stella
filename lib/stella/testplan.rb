@@ -145,6 +145,7 @@ class Stella
     field :desc             => String
     field :ratio            => Float
     field :requests         => Array
+    field :http_auth             => Array
     gibbler :requests
     def initialize(req=nil)
       preprocess
@@ -172,16 +173,23 @@ class Stella
       end
       [:xget, :xput, :xhead, :xpost, :xdelete].each do |ignore|
         define_method ignore do |*args|
+          Stella.ld " ignoring #{ignore}: #{args.inspect}"
         end
+      end
+      def http_auth user, pass=nil, domain=nil
+        planname, ucname = *names
+        uc = Stella::Testplan.plans[planname].usecases.last
+        uc.http_auth = user, pass, domain
+        uc.http_auth
       end
       private 
       def create_request_template meth, path, opts=nil, &definition
         opts ||= {}
-        planname, ucname = names
+        planname, ucname = *names
         uc = Stella::Testplan.plans[planname].usecases.last
         Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
-        req = RequestTemplate.new meth, path, opts, &definition
-        uc.requests << req
+        rt = RequestTemplate.new meth, path, opts, &definition
+        uc.requests << rt
       end
     end
     class << self 
@@ -194,7 +202,6 @@ class Stella
       def names
         names = self.to_s.split('::')
         planname, ucname = case names.size
-        
         when 1 then ['DefaultTestplan', names.last]
         else        [names[0..-2].join('::'), names[-1]] end
         [eval(planname), ucname.to_sym]
