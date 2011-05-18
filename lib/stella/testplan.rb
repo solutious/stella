@@ -120,7 +120,9 @@ class Stella
         @plans
       end
       def plan(name)
-        plans[name]
+        plans[eval(name.to_s)]
+      rescue NameError => ex
+        nil
       end
       def plan?(name)
         !plan(name).nil?

@@ -44,7 +44,7 @@ class Authorized
   end
 end
 
-pp Stella::Testplan.plans
+p Stella::Testplan.plan?(DefaultTestplan)
 #puts Anonymous.checkup
 #h = TestSuite::SimpleUsecase.new.class.instance.to_hash
 #c = Stella::Usecase.from_hash h
