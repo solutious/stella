@@ -329,8 +329,9 @@ class Stella
       end
       uri = Stella.canonical_uri(uri)
       if base_uri
-        uri.scheme ||= base_uri.scheme
-        uri.host ||= base_uri.host
+        uri.scheme = base_uri.scheme
+        uri.host = base_uri.host if uri.host.to_s.empty?
+        uri.port = base_uri.port if uri.port.to_s.empty?
       end
       uri
     end

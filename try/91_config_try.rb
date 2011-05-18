@@ -6,13 +6,13 @@ class DefaultExample < Stella::Usecase
   get ':anything'
 end
 
-class Anonymous
+module Anonymous
   class FindMonitor < Stella::Usecase
 
     get '/' do
       response 200 do
-        session[:monitor_uri] = doc.css('#headingMonitoring a').first['href'] rescue nil
-        raise PageError, "No value for :monitor_uri" if session[:monitor_uri].to_s.empty?
+        session[:monitor_uri] = doc.css('#headingMonitoring a').first['href']
+        raise Stella::PageError, "No value for :monitor_uri" if session[:monitor_uri].to_s.empty?
       end
     end
     
@@ -37,19 +37,17 @@ class Authorized
       param[:u] = 'trebek'
       param[:p] = ENV['trebekpass']
       response 300..399 do
-        raise ForcedRedirect, session.location
+        raise Stella::ForcedRedirect, session.location
       end
     end
     
   end
 end
 
-p Stella::Testplan.plan?(DefaultTestplan)  # created by DefaultExample above.
+#p Stella::Testplan.plan?(DefaultTestplan)  # created by DefaultExample above.
 
-#puts Anonymous.checkup
-#h = TestSuite::SimpleUsecase.new.class.instance.to_hash
-#c = Stella::Usecase.from_hash h
-#p c.requests[2].response_handler.to_hash
+#puts Anonymous.testplan.to_yaml
+puts Anonymous.checkup('http://bs.com:3000/').statuses_pretty
 
 #@report = Anonymous.checkup "http://www.blamestella.com/"
 #pp @report.errors.all if @report.errors?

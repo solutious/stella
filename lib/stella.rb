@@ -19,6 +19,8 @@ require 'gibbler/aliases'
 require 'stella/core_ext'
 require 'familia'
 
+autoload :Nokogiri, 'nokogiri'
+
 class Stella
   module VERSION
     def self.to_s

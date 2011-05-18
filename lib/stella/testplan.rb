@@ -104,6 +104,9 @@ class Stella
         testrun = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode, opts
         report = engine.run testrun
       end
+      def testplan
+        Stella::Testplan.plan(self)
+      end
     end
     class << self
       attr_reader :plans
@@ -120,7 +123,8 @@ class Stella
         @plans
       end
       def plan(name)
-        plans[eval(name.to_s)]
+        name = eval(name.to_s) unless Class === name || Module === name
+        plans[name]
       rescue NameError => ex
         nil
       end
