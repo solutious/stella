@@ -2,9 +2,6 @@
 #Stella.debug=true
 # ruby -Ilib -rstella try/91_config_try.rb
 
-class DefaultExample < Stella::Usecase
-  get ':anything'
-end
 
 class Anonymous
   class FindMonitor < Stella::Usecase
@@ -44,7 +41,7 @@ class Authorized
   end
 end
 
-p Stella::Testplan.plan?(DefaultTestplan)
+p Stella::Testplan.plan?(DefaultTestplan)  # created 
 #puts Anonymous.checkup
 #h = TestSuite::SimpleUsecase.new.class.instance.to_hash
 #c = Stella::Usecase.from_hash h
