@@ -32,7 +32,7 @@ class Stella
     field :notify => Boolean
     include Familia::Stamps
     sensitive_fields :custid, :privacy, :notify
-    # Don't include provacy in the gibbler calculation because it
+    # Don't include privacy in the gibbler calculation because it
     # doesn't make sense to have both a public and private testplan.
     gibbler :custid, :usecases
     def init(uri=nil)
@@ -91,8 +91,25 @@ class Stella
     def owner?(guess)
       custid != nil && cust.custid?(guess)
     end
+    module ClassMethods
+      def usecases
+        @usecases ||= []
+        @usecases
+      end
+      def checkup(base_uri, opts={})
+        opts[:base_uri] = base_uri
+        run Stella::Engine::Checkup, opts
+      end
+      def run(engine, opts={})
+        testrun = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode, opts
+        report = engine.run testrun
+      end
+    end
     class << self
       attr_reader :plans
+      def inherited obj
+        obj.extend ClassMethods
+      end
       def from_hash(*args)
         me = super(*args)
         me.usecases.collect! { |uc| Stella::Usecase.from_hash(uc) }
@@ -150,28 +167,14 @@ class Stella
       def names
         names = self.to_s.split('::')
         planname, ucname = case names.size
-        when 1 then [:default, names.last]
+        
+        when 1 then ['DefaultTestplan', names.last]
         else        [names[0..-2].join('::'), names[-1]] end
         [eval(planname), ucname.to_sym]
       end
       def inherited(obj)
         planclass, ucname = *obj.names
-        planclass.module_eval do
-          class << self
-            def usecases
-              @usecases ||= []
-              @usecases
-            end
-            def checkup(base_uri, opts={})
-              opts[:base_uri] = base_uri
-              run Stella::Engine::Checkup, opts
-            end
-            def run(engine, opts={})
-              testrun = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode, opts
-              report = engine.run testrun
-            end
-          end
-        end
+        planclass.extend Stella::Testplan::ClassMethods
         unless Stella::Testplan.plan? planclass
           Stella::Testplan.plans[planclass] = Stella::Testplan.new
           Stella::Testplan.plans[planclass].desc = planclass
@@ -191,7 +194,8 @@ class Stella
         end
       end
       private 
-      def create_request_template meth, path, opts, &definition
+      def create_request_template meth, path, opts=nil, &definition
+        opts ||= {}
         planname, ucname = names
         uc = Stella::Testplan.plans[planname].usecases.last
         Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
@@ -391,3 +395,4 @@ class Stella
     end
   end
 end
+class DefaultTestplan; end

@@ -1,5 +1,10 @@
 # export trebekpass=''
 #Stella.debug=true
+# ruby -Ilib -rstella try/91_config_try.rb
+
+class DefaultExample < Stella::Usecase
+  get ':anything'
+end
 
 class Anonymous
   class FindMonitor < Stella::Usecase
@@ -39,7 +44,8 @@ class Authorized
   end
 end
 
-#puts Stella::Testplan.plans[:TestSuite].usecases.first
+pp Stella::Testplan.plans
+#puts Anonymous.checkup
 #h = TestSuite::SimpleUsecase.new.class.instance.to_hash
 #c = Stella::Usecase.from_hash h
 #p c.requests[2].response_handler.to_hash
@@ -47,11 +53,11 @@ end
 #@report = Anonymous.checkup "http://www.blamestella.com/"
 #pp @report.errors.all if @report.errors?
 
-@report = Authorized.checkup "http://www.blamestella.com/"
-if @report.errors?
-  puts  @report.errors.all 
-else
-  puts @report.metrics_pretty
-  puts
-  puts @report.statuses_pretty
-end
+#@report = Authorized.checkup "http://www.blamestella.com/"
+#if @report.errors?
+#  puts  @report.errors.all 
+#else
+#  puts @report.metrics_pretty
+#  puts
+#  puts @report.statuses_pretty
+#end
