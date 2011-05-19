@@ -98,6 +98,9 @@ class Stella
           
           @redirect_count = 0
           @session.clear_previous_request
+        rescue RepeatRequest => ex
+          debug " REPEAT REQUEST: #{@session.location}"
+          retry
           
         rescue ForcedRedirect => ex  
           # TODO: warn when redirecting from https to http
@@ -222,10 +225,11 @@ class Stella
   end
   
   class Session < Hash
-    attr_reader :events, :response_handler, :res, :req
+    attr_reader :events, :response_handler, :res, :req, :vars, :previous_doc
     attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method
     def initialize(base_uri=nil)
       @base_uri = base_uri
+      @vars = indifferent_hash
       @base_uri &&= Addressable::URI.parse(@base_uri) if String === @base_uri
       @events = SelectableArray.new
     end
@@ -290,12 +294,16 @@ class Stella
       when /text\/yaml/
         YAML.load(str)
       when /application\/json/
-        JSON.load(str)
+        Yajl::Parser.parse(str)
       end
+      @doc.replace indifferent_params(@doc) if Hash === @doc
+      @doc
     end
+    
     def handle_response
       return unless response_handler?
       instance_exec(&find_response_handler(@res.status))
+      @previous_doc = doc
     end
     def find_response_handler(status)
       return if response_handler.nil?
@@ -316,6 +324,7 @@ class Stella
     end
     alias_method :handler, :response_handler
     alias_method :response, :response_handler
+    alias_method :session, :vars
     def clear_previous_request
       [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method].each do |n|
         instance_variable_set :"@#{n}", nil
@@ -325,12 +334,12 @@ class Stella
       @res.status
     end
     
-    #def wait(t); sleep t; end
-    #def quit(msg=nil); Quit.new(msg); end
-    #def fail(msg=nil); Fail.new(msg); end
-    #def error(msg=nil); Error.new(msg); end
-    #def repeat(t=1); Repeat.new(t); end
-    def follow(uri=nil,&blk); Follow.new(uri,&blk); end
+    def wait(t); sleep t; end
+    def quit(msg=nil); raise TestplanQuit.new(msg); end
+    def fail(msg=nil); raise UsecaseFail.new(msg); end
+    def error(msg=nil); raise RequestError.new(msg); end
+    def repeat(t=1); raise RepeatRequest.new(t); end
+    def follow(uri=nil,&blk); raise ForcedRedirect.new(uri,&blk); end
     
     private 
     def build_uri(reqtempl)
@@ -365,6 +374,18 @@ class Stella
         Stella::Testplan.global(name)
       end
       value
+    end
+    def indifferent_params(params)
+      params = indifferent_hash.merge(params)
+      params.each do |key, value|
+        next unless value.is_a?(Hash)
+        params[key] = indifferent_params(value)
+      end
+    end
+
+    # Creates a Hash with indifferent access.
+    def indifferent_hash
+      Hash.new {|hash,key| hash[key.to_s] if Symbol === key }
     end
   end
 end

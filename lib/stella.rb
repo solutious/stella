@@ -13,6 +13,7 @@ $:.unshift STELLA_LIB_HOME
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
 end
 
+require 'yajl'
 require 'erb'
 require 'storable'
 require 'benelux'
@@ -75,6 +76,10 @@ class StellaError < RuntimeError
 end
 
 class StellaBehavior < Exception
+  attr_accessor :msg
+  def initialize(msg)
+    @msg = msg
+  end
 end
 
 class Stella
@@ -83,6 +88,14 @@ class Stella
     def initialize(l)
       @location = l
     end
+  end
+  class RepeatRequest < StellaBehavior
+  end
+  class UsecaseFail < StellaBehavior
+  end
+  class TestplanQuit < StellaBehavior
+  end
+  class RequestError < StellaBehavior
   end
   class TimeoutError < StellaError
   end
