@@ -91,18 +91,24 @@ class Stella
     def owner?(guess)
       custid != nil && cust.custid?(guess)
     end
+    def checkup base_uri, opts={}
+      opts[:base_uri] = base_uri
+      run Stella::Engine::Checkup, opts
+    end
+    def run engine, opts={}
+      testrun = Stella::Testrun.new self, engine.mode, opts
+      report = engine.run testrun
+    end
     module ClassMethods
       def usecases
         @usecases ||= []
         @usecases
       end
-      def checkup(base_uri, opts={})
-        opts[:base_uri] = base_uri
-        run Stella::Engine::Checkup, opts
+      def checkup base_uri, opts={}
+        Stella::Testplan.plan(self).checkup base_uri, opts
       end
-      def run(engine, opts={})
-        testrun = Stella::Testrun.new Stella::Testplan.plans[self], engine.mode, opts
-        report = engine.run testrun
+      def run engine, opts={}
+        Stella::Testplan.plan(self).run engine, opts
       end
       def testplan
         Stella::Testplan.plan(self)
@@ -193,11 +199,15 @@ class Stella
       end
     end
     class << self 
-      attr_accessor :instance
+      attr_accessor :instance, :testplan
       def from_hash(*args)
         me = super(*args)
         me.requests.collect! { |req| Stella::RequestTemplate.from_hash(req) }
         me
+      end
+      def checkup base_uri, opts={}
+        (opts[:usecases] ||= []) << self
+        testplan.checkup base_uri, opts
       end
       def names
         names = self.to_s.split('::')
@@ -213,7 +223,8 @@ class Stella
           Stella::Testplan.plans[planclass] = Stella::Testplan.new
           Stella::Testplan.plans[planclass].desc = planclass
         end
-        obj.instance = Stella::Usecase.new
+        obj.instance = obj.new
+        obj.testplan = Stella::Testplan.plans[planclass]
         Stella::Testplan.plans[planclass].usecases << obj.instance
         Stella::Testplan.plans[planclass].usecases.last.desc = ucname
         obj.extend ClassMethods
