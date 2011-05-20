@@ -17,7 +17,8 @@ class Stella
       end
     end
   end
-  class Testplan < StellaObject
+  class Testplan < Storable
+    include Gibbler::Complex
     include Familia
     include Common::PrivacyMethods
     prefix :testplan
@@ -119,6 +120,7 @@ class Stella
     class << self
       attr_reader :plans
       def inherited obj
+        super
         obj.extend ClassMethods
       end
       def from_hash(*args)
@@ -148,7 +150,8 @@ class Stella
       end
     end
   end
-  class Usecase < StellaObject
+  class Usecase < Storable
+    include Gibbler::Complex
     field :id               => Gibbler::Digest, &gibbler_id_processor
     field :desc             => String
     field :ratio            => Float
@@ -225,6 +228,7 @@ class Stella
         [eval(planname), ucname.to_sym]
       end
       def inherited(obj)
+        super
         planclass, ucname = *obj.names
         planclass.extend Stella::Testplan::ClassMethods
         unless Stella::Testplan.plan? planclass
@@ -240,7 +244,8 @@ class Stella
     end
   end
     
-  class EventTemplate < StellaObject
+  class EventTemplate < Storable
+    include Gibbler::Complex
   end
   
   class StringTemplate
@@ -282,7 +287,6 @@ class Stella
       @follow ||= false
       @callback = definition
     end
-    alias_method :rtid, :id
     def postprocess
       @id &&= Gibbler::Digest.new(@id)
       unless response_handler.nil?
@@ -312,7 +316,8 @@ end
 
 
 class Stella
-  class Testrun < StellaObject
+  class Testrun < Storable
+    include Gibbler::Complex
     include Familia
     prefix :testrun
     index :id

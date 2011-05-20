@@ -63,13 +63,13 @@ end
 #
 #   field :id => Gibbler::Digest, &gibbler_id_processor
 #
-class StellaObject < Storable
-  include Gibbler::Complex
-  def id
-    @id ||= self.digest
-    @id
-  end
-end
+#module StellaObject < Storable
+#  include Gibbler::Complex
+#  def id
+#    @id ||= self.digest
+#    @id
+#  end
+#end
 
 # All errors inherit from this class. 
 class StellaError < RuntimeError

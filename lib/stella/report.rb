@@ -5,7 +5,8 @@ end
 
 class Stella
   class Log
-    class HTTP < StellaObject
+    class HTTP < Storable
+      include Gibbler::Complex
       include Selectable::Object
       field :stamp
       field :httpmethod
@@ -19,7 +20,8 @@ class Stella
       field :msg
     end
   end
-  class Report < StellaObject
+  class Report < Storable
+    include Gibbler::Complex
     CRLF = "\r\n" unless defined?(Report::CRLF)
     @plugins, @plugin_order = {}, []
     class << self
@@ -62,7 +64,8 @@ class Stella
       end
     end
 
-    class Errors < StellaObject
+    class Errors < Storable
+      include Gibbler::Complex
       include Report::Plugin
       field :exceptions
       field :timeouts
@@ -109,7 +112,8 @@ class Stella
       register :errors
     end
     
-    class Content < StellaObject
+    class Content < Storable
+      include Gibbler::Complex
       include Report::Plugin
       field :request_body
       field :response_body
@@ -185,7 +189,8 @@ class Stella
       register :content
     end
     
-    class Statuses < StellaObject
+    class Statuses < Storable
+      include Gibbler::Complex
       include Report::Plugin
       field :values => Array
       def process(filter={})
@@ -228,7 +233,8 @@ class Stella
       register :statuses
     end
     
-    class Headers < StellaObject
+    class Headers < Storable
+      include Gibbler::Complex
       include Report::Plugin
       field :request_headers
       field :response_headers
@@ -276,7 +282,8 @@ class Stella
       register :headers
     end
 
-    class Metrics < StellaObject
+    class Metrics < Storable
+      include Gibbler::Complex
       include Report::Plugin
       field :response_time            => Benelux::Stats::Calculator
       field :socket_connect           => Benelux::Stats::Calculator
