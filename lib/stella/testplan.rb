@@ -192,6 +192,10 @@ class Stella
         uc.http_auth = { :user => user, :pass => pass, :domain => domain }
         uc.http_auth
       end
+      def session
+        @session ||= {}
+        @session
+      end
       private 
       def create_request_template meth, path, opts=nil, &definition
         opts ||= {}
