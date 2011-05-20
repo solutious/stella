@@ -33,7 +33,6 @@ class Stella
     end
   end
 
-  
   module Engine
     module Checkup
       include Engine::Base

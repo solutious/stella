@@ -376,10 +376,20 @@ class Stella
       value
     end
     def indifferent_params(params)
-      params = indifferent_hash.merge(params)
-      params.each do |key, value|
-        next unless value.is_a?(Hash)
-        params[key] = indifferent_params(value)
+      if params.is_a?(Hash)
+        params = indifferent_hash.merge(params)
+        params.each do |key, value|
+          next unless value.is_a?(Hash) || value.is_a?(Array)
+          params[key] = indifferent_params(value)
+        end
+      elsif params.is_a?(Array)
+        params.collect! do |value|
+          if value.is_a?(Hash) || value.is_a?(Array)
+            indifferent_params(value)
+          else
+            value
+          end
+        end
       end
     end
 
