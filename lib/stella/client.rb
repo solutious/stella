@@ -44,6 +44,10 @@ class Stella
       @clientid = [@session.object_id, created, index, opts].digest
     end
     
+    def exception 
+      @session.exception
+    end
+    
     def execute usecase, &each_request
       @session.http_client = create_http_client
       tt = Benelux.current_track.timeline
@@ -89,7 +93,7 @@ class Stella
           if @session.response_handler?
             @session.handle_response
           elsif res.status >= 400
-            raise Stella::HTTPError, res.status 
+            raise Stella::HTTPError.new(res.status)
           elsif req.follow && @session.redirect?
             raise ForcedRedirect, @session.location
           end
@@ -97,7 +101,7 @@ class Stella
           tt.add_message log, :status => res.status, :kind => :http_log, :state => :nominal
           
           @redirect_count = 0
-          @session.clear_previous_request
+          
         rescue RepeatRequest => ex
           debug " REPEAT REQUEST: #{@session.location}"
           retry
@@ -145,6 +149,7 @@ class Stella
           log.msg = ex.message
           tt.add_message log, :status => log.response_status, :kind => :http_log, :state => :exception
           Benelux.current_track.remove_tags :status, :request, :stella_id
+          @session.exception = ex
           break
         
         rescue Errno::ECONNREFUSED => ex
@@ -226,7 +231,7 @@ class Stella
   
   class Session < Hash
     attr_reader :events, :response_handler, :res, :req, :vars, :previous_doc, :http_auth
-    attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method
+    attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method, :exception
     def initialize(base_uri=nil)
       @base_uri = base_uri
       @vars = indifferent_hash
@@ -240,8 +245,9 @@ class Stella
     alias_method :header, :headers
     def session
       self
-    end    
+    end 
     def prepare_request uc, req
+      clear_previous_request
       @req = req
       @http_method, @params, @headers = req.http_method, req.params, req.headers
       @http_auth = uc.http_auth
@@ -326,7 +332,7 @@ class Stella
     alias_method :response, :response_handler
     alias_method :session, :vars
     def clear_previous_request
-      [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method].each do |n|
+      [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method, :exception].each do |n|
         instance_variable_set :"@#{n}", nil
       end
     end

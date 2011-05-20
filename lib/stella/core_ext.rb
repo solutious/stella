@@ -355,6 +355,9 @@ class MetricsPack < Storable
   def self.from_json(str)
     unpack(str)
   end
+  def self.metric?(guess)
+    METRICS.member?(guess.to_s.to_sym)
+  end
 end
 
 

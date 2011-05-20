@@ -73,13 +73,17 @@ end
 
 # All errors inherit from this class. 
 class StellaError < RuntimeError
+  def initialize(msg)
+    @message = msg
+  end
+  attr_reader :message
 end
 
 class StellaBehavior < Exception
-  attr_accessor :msg
   def initialize(msg)
-    @msg = msg
+    @message = msg
   end
+  attr_reader :message
 end
 
 class Stella
