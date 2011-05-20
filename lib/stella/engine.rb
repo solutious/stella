@@ -49,18 +49,18 @@ class Stella
             Benelux.current_track "client_#{client.clientid.shorten}"
             begin
               opts[:repetitions].times do |idx|
-                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.planid.short] if Stella.noise >= 1
+                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.planid.short] if Stella.noise > 1
                 testrun.plan.usecases.each_with_index do |uc,i|
                   if opts[:usecases].nil? || opts[:usecases].member?(uc.class)
                     Benelux.current_track.add_tags :usecase => uc.id
                     Stella.rescue { 
-                      Stella.li ' %-60s %s' % [uc.desc, uc.id.short] if Stella.noise >= 1
+                      Stella.li ' %-60s %s' % [uc.desc, uc.id.short] if Stella.noise > 1
                       client.execute uc do |session|
-                        Stella.li '  %-63s %d' % [session.uri, session.status] if Stella.noise >= 1
+                        Stella.li '  %-63s %d' % [session.uri, session.status] if Stella.noise > 1
                       end
                     }
                   else
-                    Stella.li ' %-60s %s (skipped)' % [uc.desc, uc.id.short] if Stella.noise >= 1
+                    Stella.li ' %-60s %s (skipped)' % [uc.desc, uc.id.short] if Stella.noise > 1
                   end
                   Benelux.current_track.remove_tags :usecase
                 end
