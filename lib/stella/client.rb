@@ -132,7 +132,7 @@ class Stella
           Benelux.current_track.remove_tags :status, :request, :stella_id
           next
           
-        rescue StellaError => ex
+        rescue StellaError, StellaBehavior => ex
           debug "[#{ex.class}] #{ex.message}"
           log = Stella::Log::HTTP.new Stella.now, @session.http_method, @session.uri, @session.params
           if @session.res 
@@ -225,7 +225,7 @@ class Stella
   end
   
   class Session < Hash
-    attr_reader :events, :response_handler, :res, :req, :vars, :previous_doc
+    attr_reader :events, :response_handler, :res, :req, :vars, :previous_doc, :http_auth
     attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method
     def initialize(base_uri=nil)
       @base_uri = base_uri
@@ -244,6 +244,7 @@ class Stella
     def prepare_request uc, req
       @req = req
       @http_method, @params, @headers = req.http_method, req.params, req.headers
+      @http_auth = uc.http_auth
       instance_exec(&req.callback) unless req.callback.nil?
       @uri = if @redirect_uri
         @params = {}
@@ -258,11 +259,10 @@ class Stella
       else
         build_uri @req.uri
       end
-      if !uc.http_auth.nil? && !uc.http_auth.empty?
-        Stella.ld " HTTP AUTH: #{uc.http_auth.inspect}"
-        user, pass, domain = *uc.http_auth
-        domain ||= '%s://%s:%d%s' % [base_uri.scheme, base_uri.host, base_uri.port, '/'] 
-        http_client.set_auth domain, user, pass
+      if !http_auth.nil? && !http_auth.empty?
+        Stella.ld " HTTP AUTH: #{http_auth.inspect}"
+        http_auth[:domain] ||= '%s://%s:%d%s' % [base_uri.scheme, base_uri.host, base_uri.port, '/'] 
+        http_client.set_auth http_auth[:domain], http_auth[:user], http_auth[:pass]
         Stella.ld "   #{http_client.www_auth.inspect}"
       end
       @redirect_uri = nil  # one time deal

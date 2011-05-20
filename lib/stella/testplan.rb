@@ -145,7 +145,7 @@ class Stella
     field :desc             => String
     field :ratio            => Float
     field :requests         => Array
-    field :http_auth             => Array
+    field :http_auth        => Hash
     gibbler :requests
     def initialize(req=nil)
       preprocess
@@ -179,7 +179,7 @@ class Stella
       def http_auth user, pass=nil, domain=nil
         planname, ucname = *names
         uc = Stella::Testplan.plans[planname].usecases.last
-        uc.http_auth = user, pass, domain
+        uc.http_auth = { :user => user, :pass => pass, :domain => domain }
         uc.http_auth
       end
       private 
