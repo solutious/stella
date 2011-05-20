@@ -56,11 +56,11 @@ class Stella
                     Stella.rescue { 
                       Stella.li ' %-60s %s' % [uc.desc, uc.id.short] if Stella.noise > 1
                       client.execute uc do |session|
-                        Stella.li '  %-63s %d' % [session.uri, session.status] if Stella.noise > 1
+                        Stella.li '  %-76s %d' % [session.uri, session.status] if Stella.noise > 1
                       end
                     }
                   else
-                    Stella.li ' %-60s %s (skipped)' % [uc.desc, uc.id.short] if Stella.noise > 1
+                    Stella.li ' %-60s %s' % ["#{uc.desc} (skipped)", uc.id.short] if Stella.noise > 1
                   end
                   Benelux.current_track.remove_tags :usecase
                 end

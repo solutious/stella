@@ -77,11 +77,11 @@ class Stella
       mon && mon.enabled
     end
     def host
-      h = @host.to_s.empty? || frozen? ? HostInfo.load_or_create(hostid) : @host
+      h = @host.nil? || frozen? ? HostInfo.load_or_create(hostid) : @host
       frozen? ? h : (@host=h)
     end
     def hostid
-      h = @hostid.to_s.empty? || frozen? ? Stella.canonical_host(first_request.uri) : @hostid
+      h = (@hostid.nil? || frozen?) && first_request ? Stella.canonical_host(first_request.uri) : @hostid
       frozen? ? h : (@hostid=h)
     end
     def destroy!
