@@ -29,6 +29,7 @@ class Stella
     field :privacy            => Boolean
     field :favicon            => String
     field :last_run           => Integer
+    field :planid             => Gibbler::Digest
     field :notify => Boolean
     include Familia::Stamps
     sensitive_fields :custid, :privacy, :notify
@@ -42,6 +43,7 @@ class Stella
         @usecases << Stella::Usecase.new(req) 
       end
     end
+    alias_method :planid, :id
     def favicon?() !@favicon.nil? && !@favicon.empty? end
     def preprocess
       @usecases ||= []
@@ -152,11 +154,13 @@ class Stella
     field :ratio            => Float
     field :requests         => Array
     field :http_auth        => Hash
+    field :ucid             => Gibbler::Digest
     gibbler :requests
     def initialize(req=nil)
       preprocess
       @requests << req if req
     end
+    alias_method :ucid, :id
     def preprocess
       @requests ||= []
     end
@@ -259,6 +263,7 @@ class Stella
     field :headers          => Hash
     field :body
     field :desc
+    field :rtid             => Gibbler::Digest
     field :wait             => Range
     field :response_handler => Hash, &hash_proc_processor
     field :follow           => Boolean
@@ -273,6 +278,7 @@ class Stella
       @follow ||= false
       @callback = definition
     end
+    alias_method :rtid, :id
     def postprocess
       @id &&= Gibbler::Digest.new(@id)
       unless response_handler.nil?
@@ -319,6 +325,7 @@ class Stella
     field :etime              => Float
     field :salt
     field :planid             => Gibbler::Digest
+    field :runid              => Gibbler::Digest
     field :hostid
     field :privacy            => Boolean
     field :report             => Stella::Report
@@ -334,6 +341,7 @@ class Stella
       }.merge options
       preprocess
     end
+    alias_method :runid, :id
     def duration
       return 0 unless @stime
       (@etime || Stella.now) - @stime

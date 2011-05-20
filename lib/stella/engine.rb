@@ -49,7 +49,7 @@ class Stella
             Benelux.current_track "client_#{client.clientid.shorten}"
             begin
               opts[:repetitions].times do |idx|
-                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.id.short] if Stella.noise > 1
+                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.planid.short] if Stella.noise > 1
                 testrun.plan.usecases.each_with_index do |uc,i|
                   if opts[:usecases].nil? || opts[:usecases].member?(uc.class)
                     Benelux.current_track.add_tags :usecase => uc.id
@@ -89,7 +89,7 @@ class Stella
         
         begin
           testrun.etime = Stella.now
-          testrun.report = Stella::Report.new timeline, testrun.id
+          testrun.report = Stella::Report.new timeline, testrun.runid
           testrun.report.process 
           testrun.report.fubars? ? testrun.fubar! : testrun.done! 
         rescue Interrupt

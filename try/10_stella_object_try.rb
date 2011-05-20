@@ -21,7 +21,7 @@ TEST_URI = 'http://www.blamestella.com/'
 
 ## Stella instance
 @stella = Stella.new TEST_URI
-@stella.plan.id
+@stella.plan.planid
 #=> @tp.id
 
 ## Create testrun
