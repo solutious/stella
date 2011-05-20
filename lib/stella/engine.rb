@@ -58,10 +58,12 @@ class Stella
                       client.execute uc do |session|
                         Stella.li '  %-76s %d' % [session.uri, session.status] if Stella.noise >= 1
                       end
-                      if client.exception
-                        Stella.li '   %s (%s)' % [client.exception.message, client.exception.class]
-                      end
                     }
+                    if client.exception
+                      Stella.li '   %s (%s)' % [client.exception.message, client.exception.class]
+                      # TODO: use a throw. This won't stop the next repetition.
+                      break if Stella::TestplanQuit === client.exception
+                    end
                   else
                     Stella.li ' %-60s %s' % ["#{uc.desc} (skipped)", uc.id.short] if Stella.noise >= 1
                   end
