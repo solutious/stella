@@ -20,12 +20,13 @@ GEM
     nokogiri (1.4.4)
     public_suffix_service (0.8.1)
     redis (2.2.0)
-    storable (0.8.7)
+    storable (0.8.8)
     sysinfo (0.7.3)
       drydock
       storable
     uri-redis (0.4.2)
     whois (1.6.6)
+    yajl-ruby (0.7.9)
 
 PLATFORMS
   ruby
@@ -42,6 +43,7 @@ DEPENDENCIES
   nokogiri
   public_suffix_service (= 0.8.1)
   redis (= 2.2.0)
-  storable
+  storable (>= 0.8.8)
   sysinfo
   whois (= 1.6.6)
+  yajl-ruby

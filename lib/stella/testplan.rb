@@ -23,7 +23,7 @@ class Stella
     include Common::PrivacyMethods
     prefix :testplan
     index :id
-    field :id                 => Gibbler::Digest, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
     field :custid             => String
     field :usecases           => Array
     field :desc               => String
@@ -152,7 +152,7 @@ class Stella
   end
   class Usecase < Storable
     include Gibbler::Complex
-    field :id               => Gibbler::Digest, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
     field :desc             => String
     field :ratio            => Float
     field :requests         => Array
@@ -268,7 +268,7 @@ class Stella
   end
   
   class RequestTemplate < EventTemplate
-    field :id               => Gibbler::Digest, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
     field :protocol         => Symbol
     field :http_method
     field :http_version
@@ -329,7 +329,7 @@ class Stella
     index :id
     include Familia::Stamps
     include Common::PrivacyMethods
-    field :id                 => Gibbler::Digest, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
     field :custid             => String
     field :status             => Symbol
     field :options            => Hash

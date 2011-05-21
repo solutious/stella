@@ -6,7 +6,7 @@ if RUBY_VERSION =~ /1.9/
   Encoding.default_internal = Encoding::UTF_8
 end
 
-#require 'bundler/setup'
+require 'bundler/setup'
 $:.unshift STELLA_LIB_HOME
 
 %w{tryouts benelux storable gibbler familia bluth}.each do |dir|
@@ -61,7 +61,7 @@ end
 # NOTE: you cannot define Storable fields here.
 # Most notably, you'll prob want to include this. 
 #
-#   field :id => Gibbler::Digest, &gibbler_id_processor
+#   field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
 #
 #module StellaObject < Storable
 #  include Gibbler::Complex
