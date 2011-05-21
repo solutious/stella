@@ -250,6 +250,9 @@ class Stella
       clear_previous_request
       @req = req
       @vars.merge! uc.class.session || {}
+      (uc.class.registered_classes || []).each do |klass| 
+        self.extend klass unless self.kind_of?(klass)
+      end
       @http_method, @params, @headers = req.http_method, req.params, req.headers
       @http_auth = uc.http_auth
       instance_exec(&req.callback) unless req.callback.nil?
