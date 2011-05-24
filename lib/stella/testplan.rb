@@ -132,9 +132,11 @@ class Stella
         @plans ||= {}
         @plans
       end
-      def plan(name)
-        name = eval(name.to_s) unless Class === name || Module === name
-        plans[name]
+      def plan(klass,v=nil)
+        # Store the class as a string. Ruby calls Object#hash before setting
+        # the hash key which conflicts with Familia::Object.hash.
+        plans[klass.to_s] = v unless v.nil?
+        plans[klass.to_s]
       rescue NameError => ex
         nil
       end
@@ -191,7 +193,7 @@ class Stella
       end
       def http_auth user, pass=nil, domain=nil
         planname, ucname = *names
-        uc = Stella::Testplan.plans[planname].usecases.last
+        uc = Stella::Testplan.plans(planname).usecases.last
         uc.http_auth = { :user => user, :pass => pass, :domain => domain }
         uc.http_auth
       end
@@ -212,7 +214,7 @@ class Stella
       def create_request_template meth, path, opts=nil, &definition
         opts ||= {}
         planname, ucname = *names
-        uc = Stella::Testplan.plans[planname].usecases.last
+        uc = Stella::Testplan.plan(planname).usecases.last
         Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
         rt = RequestTemplate.new meth, path, opts, &definition
         uc.requests << rt
@@ -244,13 +246,14 @@ class Stella
         planclass, ucname = *obj.names
         planclass.extend Stella::Testplan::ClassMethods
         unless Stella::Testplan.plan? planclass
-          Stella::Testplan.plans[planclass] = Stella::Testplan.new
-          Stella::Testplan.plans[planclass].desc = planclass
+          Stella::Testplan.plan(planclass, planclass.new)
+          Stella::Testplan.plan(planclass).desc = planclass
         end
+        
         obj.instance = obj.new
-        obj.testplan = Stella::Testplan.plans[planclass]
-        Stella::Testplan.plans[planclass].usecases << obj.instance
-        Stella::Testplan.plans[planclass].usecases.last.desc = ucname
+        obj.testplan = Stella::Testplan.plan(planclass)
+        Stella::Testplan.plan(planclass).usecases << obj.instance
+        Stella::Testplan.plan(planclass).usecases.last.desc = ucname
         obj.extend ClassMethods
       end
     end
@@ -451,4 +454,4 @@ class Stella
     end
   end
 end
-class DefaultTestplan; end
+class DefaultTestplan < Stella::Testplan; end
