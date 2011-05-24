@@ -56,11 +56,11 @@ class Stella
                     Stella.rescue { 
                       Stella.li ' %-60s %s' % [uc.desc, uc.ucid.shorten(12)] if Stella.noise >= 2
                       client.execute uc do |session|
-                        Stella.li '  %3d %-76s' % [session.status, session.uri] if Stella.noise >= 2
+                        Stella.li '  %3d %4s %-76s' % [session.status, session.http_method.upcase, session.uri] if Stella.noise >= 2
                       end
                     }
                     if client.exception
-                      Stella.li '  %3s %s (%s)' % ['', client.exception.message, client.exception.class]
+                      Stella.li '  %4s %s (%s)' % ['', client.exception.message, client.exception.class]
                       # TODO: use a throw. This won't stop the next repetition.
                       break if Stella::TestplanQuit === client.exception
                     end
