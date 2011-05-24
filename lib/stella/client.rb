@@ -473,6 +473,19 @@ class Stella
         quit "#{key} contains unexpected values for #{object_key}: #{values_found.uniq}"
       end
     end
+    
+    def assert_form name
+      assert_doc
+      fail "No form called #{name}" unless form && form[name]
+    end
+    def assert_equals expected, found
+      fail "Expected: #{expected}; Found: #{found}" unless expected == found
+    end
+    def assert_matches regex, found
+      fail "Expected: #{regex}; Found: #{found}" unless regex.match(found)
+    end
+    alias_method :assert_match, :assert_matches
+    
   end
   
 end
