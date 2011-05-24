@@ -332,6 +332,18 @@ class Stella
       @form
     end
     alias_method :forms, :form
+    def cookie
+      return @cookie unless @cookie.nil?
+      return nil unless http_client.cookie_manager
+      return nil if http_client.cookie_manager.cookies.empty?
+      @cookie = indifferent_hash
+      http_client.cookie_manager.cookies.each do |c|
+        next unless c.match?(uri)
+        @cookie[c.name] = c.value
+      end
+      @cookie
+    end
+    alias_method :cookies, :cookie
     def content_type? guess
       guess = Regexp.new guess unless Regexp === guess
       guess.match((res.header['Content-Type'] || []).first)
