@@ -282,7 +282,7 @@ class Stella
     end
     def generate_request(event_id)
       @res = http_client.send(@http_method.to_s.downcase, @uri, params, headers)
-      @req = @req.request
+      @req = @res.request
       @events << event_id
       @res
     end
