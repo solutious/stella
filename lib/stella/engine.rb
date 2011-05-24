@@ -57,6 +57,11 @@ class Stella
                       Stella.li ' %-60s %s' % [uc.desc, uc.ucid.shorten(12)] if Stella.noise >= 2
                       client.execute uc do |session|
                         Stella.li '  %3d %4s %-76s' % [session.status, session.http_method.upcase, session.uri] if Stella.noise >= 2
+                        if Stella.noise >= 3
+                          Stella.li '       %s' % [session.req.header.dump.split(/\n/).join("\n       ")]
+                          Stella.li
+                          Stella.li '       %s' % [session.res.header.dump.split(/\n/).join("\n       ")]
+                        end
                       end
                     }
                     if client.exception
