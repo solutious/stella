@@ -313,7 +313,32 @@ class Stella
       @doc.replace indifferent_params(@doc) if Hash === @doc
       @doc
     end
-    
+    def form
+      return @form unless @form.nil?
+      return nil if doc.nil?
+      return nil unless content_type?('text/html')
+      @form = indifferent_hash
+      forms = doc.css('form')
+      forms.each_with_index do |html,idx|
+        name = html['id'] || html['name'] || html['class']
+        Stella.ld [:form, idx, name].inspect
+        form = indifferent_hash
+        # Store form attributes in keys prefixed with an underscore.
+        html.each { |att,val| form["_#{att}"] = val }
+        # Store input name and values in the form hash.
+        html.css('input').each do |input|
+          form[input['name']] = input['value']
+        end
+        # Store the form by the name and index in the document
+        @form[name] = @form[idx] = form
+      end
+      @form
+    end
+    alias_method :forms, :form
+    def content_type? guess
+      guess = Regexp.new guess unless Regexp === guess
+      guess.match((res.header['Content-Type'] || []).first)
+    end
     def handle_response
       return unless response_handler?
       instance_exec(&find_response_handler(@res.status))
