@@ -411,4 +411,42 @@ class Stella
       Hash.new {|hash,key| hash[key.to_s] if Symbol === key }
     end
   end
+  
+  module Asserts
+    def assert_doc
+      fail 'No content' if doc.nil?
+    end
+    
+    def assert_keys expected_keys 
+      assert_doc
+      found_keys = doc.keys.uniq.sort
+      unless found_keys == expected_keys
+        quit "Doc keys mismatch (#{found_keys})"
+      end
+    end
+    
+    def assert_list key
+      assert_doc
+      fail "#{key} is empty" if doc[key].nil? || doc[key].empty?
+    end
+    
+    def assert_object_keys key, expected_keys
+      assert_doc
+      found_keys = doc[key].collect { |obj| obj.keys }.flatten.uniq.sort
+      unless found_keys == expected_keys
+        quit "Doc keys mismatch (#{found_keys})"
+      end
+    end
+    
+    def assert_object_values key, object_key, expected_values
+      expected_values = [expected_values] unless Array === expected_values
+      expected_values = expected_values.collect { |v| v.to_s }.sort
+      values_found = doc[key].collect { |obj| obj[object_key].to_s }
+      values_found.sort!
+      unless values_found.uniq == expected_values
+        quit "#{key} contains unexpected values for #{object_key}: #{values_found.uniq}"
+      end
+    end
+  end
+  
 end
