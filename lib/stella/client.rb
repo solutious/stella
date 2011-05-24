@@ -229,7 +229,7 @@ class Stella
     
   end
   
-  class Session < Hash
+  class Session
     attr_reader :events, :response_handler, :res, :req, :rt, :vars, :previous_doc, :http_auth
     attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method, :exception
     def initialize(base_uri=nil)
@@ -243,9 +243,6 @@ class Stella
     end
     alias_method :param, :params
     alias_method :header, :headers
-    def session
-      self
-    end 
     def prepare_request uc, rt
       clear_previous_request
       @rt = rt
@@ -405,14 +402,13 @@ class Stella
     # usecase's resource hash for a replacement value. 
     # If not found, returns nil. 
     def find_replacement_value(name)
-      value = if @params.has_key?(name.to_sym)
+      if @params.has_key?(name.to_sym)
         @params.delete name.to_sym
-      elsif self.has_key?(name.to_sym) || self.has_key?(name)
-        self[name.to_sym] || self[name]
+      elsif vars.has_key?(name.to_s) || vars.has_key?(name.to_s.to_sym)
+        vars[name.to_s] || vars[name.to_s.to_sym]
       elsif Stella::Testplan.global?(name)
         Stella::Testplan.global(name)
       end
-      value
     end
     def indifferent_params(params)
       if params.is_a?(Hash)
