@@ -474,6 +474,10 @@ class Stella
       assert_doc
       fail "No form called #{name}" unless form && form[name]
     end
+    def assert_exists v
+      fail "Found nil value" if v.nil?
+      fail "Found empty value" if v.empty?
+    end
     def assert_equals expected, found
       fail "Expected: #{expected}; Found: #{found}" unless expected == found
     end
