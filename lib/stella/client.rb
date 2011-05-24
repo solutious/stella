@@ -374,7 +374,7 @@ class Stella
     alias_method :response, :response_handler
     alias_method :session, :vars
     def clear_previous_request
-      [:doc, :location, :res, :req, :rt, :params, :headers, :response_handler, :http_method, :exception].each do |n|
+      [:doc, :location, :res, :req, :rt, :params, :headers, :cookie, :form, :response_handler, :http_method, :exception].each do |n|
         instance_variable_set :"@#{n}", nil
       end
     end
