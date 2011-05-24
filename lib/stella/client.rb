@@ -51,18 +51,18 @@ class Stella
     def execute usecase, &each_request
       @session.http_client = create_http_client
       tt = Benelux.current_track.timeline
-      usecase.requests.each_with_index do |req,idx|
+      usecase.requests.each_with_index do |rt,idx|
         begin 
           debug "request start (session: #{@session.object_id})"
-          @session.prepare_request usecase, req 
+          @session.prepare_request usecase, rt 
           
-          debug "#{@session.http_method} #{@session.uri} (#{req.id.short})"
+          debug "#{@session.http_method} #{@session.uri} (#{rt.id.short})"
           debug " #{@session.params.inspect}" unless @session.params.empty?
           debug " #{@session.headers.inspect}" unless @session.headers.empty?
           
-          stella_id = [clientid, req.id, @session.uri.to_s, @session.params, @session.headers, idx].digest
+          stella_id = [clientid, rt.id, @session.uri.to_s, @session.params, @session.headers, idx].digest
           
-          Benelux.current_track.add_tags :request   => req.id
+          Benelux.current_track.add_tags :request   => rt.id
           Benelux.current_track.add_tags :stella_id => stella_id
           
           ## Useful for testing larger large request header
@@ -94,7 +94,7 @@ class Stella
             @session.handle_response
           elsif res.status >= 400
             raise Stella::HTTPError.new(res.status)
-          elsif req.follow && @session.redirect?
+          elsif rt.follow && @session.redirect?
             raise ForcedRedirect, @session.location
           end
 
@@ -230,7 +230,7 @@ class Stella
   end
   
   class Session < Hash
-    attr_reader :events, :response_handler, :res, :req, :vars, :previous_doc, :http_auth
+    attr_reader :events, :response_handler, :res, :req, :rt, :vars, :previous_doc, :http_auth
     attr_accessor :headers, :params, :base_uri, :http_client, :uri, :redirect_uri, :http_method, :exception
     def initialize(base_uri=nil)
       @base_uri = base_uri
@@ -246,9 +246,9 @@ class Stella
     def session
       self
     end 
-    def prepare_request uc, req
+    def prepare_request uc, rt
       clear_previous_request
-      @req = req
+      @rt = rt
       @vars.merge! uc.class.session || {}
       @vars.merge! uc.class.testplan.class.session || {}
       registered_classes = uc.class.testplan.class.registered_classes || []
@@ -256,9 +256,9 @@ class Stella
       registered_classes.each do |klass| 
         self.extend klass unless self.kind_of?(klass)
       end
-      @http_method, @params, @headers = req.http_method, req.params, req.headers
+      @http_method, @params, @headers = rt.http_method, rt.params, rt.headers
       @http_auth = uc.http_auth
-      instance_exec(&req.callback) unless req.callback.nil?
+      instance_exec(&rt.callback) unless rt.callback.nil?
       @uri = if @redirect_uri
         @params = {}
         @headers = {}
@@ -270,7 +270,7 @@ class Stella
         end
         build_uri @redirect_uri
       else
-        build_uri @req.uri
+        build_uri @rt.uri
       end
       if !http_auth.nil? && !http_auth.empty?
         Stella.ld " HTTP AUTH: #{http_auth.inspect}"
@@ -282,6 +282,7 @@ class Stella
     end
     def generate_request(event_id)
       @res = http_client.send(@http_method.to_s.downcase, @uri, params, headers)
+      @req = @req.request
       @events << event_id
       @res
     end
@@ -339,7 +340,7 @@ class Stella
     alias_method :response, :response_handler
     alias_method :session, :vars
     def clear_previous_request
-      [:doc, :location, :res, :req, :params, :headers, :response_handler, :http_method, :exception].each do |n|
+      [:doc, :location, :res, :req, :rt, :params, :headers, :response_handler, :http_method, :exception].each do |n|
         instance_variable_set :"@#{n}", nil
       end
     end
@@ -361,7 +362,7 @@ class Stella
         val = find_replacement_value(inst[1])
         Stella.ld " FOUND VAR: #{inst[0]}#{inst[1]} (value: #{val})"
         if val.nil?
-          raise Stella::UsecaseError, "no value for #{inst[0]}#{inst[1]} in '#{@req.uri}'"
+          raise Stella::UsecaseError, "no value for #{inst[0]}#{inst[1]} in '#{@rt.uri}'"
         end
         re = Regexp.new "\\#{inst[0]}#{inst[1]}"
         uri.gsub! re, val.to_s unless val.nil?
