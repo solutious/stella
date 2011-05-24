@@ -116,6 +116,19 @@ class Stella
       def testplan
         Stella::Testplan.plan(self)
       end
+      # Session objects will extend registered classes.
+      def register klass=nil
+        unless klass.nil?
+          @registered_classes ||= []
+          @registered_classes << klass
+        end
+        @registered_classes
+      end
+      attr_reader :registered_classes
+      def session
+        @session ||= {}
+        @session
+      end
     end
     class << self
       attr_reader :plans
