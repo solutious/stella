@@ -206,7 +206,7 @@ class Stella
       end
       def http_auth user, pass=nil, domain=nil
         planname, ucname = *names
-        uc = Stella::Testplan.plans(planname).usecases.last
+        uc = Stella::Testplan.plan(planname).usecases.last
         uc.http_auth = { :user => user, :pass => pass, :domain => domain }
         uc.http_auth
       end

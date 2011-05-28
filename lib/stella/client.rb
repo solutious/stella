@@ -247,8 +247,11 @@ class Stella
       clear_previous_request
       @rt = rt
       @vars.merge! uc.class.session || {}
-      @vars.merge! uc.class.testplan.class.session || {}
-      registered_classes = uc.class.testplan.class.registered_classes || []
+      registered_classes = []
+      if uc.class.testplan
+        @vars.merge! uc.class.testplan.class.session || {} 
+        registered_classes = uc.class.testplan.class.registered_classes || []
+      end
       registered_classes.push *(uc.class.registered_classes || [])
       registered_classes.each do |klass| 
         self.extend klass unless self.kind_of?(klass)
@@ -497,7 +500,9 @@ class Stella
       fail "Expected: #{regex}; Found: #{found}" unless regex.match(found)
     end
     alias_method :assert_match, :assert_matches
-    
+    def assert_status expected
+      fail "Expected: #{expected}; Found: #{res.status}" unless res.status.to_i == expected.to_i
+    end
   end
   
 end
