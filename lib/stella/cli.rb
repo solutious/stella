@@ -13,22 +13,46 @@ class Stella::CLI < Drydock::Command
   
   
   def checkup
-    uri = Stella.canonical_uri(@argv.first)
-    @plan = Stella::Testplan.new uri
-    @run = Stella::Testrun.new @plan, :checkup
-    @run.options[:repetitions] = @option.repetition
-    @run.options[:concurrency] = @option.concurrency
-    @report = Stella::Engine.run @run; nil
-    if Stella.quiet?
-      @exit_code = @report.error_count
+    base_uri = Stella.canonical_uri(@argv.first)
+    run_opts = { 
+      :repetitions => @option.repetitions || 1,
+      :concurrency => @option.concurrency || 1
+    }
+    if @global.testplan
+      unless File.owned?(@global.testplan)
+        raise ArgumentError, "File not found #{@global.testplan}"
+      end
+      Stella.ld "Load #{@global.testplan}"
+      load @global.testplan
+      filter = @global.filter
+      planname = Stella::Testplan.plans.keys.first
+      @plan = Stella::Testplan.plan(planname)
+      if filter
+        @plan.usecases.reject! { |uc| 
+          ret = !uc.desc.to_s.downcase.match(filter.downcase)
+          Stella.ld " rejecting #{uc.desc}" if ret
+          ret
+        }
+      end
+      Stella.ld "Running #{@plan.usecases.size} usecases"
     else
+      @plan = Stella::Testplan.new base_uri
+    end
+    @run = @plan.checkup base_uri, run_opts
+    @report = @run.report
+    if Stella.quiet?
+      @exit_code = report.error_count
+    else
+      @global.format ||= 'json'
       if @global.verbose == 2
-        puts @report.dump(@global.format || 'json')
+        if (@global.format == 'string' || @global.format == 'csv')
+          metrics = @report.metrics_pack
+          puts metrics.dump(@global.format)
+        else 
+          puts @report.dump(@global.format)
+        end
       elsif @global.verbose >= 3
-        puts @run.dump(@global.format || 'json')
-      else
-        metrics = @report.metrics_pack
-        puts metrics.dump(@global.format || 'string')
+        puts @run.dump(@global.format)
       end
     end
   end

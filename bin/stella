@@ -44,7 +44,9 @@ class Stella::CLI::Definition
   #global :H, :withheader, "Include X-Stella-ID request header" 
   #global :P, :withparam, "Include __stella query parameter header"
   global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
-  global :f, :format, String, "Output format (partial support)"
+  global :F, :format, String, "Output format (partial support)"
+  global :f, :filter, String, "Only run usecases that match this filter"
+  global :p, :testplan, String, "Path to testplan"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color
   end
@@ -74,8 +76,7 @@ class Stella::CLI::Definition
   #option :a, :arrival, Float, "Arrival rate (new clients per second)"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :W, :nowait, "Ignore wait times"
-  #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
+  #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)
   command :checkup => Stella::CLI
   
   

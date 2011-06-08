@@ -114,7 +114,7 @@ class Stella
           testrun.fubar!
         end
         Benelux.reset # If we run again, the old stats still remain
-        testrun.report
+        testrun
       end
 
       private 

@@ -100,7 +100,7 @@ class Stella
     end
     def run engine, opts={}
       testrun = Stella::Testrun.new self, engine.mode, opts
-      report = engine.run testrun
+      engine.run testrun
     end
     module ClassMethods
       def usecases
