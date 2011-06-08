@@ -12,9 +12,7 @@
 # Usage:
 # 
 #     $ stella -h
-#     $ stella verify -p plans/basic.rb http://test.example.com/
-#     $ stella generate -u 10 -t 60 http://test.example.com/
-#     $ stella generate -u 10 -r 40 -p plans/basic.rb http://test.example.com/
+#     $ stella checkup -p plans/basic.rb http://stellaaahhhh.com/
 #
 #--
 
@@ -23,8 +21,8 @@ BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
 lib_dir = File.join(BASE_PATH, 'lib')
 $:.unshift lib_dir  
 
-require 'drydock'
 require 'stella'
+require 'drydock'
 require 'stella/cli'
 
 # Command-line interface for bin/stella
@@ -40,32 +38,23 @@ class Stella::CLI::Definition
   #global :S, :secret, String, "Secret Key"
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
-    Stella.enable_debug
+    Stella.debug = true
   end
-  global :W, :wait, Integer, "Seconds to wait before starting test"
-  global :H, :withheader, "Include X-Stella-ID request header" 
-  global :P, :withparam, "Include __stella query parameter header"
+  global :P, :pause, Integer, "Seconds to wait before starting test"
+  #global :H, :withheader, "Include X-Stella-ID request header" 
+  #global :P, :withparam, "Include __stella query parameter header"
   global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
-  global :o, :output, String, "Write output to the given file" do |v|
-    String.disable_color
-    Stella.log.output = v
-  end
-  global :var, Array, 'Set an arbitrary variable (--var "name=v")'
-  global :f, :format, String, "Output format (partial support)"
+  global :F, :format, String, "Output format (partial support)"
+  global :f, :filter, String, "Only run usecases that match this filter"
+  global :p, :testplan, String, "Path to testplan"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color
   end
   global :q, :quiet, "Be quiet!" do
-    Stella.enable_quiet
+    Stella.quiet = true
   end
   global :v, :verbose, "Increase verbosity of output (e.g. -v or -vv or -vvv)" do
-    Stella.stdout.lev += 1
-  end
-  global :nostats, "Disable stat collection" do
-    true
-  end
-  global :notemplates, "Disable template parsing" do
-    true
+    Stella.noise += 1
   end
   global :V, :version, "Display version number" do
     puts "Stella version: #{Stella::VERSION.inspect}"
@@ -79,64 +68,17 @@ class Stella::CLI::Definition
   usage "stella example"
   command :example => Stella::CLI
   
-  about "View Stella configuration"
-  usage "stella config"
-  command :config => Stella::CLI
-  
-  about "Preview a test plan"
-  usage "stella preview [-p path/2/testplan.rb] "
-  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
-  option :a, :arrival, Float, "Arrival rate (ignored)"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
-  option :d, :duration, String, "Max duration to run test (ignored)"
-  option :W, :nowait, "Ignore wait times (ignored)"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  option :g, :granularity, Integer, "Amount of time (in seconds) between timeline rotations"
-  command :preview => Stella::CLI
-  
-  about "Verify a test plan"
-  usage "stella verify [-p path/2/testplan.rb] URI"
-  usage "e.g."
-  usage "   $ stella verify -p path/2/testplan.rb http://stellaaahhhh.com/"
-  option :c, :clients, Integer, "Maximum number of virtual clients (ignored)"
-  option :a, :arrival, Float, "Arrival rate (ignored)"
-  option :r, :repetitions, Integer, "Number of times to repeat the testplan (ignored)"
-  option :d, :duration, String, "Max duration to run test (ignored)"
-  option :W, :nowait, "Ignore wait times"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  option :g, :granularity, Integer, "Amount of time (in seconds) between timeline rotations"
-  command :verify => Stella::CLI
-  
-  about "Generate requests"
-  usage "stella generate [options] URI"
-  #usage "stella load [options] URI"
-  #usage "stella stress [options] URI"
+  about "Run a checkup"
+  usage "stella checkup [options] URI"
   usage "e.g. "
-  usage "   $ stella generate -p path/2/testplan.rb -u 100 -r 50 http://stellaaahhhh.com:3114/"
-  #usage "   $ stella stress --clients=50 --repetitions=20 http://stellaaahhhh.com/"
-  option :c, :clients, Integer, "Maximum number of virtual clients"
-  option :a, :arrival, Float, "Arrival rate (new clients per second)"
+  usage "   $ stella checkup -p path/2/testplan.rb http://stellaaahhhh.com/"
+  option :c, :concurrency, Integer, "Maximum number of virtual clients"
+  #option :a, :arrival, Float, "Arrival rate (new clients per second)"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
-  option :d, :duration, String, "Max duration to run test"
   option :W, :nowait, "Ignore wait times"
-  option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)"
-  option :p, :testplan, String, "Path to testplan" 
-  option :g, :granularity, Integer, "Amount of time (in seconds) between timeline rotations"
-  command :generate => Stella::CLI
+  #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)
+  command :checkup => Stella::CLI
   
-  about "Initialize Stella configuration"
-  command :init do
-    Stella::Config.init
-  end
-  
-  if Drydock.debug?
-    about "Blast away all Stella config assets"
-    command :blast do
-      Stella::Config.blast
-    end
-  end
   
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
@@ -155,8 +97,8 @@ class Stella::CLI::Definition
 
   after do |obj|  
     @elapsed = Time.now - @start
-    if @elapsed > 0.1
-      Stella.stdout.puts 2, "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
+    if @elapsed > 0.1 && Stella.noise > 1
+      Stella.li "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
     end
     code = obj.exit_code if obj.respond_to? :exit_code
     exit code ||= 0
@@ -173,13 +115,13 @@ rescue Drydock::InvalidArgument => ex
   STDERR.puts ex.message
 rescue Drydock::UnknownCommand => ex
   STDERR.puts "Unknown command: %s" % ex.name
-rescue Stella::Error => ex
+rescue StellaError => ex
   STDERR.puts ex.message
-  STDERR.puts ex.backtrace if Stella.stdout.lev > 2 || Stella.debug?
+  STDERR.puts ex.backtrace if Stella.debug?
 rescue Interrupt
   puts $/, "Exiting... "
   exit 1
 rescue => ex
   STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
-  STDERR.puts ex.backtrace if Stella.stdout.lev > 2 || Stella.debug?
+  STDERR.puts ex.backtrace if Stella.debug?
 end

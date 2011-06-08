@@ -1,0 +1,49 @@
+GEM
+  remote: http://production.s3.rubygems.org.s3.amazonaws.com/
+  specs:
+    SystemTimer (1.2.3)
+    addressable (2.2.2)
+    attic (0.5.3)
+    benelux (0.6.1)
+      attic (>= 0.5.3)
+      storable (>= 0.8.6)
+    drydock (0.6.9)
+    familia (0.7.0)
+      gibbler (>= 0.8.6)
+      redis (>= 2.1.0)
+      storable (>= 0.8.6)
+      uri-redis (>= 0.4.2)
+    gibbler (0.8.9)
+      attic (>= 0.4.0)
+    ipaddress (0.7.0)
+    multi_json (0.0.5)
+    nokogiri (1.4.4)
+    public_suffix_service (0.8.1)
+    redis (2.2.0)
+    storable (0.8.8)
+    sysinfo (0.7.3)
+      drydock
+      storable
+    uri-redis (0.4.2)
+    whois (1.6.6)
+    yajl-ruby (0.7.9)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  SystemTimer
+  addressable (= 2.2.2)
+  benelux (= 0.6.1)
+  drydock (= 0.6.9)
+  familia (= 0.7.0)
+  gibbler (= 0.8.9)
+  ipaddress (= 0.7.0)
+  multi_json
+  nokogiri
+  public_suffix_service (= 0.8.1)
+  redis (= 2.2.0)
+  storable (>= 0.8.8)
+  sysinfo
+  whois (= 1.6.6)
+  yajl-ruby

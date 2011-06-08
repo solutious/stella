@@ -1,6 +1,14 @@
 STELLA, CHANGES
 
+#### 2.0.1 (2011-06-08) ###############################
+
+NOTE: First release of 2.x.
+
+
 #### 0.8.X (XXXX-XX-XX) ###############################
+
+NOTE: We're now focusing our effort on 2.0, so these features are still 
+      outstanding for a 1.x release (they probably won't be worked on).
 
 * TODO: Force response block content type. 
 * TODO: Add option to dump full request/response output to a file by client
@@ -60,7 +68,7 @@ STELLA, CHANGES
 * FIXED: There was no response body in Stella::Engine::Log objects
 * CHANGE: Store URIs as strings in Stella::Engine::Log objects
 * CHANGE: Stella::Data::HTTP now uses @header instead of @headers
-* ADDED: Testrun#end_time, Testrun#running?
+* ADDED: Testrun#etime, Testrun#running?
 * ADDED: Testrun.elapsed_seconds
 * ADDED: Testrun.granularity which replaces Load::ROTATE_TIMELINE
 

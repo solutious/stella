@@ -1,13 +1,235 @@
-
 require 'socket'  # Why doesn't socket work with autoload?
 autoload :Timeout, 'timeout'
+autoload :IPAddr, 'ipaddr'
+autoload :Whois, 'whois'
+autoload :PublicSuffixService, 'public_suffix_service'
 
-module Stella
+class Stella
+  
+  IMAGE_EXT = %w/.bmp .gif .jpg .jpeg .png .ico/ unless defined?(Stella::IMAGE_EXT)
   
   # A motley collection of methods that Stella loves to call!
   module Utils
     extend self
     include Socket::Constants
+
+    ADDR_LOCAL = IPAddr.new("127.0.0.0/8")
+    ADDR_CLASSA = IPAddr.new("10.0.0.0/8")
+    ADDR_CLASSB = IPAddr.new("172.16.0.0/16")
+    ADDR_CLASSC = IPAddr.new("192.168.0.0/24")
+    
+    # See: https://forums.aws.amazon.com/ann.jspa?annID=877
+    ADDR_EC2_US_EAST = %w{
+      216.182.224.0/20
+      72.44.32.0/19
+      67.202.0.0/18
+      75.101.128.0/17
+      174.129.0.0/16
+      204.236.192.0/18
+      184.73.0.0/16
+      184.72.128.0/17
+      184.72.64.0/18
+      50.16.0.0/15
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_US_WEST = %w{
+      204.236.128.0/18
+      184.72.0.0/18
+      50.18.0.0/18
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_EU_WEST = %w{
+      79.125.0.0/17
+      46.51.128.0/18
+      46.51.192.0/20
+      46.137.0.0/17
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    ADDR_EC2_AP_EAST = %w{
+      175.41.128.0/18
+      122.248.192.0/18
+    }.collect { |ipr| IPAddr.new(ipr.strip) }
+    
+    
+    def image_ext?(name)
+      IMAGE_EXT.include?(File.extname(name.downcase))
+    end
+    
+    def image?(s)
+      return false if s.nil?
+      (bmp?(s) || jpg?(s) || png?(s) || gif?(s) || ico?(s))
+    end
+    
+    # Checks if the file has more than 30% non-ASCII characters.
+    # NOTE: how to determine the difference between non-latin and binary?
+    def binary?(s)
+      return false if s.nil?
+      #puts "TODO: fix encoding issue in 1.9"
+      s = s.to_s.split(//) rescue [] unless Array === s
+      s.slice!(0, 4096)  # limit to a typcial blksize
+      ((s.size - s.grep(" ".."~").size) / s.size.to_f) > 0.30
+    end
+    
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def bmp?(a)
+      possible = ['BM6', 'BM' << 226.chr]
+      possible.member? a.slice(0, 3)
+    end
+
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def jpg?(a)
+      a.slice(0, 10) == "\377\330\377\340\000\020JFIF"
+    end
+
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def png?(a)
+      a.slice(0, 4) == "\211PNG"
+    end
+
+    def ico?(a)
+      a.slice(0, 3) == [0.chr, 0.chr, 1.chr].join
+    end
+
+    # Based on ptools by Daniel J. Berger 
+    # http://raa.ruby-lang.org/project/ptools/
+    def gif?(a)
+      ['GIF89a', 'GIF97a'].include?(a.slice(0, 6))
+    end
+    
+    def domain(host)
+      begin
+        PublicSuffixService.parse host
+      rescue PublicSuffixService::DomainInvalid => ex
+        Stella.ld ex.message
+        nil
+      rescue => ex
+        Stella.li "Error determining domain for #{host}: #{ex.message} (#{ex.class})"
+        Stella.ld ex.backtrace
+        nil
+      end
+    end
+    
+    def whois(host_or_ip)
+      begin
+        raw = Whois.whois(host_or_ip)
+        info = raw.content.split("\n").select { |line| line !~ /\A[\#\%]/ && !line.empty? }
+        info.join("\n")
+      rescue => ex
+        Stella.ld "Error fetching whois for #{host_or_ip}: #{ex.message}"
+        Stella.ld ex.backtrace
+      end
+    end
+    
+    # Returns an Array of ip addresses or nil
+    def ipaddr(host)
+      require 'resolv'
+      host = host.host if host.kind_of?(URI)
+      begin
+        resolv = Resolv::DNS.new # { :nameserver => [] }
+        resolv.getaddresses(host).collect { |addr| addr.to_s }
+      rescue => ex
+        Stella.ld "Error getting ip address for #{host}: #{ex.message} (#{ex.class})"
+        Stella.ld ex.backtrace
+        nil
+      end
+    end
+    
+    # http://www.opensource.apple.com/source/ruby/ruby-4/ruby/lib/resolv.rb
+    # * Resolv::DNS::Resource::IN::ANY
+    # * Resolv::DNS::Resource::IN::NS
+    # * Resolv::DNS::Resource::IN::CNAME
+    # * Resolv::DNS::Resource::IN::SOA
+    # * Resolv::DNS::Resource::IN::HINFO
+    # * Resolv::DNS::Resource::IN::MINFO
+    # * Resolv::DNS::Resource::IN::MX
+    # * Resolv::DNS::Resource::IN::TXT
+    # * Resolv::DNS::Resource::IN::ANY
+    # * Resolv::DNS::Resource::IN::A
+    # * Resolv::DNS::Resource::IN::WKS
+    # * Resolv::DNS::Resource::IN::PTR
+    # * Resolv::DNS::Resource::IN::AAAA
+    
+    # Returns a cname or nil
+    def cname(host)
+      require 'resolv'
+      host = host.host if host.kind_of?(URI)
+      begin
+        resolv = Resolv::DNS.new # { :nameserver => [] }
+        resolv.getresources(host, Resolv::DNS::Resource::IN::CNAME).collect { |cname| cname.name.to_s }.first
+      rescue => ex
+        Stella.ld "Error getting CNAME for #{host}: #{ex.message} (#{ex.class})"
+        Stella.ld ex.backtrace
+        nil
+      end
+    end
+    
+    def local_ipaddr?(addr)
+      addr = IPAddr.new(addr) if String === addr
+      ADDR_LOCAL.include?(addr)
+    end
+     
+    def private_ipaddr?(addr)
+      addr = IPAddr.new(addr) if String === addr
+      ADDR_CLASSA.include?(addr) ||
+      ADDR_CLASSB.include?(addr) ||
+      ADDR_CLASSC.include?(addr)
+    end
+    
+    def ec2_cname_to_ipaddr(cname)
+      return unless cname =~ /\Aec2-(\d+)-(\d+)-(\d+)-(\d+)\./
+      [$1, $2, $3, $4].join '.'
+    end
+    
+    def ec2_ipaddr?(addr)
+      ec2_us_east_ipaddr?(addr) || ec2_us_west_ipaddr?(addr) ||
+      ec2_eu_west_ipaddr?(addr) || ec2_ap_east_ipaddr?(addr)
+    end
+    
+    def ec2_us_east_ipaddr?(addr)
+      ADDR_EC2_US_EAST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_us_west_ipaddr?(addr)
+      ADDR_EC2_US_WEST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_eu_west_ipaddr?(addr)
+      ADDR_EC2_EU_WEST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    def ec2_ap_east_ipaddr?(addr)
+      ADDR_EC2_AP_EAST.each { |ipclass| return true if ipclass.include?(addr) }
+      false
+    end
+    
+    def hosted_at_ec2?(hostname, region=nil)
+      meth = region.nil? ? :ec2_ipaddr? : :"ec2_#{region}_ipaddr?"
+      cname = Stella::Utils.cname(hostname)
+      if !cname.nil? && cname.first
+        addr = Stella::Utils.ec2_cname_to_ipaddr(cname.first)
+      else
+        addresses = Stella::Utils.ipaddr(hostname) || []
+        addr = addresses.first
+      end
+      addr.nil? ? false : Stella::Utils.send(meth, addr)
+    end
+    
+    def valid_hostname?(uri)
+      begin 
+        if String === uri
+          uri = "http://#{uri}" unless uri.match(/^https?:\/\//)
+          uri = URI.parse(uri)
+        end
+        hostname = Socket.gethostbyname(uri.host).first
+        true
+      rescue SocketError => ex
+        Stella.ld "#{uri.host}: #{ex.message}"
+        false
+      end
+    end
     
     # Return the external IP address (the one seen by the internet)
     def external_ip_address
@@ -138,6 +360,9 @@ module Stella
       indent = str.split($/).each {|line| !line.strip.empty? }.map {|line| line.index(/[^\s]/) }.compact.min
       str.gsub(/^[[:blank:]]{#{indent}}/, '')
     end
+    
+    
+    IPAddr.new("127.0.0.0/8")
     
   end
 end

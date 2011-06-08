@@ -20,17 +20,20 @@ begin
     gem.version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}.#{config[:BUILD]}"
     gem.name = "stella"
     gem.rubyforge_project = gem.name
-    gem.summary = "Blame Stella for breaking your web application!"
-    gem.description = "Blame Stella for breaking your web application!"
+    gem.summary = "Define realistic testplans and run them against your webapps"
+    gem.description = "Define realistic testplans and run them against your webapps"
     gem.email = "delano@solutious.com"
-    gem.homepage = "http://blamestella.com/"
+    gem.homepage = "http://github.com/solutious/stella"
     gem.authors = ["Delano Mandelbaum"]
-    gem.add_dependency("gibbler",    ">= 0.8.1")
+    gem.add_dependency('familia',    '>= 0.7.1')
+    gem.add_dependency("gibbler",    ">= 0.8.9")
     gem.add_dependency("drydock",    ">= 0.6.9")
-    gem.add_dependency("benelux",    "= 0.5.17")
+    gem.add_dependency("benelux",    ">= 0.6.1")
     gem.add_dependency('sysinfo',    '>= 0.7.3')
-    gem.add_dependency('storable',   '>= 0.7.3')
-    gem.add_dependency("nokogiri")
+    gem.add_dependency('storable',   '>= 0.8.8')
+    gem.add_dependency("nokogiri",      ">= 1.4.4")
+    gem.add_dependency("public_suffix_service",      ">= 0.8.1")
+    gem.add_dependency("whois",      ">= 1.6.6")
 
     #gem.add_development_dependency("rspec", ">= 1.2.9")
     #gem.add_development_dependency("mocha", ">= 0.9.8")

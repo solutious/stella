@@ -1,344 +1,470 @@
-autoload :CSV, 'csv'
-#Gibbler.enable_debug
 
-module Stella
-class Testplan < Storable
-  include Gibbler::Complex
-  extend Attic
-  
-  @file_cache = {}
-  @globals = {}
-  class << self
-    attr_reader :file_cache
-    attr_reader :globals
-    def readlines path
-      if @file_cache.has_key?(path)
-        Stella.ld "FILE CACHE HIT: #{path}"
-        return @file_cache[path]
-      end
-      Stella.ld "FILE CACHE LOAD: #{path}"
-      @file_cache[path] = File.readlines(path)
-    end
-    def global(n,v=nil)
-      @globals[n.to_sym] = v unless v.nil?
-      @globals[n.to_sym]
-    end
-    def global?(n)
-      @globals.has_key?(n.to_sym)
-    end
-  end
-  
-  attic :base_path
-  attic :plan_path
-  attic :description
-  
-  field :id => String, &gibbler_id_processor
-  field :userid => String
-  field :usecases => Array
-  field :description => String
-  #field :resources
-  
-  gibbler :usecases, :userid
-  
-  def initialize(*uris)
-    uris.flatten!
-    self.description = "Test plan"
-    @usecases = []
-    @testplan_current_ratio = 0
-    #@resources = {}
-    
-    unless uris.empty?
-      uris = [uris] unless Array === uris
-      usecase = Stella::Testplan::Usecase.new
-      usecase.ratio = 1.0
-      uris.each do |uri|
-        req = usecase.add_request :get, uri
-      end
-      self.add_usecase usecase
-    end
-  end
-  
-  def postprocess
-    @id &&= Gibbler::Digest.new @id
-  end
-  
-  def self.load_file(path)
-    conf = File.read path
-    plan = Stella::Testplan.new
-    plan.base_path = File.dirname path
-    plan.plan_path = path
-    # eval so the DSL code can be executed in this namespace.
-    plan.instance_eval conf, path 
-    plan
-  end
-  
-  def check!
-    # Adjust ratios if necessary
-    needy = @usecases.select { |u| u.ratio == -1 }
-    needy.each do |u|
-      u.ratio = (remaining_ratio / needy.size).to_f
-    end
-    if @testplan_current_ratio > 1.0 
-      msg = "Usecase ratio cannot be higher than 1.0"
-      msg << " (#{@testplan_current_ratio})"
-      raise Stella::WackyRatio, msg
-    end
-  end
-  
-  # make sure all clients share identical test plans
-  def freeze
-    return if frozen?
-    Stella.ld "FREEZE TESTPLAN: #{self.description}"
-    @usecases.each { |uc| uc.freeze }
-    super
-    self
-  end
-  
-  def id
-    Gibbler::Digest.new(@id || self.digest)
-  end
-  
-  def self.from_hash(*args)
-    me = super(*args)
-    me.usecases.collect! { |uc| Stella::Testplan::Usecase.from_hash(uc) }
-    me
-  end
-  
-  def usecase(*args, &blk)
-    return @usecases if args.empty? && blk.nil?
-    ratio, name = nil,nil
-    unless args.empty?
-      ratio, name = args[0], args[1] if args[0].is_a?(Numeric)
-      ratio, name = args[1], args[0] if args[0].is_a?(String)
-    end
-    uc = Stella::Testplan::Usecase.new
-    uc.base_path = self.base_path
-    uc.plan_path = self.plan_path
-    uc.instance_eval &blk
-    uc.ratio = (ratio || -1).to_f
-    uc.description = name unless name.nil?
-    @testplan_current_ratio += uc.ratio if uc.ratio > 0
-    add_usecase uc
-  end
-  def xusecase(*args, &blk); Stella.ld "Skipping usecase"; end
-  
-  def add_usecase(uc)
-    Stella.ld "Usecase: #{uc.description}"
-    @usecases << uc
-    uc
-  end
-  
-  # for DSL use-only (otherwise use: self.description)
-  def desc(*args)
-    self.description = args.first unless args.empty?
-    self.description
-  end
-  
-  def pretty(long=false)
-    self.digest # make sure we have values in the cache
-    str = []
-    dig = long ? self.digest_cache : self.digest_cache.shorter
-    str << " %-66s  ".att(:reverse) % ["#{self.description}  (#{dig})"]
-    @usecases.each_with_index do |uc,i| 
-      uc.digest
-      dig = long ? uc.digest_cache : uc.digest_cache.shorter
-      desc = uc.description || "Usecase ##{i+1}"
-      desc += "  (#{dig}) "
-      str << (' ' << " %-61s %s%% ".att(:reverse).bright) % [desc, uc.ratio_pretty]
-      unless uc.http_auth.nil?
-        str << '    Auth: %s (%s/%s)' % uc.http_auth.values
-      end
-      requests = uc.requests.each do |r| 
-        r.digest
-        dig = long ? r.digest_cache : r.digest_cache.shorter
-        str << "    %-62s".bright % ["#{r.description}  (#{dig})"]
-        str << "      %s" % [r]
-        if Stella.stdout.lev > 1
-          [:wait].each { |i| str << "      %s: %s" % [i, r.send(i)] }
-          str << '       %s: %s' % ['params', r.params.inspect] 
-          r.response_handler.each do |status,proc|
-            str << "      response: %s%s" % [status, proc.source.split($/).join("#{$/}    ")]
-          end
-        end
-      end
-    end
-    str.join($/)
-  end
-  
-  private
-  def remaining_ratio
-    1.0 - @testplan_current_ratio
-  end
-  
-end
-end  
-  
-  
-module Stella
-class Testplan
 
-  #
-  # Any valid Ruby syntax will do the trick:
-  #
-  #     usecase(10, "Self-serve") {
-  #       post("/listing/add", "Add a listing") {
-  #         wait 1..4 
-  #         param :name => random(8)
-  #         param :city => "Vancouver"
-  #         response(302) {
-  #           repeat 3
-  #         }
-  #       }
-  #     }
-  #
-  class Usecase < Storable
+class Stella
+  module Common
+    module PrivacyMethods
+      def private?
+        privacy == true
+      end
+      def public?
+        !private?
+      end
+      def private!
+        @privacy = true
+      end
+      def public!
+        @privacy = false
+      end
+    end
+  end
+  class Testplan < Storable
     include Gibbler::Complex
-    include Stella::Data::Helpers
-    extend Attic
-    
-    class Auth < Struct.new(:domain, :user, :pass)
-      include Gibbler::Complex
-    end
-    
-    attic :base_path # we don't want gibbler to see this
-    attic :plan_path
-    
-    field :id => String, &gibbler_id_processor
-    
-    attic :description
-    field :description => String
-    
-    field :ratio => Float
-    field :http_auth => Hash
-    field :timeout => Float
-    field :requests => Array
-    field :resources => Hash
-    
-    class UnknownResource < Stella::Error
-      def message; "UnknownResource: #{@obj}"; end
-    end
-    
-    def initialize(&blk)
-      @requests, @resources = [], {}
-      instance_eval &blk unless blk.nil?
-    end
-    
-    def id
-      Gibbler::Digest.new(@id || self.digest)
-    end
-    
-    def self.from_hash(hash={})
-      me = super(hash)
-      me.requests.collect! { |req| Stella::Data::HTTP::Request.from_hash(req) }
-      me
-    end
-    
-    
-    def desc(*args)
-      self.description = args.first unless args.empty?
-      self.description
-    end
-    
-    def timeout(*args)
-      @timeout = args.first unless args.empty?
-      @timeout
-    end
-    
-    def resource(name, *args)
-      if Hash === name
-        Stella.ld "ARGS IGNORED: #{args.inspect} (#{caller[0]})" if !args.empty?
-        @resources.merge! name
-      elsif !name.nil? && !args.empty?
-        @resources.merge!({name => args[0]})
-      elsif @resources.has_key?(name)
-        @resources[name]
-      elsif Stella::Testplan.global?(name)
-        Stella::Testplan.global(name)
+    include Familia
+    include Common::PrivacyMethods
+    prefix :testplan
+    index :id
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :custid             => String
+    field :usecases           => Array
+    field :desc               => String
+    field :privacy            => Boolean
+    field :favicon            => String
+    field :last_run           => Integer
+    field :planid             => Gibbler::Digest
+    field :notify => Boolean
+    include Familia::Stamps
+    sensitive_fields :custid, :privacy, :notify
+    # Don't include privacy in the gibbler calculation because it
+    # doesn't make sense to have both a public and private testplan.
+    gibbler :custid, :usecases
+    def init(uri=nil)
+      preprocess
+      if uri
+        req = Stella::RequestTemplate.new :get, Stella.canonical_uri(uri)
+        @usecases << Stella::Usecase.new(req) 
       end
     end
-    alias_method :set, :resource
-    
-    def ratio
-      r = (@ratio || 0).to_f
-      r = r/100 if r > 1 
-      r
+    alias_method :planid, :id
+    def favicon?() !@favicon.nil? && !@favicon.empty? end
+    def preprocess
+      @usecases ||= []
+      @privacy = false if @privacy.nil?
     end
-    
-    def ratio_pretty
-      r = (@ratio || 0).to_f
-      r > 1.0 ? r.to_i : (r * 100).to_i
+    def first_request
+      return if @usecases.empty?
+      @usecases.first.requests.first
     end
-    
-    # Reads the contents of the file <tt>path</tt> (the current working
-    # directory is assumed to be the same directory containing the test plan).
-    def read(path)
-      path = File.join(base_path, path) if base_path
-      Stella.ld "READING FILE: #{path}"
-      Stella::Testplan.readlines path
-    end
-      
-    def list(path)
-      read(path).collect { |line| line.strip }
-    end
-    
-    def csv(path)
-      path = File.join(base_path, path) if base_path
-      Stella.ld "READING CSV: #{path}"
-      file = Stella::Testplan.readlines path
-      CSV.parse file.join
-    end
-    
-    def quickcsv(path)
-      path = File.join(base_path, path) if base_path
-      Stella.ld "READING CSV(QUICK): #{path}"
-      ar = []
-      file = Stella::Testplan.readlines path
-      file.each do |l|
-        l.strip!
-        ar << l.split(',')
-      end
-      ar
-    end
-    
     def freeze
       return if frozen?
-      @requests.each { |r| r.freeze }
-      self.id ||= self.digest
+      @usecases.each { |uc| uc.freeze }
+      @id &&= Gibbler::Digest.new(@id || self.digest)
       super
       self
     end
-    
-    def auth(user, pass=nil, domain=nil)
-      @http_auth ||= Auth.new
-      @http_auth.user, @http_auth.pass, @http_auth.domain = user, pass, domain
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+      @notify ||= false 
+      @notify &&= false if @notify == 'false'
     end
-    
-    def add_request(meth, *args, &blk)
-      if args[0].nil?
-        msg = "No URI given for request ##{@requests.size} "
-        msg << "#{meth} block in #{self.plan_path}"
-        raise Stella::Error, msg 
+    def cust
+      @cust ||= Customer.from_redis @custid
+      @cust || Customer.anonymous
+    end
+    def monitor
+      MonitorInfo.from_redis @id
+    end
+    def monitored?
+      mon = monitor
+      mon && mon.enabled
+    end
+    def host
+      h = @host.nil? || frozen? ? HostInfo.load_or_create(hostid) : @host
+      frozen? ? h : (@host=h)
+    end
+    def hostid
+      h = (@hostid.nil? || frozen?) && first_request ? Stella.canonical_host(first_request.uri) : @hostid
+      frozen? ? h : (@hostid=h)
+    end
+    def destroy!
+      raise BS::Problem, "Monitor exists #{index}" if MonitorInfo.exists?(index)
+      host.testplans.rem self unless host.nil?
+      cust.testplans.rem self unless cust.nil?
+      super
+    end
+    def owner?(guess)
+      custid != nil && cust.custid?(guess)
+    end
+    def checkup base_uri, opts={}
+      opts[:base_uri] = base_uri
+      run Stella::Engine::Checkup, opts
+    end
+    def run engine, opts={}
+      testrun = Stella::Testrun.new self, engine.mode, opts
+      engine.run testrun
+    end
+    module ClassMethods
+      def usecases
+        @usecases ||= []
+        @usecases
       end
-      req = Stella::Data::HTTP::Request.new meth.to_s.upcase, args[0], &blk
-      req.description = args[1] if args.size > 1 # Description is optional
-      Stella.ld req
-      @requests << req
-      req
+      def checkup base_uri, opts={}
+        Stella::Testplan.plan(self).checkup base_uri, opts
+      end
+      def run engine, opts={}
+        Stella::Testplan.plan(self).run engine, opts
+      end
+      def testplan
+        Stella::Testplan.plan(self)
+      end
+      # Session objects will extend registered classes.
+      def register klass=nil
+        unless klass.nil?
+          @registered_classes ||= []
+          @registered_classes << klass
+        end
+        @registered_classes
+      end
+      attr_reader :registered_classes
+      def session
+        @session ||= {}
+        @session
+      end
     end
-    def get(*args, &blk);    add_request :get,    *args, &blk; end
-    def put(*args, &blk);    add_request :put,    *args, &blk; end
-    def post(*args, &blk);   add_request :post,   *args, &blk; end
-    def head(*args, &blk);   add_request :head,   *args, &blk; end
-    def delete(*args, &blk); add_request :delete, *args, &blk; end
+    class << self
+      attr_reader :plans
+      def inherited obj
+        super
+        obj.extend ClassMethods
+      end
+      def from_hash(*args)
+        me = super(*args)
+        me.usecases.collect! { |uc| Stella::Usecase.from_hash(uc) }
+        me
+      end
+      def plans
+        @plans ||= {}
+        @plans
+      end
+      def plan(klass,v=nil)
+        # Store the class as a string. Ruby calls Object#hash before setting
+        # the hash key which conflicts with Familia::Object.hash.
+        plans[klass.to_s] = v unless v.nil?
+        plans[klass.to_s]
+      rescue NameError => ex
+        nil
+      end
+      def plan?(name)
+        !plan(name).nil?
+      end
+      def global?(name)
+        global.has_key?(name)
+      end
+      def global
+        @global ||= {}
+        @global
+      end
+    end
+  end
+  class Usecase < Storable
+    include Gibbler::Complex
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :desc             => String
+    field :ratio            => Float
+    field :requests         => Array
+    field :http_auth        => Hash
+    field :ucid             => Gibbler::Digest
+    gibbler :requests
+    def initialize(req=nil)
+      preprocess
+      @requests << req if req
+    end
+    alias_method :ucid, :id
+    def preprocess
+      @requests ||= []
+    end
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+    end
+    def freeze
+      return if frozen?
+      @requests.each { |r| r.freeze }
+      @id &&= Gibbler::Digest.new(@id || self.digest)
+      super
+      self
+    end
+    module ClassMethods
+      [:get, :put, :head, :post, :delete].each do |meth|
+        define_method meth do |*args,&definition|
+          path, opts = *args
+          create_request_template meth, path, opts, &definition
+        end
+      end
+      [:xget, :xput, :xhead, :xpost, :xdelete].each do |ignore|
+        define_method ignore do |*args|
+          Stella.ld " ignoring #{ignore}: #{args.inspect}"
+        end
+      end
+      def http_auth user, pass=nil, domain=nil
+        planname, ucname = *names
+        uc = Stella::Testplan.plan(planname).usecases.last
+        uc.http_auth = { :user => user, :pass => pass, :domain => domain }
+        uc.http_auth
+      end
+      # Session objects will extend registered classes.
+      def register klass=nil
+        unless klass.nil?
+          @registered_classes ||= []
+          @registered_classes << klass
+        end
+        @registered_classes
+      end
+      attr_reader :registered_classes
+      def session
+        @session ||= {}
+        @session
+      end
+      private 
+      def create_request_template meth, path, opts=nil, &definition
+        opts ||= {}
+        planname, ucname = *names
+        uc = Stella::Testplan.plan(planname).usecases.last
+        Stella.ld " (#{uc.class}) define: #{meth} #{path} #{opts if !opts.empty?}"
+        rt = RequestTemplate.new meth, path, opts, &definition
+        uc.requests << rt
+      end
+    end
+    class << self 
+      attr_accessor :instance, :testplan
+      # The class syntax uses the session method defined in ClassMethods.
+      # This is here for autogenerated usecases and ones loaded from JSON.
+      attr_reader :registered_classes, :session
+      def from_hash(*args)
+        me = super(*args)
+        me.requests.collect! { |req| Stella::RequestTemplate.from_hash(req) }
+        me
+      end
+      def checkup base_uri, opts={}
+        (opts[:usecases] ||= []) << self
+        testplan.checkup base_uri, opts
+      end
+      def names
+        names = self.to_s.split('::')
+        planname, ucname = case names.size
+        when 1 then ['DefaultTestplan', names.last]
+        else        [names[0..-2].join('::'), names[-1]] end
+        [eval(planname), ucname.to_sym]
+      end
+      def inherited(obj)
+        super
+        planclass, ucname = *obj.names
+        planclass.extend Stella::Testplan::ClassMethods
+        unless Stella::Testplan.plan? planclass
+          Stella::Testplan.plan(planclass, planclass.new)
+          Stella::Testplan.plan(planclass).desc = planclass
+        end
+        
+        obj.instance = obj.new
+        obj.testplan = Stella::Testplan.plan(planclass)
+        Stella::Testplan.plan(planclass).usecases << obj.instance
+        Stella::Testplan.plan(planclass).usecases.last.desc = ucname
+        obj.extend ClassMethods
+      end
+    end
+  end
     
-    def xget(*args, &blk);    Stella.ld "Skipping get" end
-    def xput(*args, &blk);    Stella.ld "Skipping put" end
-    def xpost(*args, &blk);   Stella.ld "Skipping post" end
-    def xhead(*args, &blk);   Stella.ld "Skipping head" end
-    def xdelete(*args, &blk); Stella.ld "Skipping delete" end
-    
+  class EventTemplate < Storable
+    include Gibbler::Complex
   end
   
-end
+  class StringTemplate
+    include Gibbler::String
+    attr_reader :src
+    def initialize(src)
+      src = src.to_s
+      @src, @template = src, ERB.new(src)
+    end
+    def result(binding)
+      @template.result(binding)
+    end
+    def to_s() src end
+  end
+  
+  class RequestTemplate < EventTemplate
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :protocol         => Symbol
+    field :http_method
+    field :http_version
+    field :http_auth
+    field :uri              => String do |v| v.to_s end
+    field :params           => Hash
+    field :headers          => Hash
+    field :body
+    field :desc
+    field :rtid             => Gibbler::Digest
+    field :wait             => Range
+    field :response_handler => Hash, &hash_proc_processor
+    field :follow           => Boolean
+    attr_accessor :callback
+    gibbler :http_method, :uri, :http_version, :params, :headers, :body
+    def initialize(meth=nil, uri=nil, opts={}, &definition)
+      @protocol = :http
+      @http_method, @uri = meth, uri
+      opts.each_pair { |n,v| self.send("#{n}=", v) if self.class.has_field?(n) }
+      @params ||= {}
+      @headers ||= {}
+      @follow ||= false
+      @callback = definition
+    end
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+      unless response_handler.nil?
+        response_handler.keys.each do |range|
+          proc = response_handler[range]
+          response_handler[range] = Proc.from_string(proc) if proc.kind_of?(ProcString)
+        end
+      end
+    end
+    def freeze
+      return if frozen?
+      @id &&= Gibbler::Digest.new(@id || self.digest)
+      super
+      self
+    end
+    alias_method :param, :params
+    alias_method :header, :headers
+  end
+    
+  TP = Testplan
+  UC = Usecase
+  RT = RequestTemplate
+  ET = EventTemplate
+  
 end
 
+
+
+class Stella
+  class Testrun < Storable
+    include Gibbler::Complex
+    include Familia
+    prefix :testrun
+    index :id
+    include Familia::Stamps
+    include Common::PrivacyMethods
+    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :custid             => String
+    field :status             => Symbol
+    field :options            => Hash
+    field :mode               => Symbol
+    field :hosts
+    field :ctime              => Float
+    field :stime              => Float
+    field :etime              => Float
+    field :salt
+    field :planid             => Gibbler::Digest
+    field :runid              => Gibbler::Digest
+    field :hostid
+    field :privacy            => Boolean
+    field :report             => Stella::Report
+    sensitive_fields :custid, :salt, :privacy
+    gibbler :salt, :planid, :custid, :hosts, :mode, :options, :ctime
+    attr_reader :plan
+    alias_method :start_time, :stime
+    alias_method :end_time, :etime
+    def init plan=nil, mode=nil, options={}
+      @ctime = Stella.now
+      @plan, @mode = plan, mode
+      @options = {
+      }.merge options
+      preprocess
+    end
+    alias_method :runid, :id
+    def duration
+      return 0 unless @stime
+      (@etime || Stella.now) - @stime
+    end
+    def errors?
+      @report && @report.errors?
+    end
+    def preprocess
+      @salt ||= Stella.now.digest.short
+      @status ||= :new
+      if @plan
+        @planid = @plan.id 
+        @hostid = @plan.hostid
+      end
+      @options ||= {}
+      @privacy ||= false
+    end
+    def postprocess
+      @id &&= Gibbler::Digest.new(@id)
+      # Calling plan calls Redis. 
+      #@privacy = plan.privacy if Stella::Testplan === plan
+      @report = Stella::Report.from_hash @report if Hash === @report
+      @planid &&= Gibbler::Digest.new(@planid)
+    end
+    def hostid
+      # NOTE: This method is needed only until May 30 or so.
+      # (there was an issue where incidents were not including a hostid)
+      @hostid || (plan.nil? ? nil : plan.hostid)
+    end
+    def run opts={}
+      raise StellaError.new("No mode") unless Stella::Engine.mode?(@mode)
+      engine = Stella::Engine.load(@mode)
+      opts.merge! @options
+      engine.run self, opts
+      save if respond_to? :save
+      self.report
+    end
+    def checkup?
+      @mode == :checkup
+    end
+    def monitor?
+      @mode == :monitor
+    end
+    def destroy!
+      VendorInfo.global.checkups.remove self
+      host.checkups.remove self if host
+      plan.checkups.remove self if plan
+      cust.checkups.remove self if cust
+      super
+    end
+    def plan
+      if @plan.nil? 
+        @plan = Stella::Testplan.from_redis @planid
+        @plan.freeze
+      end
+      @plan
+    end
+    def owner?(obj)
+      obj = Customer === obj ? obj.custid : obj
+      cust.username?(obj)
+    end
+    def cust
+      @cust ||= Customer.from_redis @custid
+      @cust || Customer.anonymous
+    end
+    def host
+      @host ||= plan.host if plan
+      @host
+    end
+    class << self
+      attr_reader :statuses
+    end
+    @statuses = [:new, :pending, :running, :done, :failed, :fubar, :cancelled]
+    @statuses.each do |status|
+      define_method :"#{status}?" do
+        @status == status
+      end
+      define_method :"#{status}!" do
+        @status = status
+        begin
+          save if respond_to? :save
+        rescue Errno::ECONNREFUSED => ex
+          Stella.ld ex.message
+        end
+      end
+    end
+  end
+end
+class DefaultTestplan < Stella::Testplan; end

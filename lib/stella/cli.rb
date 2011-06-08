@@ -3,45 +3,60 @@ class Stella::CLI < Drydock::Command
   attr_accessor :exit_code
   
   def init
-    @conf = Stella::Config.refresh
+    #@conf = Stella::Config.refresh
     @exit_code = 0
   end
   
-  def config
-    puts @conf.to_yaml
+  def checkup_valid?
+    true
   end
   
-  def verify_valid?
-    create_testplan
+  
+  def checkup
+    base_uri = Stella.canonical_uri(@argv.first)
+    run_opts = { 
+      :repetitions => @option.repetitions || 1,
+      :concurrency => @option.concurrency || 1
+    }
+    if @global.testplan
+      unless File.owned?(@global.testplan)
+        raise ArgumentError, "File not found #{@global.testplan}"
+      end
+      Stella.ld "Load #{@global.testplan}"
+      load @global.testplan
+      filter = @global.filter
+      planname = Stella::Testplan.plans.keys.first
+      @plan = Stella::Testplan.plan(planname)
+      if filter
+        @plan.usecases.reject! { |uc| 
+          ret = !uc.desc.to_s.downcase.match(filter.downcase)
+          Stella.ld " rejecting #{uc.desc}" if ret
+          ret
+        }
+      end
+      Stella.ld "Running #{@plan.usecases.size} usecases"
+    else
+      @plan = Stella::Testplan.new base_uri
+    end
+    @run = @plan.checkup base_uri, run_opts
+    @report = @run.report
+    if Stella.quiet?
+      @exit_code = report.error_count
+    else
+      @global.format ||= 'json'
+      if @global.verbose == 2
+        if (@global.format == 'string' || @global.format == 'csv')
+          metrics = @report.metrics_pack
+          puts metrics.dump(@global.format)
+        else 
+          puts @report.dump(@global.format)
+        end
+      elsif @global.verbose >= 3
+        puts @run.dump(@global.format)
+      end
+    end
   end
 
-  def generate_valid?
-    create_testplan
-  end
-  
-  def run(mode)
-    opts = { :mode => mode }
-    opts[:hosts] = @hosts
-    [:nowait, :clients, :repetitions, :duration, :arrival, :granularity, :'wait'].each do |opt|
-      opts[opt] = @option.send(opt) unless @option.send(opt).nil?
-    end
-    [:'notemplates', :'nostats', :'noheader', :'noparam', :'timeout'].each do |opt|
-      opts[opt] = @global.send(opt) unless @global.send(opt).nil?
-    end
-    testrun = Stella::Testrun.new @testplan, opts
-    testrun.run
-    testrun
-  end
-  
-  def generate
-    testrun = run :generate
-    @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
-  end
-  def verify
-    testrun = run :verify
-    @exit_code = (testrun.has_errors? == 0 ? 0 : 1)
-  end
-    
   def example
     base_path = File.expand_path(File.join(STELLA_LIB_HOME, '..'))
     thin_path = File.join(base_path, 'support', 'sample_webapp', 'config.ru')
@@ -57,49 +72,14 @@ class Stella::CLI < Drydock::Command
     puts %Q{
     http://127.0.0.1:3114/
     }
-    puts "3. Verify the testplan is correct (functional test):".bright
+    puts "3. Run a checkup".bright
     puts %Q{
-    $ stella verify -p #{tp_path} 127.0.0.1:3114
+    $ stella checkup -p #{tp_path} 127.0.0.1:3114
     }
-    puts "4. Generate requests (load test):".bright
-    puts %Q{
-    $ stella generate -p #{tp_path} 127.0.0.1:3114
-    }
-  end
-  
-  def preview
-    create_testplan
-    if @global.format == 'json'
-      Stella.stdout.info @testplan.to_json
-    else
-      Stella.stdout.info @testplan.pretty(Stella.stdout.lev > 1)
-    end
   end
   
   private
   
-  def create_testplan
-    unless @option.testplan.nil? || File.exists?(@option.testplan)
-      raise Stella::InvalidOption, "Bad path: #{@option.testplan}" 
-    end
-    (@global.var || []).each do |var|
-      n, v = *var.split('=')
-      raise "Bad variable format: #{var}" if n.nil? || !n.match(/[a-z]+/i)
-      Stella::Testplan.global(n.to_sym, v)
-    end
-    @hosts = @argv.collect { |uri|; 
-      uri = 'http://' << uri unless uri.match /^https?:\/\//i
-      obj = URI.parse uri
-    }
-    if @option.testplan
-      @testplan = Stella::Testplan.load_file @option.testplan
-    else
-      @testplan = Stella::Testplan.new(@hosts)
-    end
-    @testplan.check!  # raise errors, update usecase ratios
-    @testplan.freeze  # cascades through usecases and requests
-    true
-  end
   
   
   
