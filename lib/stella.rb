@@ -154,7 +154,8 @@ class Stella
     def get(uri, opts={})
       opts[:concurrency] ||= 1
       opts[:repetitions] ||= 1
-      report = checkup uri, opts
+      run = checkup uri, opts
+      report = run.report
       if report.processed? && report.content && report.statuses.success?
         report.content.response_body 
       else
@@ -164,7 +165,8 @@ class Stella
     def checkup(uri, opts={})
       plan = Stella::Testplan.new uri
       run = Stella::Testrun.new plan, :checkup, opts
-      report = Stella::Engine.run run
+      Stella::Engine.run run
+      run
     end
     def now
       Time.now.utc.to_f

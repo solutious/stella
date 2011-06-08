@@ -36,7 +36,7 @@ timeline = Benelux.merge_tracks
 report = Stella::Report.new timeline
 report.process
 report.processed?
-#=> true
+##=> true
 
 
 #  uri = URI.parse ARGV.first
