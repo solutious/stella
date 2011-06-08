@@ -6,18 +6,8 @@ if RUBY_VERSION =~ /1.9/
   Encoding.default_internal = Encoding::UTF_8
 end
 
-<<<<<<< HEAD
-require 'sysinfo'
-autoload :Drydock, 'drydock'
-autoload :URI, 'uri'
-autoload :OpenStruct, 'ostruct'
-autoload :Storable, 'storable'
-autoload :Attic, 'attic'
-autoload :ERB, 'erb'
-=======
 require 'bundler/setup'
 $:.unshift STELLA_LIB_HOME
->>>>>>> 2.0
 
 %w{tryouts benelux storable gibbler familia bluth}.each do |dir|
   $:.unshift File.join(STELLA_LIB_HOME, '..', '..', dir, 'lib')
