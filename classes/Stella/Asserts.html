@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Stella::Asserts [stella 2.0.1.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Stella::Asserts
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/stella/client_rb.html">lib/stella/client.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000013">assert_doc</a></li>
+              <li><a href="#M000020">assert_equals</a></li>
+              <li><a href="#M000019">assert_exists</a></li>
+              <li><a href="#M000018">assert_form</a></li>
+              <li><a href="#M000014">assert_keys</a></li>
+              <li><a href="#M000015">assert_list</a></li>
+              <li><a href="#M000022">assert_match</a></li>
+              <li><a href="#M000021">assert_matches</a></li>
+              <li><a href="#M000016">assert_object_keys</a></li>
+              <li><a href="#M000017">assert_object_values</a></li>
+              <li><a href="#M000023">assert_status</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000013'>
+                <a name='M000013'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_doc</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 453</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_doc</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-value str">'No content'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000020'>
+                <a name='M000020'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_equals</span>
+                  <span class='arguments'>(expected, found)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 496</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_equals</span> <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">found</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-node">&quot;Expected: #{expected}; Found: #{found}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">found</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000019'>
+                <a name='M000019'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_exists</span>
+                  <span class='arguments'>(v)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 492</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_exists</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-value str">&quot;Found nil value&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-value str">&quot;Found empty value&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000018'>
+                <a name='M000018'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_form</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 488</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_form</span> <span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-identifier">assert_doc</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-node">&quot;No form called #{name}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">form</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">form</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000014'>
+                <a name='M000014'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_keys</span>
+                  <span class='arguments'>(expected_keys)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 457</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_keys</span> <span class="ruby-identifier">expected_keys</span> &#x000A;      <span class="ruby-identifier">assert_doc</span>&#x000A;      <span class="ruby-identifier">found_keys</span> = <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found_keys</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected_keys</span>&#x000A;        <span class="ruby-identifier">quit</span> <span class="ruby-node">&quot;Doc keys mismatch (#{found_keys})&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000015'>
+                <a name='M000015'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_list</span>
+                  <span class='arguments'>(key)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 465</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_list</span> <span class="ruby-identifier">key</span>&#x000A;      <span class="ruby-identifier">assert_doc</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-node">&quot;#{key} is empty&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">doc</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">doc</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000022'>
+                <a name='M000022'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_match</span>
+                  <span class='arguments'>(regex, found)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Alias for <a href="Asserts.html#M000021">assert_matches</a>
+                  </p>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000021'>
+                <a name='M000021'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_matches</span>
+                  <span class='arguments'>(regex, found)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 499</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_matches</span> <span class="ruby-identifier">regex</span>, <span class="ruby-identifier">found</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-node">&quot;Expected: #{regex}; Found: #{found}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">regex</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">found</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000016'>
+                <a name='M000016'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_object_keys</span>
+                  <span class='arguments'>(key, expected_keys)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 470</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_object_keys</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">expected_keys</span>&#x000A;      <span class="ruby-identifier">assert_doc</span>&#x000A;      <span class="ruby-identifier">found_keys</span> = <span class="ruby-identifier">doc</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">keys</span> }.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found_keys</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected_keys</span>&#x000A;        <span class="ruby-identifier">quit</span> <span class="ruby-node">&quot;Doc keys mismatch (#{found_keys})&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000017'>
+                <a name='M000017'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_object_values</span>
+                  <span class='arguments'>(key, object_key, expected_values)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 478</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_object_values</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">object_key</span>, <span class="ruby-identifier">expected_values</span>&#x000A;      <span class="ruby-identifier">expected_values</span> = [<span class="ruby-identifier">expected_values</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">expected_values</span>&#x000A;      <span class="ruby-identifier">expected_values</span> = <span class="ruby-identifier">expected_values</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_s</span> }.<span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-identifier">values_found</span> = <span class="ruby-identifier">doc</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-identifier">obj</span>[<span class="ruby-identifier">object_key</span>].<span class="ruby-identifier">to_s</span> }&#x000A;      <span class="ruby-identifier">values_found</span>.<span class="ruby-identifier">sort!</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">values_found</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected_values</span>&#x000A;        <span class="ruby-identifier">quit</span> <span class="ruby-node">&quot;#{key} contains unexpected values for #{object_key}: #{values_found.uniq}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000023'>
+                <a name='M000023'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>assert_status</span>
+                  <span class='arguments'>(expected)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/stella/client.rb, line 503</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_status</span> <span class="ruby-identifier">expected</span>&#x000A;      <span class="ruby-identifier">fail</span> <span class="ruby-node">&quot;Expected: #{expected}; Found: #{res.status}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">status</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

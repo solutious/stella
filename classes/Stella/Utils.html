@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Utils [stella 0.8.8.001]</title>
+    <title>: Stella::Utils [stella 2.0.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -47,15 +47,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000134">autoload_vendor</a></li>
-              <li><a href="#M000130">external_ip_address</a></li>
-              <li><a href="#M000131">internal_ip_address</a></li>
-              <li><a href="#M000138">noindent</a></li>
-              <li><a href="#M000132">require_glob</a></li>
-              <li><a href="#M000133">require_vendor</a></li>
-              <li><a href="#M000135">service_available?</a></li>
-              <li><a href="#M000137">strand</a></li>
-              <li><a href="#M000136">write_to_file</a></li>
+              <li><a href="#M000060">autoload_vendor</a></li>
+              <li><a href="#M000036">binary?</a></li>
+              <li><a href="#M000037">bmp?</a></li>
+              <li><a href="#M000045">cname</a></li>
+              <li><a href="#M000042">domain</a></li>
+              <li><a href="#M000053">ec2_ap_east_ipaddr?</a></li>
+              <li><a href="#M000048">ec2_cname_to_ipaddr</a></li>
+              <li><a href="#M000052">ec2_eu_west_ipaddr?</a></li>
+              <li><a href="#M000049">ec2_ipaddr?</a></li>
+              <li><a href="#M000050">ec2_us_east_ipaddr?</a></li>
+              <li><a href="#M000051">ec2_us_west_ipaddr?</a></li>
+              <li><a href="#M000056">external_ip_address</a></li>
+              <li><a href="#M000041">gif?</a></li>
+              <li><a href="#M000054">hosted_at_ec2?</a></li>
+              <li><a href="#M000040">ico?</a></li>
+              <li><a href="#M000035">image?</a></li>
+              <li><a href="#M000034">image_ext?</a></li>
+              <li><a href="#M000057">internal_ip_address</a></li>
+              <li><a href="#M000044">ipaddr</a></li>
+              <li><a href="#M000038">jpg?</a></li>
+              <li><a href="#M000046">local_ipaddr?</a></li>
+              <li><a href="#M000064">noindent</a></li>
+              <li><a href="#M000039">png?</a></li>
+              <li><a href="#M000047">private_ipaddr?</a></li>
+              <li><a href="#M000058">require_glob</a></li>
+              <li><a href="#M000059">require_vendor</a></li>
+              <li><a href="#M000061">service_available?</a></li>
+              <li><a href="#M000063">strand</a></li>
+              <li><a href="#M000055">valid_hostname?</a></li>
+              <li><a href="#M000043">whois</a></li>
+              <li><a href="#M000062">write_to_file</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -67,29 +89,229 @@
             </div>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_LOCAL</td>
+                    <td>=</td>
+                    <td class='context-item-value'>IPAddr.new(&quot;127.0.0.0/8&quot;)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_CLASSA</td>
+                    <td>=</td>
+                    <td class='context-item-value'>IPAddr.new(&quot;10.0.0.0/8&quot;)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_CLASSB</td>
+                    <td>=</td>
+                    <td class='context-item-value'>IPAddr.new(&quot;172.16.0.0/16&quot;)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_CLASSC</td>
+                    <td>=</td>
+                    <td class='context-item-value'>IPAddr.new(&quot;192.168.0.0/24&quot;)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_EC2_US_EAST</td>
+                    <td>=</td>
+                    <td class='context-item-value'>%w{       216.182.224.0/20       72.44.32.0/19       67.202.0.0/18       75.101.128.0/17       174.129.0.0/16       204.236.192.0/18       184.73.0.0/16       184.72.128.0/17       184.72.64.0/18       50.16.0.0/15     }.collect { |ipr| IPAddr.new(ipr.strip) }</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      See: <a
+                      href="https://forums.aws.amazon.com/ann.jspa?annID=877">forums.aws.amazon.com/ann.jspa?annID=877</a>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_EC2_US_WEST</td>
+                    <td>=</td>
+                    <td class='context-item-value'>%w{       204.236.128.0/18       184.72.0.0/18       50.18.0.0/18     }.collect { |ipr| IPAddr.new(ipr.strip) }</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_EC2_EU_WEST</td>
+                    <td>=</td>
+                    <td class='context-item-value'>%w{       79.125.0.0/17       46.51.128.0/18       46.51.192.0/20       46.137.0.0/17     }.collect { |ipr| IPAddr.new(ipr.strip) }</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ADDR_EC2_AP_EAST</td>
+                    <td>=</td>
+                    <td class='context-item-value'>%w{       175.41.128.0/18       122.248.192.0/18     }.collect { |ipr| IPAddr.new(ipr.strip) }</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000134'>
-                <a name='M000134'>      </a>
+              <div class='method public-instance' id='method-M000060'>
+                <a name='M000060'>      </a>
                 <div class='synopsis'>
                   <span class='name'>autoload_vendor</span>
                   <span class='arguments'>(mod, name, version)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Same as <tt><a href="Utils.html#M000133">require_vendor</a></tt>, but uses
+                  Same as <tt><a href="Utils.html#M000059">require_vendor</a></tt>, but uses
                   <tt>autoload</tt> instead.
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000134-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000134-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 72</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autoload_vendor</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;      <span class="ruby-identifier">autoload</span> <span class="ruby-identifier">mod</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>, <span class="ruby-identifier">name</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000060-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 294</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autoload_vendor</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;      <span class="ruby-identifier">autoload</span> <span class="ruby-identifier">mod</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>, <span class="ruby-identifier">name</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000130'>
-                <a name='M000130'>      </a>
+              <div class='method public-instance' id='method-M000036'>
+                <a name='M000036'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>binary?</span>
+                  <span class='arguments'>(s)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Checks if the file has more than 30% non-ASCII characters. NOTE: how to
+                  determine the difference between non-latin and binary?
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 65</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">binary?</span>(<span class="ruby-identifier">s</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-comment cmt">#puts &quot;TODO: fix encoding issue in 1.9&quot;</span>&#x000A;      <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">//</span>) <span class="ruby-keyword kw">rescue</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">s</span>&#x000A;      <span class="ruby-identifier">s</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>, <span class="ruby-value">4096</span>)  <span class="ruby-comment cmt"># limit to a typcial blksize</span>&#x000A;      ((<span class="ruby-identifier">s</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-value str">&quot; &quot;</span><span class="ruby-operator">..</span><span class="ruby-value str">&quot;~&quot;</span>).<span class="ruby-identifier">size</span>) <span class="ruby-operator">/</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_f</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span><span class="ruby-value">.30</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000037'>
+                <a name='M000037'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>bmp?</span>
+                  <span class='arguments'>(a)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on ptools by Daniel J. Berger <a
+                  href="http://raa.ruby-lang.org/project/ptools/">raa.ruby-lang.org/project/ptools/</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 75</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bmp?</span>(<span class="ruby-identifier">a</span>)&#x000A;      <span class="ruby-identifier">possible</span> = [<span class="ruby-value str">'BM6'</span>, <span class="ruby-value str">'BM'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">226</span>.<span class="ruby-identifier">chr</span>]&#x000A;      <span class="ruby-identifier">possible</span>.<span class="ruby-identifier">member?</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-value">3</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000045'>
+                <a name='M000045'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>cname</span>
+                  <span class='arguments'>(host)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Returns a cname or nil
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 156</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cname</span>(<span class="ruby-identifier">host</span>)&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'resolv'</span>&#x000A;      <span class="ruby-identifier">host</span> = <span class="ruby-identifier">host</span>.<span class="ruby-identifier">host</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">host</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">URI</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">resolv</span> = <span class="ruby-constant">Resolv</span><span class="ruby-operator">::</span><span class="ruby-constant">DNS</span>.<span class="ruby-identifier">new</span> <span class="ruby-comment cmt"># { :nameserver =&gt; [] }</span>&#x000A;        <span class="ruby-identifier">resolv</span>.<span class="ruby-identifier">getresources</span>(<span class="ruby-identifier">host</span>, <span class="ruby-constant">Resolv</span><span class="ruby-operator">::</span><span class="ruby-constant">DNS</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span><span class="ruby-operator">::</span><span class="ruby-constant">IN</span><span class="ruby-operator">::</span><span class="ruby-constant">CNAME</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">cname</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cname</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span> }.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;Error getting CNAME for #{host}: #{ex.message} (#{ex.class})&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000042'>
+                <a name='M000042'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>domain</span>
+                  <span class='arguments'>(host)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 102</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">domain</span>(<span class="ruby-identifier">host</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-constant">PublicSuffixService</span>.<span class="ruby-identifier">parse</span> <span class="ruby-identifier">host</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">PublicSuffixService</span><span class="ruby-operator">::</span><span class="ruby-constant">DomainInvalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">message</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">li</span> <span class="ruby-node">&quot;Error determining domain for #{host}: #{ex.message} (#{ex.class})&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000053'>
+                <a name='M000053'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_ap_east_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 203</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_ap_east_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-constant">ADDR_EC2_AP_EAST</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ipclass</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ipclass</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) }&#x000A;      <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000048'>
+                <a name='M000048'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_cname_to_ipaddr</span>
+                  <span class='arguments'>(cname)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 181</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_cname_to_ipaddr</span>(<span class="ruby-identifier">cname</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">cname</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\Aec2-(\d+)-(\d+)-(\d+)-(\d+)\./</span>&#x000A;      [<span class="ruby-identifier">$1</span>, <span class="ruby-identifier">$2</span>, <span class="ruby-identifier">$3</span>, <span class="ruby-identifier">$4</span>].<span class="ruby-identifier">join</span> <span class="ruby-value str">'.'</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000052'>
+                <a name='M000052'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_eu_west_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 199</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_eu_west_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-constant">ADDR_EC2_EU_WEST</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ipclass</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ipclass</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) }&#x000A;      <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000049'>
+                <a name='M000049'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 186</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-identifier">ec2_us_east_ipaddr?</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">ec2_us_west_ipaddr?</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-operator">||</span>&#x000A;      <span class="ruby-identifier">ec2_eu_west_ipaddr?</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">ec2_ap_east_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000050'>
+                <a name='M000050'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_us_east_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 191</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_us_east_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-constant">ADDR_EC2_US_EAST</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ipclass</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ipclass</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) }&#x000A;      <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000051'>
+                <a name='M000051'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ec2_us_west_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 195</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ec2_us_west_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-constant">ADDR_EC2_US_WEST</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ipclass</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ipclass</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) }&#x000A;      <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000056'>
+                <a name='M000056'>      </a>
                 <div class='synopsis'>
                   <span class='name'>external_ip_address</span>
                   <span class='arguments'>()</span>
@@ -100,14 +322,85 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000130-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000130-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 13</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">external_ip_address</span>&#x000A;      <span class="ruby-identifier">ip</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-node">%w{solutious.heroku.com/ip}</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sponge</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">ipstr</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-node">&quot;http://#{sponge}&quot;</span>)) <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>&#x000A;          <span class="ruby-identifier">ip</span> = <span class="ruby-regexp re">/([0-9]{1,3}\.){3}[0-9]{1,3}/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">ipstr</span>).<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ip</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">ip</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SocketError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ETIMEDOUT</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">le</span> <span class="ruby-value str">&quot;Connection Error. Check your internets!&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">ip</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 235</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">external_ip_address</span>&#x000A;      <span class="ruby-identifier">ip</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-node">%w{solutious.heroku.com/ip}</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sponge</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">ipstr</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-node">&quot;http://#{sponge}&quot;</span>)) <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>&#x000A;          <span class="ruby-identifier">ip</span> = <span class="ruby-regexp re">/([0-9]{1,3}\.){3}[0-9]{1,3}/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">ipstr</span>).<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ip</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">ip</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SocketError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ETIMEDOUT</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">le</span> <span class="ruby-value str">&quot;Connection Error. Check your internets!&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">ip</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000131'>
-                <a name='M000131'>      </a>
+              <div class='method public-instance' id='method-M000041'>
+                <a name='M000041'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>gif?</span>
+                  <span class='arguments'>(a)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on ptools by Daniel J. Berger <a
+                  href="http://raa.ruby-lang.org/project/ptools/">raa.ruby-lang.org/project/ptools/</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 98</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gif?</span>(<span class="ruby-identifier">a</span>)&#x000A;      [<span class="ruby-value str">'GIF89a'</span>, <span class="ruby-value str">'GIF97a'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-value">6</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000054'>
+                <a name='M000054'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>hosted_at_ec2?</span>
+                  <span class='arguments'>(hostname, region=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 208</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hosted_at_ec2?</span>(<span class="ruby-identifier">hostname</span>, <span class="ruby-identifier">region</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">region</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">ec2_ipaddr?</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:&quot;ec2_#{region}_ipaddr?&quot;</span>&#x000A;      <span class="ruby-identifier">cname</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">cname</span>(<span class="ruby-identifier">hostname</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">cname</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">cname</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-identifier">addr</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">ec2_cname_to_ipaddr</span>(<span class="ruby-identifier">cname</span>.<span class="ruby-identifier">first</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">addresses</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">ipaddr</span>(<span class="ruby-identifier">hostname</span>) <span class="ruby-operator">||</span> []&#x000A;        <span class="ruby-identifier">addr</span> = <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">addr</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">addr</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000040'>
+                <a name='M000040'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ico?</span>
+                  <span class='arguments'>(a)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 92</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ico?</span>(<span class="ruby-identifier">a</span>)&#x000A;      <span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-value">3</span>) <span class="ruby-operator">==</span> [<span class="ruby-value">0</span>.<span class="ruby-identifier">chr</span>, <span class="ruby-value">0</span>.<span class="ruby-identifier">chr</span>, <span class="ruby-value">1</span>.<span class="ruby-identifier">chr</span>].<span class="ruby-identifier">join</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000035'>
+                <a name='M000035'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>image?</span>
+                  <span class='arguments'>(s)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 58</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">image?</span>(<span class="ruby-identifier">s</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">nil?</span>&#x000A;      (<span class="ruby-identifier">bmp?</span>(<span class="ruby-identifier">s</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">jpg?</span>(<span class="ruby-identifier">s</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">png?</span>(<span class="ruby-identifier">s</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">gif?</span>(<span class="ruby-identifier">s</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">ico?</span>(<span class="ruby-identifier">s</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000034'>
+                <a name='M000034'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>image_ext?</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">image_ext?</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-constant">IMAGE_EXT</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000057'>
+                <a name='M000057'>      </a>
                 <div class='synopsis'>
                   <span class='name'>internal_ip_address</span>
                   <span class='arguments'>()</span>
@@ -120,14 +413,64 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000057-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">internal_ip_address</span>&#x000A;      <span class="ruby-comment cmt"># turn off reverse DNS resolution temporarily </span>&#x000A;      <span class="ruby-identifier">orig</span>, <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span>, <span class="ruby-keyword kw">true</span>   &#x000A;      <span class="ruby-identifier">ip</span> = <span class="ruby-constant">UDPSocket</span>.<span class="ruby-identifier">open</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-value str">'75.101.137.7'</span>, <span class="ruby-value">1</span>); <span class="ruby-identifier">s</span>.<span class="ruby-identifier">addr</span>.<span class="ruby-identifier">last</span> } <span class="ruby-comment cmt"># Solutious IP</span>&#x000A;      <span class="ruby-identifier">ip</span>&#x000A;    <span class="ruby-keyword kw">ensure</span>  &#x000A;      <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span> = <span class="ruby-identifier">orig</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000057-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 252</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">internal_ip_address</span>&#x000A;      <span class="ruby-comment cmt"># turn off reverse DNS resolution temporarily </span>&#x000A;      <span class="ruby-identifier">orig</span>, <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span>, <span class="ruby-keyword kw">true</span>   &#x000A;      <span class="ruby-identifier">ip</span> = <span class="ruby-constant">UDPSocket</span>.<span class="ruby-identifier">open</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-value str">'75.101.137.7'</span>, <span class="ruby-value">1</span>); <span class="ruby-identifier">s</span>.<span class="ruby-identifier">addr</span>.<span class="ruby-identifier">last</span> } <span class="ruby-comment cmt"># Solutious IP</span>&#x000A;      <span class="ruby-identifier">ip</span>&#x000A;    <span class="ruby-keyword kw">ensure</span>  &#x000A;      <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">do_not_reverse_lookup</span> = <span class="ruby-identifier">orig</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000138'>
-                <a name='M000138'>      </a>
+              <div class='method public-instance' id='method-M000044'>
+                <a name='M000044'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ipaddr</span>
+                  <span class='arguments'>(host)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Returns an <a href="../Array.html">Array</a> of ip addresses or nil
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 127</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ipaddr</span>(<span class="ruby-identifier">host</span>)&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'resolv'</span>&#x000A;      <span class="ruby-identifier">host</span> = <span class="ruby-identifier">host</span>.<span class="ruby-identifier">host</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">host</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">URI</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">resolv</span> = <span class="ruby-constant">Resolv</span><span class="ruby-operator">::</span><span class="ruby-constant">DNS</span>.<span class="ruby-identifier">new</span> <span class="ruby-comment cmt"># { :nameserver =&gt; [] }</span>&#x000A;        <span class="ruby-identifier">resolv</span>.<span class="ruby-identifier">getaddresses</span>(<span class="ruby-identifier">host</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">addr</span><span class="ruby-operator">|</span> <span class="ruby-identifier">addr</span>.<span class="ruby-identifier">to_s</span> }&#x000A;      <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;Error getting ip address for #{host}: #{ex.message} (#{ex.class})&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000038'>
+                <a name='M000038'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>jpg?</span>
+                  <span class='arguments'>(a)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on ptools by Daniel J. Berger <a
+                  href="http://raa.ruby-lang.org/project/ptools/">raa.ruby-lang.org/project/ptools/</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 82</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">jpg?</span>(<span class="ruby-identifier">a</span>)&#x000A;      <span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-value">10</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\377\330\377\340\000\020JFIF&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000046'>
+                <a name='M000046'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>local_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 169</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">local_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-identifier">addr</span> = <span class="ruby-constant">IPAddr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">addr</span>&#x000A;      <span class="ruby-constant">ADDR_LOCAL</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000064'>
+                <a name='M000064'>      </a>
                 <div class='synopsis'>
                   <span class='name'>noindent</span>
                   <span class='arguments'>(str)</span>
@@ -140,14 +483,46 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000138-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000138-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 137</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">noindent</span>(<span class="ruby-identifier">str</span>)&#x000A;      <span class="ruby-identifier">indent</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-identifier">line</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span> }.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-regexp re">/[^\s]/</span>) }.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">min</span>&#x000A;      <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^[[:blank:]]{#{indent}}/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 359</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">noindent</span>(<span class="ruby-identifier">str</span>)&#x000A;      <span class="ruby-identifier">indent</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-identifier">line</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span> }.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-regexp re">/[^\s]/</span>) }.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">min</span>&#x000A;      <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^[[:blank:]]{#{indent}}/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000132'>
-                <a name='M000132'>      </a>
+              <div class='method public-instance' id='method-M000039'>
+                <a name='M000039'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>png?</span>
+                  <span class='arguments'>(a)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on ptools by Daniel J. Berger <a
+                  href="http://raa.ruby-lang.org/project/ptools/">raa.ruby-lang.org/project/ptools/</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 88</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">png?</span>(<span class="ruby-identifier">a</span>)&#x000A;      <span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-value">4</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\211PNG&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000047'>
+                <a name='M000047'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>private_ipaddr?</span>
+                  <span class='arguments'>(addr)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 174</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">private_ipaddr?</span>(<span class="ruby-identifier">addr</span>)&#x000A;      <span class="ruby-identifier">addr</span> = <span class="ruby-constant">IPAddr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">addr</span>&#x000A;      <span class="ruby-constant">ADDR_CLASSA</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-operator">||</span>&#x000A;      <span class="ruby-constant">ADDR_CLASSB</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>) <span class="ruby-operator">||</span>&#x000A;      <span class="ruby-constant">ADDR_CLASSC</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">addr</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000058'>
+                <a name='M000058'>      </a>
                 <div class='synopsis'>
                   <span class='name'>require_glob</span>
                   <span class='arguments'>(*path)</span>
@@ -168,14 +543,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000132-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000058-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000132-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 45</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_glob</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">path</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">path</span>.<span class="ruby-identifier">flatten</span>)).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">require</span> <span class="ruby-identifier">path</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Error: #{ex.message}&quot;</span>&#x000A;        <span class="ruby-identifier">exit</span> <span class="ruby-value">7</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000058-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 267</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_glob</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">path</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">path</span>.<span class="ruby-identifier">flatten</span>)).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">require</span> <span class="ruby-identifier">path</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Error: #{ex.message}&quot;</span>&#x000A;        <span class="ruby-identifier">exit</span> <span class="ruby-value">7</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000133'>
-                <a name='M000133'>      </a>
+              <div class='method public-instance' id='method-M000059'>
+                <a name='M000059'>      </a>
                 <div class='synopsis'>
                   <span class='name'>require_vendor</span>
                   <span class='arguments'>(name, version)</span>
@@ -192,14 +567,14 @@
                   <pre>vendor/httpclient-2.1.5.2/httpclient</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000133-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000133-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_vendor</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;       <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>)&#x000A;       <span class="ruby-identifier">require</span> <span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 288</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_vendor</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;       <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">STELLA_LIB_HOME</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>)&#x000A;       <span class="ruby-identifier">require</span> <span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000135'>
-                <a name='M000135'>      </a>
+              <div class='method public-instance' id='method-M000061'>
+                <a name='M000061'>      </a>
                 <div class='synopsis'>
                   <span class='name'>service_available?</span>
                   <span class='arguments'>(host, port, wait=3)</span>
@@ -226,14 +601,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000135-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000135-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 85</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">service_available?</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>, <span class="ruby-identifier">wait</span>=<span class="ruby-value">3</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">vm</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:java</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">iadd</span> = <span class="ruby-constant">Java</span><span class="ruby-operator">::</span><span class="ruby-constant">InetSocketAddress</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>      &#x000A;          <span class="ruby-identifier">socket</span> = <span class="ruby-constant">Java</span><span class="ruby-operator">::</span><span class="ruby-constant">Socket</span>.<span class="ruby-identifier">new</span>&#x000A;          <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">connect</span> <span class="ruby-identifier">iadd</span>, <span class="ruby-identifier">wait</span> <span class="ruby-operator">*</span> <span class="ruby-value">1000</span>  <span class="ruby-comment cmt"># milliseconds</span>&#x000A;          <span class="ruby-identifier">success</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">socket</span>.<span class="ruby-identifier">isClosed</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">isConnected</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NativeException</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">debug?</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span> &#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">status</span> = <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-identifier">wait</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">socket</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">new</span>( <span class="ruby-constant">AF_INET</span>, <span class="ruby-constant">SOCK_STREAM</span>, <span class="ruby-value">0</span> )&#x000A;            <span class="ruby-identifier">sockaddr</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">pack_sockaddr_in</span>( <span class="ruby-identifier">port</span>, <span class="ruby-identifier">host</span> )&#x000A;            <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">connect</span>( <span class="ruby-identifier">sockaddr</span> )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EAFNOSUPPORT</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNREFUSED</span>, <span class="ruby-constant">SocketError</span>, <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">class</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">debug?</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000061-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 307</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">service_available?</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>, <span class="ruby-identifier">wait</span>=<span class="ruby-value">3</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">vm</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:java</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">iadd</span> = <span class="ruby-constant">Java</span><span class="ruby-operator">::</span><span class="ruby-constant">InetSocketAddress</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>      &#x000A;          <span class="ruby-identifier">socket</span> = <span class="ruby-constant">Java</span><span class="ruby-operator">::</span><span class="ruby-constant">Socket</span>.<span class="ruby-identifier">new</span>&#x000A;          <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">connect</span> <span class="ruby-identifier">iadd</span>, <span class="ruby-identifier">wait</span> <span class="ruby-operator">*</span> <span class="ruby-value">1000</span>  <span class="ruby-comment cmt"># milliseconds</span>&#x000A;          <span class="ruby-identifier">success</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">socket</span>.<span class="ruby-identifier">isClosed</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">isConnected</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NativeException</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">debug?</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span> &#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">status</span> = <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-identifier">wait</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">socket</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">new</span>( <span class="ruby-constant">AF_INET</span>, <span class="ruby-constant">SOCK_STREAM</span>, <span class="ruby-value">0</span> )&#x000A;            <span class="ruby-identifier">sockaddr</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">pack_sockaddr_in</span>( <span class="ruby-identifier">port</span>, <span class="ruby-identifier">host</span> )&#x000A;            <span class="ruby-identifier">socket</span>.<span class="ruby-identifier">connect</span>( <span class="ruby-identifier">sockaddr</span> )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EAFNOSUPPORT</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNREFUSED</span>, <span class="ruby-constant">SocketError</span>, <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">class</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">debug?</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000137'>
-                <a name='M000137'>      </a>
+              <div class='method public-instance' id='method-M000063'>
+                <a name='M000063'>      </a>
                 <div class='synopsis'>
                   <span class='name'>strand</span>
                   <span class='arguments'>( len=8, safe=true )</span>
@@ -254,14 +629,40 @@
                   </ul>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000137-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000137-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 127</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">strand</span>( <span class="ruby-identifier">len</span>=<span class="ruby-value">8</span>, <span class="ruby-identifier">safe</span>=<span class="ruby-keyword kw">true</span> )&#x000A;       <span class="ruby-identifier">chars</span> = (<span class="ruby-value str">&quot;a&quot;</span><span class="ruby-operator">..</span><span class="ruby-value str">&quot;z&quot;</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-operator">+</span> (<span class="ruby-value str">&quot;0&quot;</span><span class="ruby-operator">..</span><span class="ruby-value str">&quot;9&quot;</span>).<span class="ruby-identifier">to_a</span>&#x000A;       <span class="ruby-identifier">chars</span>.<span class="ruby-identifier">delete_if</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">%w(i l o 1 0)</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-identifier">v</span>) } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">safe</span>&#x000A;       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>&#x000A;       <span class="ruby-value">1</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">len</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">chars</span>[<span class="ruby-identifier">rand</span>(<span class="ruby-identifier">chars</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)] }&#x000A;       <span class="ruby-identifier">str</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000063-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 349</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">strand</span>( <span class="ruby-identifier">len</span>=<span class="ruby-value">8</span>, <span class="ruby-identifier">safe</span>=<span class="ruby-keyword kw">true</span> )&#x000A;       <span class="ruby-identifier">chars</span> = (<span class="ruby-value str">&quot;a&quot;</span><span class="ruby-operator">..</span><span class="ruby-value str">&quot;z&quot;</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-operator">+</span> (<span class="ruby-value str">&quot;0&quot;</span><span class="ruby-operator">..</span><span class="ruby-value str">&quot;9&quot;</span>).<span class="ruby-identifier">to_a</span>&#x000A;       <span class="ruby-identifier">chars</span>.<span class="ruby-identifier">delete_if</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">%w(i l o 1 0)</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-identifier">v</span>) } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">safe</span>&#x000A;       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>&#x000A;       <span class="ruby-value">1</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">len</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">chars</span>[<span class="ruby-identifier">rand</span>(<span class="ruby-identifier">chars</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)] }&#x000A;       <span class="ruby-identifier">str</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000136'>
-                <a name='M000136'>      </a>
+              <div class='method public-instance' id='method-M000055'>
+                <a name='M000055'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>valid_hostname?</span>
+                  <span class='arguments'>(uri)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 220</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_hostname?</span>(<span class="ruby-identifier">uri</span>)&#x000A;      <span class="ruby-keyword kw">begin</span> &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">uri</span>&#x000A;          <span class="ruby-identifier">uri</span> = <span class="ruby-node">&quot;http://#{uri}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^https?:\/\//</span>)&#x000A;          <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">hostname</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostbyname</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">host</span>).<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SocketError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;#{uri.host}: #{ex.message}&quot;</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000043'>
+                <a name='M000043'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>whois</span>
+                  <span class='arguments'>(host_or_ip)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 115</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">whois</span>(<span class="ruby-identifier">host_or_ip</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">raw</span> = <span class="ruby-constant">Whois</span>.<span class="ruby-identifier">whois</span>(<span class="ruby-identifier">host_or_ip</span>)&#x000A;        <span class="ruby-identifier">info</span> = <span class="ruby-identifier">raw</span>.<span class="ruby-identifier">content</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\n&quot;</span>).<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/\A[\#\%]/</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">line</span>.<span class="ruby-identifier">empty?</span> }&#x000A;        <span class="ruby-identifier">info</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;      <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;Error fetching whois for #{host_or_ip}: #{ex.message}&quot;</span>&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">backtrace</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000062'>
+                <a name='M000062'>      </a>
                 <div class='synopsis'>
                   <span class='name'>write_to_file</span>
                   <span class='arguments'>(filename, content, mode, chmod=0600)</span>
@@ -272,10 +673,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000136-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000136-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 112</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_to_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">content</span>, <span class="ruby-identifier">mode</span>, <span class="ruby-identifier">chmod</span>=<span class="ruby-value">0600</span>)&#x000A;      <span class="ruby-identifier">mode</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:append</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">'a'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'w'</span>&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">mode</span>)&#x000A;      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">os</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:unix</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Provided chmod is not a Fixnum (#{chmod})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">chmod</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>)&#x000A;      <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">chmod</span>, <span class="ruby-identifier">filename</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000062-source'><span class="ruby-comment cmt"># File lib/stella/utils.rb, line 334</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_to_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">content</span>, <span class="ruby-identifier">mode</span>, <span class="ruby-identifier">chmod</span>=<span class="ruby-value">0600</span>)&#x000A;      <span class="ruby-identifier">mode</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:append</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">'a'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'w'</span>&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">mode</span>)&#x000A;      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">sysinfo</span>.<span class="ruby-identifier">os</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:unix</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Provided chmod is not a Fixnum (#{chmod})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">chmod</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>)&#x000A;      <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">chmod</span>, <span class="ruby-identifier">filename</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

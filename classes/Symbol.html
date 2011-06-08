@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Symbol [stella 0.8.8.001]</title>
+    <title>: Symbol [stella 2.0.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../files/lib/stella/common_rb.html">lib/stella/common.rb</a>
+            <a href="../files/lib/stella/core_ext_rb.html">lib/stella/core_ext.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -45,37 +45,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000003">downcase</a></li>
-              <li><a href="#M000004">upcase</a></li>
+              <li><a href="#M000212">downcase</a></li>
+              <li><a href="#M000214">empty?</a></li>
+              <li><a href="#M000213">upcase</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000003'>
-                <a name='M000003'>      </a>
+              <div class='method public-instance' id='method-M000212'>
+                <a name='M000212'>      </a>
                 <div class='synopsis'>
                   <span class='name'>downcase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000003-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000212-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000003-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 105</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">downcase</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000212-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 78</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">downcase</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000004'>
-                <a name='M000004'>      </a>
+              <div class='method public-instance' id='method-M000214'>
+                <a name='M000214'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>empty?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000214-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000214-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 85</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000213'>
+                <a name='M000213'>      </a>
                 <div class='synopsis'>
                   <span class='name'>upcase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000213-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 108</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">upcase</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000213-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 81</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">upcase</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

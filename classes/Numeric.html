@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Numeric [stella 0.8.8.001]</title>
+    <title>: Numeric [stella 2.0.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../files/lib/stella/common_rb.html">lib/stella/common.rb</a>
+            <a href="../files/lib/stella/core_ext_rb.html">lib/stella/core_ext.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -41,11 +41,24 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <p>
+            Statistics Module for Ruby (C) Derrick Pallas
+            </p>
+            <p>
+            Authors: Derrick Pallas Website: <a
+            href="http://derrick.pallas.us/ruby-stats">derrick.pallas.us/ruby-stats</a>/
+            License: Academic Free License 3.0 Version: 2007-10-01b
+            </p>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000030">to_bytes</a></li>
+              <li><a href="#M000251">fineround</a></li>
+              <li><a href="#M000250">square</a></li>
+              <li><a href="#M000249">to_bytes</a></li>
+              <li><a href="#M000248">to_ms</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -59,8 +72,34 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000030'>
-                <a name='M000030'>      </a>
+              <div class='method public-instance' id='method-M000251'>
+                <a name='M000251'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>fineround</span>
+                  <span class='arguments'>(len=6.0)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000251-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000251-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 376</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fineround</span>(<span class="ruby-identifier">len</span>=<span class="ruby-value">6.0</span>)&#x000A;    <span class="ruby-identifier">v</span> = (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> (<span class="ruby-value">10.0</span><span class="ruby-operator">**</span><span class="ruby-identifier">len</span>)).<span class="ruby-identifier">round</span> <span class="ruby-operator">/</span> (<span class="ruby-value">10.0</span><span class="ruby-operator">**</span><span class="ruby-identifier">len</span>)&#x000A;    <span class="ruby-identifier">v</span>.<span class="ruby-identifier">zero?</span> <span class="ruby-value">? </span><span class="ruby-value">0</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000250'>
+                <a name='M000250'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>square</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000250-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000250-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 375</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">square</span> ; <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-keyword kw">self</span> ; <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000249'>
+                <a name='M000249'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_bytes</span>
                   <span class='arguments'>()</span>
@@ -71,10 +110,23 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000249-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/stella/common.rb, line 205</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_bytes</span>&#x000A;    <span class="ruby-identifier">args</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">abs</span>.<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">1000</span>&#x000A;      [(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'B'</span>]&#x000A;    <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>)&#x000A;      [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> <span class="ruby-value">1000</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'KB'</span>]&#x000A;    <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>)&#x000A;      [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'MB'</span>]&#x000A;    <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>)&#x000A;      [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'GB'</span>]&#x000A;    <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">6</span>)&#x000A;      [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'TB'</span>]&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      [<span class="ruby-keyword kw">self</span>, <span class="ruby-value str">'B'</span>]&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-value str">'%3.2f%s'</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">args</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000249-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 244</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_bytes</span>&#x000A;      <span class="ruby-identifier">args</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">abs</span>.<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>)&#x000A;        <span class="ruby-value str">'%3.2f%s'</span> <span class="ruby-operator">%</span> [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> <span class="ruby-value">1000</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'KB'</span>]&#x000A;      <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>)&#x000A;        <span class="ruby-value str">'%3.2f%s'</span> <span class="ruby-operator">%</span> [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">2</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'MB'</span>]&#x000A;      <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>)&#x000A;        <span class="ruby-value str">'%3.2f%s'</span> <span class="ruby-operator">%</span> [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">3</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'GB'</span>]&#x000A;      <span class="ruby-keyword kw">when</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>)<span class="ruby-operator">..</span>(<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">6</span>)&#x000A;        <span class="ruby-value str">'%3.2f%s'</span> <span class="ruby-operator">%</span> [(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">/</span> (<span class="ruby-value">1000</span><span class="ruby-operator">**</span><span class="ruby-value">4</span>).<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">to_s</span>, <span class="ruby-value str">'TB'</span>]&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        [<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-value str">'B'</span>].<span class="ruby-identifier">join</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000248'>
+                <a name='M000248'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_ms</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000248-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000248-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 239</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ms</span>&#x000A;      (<span class="ruby-keyword kw">self</span><span class="ruby-operator">*</span><span class="ruby-value">1000</span>.<span class="ruby-identifier">to_f</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

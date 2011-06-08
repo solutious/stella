@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.md [stella 0.8.8.001]</title>
+    <title>File: README.md [stella 2.0.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,84 +31,21 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2011-02-26 15:44:30 -0500</span>
+          <span class='datetime'>2011-06-08 19:13:37 -0400</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             <p>
-            # <a href="../classes/Stella.html">Stella</a> - 0.8 BETA
+            # <a href="../classes/Stella.html">Stella</a> - 2.0-RC1
             </p>
             <p>
-            **Blame <a href="../classes/Stella.html">Stella</a> for breaking your web
-            application!**
-            </p>
-            <p>
-            <a href="../classes/Stella.html">Stella</a> is an integration and load
-            testing tool. It fits well into an agile development process because the
-            configuration syntax is simple yet powerful and a single config can be used
-            for both kinds of tests (integration and load). <a
-            href="../classes/Stella.html">Stella</a> runs at the protocol-level which
-            means it generates HTTP requests and parses the responses but does not
-            perform any browser simulation (see Caveats).
-            </p>
-            <p>
-            ### Important Information Regarding Your Testplans
-            </p>
-            <p>
-            *The testplan configuration syntax changed a little in 0.8. Most configs
-            will not be affected. See &#8220;News&#8221; below for more info.*
+            **Define realistic testplans and run them against your webapps**
             </p>
             <p>
             ## Features
             </p>
-            <ul>
-            <li>Support for simulating multiple usecases at the same time
-            
-            </li>
-            <li>Sophisticated response handling
-            
-            </li>
-            <li>Automatic parsing of HTML, XML, XHTML, YAML, and JSON response bodies
-            
-            </li>
-            <li>Dynamic variable replacement
-            
-            </li>
-            <li>Support for testing multiple sites simultaneously
-            
-            </li>
-            </ul>
-            <p>
-            ## Caveats
-            </p>
-            <p>
-            There are a few known limitations:
-            </p>
-            <ul>
-            <li>*POSSIBLE SHOW-STOPPER*: An upper limit of around 200-300 concurrent
-            virtual HTTP clients. There is a threading issue in the HTTPClient library
-            which appears under high load.
-            
-            </li>
-            <li>*POSSIBLE SHOW-STOPPER*: No support for browser or UI based tests (a la
-            Watir or Selenium). If this is a show stopper for you, check out
-            [WatirGrid](<a
-            href="http://github.com/90kts/watirgrid">github.com/90kts/watirgrid</a>)
-            
-            </li>
-            <li><b>ANNOYING</b>: File uploads do not work with some HTTP servers (WEBrick)
-            
-            </li>
-            <li><b>ANNOYING</b>: Lack of documentation (see examples/ directory)
-            
-            </li>
-            <li><b>ANNOYING</b>: Reporting is limited to log files and command-line output.
-            You need to make your own graphs.
-            
-            </li>
-            </ul>
             <p>
             ## Examples
             </p>
@@ -116,60 +53,15 @@
             ### Testplan Configuration
             </p>
             <p>
-            Every load testing tool worth its salt allows you to control the logical
-            flow with some form of programming language. One of the advantages that
-            open source tools have over commercial ones is that the languages used are
-            generally well known whereas most commercial tools use proprietary
-            languages. This makes it possible to define sophisticated and realistic
-            tests.
-            </p>
-            <p>
-            <a href="../classes/Stella.html">Stella</a> test plans are defined in
-            subset of the Ruby programming language. They also typically contain more
-            than one usecase which is important when simulating realistic load.
-            </p>
-            <pre>usecase &quot;An Example Usecase&quot; do&#x000A;  get '/some/path' do&#x000A;    param :what  =&gt; 'food'&#x000A;    param :where =&gt; 'iowa'&#x000A;    response 200 do&#x000A;      # code executed when the server returns a 200 response.&#x000A;    end&#x000A;  end&#x000A;&#x000A;  get '/a/dynamic/:path' do&#x000A;    param :path =&gt; random(4)   # =&gt; http://host/a/dynamic/jrr1&#x000A;  end&#x000A;end</pre>
-            <p>
-            See the [examples/](<a
-            href="http://github.com/solutious/stella/tree/0.8/examples/">github.com/solutious/stella/tree/0.8/examples/</a>)
-            directory and [Getting Started](<a
-            href="http://solutious.com/projects/stella/getting-started">solutious.com/projects/stella/getting-started</a>/)
-            for more information.
-            </p>
-            <p>
             ### Running Tests
             </p>
-            <p>
-            <a href="../classes/Stella.html">Stella</a> is a command-line tool with two
-            main commands: &#8220;verify&#8221; for integration tests and
-            &#8220;generate&#8221; for load tests.
-            </p>
-            <pre># Verify a test plan is defined correctly&#x000A;# by running a single user functional test.&#x000A;$ stella verify -p examples/essentials/plan.rb http://stellaaahhhh.com/&#x000A;&#x000A;# Generate load using the same test plan.&#x000A;$ stella generate -p examples/essentials/plan.rb -c 50 -d 10m http://stellaaahhhh.com/</pre>
-            <p>
-            See <tt>$ stella -h</tt> and <tt>$ stella example</tt> for more info.
-            </p>
-            <p>
-            ## News
-            </p>
-            <p>
-            ### 2010-01-16: sequential, random, rsequential etc... methods now return
-            ERB-style templates instead of Procs
-            </p>
-            <p>
-            Pre-0.8 would return a Proc that would be evaluated at request time:
-            </p>
-            <pre>get &quot;/&quot; do&#x000A;  param :salt =&gt; random(8)    # =&gt; &quot;#&lt;Proc0x13423c0 ...&gt;&quot;&#x000A;end</pre>
-            <p>
-            In 0.8 and beyond, the same configuration will return a String:
-            </p>
-            <pre>get &quot;/&quot; do&#x000A;  param :salt =&gt; random(8)    # =&gt; &quot;&lt;%= random(8) %&gt;&quot;&#x000A;end</pre>
             <p>
             ## Installation
             </p>
             <p>
             Get it in one of the following ways:
             </p>
-            <pre>$ gem install stella --source=http://gemcutter.org/&#x000A;$ sudo gem install stella --source=http://gemcutter.org/&#x000A;$ git clone git://github.com/solutious/stella.git</pre>
+            <pre>$ gem install stella&#x000A;$ sudo gem install stella&#x000A;$ git clone git://github.com/solutious/stella.git</pre>
             <p>
             You can also download via [tarball](<a
             href="http://github.com/solutious/stella/tarball/latest">github.com/solutious/stella/tarball/latest</a>)
@@ -210,6 +102,10 @@
             </p>
             <ul>
             <li>[Delano Mandelbaum](<a href="http://solutious.com">solutious.com</a>)
+            
+            </li>
+            <li>[Daniel J. Berger] for file logic borrowed from <a
+            href="http://raa.ruby-lang.org/project/ptools/">ptools</a>
             
             </li>
             </ul>

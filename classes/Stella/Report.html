@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Stella::Report [stella 2.0.1.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Stella::Report
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/stella/report_rb.html">lib/stella/report.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong>Storable</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000103">load</a></li>
+              <li><a href="#M000104">new</a></li>
+              <li><a href="#M000102">plugin?</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000105">postprocess</a></li>
+              <li><a href="#M000106">process</a></li>
+              <li><a href="#M000107">processed?</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li>Gibbler::Complex</li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="Report/Plugin.html" class="link">Stella::Report::Plugin</a><br />
+              Class <a href="Report/Content.html" class="link">Stella::Report::Content</a><br />
+              Class <a href="Report/Errors.html" class="link">Stella::Report::Errors</a><br />
+              Class <a href="Report/Headers.html" class="link">Stella::Report::Headers</a><br />
+              Class <a href="Report/Metrics.html" class="link">Stella::Report::Metrics</a><br />
+              Class <a href="Report/Statuses.html" class="link">Stella::Report::Statuses</a><br />
+            </div>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>CRLF</td>
+                    <td>=</td>
+                    <td class='context-item-value'>&quot;\r\n&quot; unless defined?(Report::CRLF)</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>filter</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>plugin_order</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>plugins</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>runid</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>timeline</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='method public-class' id='method-M000103'>
+                <a name='M000103'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>load</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000103-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000103-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000104'>
+                <a name='M000104'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(timeline=nil, runid=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000104-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000104-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 367</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">timeline</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">runid</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@timeline</span>, <span class="ruby-ivar">@runid</span> = <span class="ruby-identifier">timeline</span>, <span class="ruby-identifier">runid</span>&#x000A;      <span class="ruby-ivar">@processed</span> = <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000102'>
+                <a name='M000102'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plugin?</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000102-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plugin?</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-ivar">@plugins</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000105'>
+                <a name='M000105'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>postprocess</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000105-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000105-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 371</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">plugins</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>,<span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">val</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>))&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{name}=&quot;</span>, <span class="ruby-identifier">val</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000106'>
+                <a name='M000106'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>process</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000106-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000106-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 377</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">plugin_order</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">klass</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">plugins</span>[<span class="ruby-identifier">name</span>]&#x000A;        <span class="ruby-constant">Stella</span>.<span class="ruby-identifier">ld</span> <span class="ruby-node">&quot;processing #{name}&quot;</span>&#x000A;        <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">self</span>&#x000A;        <span class="ruby-identifier">plugin</span>.<span class="ruby-identifier">process</span>(<span class="ruby-identifier">filter</span>)&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{name}=&quot;</span>, <span class="ruby-identifier">plugin</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@processed</span> = <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000107'>
+                <a name='M000107'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>processed?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000107-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000107-source'><span class="ruby-comment cmt"># File lib/stella/report.rb, line 387</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">processed?</span>&#x000A;      <span class="ruby-ivar">@processed</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

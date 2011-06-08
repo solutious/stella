@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Stella::RequestTemplate [stella 2.0.1.001]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Stella::RequestTemplate
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/stella/testplan_rb.html">lib/stella/testplan.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="EventTemplate.html">Stella::EventTemplate</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000188">new</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000190">freeze</a></li>
+              <li><a href="#M000189">postprocess</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='aliases-list'>
+              <h2>External Aliases</h2>
+              <div class='name-list'>
+                <table summary='External aliases'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>params</td>
+                    <td>-&gt;</td>
+                    <td class='context-item-value'>param</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>headers</td>
+                    <td>-&gt;</td>
+                    <td class='context-item-value'>header</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>callback</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='method public-class' id='method-M000188'>
+                <a name='M000188'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(meth=nil, uri=nil, opts={}, &amp;definition)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000188-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000188-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 309</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">meth</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">uri</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>)&#x000A;      <span class="ruby-ivar">@protocol</span> = <span class="ruby-identifier">:http</span>&#x000A;      <span class="ruby-ivar">@http_method</span>, <span class="ruby-ivar">@uri</span> = <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>&#x000A;      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{n}=&quot;</span>, <span class="ruby-identifier">v</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">has_field?</span>(<span class="ruby-identifier">n</span>) }&#x000A;      <span class="ruby-ivar">@params</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@headers</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@follow</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-ivar">@callback</span> = <span class="ruby-identifier">definition</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000190'>
+                <a name='M000190'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>freeze</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000190-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000190-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 327</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">digest</span>)&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000189'>
+                <a name='M000189'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>postprocess</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000189-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000189-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 318</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span>)&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">range</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">proc</span> = <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>]&#x000A;          <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>] = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">from_string</span>(<span class="ruby-identifier">proc</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">ProcString</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
