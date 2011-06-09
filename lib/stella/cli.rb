@@ -16,7 +16,8 @@ class Stella::CLI < Drydock::Command
     base_uri = Stella.canonical_uri(@argv.first)
     run_opts = { 
       :repetitions => @option.repetitions || 1,
-      :concurrency => @option.concurrency || 1
+      :concurrency => @option.concurrency || 1,
+      :wait => @option.wait || 1
     }
     if @global.testplan
       unless File.owned?(@global.testplan)

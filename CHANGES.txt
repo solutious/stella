@@ -1,5 +1,10 @@
 STELLA, CHANGES
 
+#### 2.0.2 (2011-06-??) ###############################
+
+* ADDED: --wait option for checkup command
+
+
 #### 2.0.1 (2011-06-08) ###############################
 
 NOTE: First release of 2.x.

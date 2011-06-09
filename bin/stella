@@ -60,7 +60,7 @@ class Stella::CLI::Definition
     puts "Stella version: #{Stella::VERSION.inspect}"
     exit 0
   end
-
+  
   
   # ------------------------------------------------  STELLA  --------
   # ------------------------------------------------------------------
@@ -76,10 +76,8 @@ class Stella::CLI::Definition
   #option :a, :arrival, Float, "Arrival rate (new clients per second)"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :W, :nowait, "Ignore wait times"
-  #option :w, :wait, Float, "Wait time (in seconds) between client requests (ignored if testplan supplied)
+  option :w, :wait, Float, "Wait time (in seconds) between requests"
   command :checkup => Stella::CLI
-  
-  
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
   # ------------------------------------------------------------------
