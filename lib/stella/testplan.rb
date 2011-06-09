@@ -23,7 +23,7 @@ class Stella
     include Common::PrivacyMethods
     prefix :testplan
     index :id
-    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler
     field :custid             => String
     field :usecases           => Array
     field :desc               => String
@@ -43,6 +43,10 @@ class Stella
         req = Stella::RequestTemplate.new :get, Stella.canonical_uri(uri)
         @usecases << Stella::Usecase.new(req) 
       end
+    end
+    def id 
+      @id ||= gibbler
+      @id
     end
     alias_method :planid, :id
     def favicon?() !@favicon.nil? && !@favicon.empty? end
@@ -167,7 +171,7 @@ class Stella
   end
   class Usecase < Storable
     include Gibbler::Complex
-    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler
     field :desc             => String
     field :ratio            => Float
     field :requests         => Array
@@ -177,6 +181,10 @@ class Stella
     def initialize(req=nil)
       preprocess
       @requests << req if req
+    end
+    def id 
+      @id ||= gibbler
+      @id
     end
     alias_method :ucid, :id
     def preprocess
@@ -274,6 +282,10 @@ class Stella
     
   class EventTemplate < Storable
     include Gibbler::Complex
+    def id 
+      @id ||= gibbler
+      @id
+    end
   end
   
   class StringTemplate
@@ -290,7 +302,7 @@ class Stella
   end
   
   class RequestTemplate < EventTemplate
-    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler
     field :protocol         => Symbol
     field :http_method
     field :http_version
@@ -351,7 +363,7 @@ class Stella
     index :id
     include Familia::Stamps
     include Common::PrivacyMethods
-    field :id, :class => Gibbler::Digest, :meth => :gibbler, &gibbler_id_processor
+    field :id, :class => Gibbler::Digest, :meth => :gibbler
     field :custid             => String
     field :status             => Symbol
     field :options            => Hash
@@ -377,6 +389,10 @@ class Stella
       @options = {
       }.merge options
       preprocess
+    end
+    def id 
+      @id ||= gibbler
+      @id
     end
     alias_method :runid, :id
     def duration
@@ -432,7 +448,7 @@ class Stella
     def plan
       if @plan.nil? 
         @plan = Stella::Testplan.from_redis @planid
-        @plan.freeze
+        #@plan.freeze
       end
       @plan
     end

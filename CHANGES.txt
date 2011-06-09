@@ -2,7 +2,9 @@ STELLA, CHANGES
 
 #### 2.0.2 (2011-06-??) ###############################
 
+* FIXED: Gibbler ID fixes
 * ADDED: --wait option for checkup command
+* CHANGE: Don't freeze testplan
 
 
 #### 2.0.1 (2011-06-08) ###############################
