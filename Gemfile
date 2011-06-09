@@ -17,3 +17,4 @@ gem 'ipaddress', '0.7.0'
 gem 'addressable', '2.2.2'
 gem 'redis', '2.2.0'
 
+gem 'rudy', '0.9.8.020'
