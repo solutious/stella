@@ -27,10 +27,12 @@ class Stella::CLI < Drydock::Command
     if @global.format || !@global.testplan
       Stella.noise = 0 
     end
+    @global.remote ||= @global.account || @global.key
     if @global.remote
       raise "Running a testplan remotely isn't supported yet (soon!)" if @global.testplan
-      @api = Stella::API.new
+      @api = Stella::API.new @global.account, @global.key
       ret = @api.post :checkup, :uri => base_uri
+      pp @api.response if Stella.debug
       if @api.response.code >= 400
         raise Stella::API::Unauthorized if @api.response.code == 401
         STDERR.puts ret[:msg]
@@ -40,7 +42,7 @@ class Stella::CLI < Drydock::Command
         run_hash = @api.get "/checkup/#{ret[:runid]}"
         @run = Stella::Testrun.from_hash run_hash if run_hash
         STDERR.print '.' unless Stella.quiet?
-        sleep 1
+        sleep 1 if @run && !@run.done?
       end while @run && !@run.done?
       STDERR.puts unless Stella.quiet?
     else
@@ -100,8 +102,10 @@ class Stella::CLI < Drydock::Command
   rescue Stella::API::Unauthorized => ex
     STDERR.puts "Please check your credentials!"
     STDERR.puts " e.g."
-    STDERR.puts "  export STELLA_USER=youraccount"
+    STDERR.puts "  export STELLA_ACCOUNT=youraccount"
     STDERR.puts "  export STELLA_KEY=yourapikey"
+    STDERR.puts " OR "
+    STDERR.puts "  stella -A youraccount -K yourapikey checkup #{@argv.first}"
   end
 
   def example

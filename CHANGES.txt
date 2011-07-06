@@ -4,9 +4,11 @@ STELLA, CHANGES
 
 * FIXED: Different CLI output when a testplan is specified
 * ADDED: Handle bad or missing api credentials
+* ADDED: Globals -A and -K for supplying API credentials
 * CHANGE: Default output is now CLI (use -F json)
 * CHANGE: Global -f is now -u (for usecase)
 * CHANGE: Global -F is now -f (output format)
+* CHANGE: STELLA_USER env var is now STELLA_ACCOUNT
 
 
 #### 2.0.3 (2011-07-06) ###############################
