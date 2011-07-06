@@ -44,10 +44,13 @@ class Stella::CLI::Definition
   #global :H, :withheader, "Include X-Stella-ID request header" 
   #global :P, :withparam, "Include __stella query parameter header"
   global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
-  global :F, :format, String, "Output format (partial support)"
   global :R, :remote, "Run command remotely (via blamestella.com)"
-  global :u, :usecase, String, "Only run usecases that match the given filter"
   global :p, :testplan, String, "Path to testplan"
+  global :u, :usecase, String, "Only run usecases that match the given filter"
+  global :f, :format, String, "Output format (partial support)" do |v|
+    raise "Unsupported format: #{v}" unless ['csv', 'json', 'yaml'].member?(v)
+    v
+  end
   global :n, :nocolor, "Disable output colors" do
     String.disable_color
   end
