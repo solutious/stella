@@ -49,28 +49,31 @@ class Stella
             Benelux.current_track "client_#{client.clientid.shorten}"
             begin
               opts[:repetitions].times do |idx|
-                #Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.planid.shorten(12)] if Stella.noise >= 3 && !Stella.quiet?
+                Stella.li '%-61s %s' % [testrun.plan.desc, testrun.plan.planid.shorten(12)] if Stella.noise >= 2 && !Stella.quiet?
                 testrun.plan.usecases.each_with_index do |uc,i|
                   if opts[:usecases].nil? || opts[:usecases].member?(uc.class)
                     Benelux.current_track.add_tags :usecase => uc.id
                     Stella.rescue { 
-                      #Stella.li ' %-60s %s' % [uc.desc, uc.ucid.shorten(12)] if Stella.noise >= 3 && !Stella.quiet?
+                      Stella.li ' %-60s %s' % [uc.desc, uc.ucid.shorten(12)] if Stella.noise >= 1 && !Stella.quiet?
                       client.execute uc do |session|
-                        #Stella.li '  %3d %4s %-76s' % [session.status, session.http_method.upcase, session.uri] if Stella.noise == 2 && !Stella.quiet?
+                        Stella.li '  %3d %-4s %-76s' % [session.status, session.http_method.upcase, session.uri] if Stella.noise >= 1 && !Stella.quiet?
                         if Stella.noise >= 2 && !Stella.quiet?
                           Stella.li '   %s' % [session.req.header.dump.split(/\n/).join("\n   ")]
                           Stella.li
                           Stella.li '   %s' % [session.res.header.dump.split(/\n/).join("\n   ")]
+                          Stella.li ''
                         end
                       end
                     }
                     if client.exception
-                      #Stella.li '  %4s %s (%s)' % ['', client.exception.message, client.exception.class]
+                      if Stella.noise >= 1
+                        Stella.li '  %4s %s (%s)' % ['', client.exception.message, client.exception.class]
+                      end
                       # TODO: use a throw. This won't stop the next repetition.
                       break if Stella::TestplanQuit === client.exception
                     end
                   else
-                    Stella.li ' %-60s %s' % ["#{uc.desc} (skipped)", uc.ucid.shorten(12)] if Stella.noise >= 2
+                    #Stella.li ' %-60s %s' % ["#{uc.desc} (skipped)", uc.ucid.shorten(12)] if Stella.noise >= 2
                   end
                   Benelux.current_track.remove_tags :usecase
                 end

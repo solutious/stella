@@ -20,8 +20,15 @@ class Stella::CLI < Drydock::Command
       :concurrency => @option.concurrency || 1,
       :wait => @option.wait || 1
     }
-    Stella.noise = 0 if @global.format
+    # NOTE ABOUT CLI OUTPUT:
+    # Output when a testplan is supplied comes from Engine.run
+    # while it's being executed. Otherwise it's generated from
+    # testrun.report after the generic testplan has run.
+    if @global.format || !@global.testplan
+      Stella.noise = 0 
+    end
     if @global.remote
+      raise "Running a testplan remotely isn't supported yet (soon!)" if @global.testplan
       @api = Stella::API.new
       ret = @api.post :checkup, :uri => base_uri
       if @api.response.code >= 400
@@ -62,9 +69,9 @@ class Stella::CLI < Drydock::Command
     
     @report = @run.report
     
-    if Stella.quiet?
-      @exit_code = @report.error_count
-    else
+    @exit_code = @report.error_count if Stella.quiet?
+    
+    unless @global.testplan
       case @global.format
       when 'csv'
         metrics = @report.metrics_pack
@@ -73,16 +80,20 @@ class Stella::CLI < Drydock::Command
         puts @run.dump(@global.format)
       else
         metrics = @report.metrics
-        if @global.verbose > 0
-          puts
-        end
         # @run.planid.shorten(12), @run.runid.shorten(12),
-        args = ['[rt]',
+        args = [@report.statuses.values.first,
           metrics.response_time.mean*1000,
           metrics.socket_connect.mean*1000,
           metrics.first_byte.mean*1000,
           metrics.last_byte.mean*1000]
-        puts "%-8s %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
+        Stella.li "[%3s] %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
+        if @global.verbose > 0 || @report.errors?
+          Stella.li ''
+          Stella.li ' Headers:'
+          Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
+          Stella.li
+          Stella.li '  %s' % [@report.headers.response_headers.split(/\n/).join("\n  ")]
+        end
         #puts @report.metrics_pack.dump(:json)
       end
     end
