@@ -19,30 +19,42 @@ class Stella::CLI < Drydock::Command
       :concurrency => @option.concurrency || 1,
       :wait => @option.wait || 1
     }
-    if @global.testplan
-      unless File.owned?(@global.testplan)
-        raise ArgumentError, "File not found #{@global.testplan}"
-      end
-      Stella.ld "Load #{@global.testplan}"
-      load @global.testplan
-      filter = @global.filter
-      planname = Stella::Testplan.plans.keys.first
-      @plan = Stella::Testplan.plan(planname)
-      if filter
-        @plan.usecases.reject! { |uc| 
-          ret = !uc.desc.to_s.downcase.match(filter.downcase)
-          Stella.ld " rejecting #{uc.desc}" if ret
-          ret
-        }
-      end
-      Stella.ld "Running #{@plan.usecases.size} usecases"
+    if @global.remote
+      require 'stella/api'
+      @api = Stella::API.new
+      ret = @api.post :checkup, :uri => base_uri
+      begin
+        run_hash = @api.get "/checkup/#{ret[:runid]}"
+        @run = Stella::Testrun.from_hash run_hash if run_hash
+      end while @run && !@run.done?
     else
-      @plan = Stella::Testplan.new base_uri
+      if @global.testplan
+        unless File.owned?(@global.testplan)
+          raise ArgumentError, "File not found #{@global.testplan}"
+        end
+        Stella.ld "Load #{@global.testplan}"
+        load @global.testplan
+        filter = @global.filter
+        planname = Stella::Testplan.plans.keys.first
+        @plan = Stella::Testplan.plan(planname)
+        if filter
+          @plan.usecases.reject! { |uc| 
+            ret = !uc.desc.to_s.downcase.match(filter.downcase)
+            Stella.ld " rejecting #{uc.desc}" if ret
+            ret
+          }
+        end
+        Stella.ld "Running #{@plan.usecases.size} usecases"
+      else
+        @plan = Stella::Testplan.new base_uri
+      end
+      @run = @plan.checkup base_uri, run_opts
     end
-    @run = @plan.checkup base_uri, run_opts
+    
     @report = @run.report
+    
     if Stella.quiet?
-      @exit_code = report.error_count
+      @exit_code = @report.error_count
     else
       @global.format ||= 'json'
       if @global.verbose == 2
@@ -55,7 +67,17 @@ class Stella::CLI < Drydock::Command
       elsif @global.verbose >= 3
         puts @run.dump(@global.format)
       end
+      #if @global.verbose == 0
+      #  metrics = @report.metrics_pack
+      #  puts metrics.dump(@global.format)
+      #elsif @global.verbose >= 1
+      #  puts @run.dump(@global.format)
+      #end
     end
+    
+    
+    
+    
   end
 
   def example

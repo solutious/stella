@@ -4,11 +4,12 @@ require 'stella'
 class Stella
   class API
     include HTTParty
-    base_uri 'https://www.blamestella.com/api/v2'
+    
     ssl_ca_file Stella::Client::SSL_CERT_PATH
     format :json
     attr_reader :httparty_opts, :response
     def initialize user=nil, key=nil, httparty_opts={}
+      self.class.base_uri ENV['STELLA_HOST'] || 'https://www.blamestella.com/api/v2'
       @httparty_opts = httparty_opts.merge({
         :basic_auth => { :username => user || ENV['STELLA_USER'], :password => key || ENV['STELLA_KEY'] }
       })
