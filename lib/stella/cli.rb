@@ -19,14 +19,22 @@ class Stella::CLI < Drydock::Command
       :concurrency => @option.concurrency || 1,
       :wait => @option.wait || 1
     }
-    if @global.remote
+    if @option.remote
       require 'stella/api'
       @api = Stella::API.new
       ret = @api.post :checkup, :uri => base_uri
+      if @api.response.code >= 400
+        raise Stella::API::Unauthorized if @api.response.code == 401
+        STDERR.puts ret[:msg]
+        @exit_code = 1 and return
+      end
       begin
         run_hash = @api.get "/checkup/#{ret[:runid]}"
         @run = Stella::Testrun.from_hash run_hash if run_hash
+        STDERR.print '.' unless Stella.quiet?
+        sleep 1
       end while @run && !@run.done?
+      STDERR.puts unless Stella.quiet?
     else
       if @global.testplan
         unless File.owned?(@global.testplan)
@@ -64,7 +72,11 @@ class Stella::CLI < Drydock::Command
         puts @run.dump(@global.format)
       end
     end
-    
+  rescue Stella::API::Unauthorized => ex
+    STDERR.puts "Please check your credentials!"
+    STDERR.puts " e.g."
+    STDERR.puts "  export STELLA_USER=youraccount"
+    STDERR.puts "  export STELLA_KEY=yourapikey"
   end
 
   def example

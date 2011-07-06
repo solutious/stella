@@ -1,7 +1,7 @@
 require 'httparty'
 require 'stella'
 
-class Stella
+class Stella  
   class API
     include HTTParty
     
@@ -10,9 +10,12 @@ class Stella
     attr_reader :httparty_opts, :response
     def initialize user=nil, key=nil, httparty_opts={}
       self.class.base_uri ENV['STELLA_HOST'] || 'https://www.blamestella.com/api/v2'
-      @httparty_opts = httparty_opts.merge({
-        :basic_auth => { :username => user || ENV['STELLA_USER'], :password => key || ENV['STELLA_KEY'] }
-      })
+      @httparty_opts = httparty_opts
+      user ||= ENV['STELLA_USER']
+      key ||= ENV['STELLA_KEY']
+      unless user.to_s.empty? || key.to_s.empty?
+        @httparty_opts[:basic_auth] ||= { :username => user, :password => key }
+      end
     end
     def get path, params=nil
       opts = httparty_opts
@@ -56,6 +59,9 @@ class Stella
     # Creates a Hash with indifferent access.
     def indifferent_hash
       Hash.new {|hash,key| hash[key.to_s] if Symbol === key }
+    end
+    
+    class Unauthorized < RuntimeError
     end
   end
 end
