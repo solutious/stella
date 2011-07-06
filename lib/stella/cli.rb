@@ -13,6 +13,7 @@ class Stella::CLI < Drydock::Command
   
   
   def checkup
+    require 'stella/api'
     base_uri = Stella.canonical_uri(@argv.first)
     run_opts = { 
       :repetitions => @option.repetitions || 1,
@@ -20,7 +21,6 @@ class Stella::CLI < Drydock::Command
       :wait => @option.wait || 1
     }
     if @option.remote
-      require 'stella/api'
       @api = Stella::API.new
       ret = @api.post :checkup, :uri => base_uri
       if @api.response.code >= 400
@@ -64,12 +64,25 @@ class Stella::CLI < Drydock::Command
     if Stella.quiet?
       @exit_code = @report.error_count
     else
-      @global.format ||= 'json'
-      if @global.verbose == 0
+      case @global.format
+      when 'csv'
         metrics = @report.metrics_pack
         puts metrics.dump(@global.format)
-      elsif @global.verbose >= 1
+      when 'json', 'yaml'
         puts @run.dump(@global.format)
+      else
+        metrics = @report.metrics
+        if @global.verbose > 0
+          args = ['', '[rt]', '[net]', '[app]', '[d/l]']
+          puts "%25s      %6s      %5s     %5s     %5s" % args
+        end
+        args = [@run.planid.shorten(12), @run.runid.shorten(12),
+          metrics.response_time.mean*1000,
+          metrics.socket_connect.mean*1000,
+          metrics.first_byte.mean*1000,
+          metrics.last_byte.mean*1000]
+        puts "%s/%s      %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
+        #puts @report.metrics_pack.dump(:json)
       end
     end
   rescue Stella::API::Unauthorized => ex

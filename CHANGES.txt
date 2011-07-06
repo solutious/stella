@@ -4,6 +4,7 @@ STELLA, CHANGES
 
 * ADDED: Handle bad or missing api credentials
 * CHANGE: -R global is now a command option
+* CHANGE: Default output is now CLI (use -F json)
 
 
 #### 2.0.3 (2011-07-06) ###############################
