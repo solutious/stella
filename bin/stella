@@ -46,7 +46,7 @@ class Stella::CLI::Definition
   global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
   global :F, :format, String, "Output format (partial support)"
   global :R, :remote, "Run command remotely (via blamestella.com)"
-  global :f, :filter, String, "Only run usecases that match this filter"
+  global :u, :usecase, String, "Only run usecases that match the given filter"
   global :p, :testplan, String, "Path to testplan"
   global :n, :nocolor, "Disable output colors" do
     String.disable_color

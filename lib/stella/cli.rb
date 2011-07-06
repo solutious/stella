@@ -50,7 +50,7 @@ class Stella::CLI < Drydock::Command
         end
         Stella.ld "Load #{@global.testplan}"
         load @global.testplan
-        filter = @global.filter
+        filter = @global.usecase
         planname = Stella::Testplan.plans.keys.first
         @plan = Stella::Testplan.plan(planname)
         if filter
