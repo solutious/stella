@@ -57,26 +57,13 @@ class Stella::CLI < Drydock::Command
       @exit_code = @report.error_count
     else
       @global.format ||= 'json'
-      if @global.verbose == 2
-        if (@global.format == 'string' || @global.format == 'csv')
-          metrics = @report.metrics_pack
-          puts metrics.dump(@global.format)
-        else 
-          puts @report.dump(@global.format)
-        end
-      elsif @global.verbose >= 3
+      if @global.verbose == 0
+        metrics = @report.metrics_pack
+        puts metrics.dump(@global.format)
+      elsif @global.verbose >= 1
         puts @run.dump(@global.format)
       end
-      #if @global.verbose == 0
-      #  metrics = @report.metrics_pack
-      #  puts metrics.dump(@global.format)
-      #elsif @global.verbose >= 1
-      #  puts @run.dump(@global.format)
-      #end
     end
-    
-    
-    
     
   end
 
