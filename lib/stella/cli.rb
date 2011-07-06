@@ -91,7 +91,7 @@ class Stella::CLI < Drydock::Command
           metrics.first_byte.mean*1000,
           metrics.last_byte.mean*1000,
           @more_info]
-        Stella.li "[%3s] %6.2fms  (%5.2fms + %5.2fms + %5.2fms) %s" % args
+        Stella.li "[%3s] %7.2fms (%5.2fms + %6.2fms + %6.2fms)  %s" % args
         if @global.verbose > 0 || @report.errors?
           Stella.li ''
           Stella.li ' Headers:'
