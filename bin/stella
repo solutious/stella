@@ -45,7 +45,6 @@ class Stella::CLI::Definition
   #global :P, :withparam, "Include __stella query parameter header"
   global :T, :timeout, Float, "HTTP request timeout (default: unlimited)"
   global :F, :format, String, "Output format (partial support)"
-  global :R, :remote, "Run command remotely (via blamestella.com)"
   global :f, :filter, String, "Only run usecases that match this filter"
   global :p, :testplan, String, "Path to testplan"
   global :n, :nocolor, "Disable output colors" do
@@ -78,6 +77,7 @@ class Stella::CLI::Definition
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between requests"
+  option :R, :remote, "Run command remotely (via blamestella.com)"
   command :checkup => Stella::CLI
   
   # ----------------------------------  STELLA MISCELLANEOUS  --------
