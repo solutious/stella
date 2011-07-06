@@ -1,0 +1,27 @@
+URI-Redis, CHANGES
+
+#### 0.4.2 (2010-12-23) ###############################
+
+# CHANGE: URI#conf enforces symbols as keys
+* ADDED: URI#conf parses query string
+
+
+#### 0.4.1 (2010-11-16) ###############################
+
+* FIXED: Nil error in URI::Redis#key
+
+#### 0.4.0 (2010-11-15) ###############################
+
+* ADDED: Support for keys in the path
+* CHANGE: Updated tryouts to 2.0
+
+
+#### 0.3.0 (2010-06-03) ###############################
+
+* CHANGE: Redis::Client.uri is now Redis.uri
+* ADDED: Support for redis-2.0.0
+
+
+#### 0.2.0 (2010-05-30) ###############################
+
+* Initial public release

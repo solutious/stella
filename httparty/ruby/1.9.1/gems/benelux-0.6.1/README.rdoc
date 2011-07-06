@@ -1,0 +1,62 @@
+= Benelux v0.5
+
+<b>A mad way to time Ruby codes</b>
+
+
+== Features
+
+* A replacement for Benchmark.measure
+* Create timers for any Ruby method
+* Store arbitrary messages
+* Granular statistics
+* Thread-safe
+
+== Example
+
+    require 'benelux'
+
+    # Similar to Benchmark.measure but you specify the
+    # number of times to run the block and the number
+    # repetitions. 
+    tms = Benelux.bm(1000000, 5) do
+      rand
+    end
+
+    # Similar to Benchmark::Tms with the addition of
+    # standard deviation, mean value, and total, for 
+    # each of the times.    
+    tms.samples              # => 5
+    tms.real                 # => 0.45
+    tms.real.sd              # => 0.04
+    tms.utime                # => 0.44
+    tms.utime.sd             # => 0.02
+    
+
+== Installation
+
+Get it in one of the following ways:
+
+     $ gem install benelux --source http://gemcutter.org
+     $ sudo gem install benelux --source http://gemcutter.org
+     $ git clone git://github.com/delano/benelux.git
+
+
+== More Information
+
+* Codes[http://github.com/delano/benelux]
+* RDocs[http://delano.github.com/benelux]
+
+== Credits
+
+* Delano Mandelbaum (http://solutious.com)
+
+
+== Thanks 
+
+* Alexis Sellier for fielding my Ruby questions
+* Tara Dougans for the motivational speeches
+
+
+== License
+
+See LICENSE.txt

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Float [stella 2.0.1.002]</title>
+    <title>: Float [stella 2.0.3.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,15 +45,15 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000283">fractional_part</a></li>
-              <li><a href="#M000282">fractional_part?</a></li>
+              <li><a href="#M000297">fractional_part</a></li>
+              <li><a href="#M000296">fractional_part?</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000283'>
-                <a name='M000283'>      </a>
+              <div class='method public-instance' id='method-M000297'>
+                <a name='M000297'>      </a>
                 <div class='synopsis'>
                   <span class='name'>fractional_part</span>
                   <span class='arguments'>()</span>
@@ -61,18 +61,18 @@
                 <div class='description'>
                   <p>
                   Returns the fractional part of a float. For example, <tt>(6.67).<a
-                  href="Float.html#M000283">fractional_part</a> == 0.67</tt>
+                  href="Float.html#M000297">fractional_part</a> == 0.67</tt>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000283-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000297-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000283-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 442</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fractional_part</span>&#x000A;    (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">truncate</span>).<span class="ruby-identifier">abs</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000297-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 442</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fractional_part</span>&#x000A;    (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">truncate</span>).<span class="ruby-identifier">abs</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000282'>
-                <a name='M000282'>      </a>
+              <div class='method public-instance' id='method-M000296'>
+                <a name='M000296'>      </a>
                 <div class='synopsis'>
                   <span class='name'>fractional_part?</span>
                   <span class='arguments'>()</span>
@@ -83,10 +83,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000282-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000296-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000282-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 437</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fractional_part?</span>&#x000A;    <span class="ruby-identifier">fractional_part</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000296-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 437</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fractional_part?</span>&#x000A;    <span class="ruby-identifier">fractional_part</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

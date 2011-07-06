@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Methods [stella 2.0.1.002]</title>
+    <title>Methods [stella 2.0.3.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <base target='docwin'>
@@ -4331,8 +4331,8 @@
         
         Element.addMethods();
         var search_index = [
-          { method: ''μs'', module: 'time::units', html: '<a href="classes/Time/Units.html#M000241"><span class="method_name">'μs'</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'all', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000118"><span class="method_name">all</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
+          { method: ''μs'', module: 'time::units', html: '<a href="classes/Time/Units.html#M000255"><span class="method_name">'μs'</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'all', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000125"><span class="method_name">all</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
           { method: 'assert_doc', module: 'stella::asserts', html: '<a href="classes/Stella/Asserts.html#M000013"><span class="method_name">assert_doc</span> <span class="module_name">(Stella::Asserts)</span></a>' },
           { method: 'assert_equals', module: 'stella::asserts', html: '<a href="classes/Stella/Asserts.html#M000020"><span class="method_name">assert_equals</span> <span class="module_name">(Stella::Asserts)</span></a>' },
           { method: 'assert_exists', module: 'stella::asserts', html: '<a href="classes/Stella/Asserts.html#M000019"><span class="method_name">assert_exists</span> <span class="module_name">(Stella::Asserts)</span></a>' },
@@ -4345,286 +4345,296 @@
           { method: 'assert_object_values', module: 'stella::asserts', html: '<a href="classes/Stella/Asserts.html#M000017"><span class="method_name">assert_object_values</span> <span class="module_name">(Stella::Asserts)</span></a>' },
           { method: 'assert_status', module: 'stella::asserts', html: '<a href="classes/Stella/Asserts.html#M000023"><span class="method_name">assert_status</span> <span class="module_name">(Stella::Asserts)</span></a>' },
           { method: 'autoload_vendor', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000060"><span class="method_name">autoload_vendor</span> <span class="module_name">(Stella::Utils)</span></a>' },
+          { method: 'binary?', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000131"><span class="method_name">binary?</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
           { method: 'binary?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000036"><span class="method_name">binary?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'binary?', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000124"><span class="method_name">binary?</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
           { method: 'bmp?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000037"><span class="method_name">bmp?</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'canonical_host', module: 'stella', html: '<a href="classes/Stella.html#M000010"><span class="method_name">canonical_host</span> <span class="module_name">(Stella)</span></a>' },
           { method: 'canonical_uri', module: 'stella', html: '<a href="classes/Stella.html#M000011"><span class="method_name">canonical_uri</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'checkup', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000293"><span class="method_name">checkup</span> <span class="module_name">(Stella::CLI)</span></a>' },
-          { method: 'checkup', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000179"><span class="method_name">checkup</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'checkup', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000159"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'checkup', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000169"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'checkup', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000168"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan)</span></a>' },
           { method: 'checkup', module: 'stella', html: '<a href="classes/Stella.html#M000008"><span class="method_name">checkup</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'checkup?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000198"><span class="method_name">checkup?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'checkup_valid?', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000292"><span class="method_name">checkup_valid?</span> <span class="module_name">(Stella::CLI)</span></a>' },
-          { method: 'clear_previous_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000094"><span class="method_name">clear_previous_request</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'checkup', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000073"><span class="method_name">checkup</span> <span class="module_name">(Stella::CLI)</span></a>' },
+          { method: 'checkup', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000190"><span class="method_name">checkup</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'checkup', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000178"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'checkup?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000212"><span class="method_name">checkup?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'checkup_valid?', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000072"><span class="method_name">checkup_valid?</span> <span class="module_name">(Stella::CLI)</span></a>' },
+          { method: 'clear_previous_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000101"><span class="method_name">clear_previous_request</span> <span class="module_name">(Stella::Session)</span></a>' },
           { method: 'cname', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000045"><span class="method_name">cname</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'content_type?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000087"><span class="method_name">content_type?</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'cookie', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000085"><span class="method_name">cookie</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'cookies', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000086"><span class="method_name">cookies</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'create_http_client', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000073"><span class="method_name">create_http_client</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'current_event', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000077"><span class="method_name">current_event</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'cust', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000203"><span class="method_name">cust</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'cust', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000152"><span class="method_name">cust</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'day', module: 'time::units', html: '<a href="classes/Time/Units.html#M000245"><span class="method_name">day</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'days', module: 'time::units', html: '<a href="classes/Time/Units.html#M000228"><span class="method_name">days</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'debug', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000072"><span class="method_name">debug</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'content_type?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000094"><span class="method_name">content_type?</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'cookie', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000092"><span class="method_name">cookie</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'cookies', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000093"><span class="method_name">cookies</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'create_http_client', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000080"><span class="method_name">create_http_client</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'current_event', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000084"><span class="method_name">current_event</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'cust', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000217"><span class="method_name">cust</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'cust', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000161"><span class="method_name">cust</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'day', module: 'time::units', html: '<a href="classes/Time/Units.html#M000259"><span class="method_name">day</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'days', module: 'time::units', html: '<a href="classes/Time/Units.html#M000242"><span class="method_name">days</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'debug', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000079"><span class="method_name">debug</span> <span class="module_name">(Stella::Client)</span></a>' },
           { method: 'debug?', module: 'stella', html: '<a href="classes/Stella.html#M000002"><span class="method_name">debug?</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'destroy!', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000157"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'destroy!', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000200"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'deviation', module: 'array', html: '<a href="classes/Array.html#M000271"><span class="method_name">deviation</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'doc', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000082"><span class="method_name">doc</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'destroy!', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000214"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'destroy!', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000166"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'deviation', module: 'array', html: '<a href="classes/Array.html#M000285"><span class="method_name">deviation</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'doc', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000089"><span class="method_name">doc</span> <span class="module_name">(Stella::Session)</span></a>' },
           { method: 'domain', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000042"><span class="method_name">domain</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'done!', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000074"><span class="method_name">done!</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'done?', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000075"><span class="method_name">done?</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'downcase', module: 'symbol', html: '<a href="classes/Symbol.html#M000212"><span class="method_name">downcase</span> <span class="module_name">(Symbol)</span></a>' },
-          { method: 'dump', module: 'hash', html: '<a href="classes/Hash.html#M000286"><span class="method_name">dump</span> <span class="module_name">(Hash)</span></a>' },
-          { method: 'dump', module: 'array', html: '<a href="classes/Array.html#M000279"><span class="method_name">dump</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'duration', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000192"><span class="method_name">duration</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'done!', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000081"><span class="method_name">done!</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'done?', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000082"><span class="method_name">done?</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'downcase', module: 'symbol', html: '<a href="classes/Symbol.html#M000226"><span class="method_name">downcase</span> <span class="module_name">(Symbol)</span></a>' },
+          { method: 'dump', module: 'array', html: '<a href="classes/Array.html#M000293"><span class="method_name">dump</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'dump', module: 'hash', html: '<a href="classes/Hash.html#M000300"><span class="method_name">dump</span> <span class="module_name">(Hash)</span></a>' },
+          { method: 'duration', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000206"><span class="method_name">duration</span> <span class="module_name">(Stella::Testrun)</span></a>' },
           { method: 'ec2_ap_east_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000053"><span class="method_name">ec2_ap_east_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ec2_cname_to_ipaddr', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000048"><span class="method_name">ec2_cname_to_ipaddr</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ec2_eu_west_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000052"><span class="method_name">ec2_eu_west_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ec2_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000049"><span class="method_name">ec2_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ec2_us_east_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000050"><span class="method_name">ec2_us_east_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ec2_us_west_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000051"><span class="method_name">ec2_us_west_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'empty?', module: 'symbol', html: '<a href="classes/Symbol.html#M000214"><span class="method_name">empty?</span> <span class="module_name">(Symbol)</span></a>' },
-          { method: 'empty?', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000141"><span class="method_name">empty?</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
-          { method: 'encode_fix', module: 'string', html: '<a href="classes/String.html#M000217"><span class="method_name">encode_fix</span> <span class="module_name">(String)</span></a>' },
-          { method: 'error', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000099"><span class="method_name">error</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'error_count', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000122"><span class="method_name">error_count</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
-          { method: 'errors?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000119"><span class="method_name">errors?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
-          { method: 'errors?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000193"><span class="method_name">errors?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'example', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000294"><span class="method_name">example</span> <span class="module_name">(Stella::CLI)</span></a>' },
-          { method: 'exception', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000069"><span class="method_name">exception</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'exceptions?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000120"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
-          { method: 'exceptions?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000115"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
-          { method: 'execute', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000070"><span class="method_name">execute</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'empty?', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000148"><span class="method_name">empty?</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
+          { method: 'empty?', module: 'symbol', html: '<a href="classes/Symbol.html#M000228"><span class="method_name">empty?</span> <span class="module_name">(Symbol)</span></a>' },
+          { method: 'encode_fix', module: 'string', html: '<a href="classes/String.html#M000231"><span class="method_name">encode_fix</span> <span class="module_name">(String)</span></a>' },
+          { method: 'error', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000106"><span class="method_name">error</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'error_count', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000129"><span class="method_name">error_count</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
+          { method: 'errors?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000207"><span class="method_name">errors?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'errors?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000126"><span class="method_name">errors?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
+          { method: 'example', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000074"><span class="method_name">example</span> <span class="module_name">(Stella::CLI)</span></a>' },
+          { method: 'exception', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000076"><span class="method_name">exception</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'exceptions?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000122"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
+          { method: 'exceptions?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000127"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
+          { method: 'execute', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000077"><span class="method_name">execute</span> <span class="module_name">(Stella::Client)</span></a>' },
           { method: 'external_ip_address', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000056"><span class="method_name">external_ip_address</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'fail', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000098"><span class="method_name">fail</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'favicon?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000147"><span class="method_name">favicon?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'find_response_handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000089"><span class="method_name">find_response_handler</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'fineround', module: 'numeric', html: '<a href="classes/Numeric.html#M000251"><span class="method_name">fineround</span> <span class="module_name">(Numeric)</span></a>' },
-          { method: 'first_request', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000149"><span class="method_name">first_request</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'flatten', module: 'hash', html: '<a href="classes/Hash.html#M000285"><span class="method_name">flatten</span> <span class="module_name">(Hash)</span></a>' },
-          { method: 'follow', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000101"><span class="method_name">follow</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'form', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000083"><span class="method_name">form</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'forms', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000084"><span class="method_name">forms</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'fractional_part', module: 'float', html: '<a href="classes/Float.html#M000283"><span class="method_name">fractional_part</span> <span class="module_name">(Float)</span></a>' },
-          { method: 'fractional_part?', module: 'float', html: '<a href="classes/Float.html#M000282"><span class="method_name">fractional_part?</span> <span class="module_name">(Float)</span></a>' },
-          { method: 'freeze', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000190"><span class="method_name">freeze</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
-          { method: 'freeze', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000177"><span class="method_name">freeze</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'freeze', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000150"><span class="method_name">freeze</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'from_array', module: 'hash', html: '<a href="classes/Hash.html#M000288"><span class="method_name">from_array</span> <span class="module_name">(Hash)</span></a>' },
-          { method: 'from_csv', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000260"><span class="method_name">from_csv</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'from_file', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000210"><span class="method_name">from_file</span> <span class="module_name">(Stella::Template)</span></a>' },
-          { method: 'from_hash', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000162"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'from_hash', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000178"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'from_json', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000262"><span class="method_name">from_json</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'from_json', module: 'array', html: '<a href="classes/Array.html#M000281"><span class="method_name">from_json</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'fubars?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000117"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
-          { method: 'fubars?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000123"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
-          { method: 'generate_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000079"><span class="method_name">generate_request</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'fail', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000105"><span class="method_name">fail</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'favicon?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000156"><span class="method_name">favicon?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'find_response_handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000096"><span class="method_name">find_response_handler</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'fineround', module: 'numeric', html: '<a href="classes/Numeric.html#M000265"><span class="method_name">fineround</span> <span class="module_name">(Numeric)</span></a>' },
+          { method: 'first_request', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000158"><span class="method_name">first_request</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'flatten', module: 'hash', html: '<a href="classes/Hash.html#M000299"><span class="method_name">flatten</span> <span class="module_name">(Hash)</span></a>' },
+          { method: 'follow', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000108"><span class="method_name">follow</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'form', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000090"><span class="method_name">form</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'forms', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000091"><span class="method_name">forms</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'fractional_part', module: 'float', html: '<a href="classes/Float.html#M000297"><span class="method_name">fractional_part</span> <span class="module_name">(Float)</span></a>' },
+          { method: 'fractional_part?', module: 'float', html: '<a href="classes/Float.html#M000296"><span class="method_name">fractional_part?</span> <span class="module_name">(Float)</span></a>' },
+          { method: 'freeze', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000159"><span class="method_name">freeze</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'freeze', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000188"><span class="method_name">freeze</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'freeze', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000202"><span class="method_name">freeze</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
+          { method: 'from_array', module: 'hash', html: '<a href="classes/Hash.html#M000302"><span class="method_name">from_array</span> <span class="module_name">(Hash)</span></a>' },
+          { method: 'from_csv', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000274"><span class="method_name">from_csv</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'from_file', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000224"><span class="method_name">from_file</span> <span class="module_name">(Stella::Template)</span></a>' },
+          { method: 'from_hash', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000171"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'from_hash', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000189"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'from_json', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000276"><span class="method_name">from_json</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'from_json', module: 'array', html: '<a href="classes/Array.html#M000295"><span class="method_name">from_json</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'fubars?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000130"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
+          { method: 'fubars?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000124"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
+          { method: 'generate_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000086"><span class="method_name">generate_request</span> <span class="module_name">(Stella::Session)</span></a>' },
           { method: 'get', module: 'stella', html: '<a href="classes/Stella.html#M000007"><span class="method_name">get</span> <span class="module_name">(Stella)</span></a>' },
+          { method: 'get', module: 'stella::api', html: '<a href="classes/Stella/API.html#M000069"><span class="method_name">get</span> <span class="module_name">(Stella::API)</span></a>' },
           { method: 'gif?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000041"><span class="method_name">gif?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'global', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000167"><span class="method_name">global</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'global?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000166"><span class="method_name">global?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'handle_response', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000088"><span class="method_name">handle_response</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000092"><span class="method_name">handler</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'histogram', module: 'array', html: '<a href="classes/Array.html#M000267"><span class="method_name">histogram</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'host', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000204"><span class="method_name">host</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'host', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000155"><span class="method_name">host</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'global', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000176"><span class="method_name">global</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'global?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000175"><span class="method_name">global?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'handle_response', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000095"><span class="method_name">handle_response</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000099"><span class="method_name">handler</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'histogram', module: 'array', html: '<a href="classes/Array.html#M000281"><span class="method_name">histogram</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'host', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000218"><span class="method_name">host</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'host', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000164"><span class="method_name">host</span> <span class="module_name">(Stella::Testplan)</span></a>' },
           { method: 'hosted_at_ec2?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000054"><span class="method_name">hosted_at_ec2?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'hostid', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000156"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'hostid', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000196"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'hour', module: 'time::units', html: '<a href="classes/Time/Units.html#M000244"><span class="method_name">hour</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'hours', module: 'time::units', html: '<a href="classes/Time/Units.html#M000227"><span class="method_name">hours</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'http_auth', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000182"><span class="method_name">http_auth</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
+          { method: 'hostid', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000165"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'hostid', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000210"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'hour', module: 'time::units', html: '<a href="classes/Time/Units.html#M000258"><span class="method_name">hour</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'hours', module: 'time::units', html: '<a href="classes/Time/Units.html#M000241"><span class="method_name">hours</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'http_auth', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000193"><span class="method_name">http_auth</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
           { method: 'ico?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000040"><span class="method_name">ico?</span> <span class="module_name">(Stella::Utils)</span></a>' },
+          { method: 'id', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000154"><span class="method_name">id</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'id', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000184"><span class="method_name">id</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'id', module: 'stella::eventtemplate', html: '<a href="classes/Stella/EventTemplate.html#M000196"><span class="method_name">id</span> <span class="module_name">(Stella::EventTemplate)</span></a>' },
+          { method: 'id', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000204"><span class="method_name">id</span> <span class="module_name">(Stella::Testrun)</span></a>' },
           { method: 'image?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000035"><span class="method_name">image?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'image?', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000125"><span class="method_name">image?</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
+          { method: 'image?', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000132"><span class="method_name">image?</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
           { method: 'image_ext?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000034"><span class="method_name">image_ext?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'in_days', module: 'time::units', html: '<a href="classes/Time/Units.html#M000233"><span class="method_name">in_days</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_hours', module: 'time::units', html: '<a href="classes/Time/Units.html#M000234"><span class="method_name">in_hours</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_microseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000237"><span class="method_name">in_microseconds</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_milliseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000236"><span class="method_name">in_milliseconds</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_minutes', module: 'time::units', html: '<a href="classes/Time/Units.html#M000235"><span class="method_name">in_minutes</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_seconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000239"><span class="method_name">in_seconds</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_seconds', module: 'string', html: '<a href="classes/String.html#M000216"><span class="method_name">in_seconds</span> <span class="module_name">(String)</span></a>' },
-          { method: 'in_time', module: 'time::units', html: '<a href="classes/Time/Units.html#M000238"><span class="method_name">in_time</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_weeks', module: 'time::units', html: '<a href="classes/Time/Units.html#M000232"><span class="method_name">in_weeks</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'in_years', module: 'time::units', html: '<a href="classes/Time/Units.html#M000231"><span class="method_name">in_years</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_days', module: 'time::units', html: '<a href="classes/Time/Units.html#M000247"><span class="method_name">in_days</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_hours', module: 'time::units', html: '<a href="classes/Time/Units.html#M000248"><span class="method_name">in_hours</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_microseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000251"><span class="method_name">in_microseconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_milliseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000250"><span class="method_name">in_milliseconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_minutes', module: 'time::units', html: '<a href="classes/Time/Units.html#M000249"><span class="method_name">in_minutes</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_seconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000253"><span class="method_name">in_seconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_seconds', module: 'string', html: '<a href="classes/String.html#M000230"><span class="method_name">in_seconds</span> <span class="module_name">(String)</span></a>' },
+          { method: 'in_time', module: 'time::units', html: '<a href="classes/Time/Units.html#M000252"><span class="method_name">in_time</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_weeks', module: 'time::units', html: '<a href="classes/Time/Units.html#M000246"><span class="method_name">in_weeks</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'in_years', module: 'time::units', html: '<a href="classes/Time/Units.html#M000245"><span class="method_name">in_years</span> <span class="module_name">(Time::Units)</span></a>' },
           { method: 'included', module: 'stella::engine::base', html: '<a href="classes/Stella/Engine/Base.html#M000027"><span class="method_name">included</span> <span class="module_name">(Stella::Engine::Base)</span></a>' },
-          { method: 'included', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000108"><span class="method_name">included</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
-          { method: 'inherited', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000161"><span class="method_name">inherited</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'inherited', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000181"><span class="method_name">inherited</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'init', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000137"><span class="method_name">init</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
-          { method: 'init', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000291"><span class="method_name">init</span> <span class="module_name">(Stella::CLI)</span></a>' },
-          { method: 'init', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000146"><span class="method_name">init</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'init', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000191"><span class="method_name">init</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'included', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000115"><span class="method_name">included</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
+          { method: 'inherited', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000192"><span class="method_name">inherited</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'inherited', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000170"><span class="method_name">inherited</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'init', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000153"><span class="method_name">init</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'init', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000203"><span class="method_name">init</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'init', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000144"><span class="method_name">init</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
+          { method: 'init', module: 'stella::cli', html: '<a href="classes/Stella/CLI.html#M000071"><span class="method_name">init</span> <span class="module_name">(Stella::CLI)</span></a>' },
           { method: 'inspect', module: 'stella::version', html: '<a href="classes/Stella/VERSION.html#M000066"><span class="method_name">inspect</span> <span class="module_name">(Stella::VERSION)</span></a>' },
           { method: 'internal_ip_address', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000057"><span class="method_name">internal_ip_address</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'ipaddr', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000044"><span class="method_name">ipaddr</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'jpg?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000038"><span class="method_name">jpg?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'kill!', module: 'thread', html: '<a href="classes/Thread.html#M000215"><span class="method_name">kill!</span> <span class="module_name">(Thread)</span></a>' },
-          { method: 'kind', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000253"><span class="method_name">kind</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'kill!', module: 'thread', html: '<a href="classes/Thread.html#M000229"><span class="method_name">kill!</span> <span class="module_name">(Thread)</span></a>' },
+          { method: 'kind', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000267"><span class="method_name">kind</span> <span class="module_name">(MetricsPack)</span></a>' },
           { method: 'ld', module: 'stella', html: '<a href="classes/Stella.html#M000006"><span class="method_name">ld</span> <span class="module_name">(Stella)</span></a>' },
           { method: 'le', module: 'stella', html: '<a href="classes/Stella.html#M000005"><span class="method_name">le</span> <span class="module_name">(Stella)</span></a>' },
           { method: 'li', module: 'stella', html: '<a href="classes/Stella.html#M000004"><span class="method_name">li</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'linkify', module: 'string', html: '<a href="classes/String.html#M000222"><span class="method_name">linkify</span> <span class="module_name">(String)</span></a>' },
-          { method: 'linkify!', module: 'string', html: '<a href="classes/String.html#M000221"><span class="method_name">linkify!</span> <span class="module_name">(String)</span></a>' },
-          { method: 'load', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000103"><span class="method_name">load</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'linkify', module: 'string', html: '<a href="classes/String.html#M000236"><span class="method_name">linkify</span> <span class="module_name">(String)</span></a>' },
+          { method: 'linkify!', module: 'string', html: '<a href="classes/String.html#M000235"><span class="method_name">linkify!</span> <span class="module_name">(String)</span></a>' },
+          { method: 'load', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000110"><span class="method_name">load</span> <span class="module_name">(Stella::Report)</span></a>' },
           { method: 'load', module: 'stella::engine', html: '<a href="classes/Stella/Engine.html#M000025"><span class="method_name">load</span> <span class="module_name">(Stella::Engine)</span></a>' },
           { method: 'load_config', module: 'stella::version', html: '<a href="classes/Stella/VERSION.html#M000067"><span class="method_name">load_config</span> <span class="module_name">(Stella::VERSION)</span></a>' },
           { method: 'local_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000046"><span class="method_name">local_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'location', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000080"><span class="method_name">location</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'log', module: 'stella::report::content::reportmethods', html: '<a href="classes/Stella/Report/Content/ReportMethods.html#M000127"><span class="method_name">log</span> <span class="module_name">(Stella::Report::Content::ReportMethods)</span></a>' },
-          { method: 'mean', module: 'array', html: '<a href="classes/Array.html#M000265"><span class="method_name">mean</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'median', module: 'array', html: '<a href="classes/Array.html#M000266"><span class="method_name">median</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'message', module: 'stella::httperror', html: '<a href="classes/Stella/HTTPError.html#M000207"><span class="method_name">message</span> <span class="module_name">(Stella::HTTPError)</span></a>' },
-          { method: 'metric?', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000263"><span class="method_name">metric?</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'metrics_pack', module: 'stella::report::metrics::reportmethods', html: '<a href="classes/Stella/Report/Metrics/ReportMethods.html#M000144"><span class="method_name">metrics_pack</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a>' },
-          { method: 'metrics_pretty', module: 'stella::report::metrics::reportmethods', html: '<a href="classes/Stella/Report/Metrics/ReportMethods.html#M000145"><span class="method_name">metrics_pretty</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a>' },
-          { method: 'microseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000223"><span class="method_name">microseconds</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'milliseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000224"><span class="method_name">milliseconds</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'minute', module: 'time::units', html: '<a href="classes/Time/Units.html#M000243"><span class="method_name">minute</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'minutes', module: 'time::units', html: '<a href="classes/Time/Units.html#M000226"><span class="method_name">minutes</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'mode', module: 'array', html: '<a href="classes/Array.html#M000268"><span class="method_name">mode</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'location', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000087"><span class="method_name">location</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'log', module: 'stella::report::content::reportmethods', html: '<a href="classes/Stella/Report/Content/ReportMethods.html#M000134"><span class="method_name">log</span> <span class="module_name">(Stella::Report::Content::ReportMethods)</span></a>' },
+          { method: 'mean', module: 'array', html: '<a href="classes/Array.html#M000279"><span class="method_name">mean</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'median', module: 'array', html: '<a href="classes/Array.html#M000280"><span class="method_name">median</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'message', module: 'stella::httperror', html: '<a href="classes/Stella/HTTPError.html#M000221"><span class="method_name">message</span> <span class="module_name">(Stella::HTTPError)</span></a>' },
+          { method: 'metric?', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000277"><span class="method_name">metric?</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'metrics_pack', module: 'stella::report::metrics::reportmethods', html: '<a href="classes/Stella/Report/Metrics/ReportMethods.html#M000151"><span class="method_name">metrics_pack</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a>' },
+          { method: 'metrics_pretty', module: 'stella::report::metrics::reportmethods', html: '<a href="classes/Stella/Report/Metrics/ReportMethods.html#M000152"><span class="method_name">metrics_pretty</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a>' },
+          { method: 'microseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000237"><span class="method_name">microseconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'milliseconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000238"><span class="method_name">milliseconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'minute', module: 'time::units', html: '<a href="classes/Time/Units.html#M000257"><span class="method_name">minute</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'minutes', module: 'time::units', html: '<a href="classes/Time/Units.html#M000240"><span class="method_name">minutes</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'mode', module: 'array', html: '<a href="classes/Array.html#M000282"><span class="method_name">mode</span> <span class="module_name">(Array)</span></a>' },
           { method: 'mode?', module: 'stella::engine', html: '<a href="classes/Stella/Engine.html#M000024"><span class="method_name">mode?</span> <span class="module_name">(Stella::Engine)</span></a>' },
-          { method: 'monitor', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000153"><span class="method_name">monitor</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'monitor?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000199"><span class="method_name">monitor?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'monitored?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000154"><span class="method_name">monitored?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'ms', module: 'time::units', html: '<a href="classes/Time/Units.html#M000240"><span class="method_name">ms</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'names', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000180"><span class="method_name">names</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'new', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000185"><span class="method_name">new</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
-          { method: 'new', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000208"><span class="method_name">new</span> <span class="module_name">(Stella::Template)</span></a>' },
-          { method: 'new', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000104"><span class="method_name">new</span> <span class="module_name">(Stella::Report)</span></a>' },
-          { method: 'new', module: 'stellaerror', html: '<a href="classes/StellaError.html#M000289"><span class="method_name">new</span> <span class="module_name">(StellaError)</span></a>' },
-          { method: 'new', module: 'stella::forcedredirect', html: '<a href="classes/Stella/ForcedRedirect.html#M000205"><span class="method_name">new</span> <span class="module_name">(Stella::ForcedRedirect)</span></a>' },
-          { method: 'new', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000188"><span class="method_name">new</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
-          { method: 'new', module: 'stellabehavior', html: '<a href="classes/StellaBehavior.html#M000290"><span class="method_name">new</span> <span class="module_name">(StellaBehavior)</span></a>' },
-          { method: 'new', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000068"><span class="method_name">new</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'new', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000111"><span class="method_name">new</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
-          { method: 'new', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000174"><span class="method_name">new</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'new', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000076"><span class="method_name">new</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'new', module: 'stella::httperror', html: '<a href="classes/Stella/HTTPError.html#M000206"><span class="method_name">new</span> <span class="module_name">(Stella::HTTPError)</span></a>' },
-          { method: 'new', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000252"><span class="method_name">new</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'monitor', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000162"><span class="method_name">monitor</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'monitor?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000213"><span class="method_name">monitor?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'monitored?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000163"><span class="method_name">monitored?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'ms', module: 'time::units', html: '<a href="classes/Time/Units.html#M000254"><span class="method_name">ms</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'names', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000191"><span class="method_name">names</span> <span class="module_name">(Stella::Usecase)</span></a>' },
           { method: 'new', module: 'stella', html: '<a href="classes/Stella.html#M000001"><span class="method_name">new</span> <span class="module_name">(Stella)</span></a>' },
+          { method: 'new', module: 'stellabehavior', html: '<a href="classes/StellaBehavior.html#M000304"><span class="method_name">new</span> <span class="module_name">(StellaBehavior)</span></a>' },
+          { method: 'new', module: 'stellaerror', html: '<a href="classes/StellaError.html#M000303"><span class="method_name">new</span> <span class="module_name">(StellaError)</span></a>' },
+          { method: 'new', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000200"><span class="method_name">new</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
+          { method: 'new', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000266"><span class="method_name">new</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'new', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000197"><span class="method_name">new</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
+          { method: 'new', module: 'stella::api', html: '<a href="classes/Stella/API.html#M000068"><span class="method_name">new</span> <span class="module_name">(Stella::API)</span></a>' },
+          { method: 'new', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000075"><span class="method_name">new</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'new', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000083"><span class="method_name">new</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'new', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000111"><span class="method_name">new</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'new', module: 'stella::forcedredirect', html: '<a href="classes/Stella/ForcedRedirect.html#M000219"><span class="method_name">new</span> <span class="module_name">(Stella::ForcedRedirect)</span></a>' },
+          { method: 'new', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000222"><span class="method_name">new</span> <span class="module_name">(Stella::Template)</span></a>' },
+          { method: 'new', module: 'stella::httperror', html: '<a href="classes/Stella/HTTPError.html#M000220"><span class="method_name">new</span> <span class="module_name">(Stella::HTTPError)</span></a>' },
+          { method: 'new', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000183"><span class="method_name">new</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'new', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000118"><span class="method_name">new</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
           { method: 'noindent', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000064"><span class="method_name">noindent</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'nonsuccessful', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000129"><span class="method_name">nonsuccessful</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
+          { method: 'nonsuccessful', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000136"><span class="method_name">nonsuccessful</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
           { method: 'now', module: 'stella', html: '<a href="classes/Stella.html#M000009"><span class="method_name">now</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'owner?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000202"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'owner?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000158"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'pack', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000255"><span class="method_name">pack</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'percentile', module: 'array', html: '<a href="classes/Array.html#M000277"><span class="method_name">percentile</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'percentile_index', module: 'array', html: '<a href="classes/Array.html#M000278"><span class="method_name">percentile_index</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'permute', module: 'array', html: '<a href="classes/Array.html#M000273"><span class="method_name">permute</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'permute!', module: 'array', html: '<a href="classes/Array.html#M000274"><span class="method_name">permute!</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'plan', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000164"><span class="method_name">plan</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'plan', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000201"><span class="method_name">plan</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'plan?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000165"><span class="method_name">plan?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'plans', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000163"><span class="method_name">plans</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'plugin?', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000102"><span class="method_name">plugin?</span> <span class="module_name">(Stella::Report)</span></a>' },
-          { method: 'plural', module: 'string', html: '<a href="classes/String.html#M000218"><span class="method_name">plural</span> <span class="module_name">(String)</span></a>' },
+          { method: 'owner?', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000216"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'owner?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000167"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'pack', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000269"><span class="method_name">pack</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'percentile', module: 'array', html: '<a href="classes/Array.html#M000291"><span class="method_name">percentile</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'percentile_index', module: 'array', html: '<a href="classes/Array.html#M000292"><span class="method_name">percentile_index</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'permute', module: 'array', html: '<a href="classes/Array.html#M000287"><span class="method_name">permute</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'permute!', module: 'array', html: '<a href="classes/Array.html#M000288"><span class="method_name">permute!</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'plan', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000215"><span class="method_name">plan</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'plan', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000173"><span class="method_name">plan</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'plan?', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000174"><span class="method_name">plan?</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'planid', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000155"><span class="method_name">planid</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'plans', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000172"><span class="method_name">plans</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'plugin?', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000109"><span class="method_name">plugin?</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'plural', module: 'string', html: '<a href="classes/String.html#M000232"><span class="method_name">plural</span> <span class="module_name">(String)</span></a>' },
           { method: 'png?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000039"><span class="method_name">png?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'postprocess', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000189"><span class="method_name">postprocess</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
-          { method: 'postprocess', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000105"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report)</span></a>' },
-          { method: 'postprocess', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000176"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'postprocess', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000151"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'postprocess', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000195"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'postprocess', module: 'stella::report::metrics', html: '<a href="classes/Stella/Report/Metrics.html#M000143"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report::Metrics)</span></a>' },
-          { method: 'prepare_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000078"><span class="method_name">prepare_request</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'preprocess', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000194"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testrun)</span></a>' },
-          { method: 'preprocess', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000175"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Usecase)</span></a>' },
-          { method: 'preprocess', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000148"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'post', module: 'stella::api', html: '<a href="classes/Stella/API.html#M000070"><span class="method_name">post</span> <span class="module_name">(Stella::API)</span></a>' },
+          { method: 'postprocess', module: 'stella::requesttemplate', html: '<a href="classes/Stella/RequestTemplate.html#M000201"><span class="method_name">postprocess</span> <span class="module_name">(Stella::RequestTemplate)</span></a>' },
+          { method: 'postprocess', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000112"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'postprocess', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000187"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'postprocess', module: 'stella::report::metrics', html: '<a href="classes/Stella/Report/Metrics.html#M000150"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report::Metrics)</span></a>' },
+          { method: 'postprocess', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000160"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'postprocess', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000209"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'prepare_request', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000085"><span class="method_name">prepare_request</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'preprocess', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000157"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'preprocess', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000208"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'preprocess', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000186"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Usecase)</span></a>' },
           { method: 'private!', module: 'stella::common::privacymethods', html: '<a href="classes/Stella/Common/PrivacyMethods.html#M000032"><span class="method_name">private!</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a>' },
           { method: 'private?', module: 'stella::common::privacymethods', html: '<a href="classes/Stella/Common/PrivacyMethods.html#M000030"><span class="method_name">private?</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a>' },
           { method: 'private_ipaddr?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000047"><span class="method_name">private_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'process', module: 'stella::report::plugin::classmethods', html: '<a href="classes/Stella/Report/Plugin/ClassMethods.html#M000113"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a>' },
-          { method: 'process', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000138"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
-          { method: 'process', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000114"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
-          { method: 'process', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000106"><span class="method_name">process</span> <span class="module_name">(Stella::Report)</span></a>' },
-          { method: 'process', module: 'stella::report::metrics', html: '<a href="classes/Stella/Report/Metrics.html#M000142"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Metrics)</span></a>' },
-          { method: 'process', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000126"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
-          { method: 'process', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000128"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
-          { method: 'processed!', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000109"><span class="method_name">processed!</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
-          { method: 'processed?', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000110"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
-          { method: 'processed?', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000107"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'process', module: 'stella::report::content', html: '<a href="classes/Stella/Report/Content.html#M000133"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Content)</span></a>' },
+          { method: 'process', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000121"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
+          { method: 'process', module: 'stella::report::metrics', html: '<a href="classes/Stella/Report/Metrics.html#M000149"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Metrics)</span></a>' },
+          { method: 'process', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000145"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
+          { method: 'process', module: 'stella::report::plugin::classmethods', html: '<a href="classes/Stella/Report/Plugin/ClassMethods.html#M000120"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a>' },
+          { method: 'process', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000113"><span class="method_name">process</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'process', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000135"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
+          { method: 'processed!', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000116"><span class="method_name">processed!</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
+          { method: 'processed?', module: 'stella::report', html: '<a href="classes/Stella/Report.html#M000114"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report)</span></a>' },
+          { method: 'processed?', module: 'stella::report::plugin', html: '<a href="classes/Stella/Report/Plugin.html#M000117"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report::Plugin)</span></a>' },
           { method: 'public!', module: 'stella::common::privacymethods', html: '<a href="classes/Stella/Common/PrivacyMethods.html#M000033"><span class="method_name">public!</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a>' },
           { method: 'public?', module: 'stella::common::privacymethods', html: '<a href="classes/Stella/Common/PrivacyMethods.html#M000031"><span class="method_name">public?</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a>' },
-          { method: 'quantize_stamp', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000256"><span class="method_name">quantize_stamp</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'quantize_stamp', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000270"><span class="method_name">quantize_stamp</span> <span class="module_name">(MetricsPack)</span></a>' },
           { method: 'quiet?', module: 'stella', html: '<a href="classes/Stella.html#M000003"><span class="method_name">quiet?</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'quit', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000097"><span class="method_name">quit</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'random', module: 'array', html: '<a href="classes/Array.html#M000276"><span class="method_name">random</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'redirect?', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000133"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
-          { method: 'redirect?', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000134"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
-          { method: 'redirect?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000081"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'redirected', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000131"><span class="method_name">redirected</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
-          { method: 'register', module: 'stella::report::plugin::classmethods', html: '<a href="classes/Stella/Report/Plugin/ClassMethods.html#M000112"><span class="method_name">register</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a>' },
-          { method: 'register', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000172"><span class="method_name">register</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'quit', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000104"><span class="method_name">quit</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'random', module: 'array', html: '<a href="classes/Array.html#M000290"><span class="method_name">random</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'redirect?', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000140"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
+          { method: 'redirect?', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000141"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
+          { method: 'redirect?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000088"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'redirected', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000138"><span class="method_name">redirected</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
           { method: 'register', module: 'stella::engine::base::classmethods', html: '<a href="classes/Stella/Engine/Base/ClassMethods.html#M000028"><span class="method_name">register</span> <span class="module_name">(Stella::Engine::Base::ClassMethods)</span></a>' },
-          { method: 'register', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000183"><span class="method_name">register</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
-          { method: 'repeat', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000100"><span class="method_name">repeat</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'request_header', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000139"><span class="method_name">request_header</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
+          { method: 'register', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000194"><span class="method_name">register</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
+          { method: 'register', module: 'stella::report::plugin::classmethods', html: '<a href="classes/Stella/Report/Plugin/ClassMethods.html#M000119"><span class="method_name">register</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a>' },
+          { method: 'register', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000181"><span class="method_name">register</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'repeat', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000107"><span class="method_name">repeat</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'request_header', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000146"><span class="method_name">request_header</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
           { method: 'require_glob', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000058"><span class="method_name">require_glob</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'require_vendor', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000059"><span class="method_name">require_vendor</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'rescue', module: 'stella', html: '<a href="classes/Stella.html#M000012"><span class="method_name">rescue</span> <span class="module_name">(Stella)</span></a>' },
-          { method: 'response', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000093"><span class="method_name">response</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'response_handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000091"><span class="method_name">response_handler</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'response_handler?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000090"><span class="method_name">response_handler?</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'response_header', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000140"><span class="method_name">response_header</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
-          { method: 'result', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000209"><span class="method_name">result</span> <span class="module_name">(Stella::Template)</span></a>' },
-          { method: 'result', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000186"><span class="method_name">result</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
-          { method: 'run', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000197"><span class="method_name">run</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'response', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000100"><span class="method_name">response</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'response_handler', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000098"><span class="method_name">response_handler</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'response_handler?', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000097"><span class="method_name">response_handler?</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'response_header', module: 'stella::report::headers', html: '<a href="classes/Stella/Report/Headers.html#M000147"><span class="method_name">response_header</span> <span class="module_name">(Stella::Report::Headers)</span></a>' },
+          { method: 'result', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000223"><span class="method_name">result</span> <span class="module_name">(Stella::Template)</span></a>' },
+          { method: 'result', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000198"><span class="method_name">result</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
           { method: 'run', module: 'stella::engine::checkup', html: '<a href="classes/Stella/Engine/Checkup.html#M000029"><span class="method_name">run</span> <span class="module_name">(Stella::Engine::Checkup)</span></a>' },
-          { method: 'run', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000170"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'run', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000179"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
           { method: 'run', module: 'stella::engine', html: '<a href="classes/Stella/Engine.html#M000026"><span class="method_name">run</span> <span class="module_name">(Stella::Engine)</span></a>' },
-          { method: 'run', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000160"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan)</span></a>' },
-          { method: 'run_sleeper', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000071"><span class="method_name">run_sleeper</span> <span class="module_name">(Stella::Client)</span></a>' },
-          { method: 'sample', module: 'array', html: '<a href="classes/Array.html#M000275"><span class="method_name">sample</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'sd', module: 'array', html: '<a href="classes/Array.html#M000272"><span class="method_name">sd</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'second', module: 'time::units', html: '<a href="classes/Time/Units.html#M000242"><span class="method_name">second</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'seconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000225"><span class="method_name">seconds</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'run', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000211"><span class="method_name">run</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'run', module: 'stella::testplan', html: '<a href="classes/Stella/Testplan.html#M000169"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan)</span></a>' },
+          { method: 'run_sleeper', module: 'stella::client', html: '<a href="classes/Stella/Client.html#M000078"><span class="method_name">run_sleeper</span> <span class="module_name">(Stella::Client)</span></a>' },
+          { method: 'runid', module: 'stella::testrun', html: '<a href="classes/Stella/Testrun.html#M000205"><span class="method_name">runid</span> <span class="module_name">(Stella::Testrun)</span></a>' },
+          { method: 'sample', module: 'array', html: '<a href="classes/Array.html#M000289"><span class="method_name">sample</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'sd', module: 'array', html: '<a href="classes/Array.html#M000286"><span class="method_name">sd</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'second', module: 'time::units', html: '<a href="classes/Time/Units.html#M000256"><span class="method_name">second</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'seconds', module: 'time::units', html: '<a href="classes/Time/Units.html#M000239"><span class="method_name">seconds</span> <span class="module_name">(Time::Units)</span></a>' },
           { method: 'service_available?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000061"><span class="method_name">service_available?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'session', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000173"><span class="method_name">session</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
-          { method: 'session', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000184"><span class="method_name">session</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
-          { method: 'shorten', module: 'string', html: '<a href="classes/String.html#M000219"><span class="method_name">shorten</span> <span class="module_name">(String)</span></a>' },
-          { method: 'square', module: 'numeric', html: '<a href="classes/Numeric.html#M000250"><span class="method_name">square</span> <span class="module_name">(Numeric)</span></a>' },
-          { method: 'squares', module: 'array', html: '<a href="classes/Array.html#M000269"><span class="method_name">squares</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'status', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000095"><span class="method_name">status</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'statuses_pretty', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000136"><span class="method_name">statuses_pretty</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
+          { method: 'session', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000182"><span class="method_name">session</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'session', module: 'stella::usecase::classmethods', html: '<a href="classes/Stella/Usecase/ClassMethods.html#M000195"><span class="method_name">session</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a>' },
+          { method: 'shorten', module: 'string', html: '<a href="classes/String.html#M000233"><span class="method_name">shorten</span> <span class="module_name">(String)</span></a>' },
+          { method: 'square', module: 'numeric', html: '<a href="classes/Numeric.html#M000264"><span class="method_name">square</span> <span class="module_name">(Numeric)</span></a>' },
+          { method: 'squares', module: 'array', html: '<a href="classes/Array.html#M000283"><span class="method_name">squares</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'status', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000102"><span class="method_name">status</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'statuses_pretty', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000143"><span class="method_name">statuses_pretty</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
           { method: 'strand', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000063"><span class="method_name">strand</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'success?', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000135"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
-          { method: 'success?', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000132"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
-          { method: 'successful', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000130"><span class="method_name">successful</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
-          { method: 'sum', module: 'array', html: '<a href="classes/Array.html#M000264"><span class="method_name">sum</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'testplan', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000171"><span class="method_name">testplan</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
-          { method: 'timeouts?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000121"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
-          { method: 'timeouts?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000116"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
-          { method: 'to_a', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000257"><span class="method_name">to_a</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'to_bytes', module: 'numeric', html: '<a href="classes/Numeric.html#M000249"><span class="method_name">to_bytes</span> <span class="module_name">(Numeric)</span></a>' },
-          { method: 'to_csv', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000259"><span class="method_name">to_csv</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'to_file', module: 'string', html: '<a href="classes/String.html#M000220"><span class="method_name">to_file</span> <span class="module_name">(String)</span></a>' },
-          { method: 'to_http_params', module: 'hash', html: '<a href="classes/Hash.html#M000287"><span class="method_name">to_http_params</span> <span class="module_name">(Hash)</span></a>' },
-          { method: 'to_json', module: 'hash', html: '<a href="classes/Hash.html#M000284"><span class="method_name">to_json</span> <span class="module_name">(Hash)</span></a>' },
-          { method: 'to_json', module: 'array', html: '<a href="classes/Array.html#M000280"><span class="method_name">to_json</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'to_ms', module: 'numeric', html: '<a href="classes/Numeric.html#M000248"><span class="method_name">to_ms</span> <span class="module_name">(Numeric)</span></a>' },
+          { method: 'success?', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000139"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
+          { method: 'success?', module: 'stella::report::statuses::reportmethods', html: '<a href="classes/Stella/Report/Statuses/ReportMethods.html#M000142"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a>' },
+          { method: 'successful', module: 'stella::report::statuses', html: '<a href="classes/Stella/Report/Statuses.html#M000137"><span class="method_name">successful</span> <span class="module_name">(Stella::Report::Statuses)</span></a>' },
+          { method: 'sum', module: 'array', html: '<a href="classes/Array.html#M000278"><span class="method_name">sum</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'testplan', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000180"><span class="method_name">testplan</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'timeouts?', module: 'stella::report::errors', html: '<a href="classes/Stella/Report/Errors.html#M000123"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors)</span></a>' },
+          { method: 'timeouts?', module: 'stella::report::errors::reportmethods', html: '<a href="classes/Stella/Report/Errors/ReportMethods.html#M000128"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a>' },
+          { method: 'to_a', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000271"><span class="method_name">to_a</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'to_bytes', module: 'numeric', html: '<a href="classes/Numeric.html#M000263"><span class="method_name">to_bytes</span> <span class="module_name">(Numeric)</span></a>' },
+          { method: 'to_csv', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000273"><span class="method_name">to_csv</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'to_file', module: 'string', html: '<a href="classes/String.html#M000234"><span class="method_name">to_file</span> <span class="module_name">(String)</span></a>' },
+          { method: 'to_http_params', module: 'hash', html: '<a href="classes/Hash.html#M000301"><span class="method_name">to_http_params</span> <span class="module_name">(Hash)</span></a>' },
+          { method: 'to_json', module: 'array', html: '<a href="classes/Array.html#M000294"><span class="method_name">to_json</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'to_json', module: 'hash', html: '<a href="classes/Hash.html#M000298"><span class="method_name">to_json</span> <span class="module_name">(Hash)</span></a>' },
+          { method: 'to_ms', module: 'numeric', html: '<a href="classes/Numeric.html#M000262"><span class="method_name">to_ms</span> <span class="module_name">(Numeric)</span></a>' },
+          { method: 'to_s', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000225"><span class="method_name">to_s</span> <span class="module_name">(Stella::Template)</span></a>' },
+          { method: 'to_s', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000272"><span class="method_name">to_s</span> <span class="module_name">(MetricsPack)</span></a>' },
           { method: 'to_s', module: 'stella::version', html: '<a href="classes/Stella/VERSION.html#M000065"><span class="method_name">to_s</span> <span class="module_name">(Stella::VERSION)</span></a>' },
-          { method: 'to_s', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000258"><span class="method_name">to_s</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'to_s', module: 'stella::template', html: '<a href="classes/Stella/Template.html#M000211"><span class="method_name">to_s</span> <span class="module_name">(Stella::Template)</span></a>' },
-          { method: 'to_s', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000187"><span class="method_name">to_s</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
-          { method: 'unpack', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000261"><span class="method_name">unpack</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'upcase', module: 'symbol', html: '<a href="classes/Symbol.html#M000213"><span class="method_name">upcase</span> <span class="module_name">(Symbol)</span></a>' },
-          { method: 'update', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000254"><span class="method_name">update</span> <span class="module_name">(MetricsPack)</span></a>' },
-          { method: 'usecases', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000168"><span class="method_name">usecases</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
+          { method: 'to_s', module: 'stella::stringtemplate', html: '<a href="classes/Stella/StringTemplate.html#M000199"><span class="method_name">to_s</span> <span class="module_name">(Stella::StringTemplate)</span></a>' },
+          { method: 'ucid', module: 'stella::usecase', html: '<a href="classes/Stella/Usecase.html#M000185"><span class="method_name">ucid</span> <span class="module_name">(Stella::Usecase)</span></a>' },
+          { method: 'unpack', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000275"><span class="method_name">unpack</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'upcase', module: 'symbol', html: '<a href="classes/Symbol.html#M000227"><span class="method_name">upcase</span> <span class="module_name">(Symbol)</span></a>' },
+          { method: 'update', module: 'metricspack', html: '<a href="classes/MetricsPack.html#M000268"><span class="method_name">update</span> <span class="module_name">(MetricsPack)</span></a>' },
+          { method: 'usecases', module: 'stella::testplan::classmethods', html: '<a href="classes/Stella/Testplan/ClassMethods.html#M000177"><span class="method_name">usecases</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a>' },
           { method: 'valid_hostname?', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000055"><span class="method_name">valid_hostname?</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'variance', module: 'array', html: '<a href="classes/Array.html#M000270"><span class="method_name">variance</span> <span class="module_name">(Array)</span></a>' },
-          { method: 'wait', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000096"><span class="method_name">wait</span> <span class="module_name">(Stella::Session)</span></a>' },
-          { method: 'week', module: 'time::units', html: '<a href="classes/Time/Units.html#M000246"><span class="method_name">week</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'weeks', module: 'time::units', html: '<a href="classes/Time/Units.html#M000229"><span class="method_name">weeks</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'variance', module: 'array', html: '<a href="classes/Array.html#M000284"><span class="method_name">variance</span> <span class="module_name">(Array)</span></a>' },
+          { method: 'wait', module: 'stella::session', html: '<a href="classes/Stella/Session.html#M000103"><span class="method_name">wait</span> <span class="module_name">(Stella::Session)</span></a>' },
+          { method: 'week', module: 'time::units', html: '<a href="classes/Time/Units.html#M000260"><span class="method_name">week</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'weeks', module: 'time::units', html: '<a href="classes/Time/Units.html#M000243"><span class="method_name">weeks</span> <span class="module_name">(Time::Units)</span></a>' },
           { method: 'whois', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000043"><span class="method_name">whois</span> <span class="module_name">(Stella::Utils)</span></a>' },
           { method: 'write_to_file', module: 'stella::utils', html: '<a href="classes/Stella/Utils.html#M000062"><span class="method_name">write_to_file</span> <span class="module_name">(Stella::Utils)</span></a>' },
-          { method: 'year', module: 'time::units', html: '<a href="classes/Time/Units.html#M000247"><span class="method_name">year</span> <span class="module_name">(Time::Units)</span></a>' },
-          { method: 'years', module: 'time::units', html: '<a href="classes/Time/Units.html#M000230"><span class="method_name">years</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'year', module: 'time::units', html: '<a href="classes/Time/Units.html#M000261"><span class="method_name">year</span> <span class="module_name">(Time::Units)</span></a>' },
+          { method: 'years', module: 'time::units', html: '<a href="classes/Time/Units.html#M000244"><span class="method_name">years</span> <span class="module_name">(Time::Units)</span></a>' },
         ]
         $(document).observe('dom:loaded', function() {
         	// Setup search-during-typing.
@@ -4695,8 +4705,8 @@
       </form>
       <ol class='methods' id='search-results' style='display: none'></ol>
       <ol class='methods' id='index-entries'>
-        <li><a href="classes/Time/Units.html#M000241"><span class="method_name">'μs'</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors.html#M000118"><span class="method_name">all</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000255"><span class="method_name">'μs'</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors.html#M000125"><span class="method_name">all</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
         <li><a href="classes/Stella/Asserts.html#M000013"><span class="method_name">assert_doc</span> <span class="module_name">(Stella::Asserts)</span></a></li>
         <li><a href="classes/Stella/Asserts.html#M000020"><span class="method_name">assert_equals</span> <span class="module_name">(Stella::Asserts)</span></a></li>
         <li><a href="classes/Stella/Asserts.html#M000019"><span class="method_name">assert_exists</span> <span class="module_name">(Stella::Asserts)</span></a></li>
@@ -4709,286 +4719,296 @@
         <li><a href="classes/Stella/Asserts.html#M000017"><span class="method_name">assert_object_values</span> <span class="module_name">(Stella::Asserts)</span></a></li>
         <li><a href="classes/Stella/Asserts.html#M000023"><span class="method_name">assert_status</span> <span class="module_name">(Stella::Asserts)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000060"><span class="method_name">autoload_vendor</span> <span class="module_name">(Stella::Utils)</span></a></li>
+        <li><a href="classes/Stella/Report/Content.html#M000131"><span class="method_name">binary?</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000036"><span class="method_name">binary?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Report/Content.html#M000124"><span class="method_name">binary?</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000037"><span class="method_name">bmp?</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella.html#M000010"><span class="method_name">canonical_host</span> <span class="module_name">(Stella)</span></a></li>
         <li><a href="classes/Stella.html#M000011"><span class="method_name">canonical_uri</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/CLI.html#M000293"><span class="method_name">checkup</span> <span class="module_name">(Stella::CLI)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000179"><span class="method_name">checkup</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000159"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000169"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000168"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan)</span></a></li>
         <li><a href="classes/Stella.html#M000008"><span class="method_name">checkup</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000198"><span class="method_name">checkup?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/CLI.html#M000292"><span class="method_name">checkup_valid?</span> <span class="module_name">(Stella::CLI)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000094"><span class="method_name">clear_previous_request</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/CLI.html#M000073"><span class="method_name">checkup</span> <span class="module_name">(Stella::CLI)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000190"><span class="method_name">checkup</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000178"><span class="method_name">checkup</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000212"><span class="method_name">checkup?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/CLI.html#M000072"><span class="method_name">checkup_valid?</span> <span class="module_name">(Stella::CLI)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000101"><span class="method_name">clear_previous_request</span> <span class="module_name">(Stella::Session)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000045"><span class="method_name">cname</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000087"><span class="method_name">content_type?</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000085"><span class="method_name">cookie</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000086"><span class="method_name">cookies</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000073"><span class="method_name">create_http_client</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000077"><span class="method_name">current_event</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000203"><span class="method_name">cust</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000152"><span class="method_name">cust</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000245"><span class="method_name">day</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000228"><span class="method_name">days</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000072"><span class="method_name">debug</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000094"><span class="method_name">content_type?</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000092"><span class="method_name">cookie</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000093"><span class="method_name">cookies</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000080"><span class="method_name">create_http_client</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000084"><span class="method_name">current_event</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000217"><span class="method_name">cust</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000161"><span class="method_name">cust</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000259"><span class="method_name">day</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000242"><span class="method_name">days</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000079"><span class="method_name">debug</span> <span class="module_name">(Stella::Client)</span></a></li>
         <li><a href="classes/Stella.html#M000002"><span class="method_name">debug?</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000157"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000200"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Array.html#M000271"><span class="method_name">deviation</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000082"><span class="method_name">doc</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000214"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000166"><span class="method_name">destroy!</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Array.html#M000285"><span class="method_name">deviation</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000089"><span class="method_name">doc</span> <span class="module_name">(Stella::Session)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000042"><span class="method_name">domain</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000074"><span class="method_name">done!</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000075"><span class="method_name">done?</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Symbol.html#M000212"><span class="method_name">downcase</span> <span class="module_name">(Symbol)</span></a></li>
-        <li><a href="classes/Hash.html#M000286"><span class="method_name">dump</span> <span class="module_name">(Hash)</span></a></li>
-        <li><a href="classes/Array.html#M000279"><span class="method_name">dump</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000192"><span class="method_name">duration</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000081"><span class="method_name">done!</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000082"><span class="method_name">done?</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Symbol.html#M000226"><span class="method_name">downcase</span> <span class="module_name">(Symbol)</span></a></li>
+        <li><a href="classes/Array.html#M000293"><span class="method_name">dump</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Hash.html#M000300"><span class="method_name">dump</span> <span class="module_name">(Hash)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000206"><span class="method_name">duration</span> <span class="module_name">(Stella::Testrun)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000053"><span class="method_name">ec2_ap_east_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000048"><span class="method_name">ec2_cname_to_ipaddr</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000052"><span class="method_name">ec2_eu_west_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000049"><span class="method_name">ec2_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000050"><span class="method_name">ec2_us_east_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000051"><span class="method_name">ec2_us_west_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Symbol.html#M000214"><span class="method_name">empty?</span> <span class="module_name">(Symbol)</span></a></li>
-        <li><a href="classes/Stella/Report/Headers.html#M000141"><span class="method_name">empty?</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
-        <li><a href="classes/String.html#M000217"><span class="method_name">encode_fix</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000099"><span class="method_name">error</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000122"><span class="method_name">error_count</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000119"><span class="method_name">errors?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000193"><span class="method_name">errors?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/CLI.html#M000294"><span class="method_name">example</span> <span class="module_name">(Stella::CLI)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000069"><span class="method_name">exception</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000120"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors.html#M000115"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000070"><span class="method_name">execute</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Report/Headers.html#M000148"><span class="method_name">empty?</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
+        <li><a href="classes/Symbol.html#M000228"><span class="method_name">empty?</span> <span class="module_name">(Symbol)</span></a></li>
+        <li><a href="classes/String.html#M000231"><span class="method_name">encode_fix</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000106"><span class="method_name">error</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000129"><span class="method_name">error_count</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000207"><span class="method_name">errors?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000126"><span class="method_name">errors?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/CLI.html#M000074"><span class="method_name">example</span> <span class="module_name">(Stella::CLI)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000076"><span class="method_name">exception</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors.html#M000122"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000127"><span class="method_name">exceptions?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000077"><span class="method_name">execute</span> <span class="module_name">(Stella::Client)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000056"><span class="method_name">external_ip_address</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000098"><span class="method_name">fail</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000147"><span class="method_name">favicon?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000089"><span class="method_name">find_response_handler</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Numeric.html#M000251"><span class="method_name">fineround</span> <span class="module_name">(Numeric)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000149"><span class="method_name">first_request</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Hash.html#M000285"><span class="method_name">flatten</span> <span class="module_name">(Hash)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000101"><span class="method_name">follow</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000083"><span class="method_name">form</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000084"><span class="method_name">forms</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Float.html#M000283"><span class="method_name">fractional_part</span> <span class="module_name">(Float)</span></a></li>
-        <li><a href="classes/Float.html#M000282"><span class="method_name">fractional_part?</span> <span class="module_name">(Float)</span></a></li>
-        <li><a href="classes/Stella/RequestTemplate.html#M000190"><span class="method_name">freeze</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000177"><span class="method_name">freeze</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000150"><span class="method_name">freeze</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Hash.html#M000288"><span class="method_name">from_array</span> <span class="module_name">(Hash)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000260"><span class="method_name">from_csv</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Stella/Template.html#M000210"><span class="method_name">from_file</span> <span class="module_name">(Stella::Template)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000162"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000178"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000262"><span class="method_name">from_json</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Array.html#M000281"><span class="method_name">from_json</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors.html#M000117"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000123"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000079"><span class="method_name">generate_request</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000105"><span class="method_name">fail</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000156"><span class="method_name">favicon?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000096"><span class="method_name">find_response_handler</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Numeric.html#M000265"><span class="method_name">fineround</span> <span class="module_name">(Numeric)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000158"><span class="method_name">first_request</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Hash.html#M000299"><span class="method_name">flatten</span> <span class="module_name">(Hash)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000108"><span class="method_name">follow</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000090"><span class="method_name">form</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000091"><span class="method_name">forms</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Float.html#M000297"><span class="method_name">fractional_part</span> <span class="module_name">(Float)</span></a></li>
+        <li><a href="classes/Float.html#M000296"><span class="method_name">fractional_part?</span> <span class="module_name">(Float)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000159"><span class="method_name">freeze</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000188"><span class="method_name">freeze</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/RequestTemplate.html#M000202"><span class="method_name">freeze</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
+        <li><a href="classes/Hash.html#M000302"><span class="method_name">from_array</span> <span class="module_name">(Hash)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000274"><span class="method_name">from_csv</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Stella/Template.html#M000224"><span class="method_name">from_file</span> <span class="module_name">(Stella::Template)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000171"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000189"><span class="method_name">from_hash</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000276"><span class="method_name">from_json</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Array.html#M000295"><span class="method_name">from_json</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000130"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors.html#M000124"><span class="method_name">fubars?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000086"><span class="method_name">generate_request</span> <span class="module_name">(Stella::Session)</span></a></li>
         <li><a href="classes/Stella.html#M000007"><span class="method_name">get</span> <span class="module_name">(Stella)</span></a></li>
+        <li><a href="classes/Stella/API.html#M000069"><span class="method_name">get</span> <span class="module_name">(Stella::API)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000041"><span class="method_name">gif?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000167"><span class="method_name">global</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000166"><span class="method_name">global?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000088"><span class="method_name">handle_response</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000092"><span class="method_name">handler</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Array.html#M000267"><span class="method_name">histogram</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000204"><span class="method_name">host</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000155"><span class="method_name">host</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000176"><span class="method_name">global</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000175"><span class="method_name">global?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000095"><span class="method_name">handle_response</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000099"><span class="method_name">handler</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Array.html#M000281"><span class="method_name">histogram</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000218"><span class="method_name">host</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000164"><span class="method_name">host</span> <span class="module_name">(Stella::Testplan)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000054"><span class="method_name">hosted_at_ec2?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000156"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000196"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000244"><span class="method_name">hour</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000227"><span class="method_name">hours</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000182"><span class="method_name">http_auth</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000165"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000210"><span class="method_name">hostid</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000258"><span class="method_name">hour</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000241"><span class="method_name">hours</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000193"><span class="method_name">http_auth</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000040"><span class="method_name">ico?</span> <span class="module_name">(Stella::Utils)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000154"><span class="method_name">id</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000184"><span class="method_name">id</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/EventTemplate.html#M000196"><span class="method_name">id</span> <span class="module_name">(Stella::EventTemplate)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000204"><span class="method_name">id</span> <span class="module_name">(Stella::Testrun)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000035"><span class="method_name">image?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Report/Content.html#M000125"><span class="method_name">image?</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
+        <li><a href="classes/Stella/Report/Content.html#M000132"><span class="method_name">image?</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000034"><span class="method_name">image_ext?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000233"><span class="method_name">in_days</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000234"><span class="method_name">in_hours</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000237"><span class="method_name">in_microseconds</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000236"><span class="method_name">in_milliseconds</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000235"><span class="method_name">in_minutes</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000239"><span class="method_name">in_seconds</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/String.html#M000216"><span class="method_name">in_seconds</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000238"><span class="method_name">in_time</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000232"><span class="method_name">in_weeks</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000231"><span class="method_name">in_years</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000247"><span class="method_name">in_days</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000248"><span class="method_name">in_hours</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000251"><span class="method_name">in_microseconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000250"><span class="method_name">in_milliseconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000249"><span class="method_name">in_minutes</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000253"><span class="method_name">in_seconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/String.html#M000230"><span class="method_name">in_seconds</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000252"><span class="method_name">in_time</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000246"><span class="method_name">in_weeks</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000245"><span class="method_name">in_years</span> <span class="module_name">(Time::Units)</span></a></li>
         <li><a href="classes/Stella/Engine/Base.html#M000027"><span class="method_name">included</span> <span class="module_name">(Stella::Engine::Base)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin.html#M000108"><span class="method_name">included</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000161"><span class="method_name">inherited</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000181"><span class="method_name">inherited</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Report/Headers.html#M000137"><span class="method_name">init</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
-        <li><a href="classes/Stella/CLI.html#M000291"><span class="method_name">init</span> <span class="module_name">(Stella::CLI)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000146"><span class="method_name">init</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000191"><span class="method_name">init</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin.html#M000115"><span class="method_name">included</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000192"><span class="method_name">inherited</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000170"><span class="method_name">inherited</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000153"><span class="method_name">init</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000203"><span class="method_name">init</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Report/Headers.html#M000144"><span class="method_name">init</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
+        <li><a href="classes/Stella/CLI.html#M000071"><span class="method_name">init</span> <span class="module_name">(Stella::CLI)</span></a></li>
         <li><a href="classes/Stella/VERSION.html#M000066"><span class="method_name">inspect</span> <span class="module_name">(Stella::VERSION)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000057"><span class="method_name">internal_ip_address</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000044"><span class="method_name">ipaddr</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000038"><span class="method_name">jpg?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Thread.html#M000215"><span class="method_name">kill!</span> <span class="module_name">(Thread)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000253"><span class="method_name">kind</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Thread.html#M000229"><span class="method_name">kill!</span> <span class="module_name">(Thread)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000267"><span class="method_name">kind</span> <span class="module_name">(MetricsPack)</span></a></li>
         <li><a href="classes/Stella.html#M000006"><span class="method_name">ld</span> <span class="module_name">(Stella)</span></a></li>
         <li><a href="classes/Stella.html#M000005"><span class="method_name">le</span> <span class="module_name">(Stella)</span></a></li>
         <li><a href="classes/Stella.html#M000004"><span class="method_name">li</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/String.html#M000222"><span class="method_name">linkify</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/String.html#M000221"><span class="method_name">linkify!</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000103"><span class="method_name">load</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/String.html#M000236"><span class="method_name">linkify</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/String.html#M000235"><span class="method_name">linkify!</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000110"><span class="method_name">load</span> <span class="module_name">(Stella::Report)</span></a></li>
         <li><a href="classes/Stella/Engine.html#M000025"><span class="method_name">load</span> <span class="module_name">(Stella::Engine)</span></a></li>
         <li><a href="classes/Stella/VERSION.html#M000067"><span class="method_name">load_config</span> <span class="module_name">(Stella::VERSION)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000046"><span class="method_name">local_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000080"><span class="method_name">location</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Content/ReportMethods.html#M000127"><span class="method_name">log</span> <span class="module_name">(Stella::Report::Content::ReportMethods)</span></a></li>
-        <li><a href="classes/Array.html#M000265"><span class="method_name">mean</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Array.html#M000266"><span class="method_name">median</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/HTTPError.html#M000207"><span class="method_name">message</span> <span class="module_name">(Stella::HTTPError)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000263"><span class="method_name">metric?</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Stella/Report/Metrics/ReportMethods.html#M000144"><span class="method_name">metrics_pack</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Metrics/ReportMethods.html#M000145"><span class="method_name">metrics_pretty</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000223"><span class="method_name">microseconds</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000224"><span class="method_name">milliseconds</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000243"><span class="method_name">minute</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000226"><span class="method_name">minutes</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Array.html#M000268"><span class="method_name">mode</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000087"><span class="method_name">location</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Content/ReportMethods.html#M000134"><span class="method_name">log</span> <span class="module_name">(Stella::Report::Content::ReportMethods)</span></a></li>
+        <li><a href="classes/Array.html#M000279"><span class="method_name">mean</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Array.html#M000280"><span class="method_name">median</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/HTTPError.html#M000221"><span class="method_name">message</span> <span class="module_name">(Stella::HTTPError)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000277"><span class="method_name">metric?</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Stella/Report/Metrics/ReportMethods.html#M000151"><span class="method_name">metrics_pack</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Report/Metrics/ReportMethods.html#M000152"><span class="method_name">metrics_pretty</span> <span class="module_name">(Stella::Report::Metrics::ReportMethods)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000237"><span class="method_name">microseconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000238"><span class="method_name">milliseconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000257"><span class="method_name">minute</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000240"><span class="method_name">minutes</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Array.html#M000282"><span class="method_name">mode</span> <span class="module_name">(Array)</span></a></li>
         <li><a href="classes/Stella/Engine.html#M000024"><span class="method_name">mode?</span> <span class="module_name">(Stella::Engine)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000153"><span class="method_name">monitor</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000199"><span class="method_name">monitor?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000154"><span class="method_name">monitored?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000240"><span class="method_name">ms</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000180"><span class="method_name">names</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/StringTemplate.html#M000185"><span class="method_name">new</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
-        <li><a href="classes/Stella/Template.html#M000208"><span class="method_name">new</span> <span class="module_name">(Stella::Template)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000104"><span class="method_name">new</span> <span class="module_name">(Stella::Report)</span></a></li>
-        <li><a href="classes/StellaError.html#M000289"><span class="method_name">new</span> <span class="module_name">(StellaError)</span></a></li>
-        <li><a href="classes/Stella/ForcedRedirect.html#M000205"><span class="method_name">new</span> <span class="module_name">(Stella::ForcedRedirect)</span></a></li>
-        <li><a href="classes/Stella/RequestTemplate.html#M000188"><span class="method_name">new</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
-        <li><a href="classes/StellaBehavior.html#M000290"><span class="method_name">new</span> <span class="module_name">(StellaBehavior)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000068"><span class="method_name">new</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin.html#M000111"><span class="method_name">new</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000174"><span class="method_name">new</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000076"><span class="method_name">new</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/HTTPError.html#M000206"><span class="method_name">new</span> <span class="module_name">(Stella::HTTPError)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000252"><span class="method_name">new</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000162"><span class="method_name">monitor</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000213"><span class="method_name">monitor?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000163"><span class="method_name">monitored?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000254"><span class="method_name">ms</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000191"><span class="method_name">names</span> <span class="module_name">(Stella::Usecase)</span></a></li>
         <li><a href="classes/Stella.html#M000001"><span class="method_name">new</span> <span class="module_name">(Stella)</span></a></li>
+        <li><a href="classes/StellaBehavior.html#M000304"><span class="method_name">new</span> <span class="module_name">(StellaBehavior)</span></a></li>
+        <li><a href="classes/StellaError.html#M000303"><span class="method_name">new</span> <span class="module_name">(StellaError)</span></a></li>
+        <li><a href="classes/Stella/RequestTemplate.html#M000200"><span class="method_name">new</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000266"><span class="method_name">new</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Stella/StringTemplate.html#M000197"><span class="method_name">new</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
+        <li><a href="classes/Stella/API.html#M000068"><span class="method_name">new</span> <span class="module_name">(Stella::API)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000075"><span class="method_name">new</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000083"><span class="method_name">new</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000111"><span class="method_name">new</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/Stella/ForcedRedirect.html#M000219"><span class="method_name">new</span> <span class="module_name">(Stella::ForcedRedirect)</span></a></li>
+        <li><a href="classes/Stella/Template.html#M000222"><span class="method_name">new</span> <span class="module_name">(Stella::Template)</span></a></li>
+        <li><a href="classes/Stella/HTTPError.html#M000220"><span class="method_name">new</span> <span class="module_name">(Stella::HTTPError)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000183"><span class="method_name">new</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin.html#M000118"><span class="method_name">new</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000064"><span class="method_name">noindent</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000129"><span class="method_name">nonsuccessful</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000136"><span class="method_name">nonsuccessful</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
         <li><a href="classes/Stella.html#M000009"><span class="method_name">now</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000202"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000158"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000255"><span class="method_name">pack</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Array.html#M000277"><span class="method_name">percentile</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Array.html#M000278"><span class="method_name">percentile_index</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Array.html#M000273"><span class="method_name">permute</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Array.html#M000274"><span class="method_name">permute!</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000164"><span class="method_name">plan</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000201"><span class="method_name">plan</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000165"><span class="method_name">plan?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000163"><span class="method_name">plans</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000102"><span class="method_name">plugin?</span> <span class="module_name">(Stella::Report)</span></a></li>
-        <li><a href="classes/String.html#M000218"><span class="method_name">plural</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000216"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000167"><span class="method_name">owner?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000269"><span class="method_name">pack</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Array.html#M000291"><span class="method_name">percentile</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Array.html#M000292"><span class="method_name">percentile_index</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Array.html#M000287"><span class="method_name">permute</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Array.html#M000288"><span class="method_name">permute!</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000215"><span class="method_name">plan</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000173"><span class="method_name">plan</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000174"><span class="method_name">plan?</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000155"><span class="method_name">planid</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000172"><span class="method_name">plans</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000109"><span class="method_name">plugin?</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/String.html#M000232"><span class="method_name">plural</span> <span class="module_name">(String)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000039"><span class="method_name">png?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/RequestTemplate.html#M000189"><span class="method_name">postprocess</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000105"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000176"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000151"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000195"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Report/Metrics.html#M000143"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report::Metrics)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000078"><span class="method_name">prepare_request</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000194"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testrun)</span></a></li>
-        <li><a href="classes/Stella/Usecase.html#M000175"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Usecase)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000148"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/API.html#M000070"><span class="method_name">post</span> <span class="module_name">(Stella::API)</span></a></li>
+        <li><a href="classes/Stella/RequestTemplate.html#M000201"><span class="method_name">postprocess</span> <span class="module_name">(Stella::RequestTemplate)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000112"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000187"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/Stella/Report/Metrics.html#M000150"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Report::Metrics)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000160"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000209"><span class="method_name">postprocess</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000085"><span class="method_name">prepare_request</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000157"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000208"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000186"><span class="method_name">preprocess</span> <span class="module_name">(Stella::Usecase)</span></a></li>
         <li><a href="classes/Stella/Common/PrivacyMethods.html#M000032"><span class="method_name">private!</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a></li>
         <li><a href="classes/Stella/Common/PrivacyMethods.html#M000030"><span class="method_name">private?</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000047"><span class="method_name">private_ipaddr?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin/ClassMethods.html#M000113"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Headers.html#M000138"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors.html#M000114"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000106"><span class="method_name">process</span> <span class="module_name">(Stella::Report)</span></a></li>
-        <li><a href="classes/Stella/Report/Metrics.html#M000142"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Metrics)</span></a></li>
-        <li><a href="classes/Stella/Report/Content.html#M000126"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000128"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin.html#M000109"><span class="method_name">processed!</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin.html#M000110"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
-        <li><a href="classes/Stella/Report.html#M000107"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/Stella/Report/Content.html#M000133"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Content)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors.html#M000121"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
+        <li><a href="classes/Stella/Report/Metrics.html#M000149"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Metrics)</span></a></li>
+        <li><a href="classes/Stella/Report/Headers.html#M000145"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin/ClassMethods.html#M000120"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000113"><span class="method_name">process</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000135"><span class="method_name">process</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin.html#M000116"><span class="method_name">processed!</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
+        <li><a href="classes/Stella/Report.html#M000114"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin.html#M000117"><span class="method_name">processed?</span> <span class="module_name">(Stella::Report::Plugin)</span></a></li>
         <li><a href="classes/Stella/Common/PrivacyMethods.html#M000033"><span class="method_name">public!</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a></li>
         <li><a href="classes/Stella/Common/PrivacyMethods.html#M000031"><span class="method_name">public?</span> <span class="module_name">(Stella::Common::PrivacyMethods)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000256"><span class="method_name">quantize_stamp</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000270"><span class="method_name">quantize_stamp</span> <span class="module_name">(MetricsPack)</span></a></li>
         <li><a href="classes/Stella.html#M000003"><span class="method_name">quiet?</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000097"><span class="method_name">quit</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Array.html#M000276"><span class="method_name">random</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000133"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000134"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000081"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000131"><span class="method_name">redirected</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
-        <li><a href="classes/Stella/Report/Plugin/ClassMethods.html#M000112"><span class="method_name">register</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000172"><span class="method_name">register</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000104"><span class="method_name">quit</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Array.html#M000290"><span class="method_name">random</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000140"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000141"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000088"><span class="method_name">redirect?</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000138"><span class="method_name">redirected</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
         <li><a href="classes/Stella/Engine/Base/ClassMethods.html#M000028"><span class="method_name">register</span> <span class="module_name">(Stella::Engine::Base::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000183"><span class="method_name">register</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000100"><span class="method_name">repeat</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Headers.html#M000139"><span class="method_name">request_header</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
+        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000194"><span class="method_name">register</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Report/Plugin/ClassMethods.html#M000119"><span class="method_name">register</span> <span class="module_name">(Stella::Report::Plugin::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000181"><span class="method_name">register</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000107"><span class="method_name">repeat</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Headers.html#M000146"><span class="method_name">request_header</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000058"><span class="method_name">require_glob</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000059"><span class="method_name">require_vendor</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella.html#M000012"><span class="method_name">rescue</span> <span class="module_name">(Stella)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000093"><span class="method_name">response</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000091"><span class="method_name">response_handler</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000090"><span class="method_name">response_handler?</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Headers.html#M000140"><span class="method_name">response_header</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
-        <li><a href="classes/Stella/Template.html#M000209"><span class="method_name">result</span> <span class="module_name">(Stella::Template)</span></a></li>
-        <li><a href="classes/Stella/StringTemplate.html#M000186"><span class="method_name">result</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
-        <li><a href="classes/Stella/Testrun.html#M000197"><span class="method_name">run</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000100"><span class="method_name">response</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000098"><span class="method_name">response_handler</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000097"><span class="method_name">response_handler?</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Headers.html#M000147"><span class="method_name">response_header</span> <span class="module_name">(Stella::Report::Headers)</span></a></li>
+        <li><a href="classes/Stella/Template.html#M000223"><span class="method_name">result</span> <span class="module_name">(Stella::Template)</span></a></li>
+        <li><a href="classes/Stella/StringTemplate.html#M000198"><span class="method_name">result</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
         <li><a href="classes/Stella/Engine/Checkup.html#M000029"><span class="method_name">run</span> <span class="module_name">(Stella::Engine::Checkup)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000170"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000179"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
         <li><a href="classes/Stella/Engine.html#M000026"><span class="method_name">run</span> <span class="module_name">(Stella::Engine)</span></a></li>
-        <li><a href="classes/Stella/Testplan.html#M000160"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan)</span></a></li>
-        <li><a href="classes/Stella/Client.html#M000071"><span class="method_name">run_sleeper</span> <span class="module_name">(Stella::Client)</span></a></li>
-        <li><a href="classes/Array.html#M000275"><span class="method_name">sample</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Array.html#M000272"><span class="method_name">sd</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000242"><span class="method_name">second</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000225"><span class="method_name">seconds</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000211"><span class="method_name">run</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Stella/Testplan.html#M000169"><span class="method_name">run</span> <span class="module_name">(Stella::Testplan)</span></a></li>
+        <li><a href="classes/Stella/Client.html#M000078"><span class="method_name">run_sleeper</span> <span class="module_name">(Stella::Client)</span></a></li>
+        <li><a href="classes/Stella/Testrun.html#M000205"><span class="method_name">runid</span> <span class="module_name">(Stella::Testrun)</span></a></li>
+        <li><a href="classes/Array.html#M000289"><span class="method_name">sample</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Array.html#M000286"><span class="method_name">sd</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000256"><span class="method_name">second</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000239"><span class="method_name">seconds</span> <span class="module_name">(Time::Units)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000061"><span class="method_name">service_available?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000173"><span class="method_name">session</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000184"><span class="method_name">session</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
-        <li><a href="classes/String.html#M000219"><span class="method_name">shorten</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/Numeric.html#M000250"><span class="method_name">square</span> <span class="module_name">(Numeric)</span></a></li>
-        <li><a href="classes/Array.html#M000269"><span class="method_name">squares</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000095"><span class="method_name">status</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000136"><span class="method_name">statuses_pretty</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000182"><span class="method_name">session</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Usecase/ClassMethods.html#M000195"><span class="method_name">session</span> <span class="module_name">(Stella::Usecase::ClassMethods)</span></a></li>
+        <li><a href="classes/String.html#M000233"><span class="method_name">shorten</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Numeric.html#M000264"><span class="method_name">square</span> <span class="module_name">(Numeric)</span></a></li>
+        <li><a href="classes/Array.html#M000283"><span class="method_name">squares</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000102"><span class="method_name">status</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000143"><span class="method_name">statuses_pretty</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000063"><span class="method_name">strand</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000135"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000132"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
-        <li><a href="classes/Stella/Report/Statuses.html#M000130"><span class="method_name">successful</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
-        <li><a href="classes/Array.html#M000264"><span class="method_name">sum</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000171"><span class="method_name">testplan</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000121"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
-        <li><a href="classes/Stella/Report/Errors.html#M000116"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000257"><span class="method_name">to_a</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Numeric.html#M000249"><span class="method_name">to_bytes</span> <span class="module_name">(Numeric)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000259"><span class="method_name">to_csv</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/String.html#M000220"><span class="method_name">to_file</span> <span class="module_name">(String)</span></a></li>
-        <li><a href="classes/Hash.html#M000287"><span class="method_name">to_http_params</span> <span class="module_name">(Hash)</span></a></li>
-        <li><a href="classes/Hash.html#M000284"><span class="method_name">to_json</span> <span class="module_name">(Hash)</span></a></li>
-        <li><a href="classes/Array.html#M000280"><span class="method_name">to_json</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Numeric.html#M000248"><span class="method_name">to_ms</span> <span class="module_name">(Numeric)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000139"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses/ReportMethods.html#M000142"><span class="method_name">success?</span> <span class="module_name">(Stella::Report::Statuses::ReportMethods)</span></a></li>
+        <li><a href="classes/Stella/Report/Statuses.html#M000137"><span class="method_name">successful</span> <span class="module_name">(Stella::Report::Statuses)</span></a></li>
+        <li><a href="classes/Array.html#M000278"><span class="method_name">sum</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000180"><span class="method_name">testplan</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors.html#M000123"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors)</span></a></li>
+        <li><a href="classes/Stella/Report/Errors/ReportMethods.html#M000128"><span class="method_name">timeouts?</span> <span class="module_name">(Stella::Report::Errors::ReportMethods)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000271"><span class="method_name">to_a</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Numeric.html#M000263"><span class="method_name">to_bytes</span> <span class="module_name">(Numeric)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000273"><span class="method_name">to_csv</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/String.html#M000234"><span class="method_name">to_file</span> <span class="module_name">(String)</span></a></li>
+        <li><a href="classes/Hash.html#M000301"><span class="method_name">to_http_params</span> <span class="module_name">(Hash)</span></a></li>
+        <li><a href="classes/Array.html#M000294"><span class="method_name">to_json</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Hash.html#M000298"><span class="method_name">to_json</span> <span class="module_name">(Hash)</span></a></li>
+        <li><a href="classes/Numeric.html#M000262"><span class="method_name">to_ms</span> <span class="module_name">(Numeric)</span></a></li>
+        <li><a href="classes/Stella/Template.html#M000225"><span class="method_name">to_s</span> <span class="module_name">(Stella::Template)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000272"><span class="method_name">to_s</span> <span class="module_name">(MetricsPack)</span></a></li>
         <li><a href="classes/Stella/VERSION.html#M000065"><span class="method_name">to_s</span> <span class="module_name">(Stella::VERSION)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000258"><span class="method_name">to_s</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Stella/Template.html#M000211"><span class="method_name">to_s</span> <span class="module_name">(Stella::Template)</span></a></li>
-        <li><a href="classes/Stella/StringTemplate.html#M000187"><span class="method_name">to_s</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000261"><span class="method_name">unpack</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Symbol.html#M000213"><span class="method_name">upcase</span> <span class="module_name">(Symbol)</span></a></li>
-        <li><a href="classes/MetricsPack.html#M000254"><span class="method_name">update</span> <span class="module_name">(MetricsPack)</span></a></li>
-        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000168"><span class="method_name">usecases</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
+        <li><a href="classes/Stella/StringTemplate.html#M000199"><span class="method_name">to_s</span> <span class="module_name">(Stella::StringTemplate)</span></a></li>
+        <li><a href="classes/Stella/Usecase.html#M000185"><span class="method_name">ucid</span> <span class="module_name">(Stella::Usecase)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000275"><span class="method_name">unpack</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Symbol.html#M000227"><span class="method_name">upcase</span> <span class="module_name">(Symbol)</span></a></li>
+        <li><a href="classes/MetricsPack.html#M000268"><span class="method_name">update</span> <span class="module_name">(MetricsPack)</span></a></li>
+        <li><a href="classes/Stella/Testplan/ClassMethods.html#M000177"><span class="method_name">usecases</span> <span class="module_name">(Stella::Testplan::ClassMethods)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000055"><span class="method_name">valid_hostname?</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Array.html#M000270"><span class="method_name">variance</span> <span class="module_name">(Array)</span></a></li>
-        <li><a href="classes/Stella/Session.html#M000096"><span class="method_name">wait</span> <span class="module_name">(Stella::Session)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000246"><span class="method_name">week</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000229"><span class="method_name">weeks</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Array.html#M000284"><span class="method_name">variance</span> <span class="module_name">(Array)</span></a></li>
+        <li><a href="classes/Stella/Session.html#M000103"><span class="method_name">wait</span> <span class="module_name">(Stella::Session)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000260"><span class="method_name">week</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000243"><span class="method_name">weeks</span> <span class="module_name">(Time::Units)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000043"><span class="method_name">whois</span> <span class="module_name">(Stella::Utils)</span></a></li>
         <li><a href="classes/Stella/Utils.html#M000062"><span class="method_name">write_to_file</span> <span class="module_name">(Stella::Utils)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000247"><span class="method_name">year</span> <span class="module_name">(Time::Units)</span></a></li>
-        <li><a href="classes/Time/Units.html#M000230"><span class="method_name">years</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000261"><span class="method_name">year</span> <span class="module_name">(Time::Units)</span></a></li>
+        <li><a href="classes/Time/Units.html#M000244"><span class="method_name">years</span> <span class="module_name">(Time::Units)</span></a></li>
       </ol>
     </div>
   </body>

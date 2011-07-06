@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::Usecase [stella 2.0.1.002]</title>
+    <title>: Stella::Usecase [stella 2.0.3.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,17 +45,19 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000179">checkup</a></li>
-              <li><a href="#M000178">from_hash</a></li>
-              <li><a href="#M000181">inherited</a></li>
-              <li><a href="#M000180">names</a></li>
-              <li><a href="#M000174">new</a></li>
+              <li><a href="#M000190">checkup</a></li>
+              <li><a href="#M000189">from_hash</a></li>
+              <li><a href="#M000192">inherited</a></li>
+              <li><a href="#M000191">names</a></li>
+              <li><a href="#M000183">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000177">freeze</a></li>
-              <li><a href="#M000176">postprocess</a></li>
-              <li><a href="#M000175">preprocess</a></li>
+              <li><a href="#M000188">freeze</a></li>
+              <li><a href="#M000184">id</a></li>
+              <li><a href="#M000187">postprocess</a></li>
+              <li><a href="#M000186">preprocess</a></li>
+              <li><a href="#M000185">ucid</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -70,18 +72,6 @@
             <div id='class-list'>
               <h2>Classes and Modules</h2>
               Module <a href="Usecase/ClassMethods.html" class="link">Stella::Usecase::ClassMethods</a><br />
-            </div>
-            <div id='aliases-list'>
-              <h2>External Aliases</h2>
-              <div class='name-list'>
-                <table summary='External aliases'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>id</td>
-                    <td>-&gt;</td>
-                    <td class='context-item-value'>ucid</td>
-                  </tr>
-                </table>
-              </div>
             </div>
             <div id='attribute-list'>
               <h2 class='section-bar'>Attributes</h2>
@@ -122,109 +112,134 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000179'>
-                <a name='M000179'>      </a>
+              <div class='method public-class' id='method-M000190'>
+                <a name='M000190'>      </a>
                 <div class='synopsis'>
                   <span class='name'>checkup</span>
                   <span class='arguments'>(base_uri, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000179-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000190-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000179-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 246</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">checkup</span> <span class="ruby-identifier">base_uri</span>, <span class="ruby-identifier">opts</span>={}&#x000A;        (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:usecases</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>&#x000A;        <span class="ruby-identifier">testplan</span>.<span class="ruby-identifier">checkup</span> <span class="ruby-identifier">base_uri</span>, <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000190-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 254</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">checkup</span> <span class="ruby-identifier">base_uri</span>, <span class="ruby-identifier">opts</span>={}&#x000A;        (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:usecases</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>&#x000A;        <span class="ruby-identifier">testplan</span>.<span class="ruby-identifier">checkup</span> <span class="ruby-identifier">base_uri</span>, <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000178'>
-                <a name='M000178'>      </a>
+              <div class='method public-class' id='method-M000189'>
+                <a name='M000189'>      </a>
                 <div class='synopsis'>
                   <span class='name'>from_hash</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000178-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000189-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000178-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 241</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_hash</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">me</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">me</span>.<span class="ruby-identifier">requests</span>.<span class="ruby-identifier">collect!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">req</span><span class="ruby-operator">|</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">RequestTemplate</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">req</span>) }&#x000A;        <span class="ruby-identifier">me</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000189-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 249</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">from_hash</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">me</span> = <span class="ruby-keyword kw">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">me</span>.<span class="ruby-identifier">requests</span>.<span class="ruby-identifier">collect!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">req</span><span class="ruby-operator">|</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">RequestTemplate</span>.<span class="ruby-identifier">from_hash</span>(<span class="ruby-identifier">req</span>) }&#x000A;        <span class="ruby-identifier">me</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000181'>
-                <a name='M000181'>      </a>
+              <div class='method public-class' id='method-M000192'>
+                <a name='M000192'>      </a>
                 <div class='synopsis'>
                   <span class='name'>inherited</span>
                   <span class='arguments'>(obj)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000192-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000181-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 257</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">obj</span>)&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;        <span class="ruby-identifier">planclass</span>, <span class="ruby-identifier">ucname</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">obj</span>.<span class="ruby-identifier">names</span>&#x000A;        <span class="ruby-identifier">planclass</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span><span class="ruby-operator">::</span><span class="ruby-constant">ClassMethods</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan?</span> <span class="ruby-identifier">planclass</span>&#x000A;          <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>, <span class="ruby-identifier">planclass</span>.<span class="ruby-identifier">new</span>)&#x000A;          <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">desc</span> = <span class="ruby-identifier">planclass</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance</span> = <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">testplan</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>)&#x000A;        <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">usecases</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance</span>&#x000A;        <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">usecases</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">desc</span> = <span class="ruby-identifier">ucname</span>&#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">ClassMethods</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000192-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 265</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">obj</span>)&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;        <span class="ruby-identifier">planclass</span>, <span class="ruby-identifier">ucname</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">obj</span>.<span class="ruby-identifier">names</span>&#x000A;        <span class="ruby-identifier">planclass</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span><span class="ruby-operator">::</span><span class="ruby-constant">ClassMethods</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan?</span> <span class="ruby-identifier">planclass</span>&#x000A;          <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>, <span class="ruby-identifier">planclass</span>.<span class="ruby-identifier">new</span>)&#x000A;          <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">desc</span> = <span class="ruby-identifier">planclass</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance</span> = <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">testplan</span> = <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>)&#x000A;        <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">usecases</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance</span>&#x000A;        <span class="ruby-constant">Stella</span><span class="ruby-operator">::</span><span class="ruby-constant">Testplan</span>.<span class="ruby-identifier">plan</span>(<span class="ruby-identifier">planclass</span>).<span class="ruby-identifier">usecases</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">desc</span> = <span class="ruby-identifier">ucname</span>&#x000A;        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">ClassMethods</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000180'>
-                <a name='M000180'>      </a>
+              <div class='method public-class' id='method-M000191'>
+                <a name='M000191'>      </a>
                 <div class='synopsis'>
                   <span class='name'>names</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000191-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000180-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 250</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">names</span>&#x000A;        <span class="ruby-identifier">names</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'::'</span>)&#x000A;        <span class="ruby-identifier">planname</span>, <span class="ruby-identifier">ucname</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">size</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span> [<span class="ruby-value str">'DefaultTestplan'</span>, <span class="ruby-identifier">names</span>.<span class="ruby-identifier">last</span>]&#x000A;        <span class="ruby-keyword kw">else</span>        [<span class="ruby-identifier">names</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'::'</span>), <span class="ruby-identifier">names</span>[<span class="ruby-value">-1</span>]] <span class="ruby-keyword kw">end</span>&#x000A;        [<span class="ruby-identifier">eval</span>(<span class="ruby-identifier">planname</span>), <span class="ruby-identifier">ucname</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000191-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 258</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">names</span>&#x000A;        <span class="ruby-identifier">names</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'::'</span>)&#x000A;        <span class="ruby-identifier">planname</span>, <span class="ruby-identifier">ucname</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">size</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span> [<span class="ruby-value str">'DefaultTestplan'</span>, <span class="ruby-identifier">names</span>.<span class="ruby-identifier">last</span>]&#x000A;        <span class="ruby-keyword kw">else</span>        [<span class="ruby-identifier">names</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'::'</span>), <span class="ruby-identifier">names</span>[<span class="ruby-value">-1</span>]] <span class="ruby-keyword kw">end</span>&#x000A;        [<span class="ruby-identifier">eval</span>(<span class="ruby-identifier">planname</span>), <span class="ruby-identifier">ucname</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-class' id='method-M000174'>
-                <a name='M000174'>      </a>
+              <div class='method public-class' id='method-M000183'>
+                <a name='M000183'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(req=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000174-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000174-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 177</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">req</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">preprocess</span>&#x000A;      <span class="ruby-ivar">@requests</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">req</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">req</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000183-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 181</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">req</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">preprocess</span>&#x000A;      <span class="ruby-ivar">@requests</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">req</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">req</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000177'>
-                <a name='M000177'>      </a>
+              <div class='method public-instance' id='method-M000188'>
+                <a name='M000188'>      </a>
                 <div class='synopsis'>
                   <span class='name'>freeze</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000177-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000188-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000177-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 188</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;      <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">freeze</span> }&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">digest</span>)&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000188-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 196</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;      <span class="ruby-ivar">@requests</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">freeze</span> }&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">digest</span>)&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000176'>
-                <a name='M000176'>      </a>
+              <div class='method public-instance' id='method-M000184'>
+                <a name='M000184'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>id</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000184-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000184-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 185</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">id</span> &#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">gibbler</span>&#x000A;      <span class="ruby-ivar">@id</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000187'>
+                <a name='M000187'>      </a>
                 <div class='synopsis'>
                   <span class='name'>postprocess</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000176-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000187-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000176-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 185</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000187-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 193</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000175'>
-                <a name='M000175'>      </a>
+              <div class='method public-instance' id='method-M000186'>
+                <a name='M000186'>      </a>
                 <div class='synopsis'>
                   <span class='name'>preprocess</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000175-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000186-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000175-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 182</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preprocess</span>&#x000A;      <span class="ruby-ivar">@requests</span> <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000186-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 190</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preprocess</span>&#x000A;      <span class="ruby-ivar">@requests</span> <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000185'>
+                <a name='M000185'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ucid</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Alias for <a href="Usecase.html#M000184">id</a>
+                  </p>
                 </div>
               </div>
             </div>

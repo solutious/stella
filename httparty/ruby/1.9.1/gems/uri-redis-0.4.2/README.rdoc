@@ -1,0 +1,35 @@
+= URI-Redis v0.2
+
+redis://host:port/dbindex
+
+== Usage
+
+    require 'uri/redis'
+
+    conf = URI.parse 'redis://localhost:8999/2'
+    conf.host                 # => localhost
+    conf.port                 # => 8999
+    conf.db                   # => 2
+        
+    
+== Installation
+
+Get it in one of the following ways:
+
+* <tt>gem install uri-redis</tt>
+* <tt>git clone git://github.com/delano/uri-redis.git</tt>
+
+
+== More Information
+
+* Codes[http://github.com/delano/uri-redis]
+* RDocs[http://delano.github.com/uri-redis]
+
+
+== Credits
+
+* Delano Mandelbaum (http://solutious.com)
+
+== License
+
+See LICENSE.txt

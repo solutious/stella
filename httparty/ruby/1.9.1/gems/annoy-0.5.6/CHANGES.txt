@@ -1,0 +1,30 @@
+ANNOY, CHANGES
+
+#### 0.5.6 (2010-02-20) ###############################
+
+* CHANGE: Remove hanna dependency [Diego Elio 'Flameeyes' Pettenò]
+
+#### 0.5.5 (2009-08-01) ###############################
+
+* CHANGE: Increased default timeout period to 3600 seconds. 
+
+#### 0.5.4 (2009-06-25) ###############################
+
+* CHANGE: Removed RedCloth dependency from gemspec.
+
+#### 0.5.3 (2009-06-21) ###############################
+
+* CHANGE: pose_question returns true when writer is nil
+
+#### 0.5.2 (2009-06-03) ###############################
+
+* FIXED: Bug in user get_user_input after timeout expires
+
+#### 0.5.1 (2009-06-03) ###############################
+
+* ADDED: get_user_input method. 
+
+#### 0.5.0 (2009-05-07) ###############################
+
+* First public release. See commit history for solutious-rudy. 
+

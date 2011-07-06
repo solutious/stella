@@ -1,0 +1,72 @@
+#!/usr/bin/ruby
+
+# = Rudy SDB
+# 
+# === A Rudy interface to Amazon Simple Storage Service
+#
+# 
+# 
+# See rudy-sdb -h for usage
+# 
+
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib') # Put our local lib in first place
+
+begin
+  require 'drydock'
+  require 'rudy'
+  require 'rudy/cli'
+rescue Interrupt
+  exit
+end
+
+# Command-line interface for bin/rudy-sdb
+module RudyCLI_SDB
+  extend Drydock
+  
+  # -----------------------------------  AMAZON SDB COMMANDS  --------
+  # ------------------------------------------------------------------
+  
+  
+  about "Displays the SimpleDB domains associated to your account"
+  action :C, :create, "Create a domain"
+  action :D, :destroy, "Destroy a domain"
+  argv :name
+  command :domains => Rudy::CLI::AWS::SDB::Domains
+  command_alias :domains, :domain
+  
+  about "Displays objects contained in a SimpleDB domain"
+  action :D, :destroy, "Remove a key from the domain (careful!)"
+  argv :name, :key
+  command :objects => Rudy::CLI::AWS::SDB::Objects
+  command_alias :objects, :object
+  
+  about "Execute a SimpleDB select query"
+  argv :query
+  command :query => Rudy::CLI::AWS::SDB::Select
+  
+  
+  # --------------------------------  RUDY-SDB MISCELLANEOUS  --------
+  # ------------------------------------------------------------------
+  
+  default :domains
+
+end
+
+begin
+  Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Drydock::ArgError, Drydock::OptError => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.usage
+rescue Drydock::InvalidArgument => ex
+  STDERR.puts ex.message  
+rescue Rudy::Error => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.backtrace if Drydock.debug?
+rescue => ex
+  STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
+  STDERR.puts ex.backtrace if Drydock.debug?
+rescue Interrupt
+  puts "#{$/}Exiting... "
+  exit 1
+end
+

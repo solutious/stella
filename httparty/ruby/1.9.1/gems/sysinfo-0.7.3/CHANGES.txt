@@ -1,0 +1,53 @@
+SYSINFO, CHANGES
+
+#### 0.7.2 (2010-02-12) #############################
+
+* CHANGE: Removed hanna dependency [Diego Elio 'Flameeyes' Pettenò]
+
+#### 0.7.1 (2009-11-02) #############################
+
+* CHANGE: Include ruby version and user name in standard dump. 
+
+#### 0.7.0 (2009-08-24) #############################
+
+NOTE: SysInfo strings are not compatible with previous releases. 
+
+* FIXED: Don't require Win32API when running in JRuby
+* CHANGE: All references to "win32" are now "windows". This resolves
+  the ambiguity between the OS and the Win32 API. 
+* CHANGE: All references to "i386" are now "x86"
+
+
+#### 0.6.3 (2009-08-03) #############################
+
+* FIXED: "warning: already initialized constant System" in JRuby
+
+#### 0.6.2 (2009-06-30) #############################
+
+* CHANGE: Updated bin/sysinfo for Drydock 0.6.6
+* CHANGE: Removed "require 'rubygems'"
+
+#### 0.6.1 (2009-05-25) #############################
+
+* CHANGE: Removed RedCloth dependency from gemspec.
+
+#### 0.6.0 (2009-06-09) ###############################
+
+* CHANGE: "universal" mapped to "i386". Now: "x86_64"
+* CHANGE: "x86" mapped to "386". Now: "x86"
+* CHANGE: /i\d86/ mapped to "386". Now: "x86"
+
+
+#### 0.5.1 (2009-05-07) ###############################
+
+* CHANGE: Hella cleanup in preparation for future expansion. 
+* CHANGE: Modified platform, now returns VM-OS instead of OS-IMPL
+* ADDED: to_s which returns a full platform string
+* ADDED: sysinfo executable
+
+
+#### 0.5 (2009-05-07) ###############################
+
+* First public release. See commit history for solutious-stella, solutious-rudy, 
+and delano-rye for complete history of SysInfo (was SystemInfo).
+

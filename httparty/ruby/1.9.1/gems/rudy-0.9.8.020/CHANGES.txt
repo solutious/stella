@@ -1,0 +1,504 @@
+RUDY, CHANGES 
+
+
+#### 0.9.8.018 (2010-11-27) #######################
+
+* ADDED: Support for registering EBS-based images. (See rudy-ec2 images -h)
+
+#### 0.9.8.017 (2010-11-11) #######################
+
+* FIXED: adduser handler checks for root before using sudo
+* FIXED: Added us-west-1 and ap-southeast-1 regions to Rudy::AWS::VALID_REGIONS
+
+
+#### 0.9.8.016 (2010-10-26) #######################
+
+NOTE: If you're using Ubuntu you'll need to update your 
+configuration to use this release. 
+
+* ADDED: new config parameter: 'root'. In previous releases
+Rudy used the default user to determine which account to use
+when launching new instances with EC2. With this release, 
+you now need to use "root". Either in the defaults config or
+the machines config for you ubuntu instances:
+
+defaults do
+  root "ubuntu"
+end
+
+machines do
+  role :ubuntu
+    root "ubuntu"
+  end
+end
+
+
+#### 0.9.8.015 (2010-10-25) #######################
+
+* FIXED: Don't try to sudo when setting hostname if already root
+* FIXED: Run rudy machines -U command as default_user (or root)
+* CHANGE: Update dependency Rye 0.9.2
+* CHANGE: Update dependency Gibbler 0.8.4
+
+
+#### 0.9.8.014 (2010-10-08) #######################
+
+* FIXED: bad delano!
+
+#### 0.9.8.013 (2010-10-08) #######################
+
+* ADDED: use default user instead of assuming root
+
+#### 0.9.8.012 (2010-09-02) #######################
+
+* ADDED: rudy-sdb objects --destroy
+
+#### 0.9.8.011 (2010-08-31) #######################
+
+* ADDED: Global --positions option to override positions variable through CLI
+
+#### 0.9.8.010 (2010-08-29) ####################### 
+
+* FIXED: Catch interrupts while loading requires
+
+#### 0.9.8.009 (2010-08-19) ####################### 
+
+* ADDED: Support for Rye 0.9
+* CHANGE: "rudy init" no longer authorizing SSH localhost
+ 
+
+#### 0.9.8.008 (2010-08-03) ####################### 
+
+* FIXED: Command-line arguments for routines are now passed to before and after dependencies.
+
+#### 0.9.8.007 (2010-06-28) ####################### 
+
+* FIXED: "rudy disks --destroy /path" was not working when all machines were shutdown.
+* CHANGE: Use sudo for remote system commands (hostname change, disk mount etc) when the user is not root. 
+* CHANGE: Dependent on Rye 0.8.19
+
+
+#### 0.9.8.006 (2010-06-28) ####################### 
+
+* FIXED: In Ruby 1.9, the value for disk.position was being modified by refresh!
+
+#### 0.9.8.005 (2010-05-21) ####################### 
+
+* FIXED: uninitialized constant Rye::Box::Huxtable error when running "rudy m -U"
+
+#### 0.9.8.004 (2010-05-19) ####################### 
+
+* FIXED: original_user and user_keypairpath errors when running "rudy machines -U"
+* FIXED: Silence redefining startup class message unless debug mode
+
+
+#### 0.9.8.003 (2010-05-19) ####################### 
+
+* FIXED: Rye should be in quiet mode when Rudy.quiet?
+* FIXED: Print paths for files transferred in routines (via Rye 0.8.16)
+
+
+#### 0.9.8.002 (2010-05-14) ####################### 
+
+* FIXED: Calling startup routine as before dependency
+* CHANGE: only switch to root if the hostname requires changing [Matt Jackson]
+
+#### 0.9.8.001 (2010-04-02) #######################
+
+* ADDED: Support for specifying non-ec2 instances in machines config with hostname parameter
+
+#### 0.9.7 (2010-02-20) ###########################
+
+* FIXED: Replace the group_id parameter with security_group. [Diego Elio 'Flameeyes' Pettenò]
+* FIXED: Remote the addressing type option no longer supported by amazon-ec2. [Diego Elio 'Flameeyes' Pettenò]
+* FIXED: "Error associating address" message on startup
+* CHANGE: Don't make tryouts a runtime dependency, but a development dependency. [Diego Elio 'Flameeyes' Pettenò]
+* CHANGE: Remove hanna dependency. [Diego Elio 'Flameeyes' Pettenò]
+
+
+#### 0.9.6 (2010-01-16) ###########################
+
+* FIXED: Include Gibbler for REXML
+* FIXED: Elastic IP binding on startup (GH-40)
+* FIXED: rudy-ec2 volumes should be quiet!
+* CHANGE: Increased max instances from 5 to 20. 
+* CHANGE: Maximum autoloads
+* ADDED: Debug mode global option -D
+
+
+#### 0.9.5 (2009-09-01) ###########################
+
+* FIXED: Unknown method error, 'li' 
+* ADDED: Better error handling for disk routines
+
+
+#### 0.9.4 (2009-08-28) ###########################
+
+* FIXED: NoMachines exception when running various dependency scenarios
+* CHANGE: All puts to STDOUT and STDERR now go through Rudy::Huxtable.li and Rudy::Huxtable.le. This resolves the issues with the output printing in quiet mode. 
+* CHANGE: Overhaul on output formatting. 
+* ADDED: "rudy networks --create" and "rudy networks --destroy"
+
+
+#### 0.9.3 (2009-08-26) ###########################
+
+* FIXED: Updated dependencies in gemspec (Rye)
+* FIXED: Local SSH pubkeys are now included when creating remote SSH
+  connections. This resolves the issues with creating and authorizing
+  a remote user then getting an authentication error. 
+  
+#### 0.9.2 (2009-08-25) ###########################
+
+* FIXED: Threading error in Net::HTTP by forcing a mutex during AWS::EC2 requests
+* FIXED: errors when washing backups
+* FIXED: Host.is_available? now checks port 3389 (Remote Desktop) for Windows instances. Closes GH-16
+* FIXED: "rudy machines -T" now checks port 3389 for Windows instances. Closes GH-21
+* FIXED: "rudy disks -l" doesn't display disks from a different zone. Closes GH-24
+* FIXED: Rudy::Machine#refresh! now correctly refreshes metadata
+* FIXED: startup, shutdown, and reboot routines don't run correctly as dependencies. Closes GH-25
+* FIXED: Rogue "No machines configuration" error when accessing current_machine_address
+* CHANGE: Increased AWS timeout to 30 seconds. Closes GH-19
+* CHANGE: Increased boot wait time for windows instances to 500 seconds.
+* CHANGE: Module names have changed from EC2 to AWS::EC2 in amazon-ec2 0.5 [Dominic Cleal]
+* CHANGE: Rudy::Routines::Handlers::Disks.attach now creates a volume if the disk doesn't already have one. 
+* CHANGE: Standardized CLI outut for rudy-ec2 (except groups b/c of weird YAML error)
+* CHANGE: Windows "os" is now referred to by :windows rather than :win32 (SysInfo 0.7)
+* CHANGE: Renamed "rudy status" to "rudy info"
+* ADDED: Rudy::Machine#get_console, Rudy::Machine#get_password
+* ADDED: Rudy::Machine#windows?, Rudy::Machine#linux?, Rudy::Machine#solaris?, Rudy::Machine#os?
+* ADDED: "rudy m -console" and "rudy m --password"
+* ADDED: "rudy keypairs"
+* ADDED: "rudy networks --authorize"
+* ADDED: "rudy networks --revoke"
+* ADDED: "rudy disks --create"
+* ADDED: "rudy disks --destroy"
+* ADDED: "rudy backups --create"
+* ADDED: Support for attaching and formating disks in Windows. 
+* ADDED: "rudy-ec2 info"
+* ADDED: Re-enabled networks action to routines config (see examples/jira.rb)
+
+
+#### 0.9.1 (2009-08-05) ###########################
+
+* FIXED: "rudy init" now exits with 0
+* FIXED: Removed unnecessary gem dependencies from gemspec
+* ADDED: Configuration examples
+
+
+#### 0.9.0 (2009-08-04) ###########################
+
+* FIXED: Better Windows support
+* FIXED: Added rescue for disk handler in reboot routine
+* FIXED: Another fix for resolving region/zone ambiguity
+* FIXED: No Routines config error during shutdown routine
+* CHANGE: Renamed "rudy machines -S" to "rudy machines -A"
+* CHANGE: Renamed "rudy machines -A" to "rudy machines -T"
+* ADDED: Print friendly error, rather then an angry exception when running on win32 with ruby 1.9
+* ADDED: "rudy machines --disassociate" command
+* ADDED: Allow colons in place of dashes (rudy publish:gem -> publish_gem do; ...; end)
+
+
+#### 0.9.0-RC3 (2009-08-03) ###########################
+
+* FIXED: GH-18 (Error when running startup, reboot, shutdown routines in parallel mode)
+* FIXED: Routine::Handler::User.adduser was specifying invalid home directory with multiple machines
+* FIXED: Socket.connect error in JRuby when checking if SSH is available
+* FIXED: Rudy::AWS::EC2.connect now correctly reconnects when run for the second time
+* FIXED: Global CLI option -R (region) was being ignored in lieu of -z (zone)
+* FIXED: Rudy::Disk#archive wasn't storing size, fstype
+* FIXED: Disk restore was balking when no FS type supplied
+* FIXED: Reboot routine now automatically umounts volumes if the routine is configured to mount after the reboot
+* CHANGE: "rudy myaddress" is now "rudy networks -L"
+* CHANGE: Renamed Volume attributes: create_time, attach_time -> created, attached
+* CHANGE: Renamed Instance attribute: launch_time -> created
+* CHANGE: Global CLI option -C (config) can now accept multiple paths
+* ADDED: "rudy machines -A" to display available machines
+* ADDED: "rudy status" to display all EC2 objects
+* ADDED: "rudy machines -U" to update hostnames
+* ADDED: "rudy machines -S" to create static IP addresses
+* ADDED: Rudy::Routines::Handlers::Disks.mount? etc... methods
+
+
+#### 0.9.0-RC2 (2009-08-02) ###########################
+
+* FIXED: Some status lines were printing on the same line during routines
+* FIXED: user value in defaults wasn't being used for remote commands
+* FIXED: Double printing SSH commands in parallel mode
+* FIXED: Startup routine was creating only one machine
+* FIXED: Reboot now executes commands in correct order
+* CHANGE: Renamed config parameter 'yes' to 'auto'
+* CHANGE: Global config parameter processed differently (see Rudy::Config#look_and_load)
+* ADDED: "rudy ssh" can now run commands in parallel
+* ADDED: rudy networks command
+
+
+#### 0.9.0-RC1 (2009-08-01) ###########################
+
+NOTE: This is a significant re-write from 0.8 (primarily the routines, metadata)
+
+* FIXED: Routine blocks now process directives in the order their given (in Ruby 1.8 and 1.9). 
+* FIXED: Region is now based on the zone. Corrects ambiguity when specifying zone and region.
+* FIXED: Reboot routines are now fully supported
+* FIXED: Unless position (-p) is specified, it's assumed that a command applies to the entire machine group. 
+* CHANGE: Rudy::Machine#inspect now prints in a standard Ruby inspect format
+* CHANGE: Routines have been completely rebuilt
+* CHANGE: Now requires Rye 0.8
+* CHANGE: before / after routine actions are now used for dependencies only.
+* CHANGE: Removed script_local, after_local, before_local from passthrough routines
+* CHANGE: Support before_local for startup routines
+* CHANGE: Support before_local and before_remote for reboot routines
+* CHANGE: Support after_local for shutdown routines
+* CHANGE: Removed machines config (now recommend uploading local files)
+* CHANGE: Group names now take the form: grp-us-east-1b-stage-app
+* CHANGE: private keys are now stored in ~/.ssh/
+* CHANGE: Removed create_image and prepare_image actions from rudy-ec2
+* CHANGE: local routine blocks now share a single Rye::Box instance
+* CHANGE: remote routine blocks now share a single Rye::Set instance
+* CHANGE: "privatekey" in accounts config is renamed to "pkey"
+* CHANGE: Reduced Rudy::AWS#execute_request timeout to 15 seconds.
+* CHANGE: Rudy:Disks, Rudy::Machines, and Rudy::Backups now use class methods
+* CHANGE: Rudy::AWS::EC2 now uses class methods
+* CHANGE: Renamed disk action 'snapshot' to 'archive'
+* ADDED: routines command for displaying available routines
+* ADDED: "rudy init" now authorizes public keys for user@localhost
+* ADDED: Parallel processing for remote machines
+* ADDED: Routines now have access to $global and $option (which are frozen)
+* ADDED: xremote and xlocal routine actions for quick skipping
+* ADDED: Dependency Attic 0.4
+* ADDED: New 'objects' and 'query' commands for rudy-sdb
+* ADDED: Execute routines on individual machines in a group
+* ADDED: rudy backups command
+
+
+#### 0.8.5 (2009-06-08) ###############################
+
+* FIXED: Bug in DiskHandler. mount method tried to attach when already attached. 
+* CHANGE: rudy config now displays account info (but keeps secret key hidden)
+* CHANGE: defaults configuration has been removed from the default ~/.rudy/config. 
+  It is now recommended to put it in the same place as machines, routines config.
+* FIXED: Bug in addresses which prevented assigning elastic IP addresses. 
+
+
+#### 0.8.4 (2009-06-04) ###############################
+
+* FIXED: Fixed nil exception in fetch_machine_param
+* CHANGE: Disabled check for private key for shutdown routine. 
+  If the private key doesn't exist it prevents shutting down.
+* CHANGE: Re-enabled the check to make sure command config is parsed only one time
+* CHANGE: Some UI tweaks, some minor integration stuff with Rye
+* CHANGE: Caesars::Config verbose mode is now enabled at Rudy verbose level 2
+
+
+#### 0.8.3 (2009-06-03) ###############################
+
+* CHANGE: Now requires rye-0.7.3 (disable_safe_mode method)
+* CHANGE: Rye safe-mode is enabled after each routines script block to force disabling it
+  explicitly in every block it's needed. 
+* CHANGE: Removed grit dependency
+
+
+#### 0.8.2 (2009-06-01) ###############################
+
+* CHANGE: Removed release routine code (it's now a passthrough) and scmhelper. All release stuff should
+  be implemented using the routine blocks. 
+* CHANGE: Passthrough routines no longer check if machine group is running. 
+* CHANGE: Local routines blocks now run from current working directory
+* CHANGE: Removed SCM classes (moved logic to the Arcade)
+* CHANGE: Moved examples to the Arcade (experimental)
+* CHANGE: Command output in routines is now displayed only when verbose is 1 or more.
+* ADDED: Routine blocks now receive command line options and arguments
+* ADDED: Commands configuration now supports inline blocks
+* ADDED: Rudy now looks for ~/.rudy/*.rb config files.
+
+
+#### 0.8.1 (2009-05-18) ###############################
+
+* FIXED: The shutdown routine was not working for Windows instances
+
+#### 0.8.0 (2009-05-18) ###############################
+
+* ADDED: Better windows instance support during routines
+* ADDED: "os" keyword to routines DSL
+* ADDED: Config defaults for "yes" global (thanks sabat)
+* FIXED: Handle exception when assigning inappropriate IP Address. 
+* CHANGE: Some refactoring to Rudy::Machines and Rudy::Routines
+
+
+#### 0.7.5 (2009-05-12) ###############################
+
+* CHANGE: rudy-ec2 console now displays windows password automatically if keypair is supplied.
+* ADDED: register and destroy commands to rudy-ec2 images
+
+#### 0.7.4 (2009-05-10) ###############################
+
+* CHANGE: Keypairs now include zone. This was necessary to allow US and EU keypairs to
+          be stored in the same directory.  
+* CHANGE: Moved non-rudy specific modules to separate projects (storable, sysinfo, annoy, 
+          console -> Drydock, escape -> Rye, tryouts -> tryouts/).
+* CHANGE: Renamed restart routine to reboot to make it clear it's about the machine
+* CHANGE: Renamed Rudy::Disk to Rudy::Metadata::Disk
+* CHANGE: Short alias for rudy-ec2 snapshot is now 's' (instead of 't')
+* CHANGE: Removed highline-1.5.1 from vendor (it's now available as a gem)
+* FIXED: Bug in Huxtable when loading global. Wasn't reloaded after config was updated. 
+* FIXED: Closed gh-12 (thanks sabat)
+* ADDED: Routines now support dependencies
+* ADDED: Disk routines now support mount, umount, snapshot, and restore
+* ADDED: rudy disk command now displays backups with -b switch
+* ADDED: RE-added basic support for creating Linux images (with security warning)
+* ADDED: Routines with underscores can now be called with dashes (a_routine vs a-routine)
+
+
+#### 0.7.3 (2009-05-05) ###############################
+
+* FIXED: Corrected a few minor interface errors in rudy-ec2
+* ADDED: rudy-ec2 console can now display the decoded admin password for Windows instances. 
+
+#### 0.7.2 (2009-05-04) ###############################
+
+* FIXED: cli/routine.rb release method wasn't sending command alias (which broke rerelease)
+* ADDED: global.offline for being cool when Internet is down
+* ADDED: Better handling in aws/sdb when call returns nil (Internet is down)
+
+
+#### 0.7.1 (2009-05-04) ###############################
+
+* FIXED: rudy wasn't honouring -C option for specifying a config file
+* FIXED: Was disabling, but not enabling colour
+* FIXED: Symbol errors in 1.8 
+* FIXED: Command blocks for root user are always run first now in Routines config.
+* CHANGE: routines before, after, and script blocks are now processed by Rye::Box.batch as Procs. 
+* CHANGE: deny was removed from commands config (it will come back later). 
+* CHANGE: Rudy now checks the current working directory for machines, commands, etc... configs
+* ADDED: examples/
+* ADDED: "script" keyword to routines config. 
+* ADDED: script_local
+* ADDED: Routine now checks whether there are any remote tasks. If not, it doesn't loop through machines. 
+
+
+#### 0.7.0 (2009-05-02) ###############################
+
+* CHANGE: Upgrade to Drydock 0.6, Caesars 0.6, and Rye 0.6
+* CHANGE: Updated Routines configuration syntax for specifying shell commands 
+* ADDED: Releases via local git repository
+* ADDED: authorize and adduser directives to routines config.
+* ADDED: Improved CLI output for routines. 
+* ADDED: Commands configuration for custom SSH commands
+* ADDED: Auto-set hostname to machine name
+* ADDED: Support for arbitrary routines via passthrough
+
+
+#### 0.6.8 (2009-04-24) ###############################
+
+* CHANGE: Renamed rudy config --rudy option to --project. This was important 
+          to maintain consistency in documentation.
+* CHANGE: Cleaned README. See: http://wiki.github.com/solutious/rudy
+
+#### 0.6.7 (2009-04-22) ###############################
+
+* ADDED: rudy-ec2 status can now display EU status
+* FIXED: Fixed bug on instance create. Instance.groups was nil, now it returns 
+         empty Array.
+
+#### 0.6.6 (2009-04-22) ###############################
+
+* ADDED: Better error handling for Rudy::AWS::SDB
+* FIXED: Ruby 1.9.1 compatability (including requiring aws-s3 >=0.6.1)
+
+
+#### 0.6.5 (2009-04-20) ###############################
+
+* FIXED: Startup and Shutdown routines now check machine group status first
+* FIXED: Misc release process issues between 0.6.0 and 0.6.4
+* ADDED: Better error handling during startup and shutdown. 
+* ADDED: Support for assigning addresses on startup
+
+
+#### 0.6.0 (2009-04-19) ###############################
+
+NOTE: This is a significant re-write from 0.5
+
+* CHANGE: Rebuilt Rudy::AWS::*
+* CHANGE: Removed lib/rudy/commands/* and lib/rudy/metadata/*
+* ADDED: rudy-ec2 executable
+* CHANGE: have local copies of Caesars and Drydock to reduce external dependencies. 
+* ADDED: new output formats: yaml, json, csv, tsv
+
+
+#### 0.5.1 (2009-04-10) ###############################
+
+* CHANGE: Removed require 'rubygems'
+* FIXED: Resolved Drydock namespace issue for rudy and ird
+
+
+#### 0.5.0 (2009-04-09) ###############################
+
+NOTE: This is a significant re-write from 0.4
+
+* CHANGE: Recommend keypair config to be in ~/.rudy/config
+* FIX: Rudy now checks for user keys specified by env-role, env, and global
+* FIX: gemspec dependency net-ssh-multi
+* ADDED: --nocolor option 
+* ADDED: Ruby API
+* ADDED: Tests with 55% coverage
+* ADDED: Ruby API (Rudy::Machines, etc...)
+* ADDED: ird, a REPL (experimental)
+* ADDED: Now uses Rye 0.4.1
+
+#### 0.4 (2009-03-12) ###############################
+
+NOTE: This is a significant re-write from 0.3
+
+* CHANGE: Mostly re-written bin/ruby, moving validation to CLI classes 
+* CHANGE: upgrade to Drydock 0.5
+* CHANGE: Moved generic EC2 commands to bin/rudy-ec2
+* CHANGE: Removed ambiguity of pluralized command names.
+  * OLD: backups, disks, configs
+  * ADDED: backup, disk, config
+* ADDED: ssh and scp commands for connecting to and copying files to/from machines
+* ADDED: New dependencies (trying out net-ssh)
+* ADDED: Domain specific language for configuration
+* ADDED: "Routines" for handling common actions. Starting, stopping, releasing, deploying. 
+* ADDED: "rudy release" will create a release from the current working copy, start an instance, 
+checkout the release, run routines. It needs some work still, but this already functions as
+a single command release process. 
+* ADDED: "rudy start|destroy|restart|update|status". Routines allow us to have generic commands 
+that can be used for any machine group. These commands relate to starting new instances.
+* ADDED: Extra caution when running destructive commands
+* ADDED: Default ~/.rudy/config created if it doesn't exist. 
+
+
+#### 0.3 (2009-02-26) ###############################
+
+NOTE: This is a significant re-write from 0.2
+
+* CHANGE: Re-written support/rudy-ec2-startup
+* CHANGE: upgrade to Drydock 0.4
+* ADDED: More functionality for disks and backups
+* ADDED: config commands
+* ADDED: Per machine configuration (via ~/.rudy)
+
+
+#### 0.2 (2009-02-23) ###############################
+
+NOTE: This is a complete re-write from 0.1
+
+* CHANGE: Added Environment variables
+* CHANGE: upgrade to drydock 0.3.3
+* ADDED: All time references are converted to UTC
+* ADDED: Safer "Are you sure?". Number of characters to enter is 
+         commiserate with amount of danger.  
+* ADDED: CLIs: myaddress, addresses, images, instances, 
+         disks, connect, copy, stage, backups, volumes
+* ADDED: Metadata storage to SimpleDB for disks, backups
+* ADDED: Creates EBS volumes based on startup from metadata
+* ADDED: Automated release process
+* ADDED: Automated creation of machine images
+* ADDED: Partial support for regions and zones
+* ADDED: Manage system based on security groups. 
+* ADDED: "rudy groups" overhaul. Display, creates, destroys groups. 
+
+
+#### 0.1 (2009-02-06) ###############################
+
+* Initial public release
+

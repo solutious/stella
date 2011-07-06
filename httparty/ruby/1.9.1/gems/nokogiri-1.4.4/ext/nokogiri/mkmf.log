@@ -1,0 +1,377 @@
+find_header: checking for libxml/parser.h... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib     -lruby-static  -lpthread -ldl -lobjc  "
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -E -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libxml/parser.h>
+/* end */
+
+--------------------
+
+find_header: checking for libxslt/xslt.h... -------------------- yes
+
+"gcc -E -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libxslt/xslt.h>
+/* end */
+
+--------------------
+
+find_header: checking for libexslt/exslt.h... -------------------- yes
+
+"gcc -E -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libexslt/exslt.h>
+/* end */
+
+--------------------
+
+have_func: checking for iconv_open() in iconv.h... -------------------- no
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib     -lruby-static  -lpthread -ldl -lobjc  "
+ld: warning: directory '/opt/local/lib' following -L not found
+Undefined symbols:
+  "_iconv_open", referenced from:
+      _t in ccuqvQDT.o
+ld: symbol(s) not found
+collect2: ld returned 1 exit status
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <iconv.h>
+4: 
+5: /*top*/
+6: int main() {return 0;}
+7: int t() { void ((*volatile p)()); p = (void ((*)()))iconv_open; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib     -lruby-static  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:7: error: too few arguments to function 'iconv_open'
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <iconv.h>
+4: 
+5: /*top*/
+6: int main() {return 0;}
+7: int t() { iconv_open(); return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for iconv_open() in -liconv... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib     -lruby-static -liconv  -lpthread -ldl -lobjc  "
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <iconv.h>
+4: 
+5: /*top*/
+6: int main() {return 0;}
+7: int t() { void ((*volatile p)()); p = (void ((*)()))iconv_open; return 0; }
+/* end */
+
+--------------------
+
+find_library: checking for xmlParseDoc() in -lxml2... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -liconv  -lruby-static -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlParseDoc' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlParseDoc; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -liconv  -lruby-static -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlParseDoc'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlParseDoc(); return 0; }
+/* end */
+
+--------------------
+
+find_library: checking for xsltParseStylesheetDoc() in -lxslt... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lxml2 -liconv  -lruby-static -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xsltParseStylesheetDoc' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xsltParseStylesheetDoc; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lxml2 -liconv  -lruby-static -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xsltParseStylesheetDoc'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xsltParseStylesheetDoc(); return 0; }
+/* end */
+
+--------------------
+
+find_library: checking for exsltFuncRegister() in -lexslt... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'exsltFuncRegister' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))exsltFuncRegister; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'exsltFuncRegister'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { exsltFuncRegister(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlFirstElementChild()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlFirstElementChild' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlFirstElementChild; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlFirstElementChild'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlFirstElementChild(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetParserStructuredErrors()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlRelaxNGSetParserStructuredErrors' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlRelaxNGSetParserStructuredErrors'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlRelaxNGSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetParserStructuredErrors()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlRelaxNGSetParserStructuredErrors' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlRelaxNGSetParserStructuredErrors'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlRelaxNGSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetValidStructuredErrors()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlRelaxNGSetValidStructuredErrors' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetValidStructuredErrors; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlRelaxNGSetValidStructuredErrors'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlRelaxNGSetValidStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlSchemaSetValidStructuredErrors()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlSchemaSetValidStructuredErrors' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetValidStructuredErrors; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlSchemaSetValidStructuredErrors'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlSchemaSetValidStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlSchemaSetParserStructuredErrors()... -------------------- yes
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: error: 'xmlSchemaSetParserStructuredErrors' undeclared (first use in this function)
+conftest.c:5: error: (Each undeclared identifier is reported only once
+conftest.c:5: error: for each function it appears in.)
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetParserStructuredErrors; return 0; }
+/* end */
+
+"gcc -o conftest -I/usr/local/include/ruby-1.9.1/x86_64-darwin10.6.0 -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -I/opt/local/include/libxml2 -I/usr/local/include/libxml2 -I/usr/local/include/libxml2 -I/opt/local/include -I/usr/local/include -I/usr/local/include -I/usr/include -I/usr/include/libxml2 -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE    -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wshorten-64-to-32 -Wno-long-long  -pipe  -g -DXP_UNIX -O3 -Wall -Wcast-qual -Wwrite-strings -Wconversion -Wmissing-noreturn -Winline conftest.c  -L. -L/usr/local/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L. -L/usr/local/lib    -lexslt -lxslt -lxml2 -liconv  -lruby-static -lexslt -lxslt -lxml2 -liconv  -lpthread -ldl -lobjc  "
+conftest.c: In function 't':
+conftest.c:5: warning: implicit declaration of function 'xmlSchemaSetParserStructuredErrors'
+ld: warning: directory '/opt/local/lib' following -L not found
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { xmlSchemaSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+

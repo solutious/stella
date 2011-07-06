@@ -1,0 +1,117 @@
+FAMILIA, CHANGES
+
+
+#### 0.7.1 (2011-04-09) ###############################
+
+* FIXED: Explicitly convert boolean conf options to true or false. Redis client
+  treats "true" as false.
+* FIXED: Clone options for each RedisObject instance to prevent cross contamination.
+* CHANGE: Fix for Familia objects with custom suffixes
+* CHANGE: Familia::String methods that modify the key now automatically update_expiration.
+* CHANGE: Familia::Object.prefix replaces :: in class names with Familia.delim
+* CHANGE: Use Familia::Object#object_proxy instead of Familia::Object.string :object
+* ADDED: Familia.qnow, Familia::Object.qstamp, RedisObject#qstamp
+* ADDED: RedisObject option: quantize
+* ADDED: Familia::Object#savenx
+* ADDED: Can now include a Familia object in Familia::Object.index (it uses its index)
+* ADDED: Dependency multi_json
+* ADDED: Hash#to_json, Hash.from_json, Array#to_json, Array.from_json
+* ADDED: Familia::Object#update!
+
+
+#### 0.7.0 (2011-03-04) ###############################
+
+* CHANGE: Use RedisObject#multi_from_redis when possible (uses mget command)
+* CHANGE: No need to check if a key exists before getting it. It will be nil anyway.
+* ADDED: Set#randomraw
+
+
+#### 0.6.10 (2011-01-08) ###############################
+
+* FIXED: RedisObject#db does not set @db
+* CHANGE: RedisObject#to_redis returns the original String if the given value 
+is a String, even if :class is specified.
+* CHANGE: Update expiration when adding to List, Set, SortedSet, and HashKey
+* CHANGE: Only call Familia.ld when in debug mode.
+* ADDED: RedisObject#rename, renamenx, persist
+
+
+#### 0.6.9 (2011-01-09) ###############################
+
+* ADDED: RedisObject#cache
+* ADDED: RedisObject#echo
+# ADDED: Familia.logger (new option: :logger)
+
+
+#### 0.6.8 (2011-01-08) ###############################
+
+* CHANGE: RedisObject#members calls compact to remove nils
+* ADDED: RedisObject#to_redis/from_redis print message for nils to STDERR
+* ADDED: RedisObjects#membersraw for List, Set, and SortedSet
+
+
+#### 0.6.7 (2011-01-02) ###############################
+
+* FIXED: RedisObject#ttl, grab from instance first. 
+
+#### 0.6.6 (2011-01-02) ###############################
+
+* FIXED: Classes that include Familia now use the suffix defined for that class.
+* FIXED: Familia::String#value= calls update_expiration 
+* CHANGE: RedisObject classes grab the ttl from @opts[:class]
+* ADDED: Familia.classes can return RedisObject.classes
+
+
+#### 0.6.4 (2010-12-31) ###############################
+
+* CHANGE: initialize does not call from_array (fix for Storable 0.8.6)
+
+#### 0.6.3 (2010-12-30) ###############################
+
+* FIXED: HashKey#update
+* FIXED: count in List#members, SortedSed#members
+* ADDED: List#add
+
+
+#### 0.6.2 (2010-12-29) ###############################
+
+* FIXED: Familia::ClassMethods.ttl=
+* FIXED: Familia.class_lists (etc) methods. 
+* FIXED: Redis objects check if parent is a Module
+* CHANGE: redis_objects, class_redis_objects maintain order they're defined in. (See Bluth::Queue)
+* CHANGE: Depends on Storable 0.8.4
+* CHANGE: FamiliaObject.instances is now a sorted set
+* ADDED: InstanceMethods#initialize calls init if available
+* ADDED: Can set index values via InstanceMethods#index=
+* ADDED: empty? method for List, Set, et al
+* ADDED: :extend option for RedisObject instances
+* ADDED: :reference option for storing the index value instead of the marshaled value
+
+
+#### 0.6.1 (2010-12-18) ###############################
+
+* CHANGE: Default initialize method calls initialize_redis_objects before super
+* CHANGE: Familia::String: lazy-set default value
+* ADDED: Familia.index can accept an Array of field names
+* ADDED: Support for using redis objects directly
+* ADDED RedisObject.ttl, RedisObject.db
+* ADDED: Familia classes maintain a set of instances (by index) which is updated
+automatically anytime an instance is saved or destroyed. 
+
+
+#### 0.6.0 (2010-12-10) ###############################
+
+NOTE: Mucho refactoring. 0.6 syntax is not compatible with previous versions. 
+
+CHANGE: All methods name "key" are now "rediskey"
+CHANGE: Familia#destroy! no longer takes a suffix argument. It now deletes
+        the object and all suffixes. See destroy. 
+CHANGE: Redis Object class methods now take the following args: name, options={}
+CHANGE: Familia class suffixes are now derived from redis_objects
+ADDED: Familia#destroy deletes just the object. 
+
+
+#### 0.5.3 (2010-12-10) ###############################
+
+Initial public release
+

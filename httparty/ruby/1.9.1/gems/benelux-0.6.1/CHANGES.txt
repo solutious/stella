@@ -1,0 +1,156 @@
+BENELUX, CHANGES
+
+#### 0.6.1 (2011-02-11) ##############################
+
+* FIXED: Fix for segfault in Ruby 1.9.2 (Don't use attic in Thread).
+         See http://redmine.ruby-lang.org/issues/show/4389
+
+
+#### 0.6.0 (2010-09-05) ##############################
+
+* CHANGE: Thread now belongs to Track (previously reversed)
+
+#### 0.5.16 (2010-06-08) ##############################
+
+* ADDED: Support for timing class methods.
+* ADDED: New Calculator attribute: time
+
+
+#### 0.5.15 (2010-04-03) ##############################
+
+* FIXED: require 'storable'. Rookie!
+
+#### 0.5.14 (2010-03-23) ##############################
+
+New dependency: storable >= 0.6.5
+
+* CHANGE: Stats::Calculator now uses Storable 
+
+#### 0.5.13 (2010-03-20) ##############################
+
+* FIXED: Benelux::Stats::Calculator#merge! checks @n instead of @sum
+* CHANGE: Don't merge when the other Calculator has 0 samples. 
+
+
+#### 0.5.12 (2010-03-19) ##############################
+
+* CHANGE: When merging Benelux::Stats::Calculator objects into one that has 0 samples, 
+  use the values of min and max rather than averages for all. 
+* CHANGE: Benelux::Stats::Calculator#mean is now an alias for #avg since
+  we don't actual return the mean anyway (we don't keep the sample values)
+
+
+#### 0.5.11 (2010-03-15) ##############################
+
+* FIXED: Don't reset packed_methods!
+
+#### 0.5.10 (2010-03-15) ##############################
+
+* ADDED: Benelux.reset
+
+#### 0.5.9 (2010-03-14) ###############################
+
+* ADDED: Benelux::Stats::Calculator#from_hash
+* ADDED: Benelux::Stats::Group#sumsq
+
+
+#### 0.5.8 (2010-03-05) ###############################
+
+* CHANGE: Added sum and sumsq to Benelux::Stats::Calculator#to_hash
+* ADDED: Support for timer and counter aliases
+
+
+#### 0.5.7 (2010-02-20) ###############################
+
+* CHANGE: Remove hanna dependency
+* CHANGE: Remove hexoid dependency
+* CHANGE: Combine mixins to single file
+
+
+#### 0.5.6 (2010-02-10) ###############################
+
+* ADDED: Benelux::Tms#to_f
+* ADDED: Benelux.timeline_chunk, Benelux.timeline_updates
+* ADDED: Calculator#to_json
+
+
+#### 0.5.5 (2010-01-16) ###############################
+
+* ADDED: Benelux.bm 
+
+#### 0.5.4 (2010-01-13) ###############################
+
+* CHANGE: Timeline#add_message now supports objects of any type (not just Strings)
+
+#### 0.5.3 (2009-11-16) ###############################
+
+* FIXED: Process dead threads only once
+* FIXED: Copy default tags when rotating timelines
+
+
+#### 0.5.2 (2009-11-02) ###############################
+
+* ADDED: Selectable#rfilter
+* ADDED: Timeline#messages
+
+
+#### 0.5.1 (2009-10-29) ###############################
+
+* FIXED: Timeline#clear
+* ADDED: Thread#rotate_timeline
+* ADDED: Stats#clear
+
+
+#### 0.5.0 (2009-10-21) ###############################
+
+* CHANGE: Do not use global timeline, update from dead threads. 
+
+#### 0.4.4 (2009-10-20) ###############################
+
+* CHANGE: Removed reporter
+* CHANGE: Take advantage of Ruby's accidentally thread-safe 
+  Arrays and use global timeline
+* CHANGE: Removed Timeline#counts
+
+
+#### 0.4.3 (2009-10-08) ###############################
+
+* FIXED: Initial reporting loop waits 1 second for first threads
+* CHANGE: Huge performance improvement (no tag matching when merging stats)
+* CHANGED: Cleaned Reporter
+
+
+#### 0.4.2 (2009-10-06) ###############################
+
+* ADDED: JRuby support
+* CHANGE: Improved performance
+
+
+#### 0.4.1 (2009-10-06) ###############################
+
+* FIXED: Nil @thread error in reporter
+* CHANGE: Reporter starts only one thread.
+
+
+#### 0.4.0 (2009-10-05) ###############################
+
+* CHANGE: All tag values are stored as strings. Keys can be anything.
+* CHANGE: Removed object-specific timelines
+* CHANGED: Stats calculators no longer keep all values
+* ADDED: Counts
+* ADDED: Reporter thread
+
+
+#### 0.3.2 (2009-10-02) ###############################
+
+* CHANGE: Major performance improvement.
+
+#### 0.3.1 (2009-09-30) ###############################
+
+* FIXED: Rubygems versioning issue. 
+
+#### 0.3.0 (2009-09-30) ###############################
+
+Initial public release
+
+

@@ -1,0 +1,210 @@
+#!/usr/bin/ruby
+
+# Seafaring Drydock Examples
+# 
+# This is a functioning script so you can copy it, run it, 
+# and just generally be a longshoreman about things. This is
+# a drydock after all. 
+#
+# If you're reading this via the Rdocs you won't see the code. See:
+#
+# http://github.com/delano/drydock/blob/master/bin/example
+#
+# For an example of a complex command-line application using 
+# Drydock, see:
+#
+# http://github.com/solutious/rudy/blob/master/bin/rudy
+#
+
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), '..')), 'lib'
+
+require 'drydock'
+
+module Example
+  extend Drydock     # Tell Drydock you want its methods! 
+  
+  default :welcome   # The welcome command will be run if no command is given
+  capture :stderr    # Drydock will capture STDERR and keep it in the hold.
+                     # You can use this to suppress errors. 
+
+  about "A friendly welcome to the Drydock"
+  command :welcome do
+    puts "Welcome to Drydock.", $/
+    puts "For available commands: #{$0} show-commands"
+  end
+
+  usage "USAGE: #{$0} laugh [-f]"
+  about "The captain commands his crew to laugh"
+  option :f, :faster, "A boolean value. Go even faster!"
+  command :laugh do |obj|
+  # +obj+ is an instance of Drydock::Command. The options you define are available
+  # via obj.option.name 
+
+    answer = !obj.option.faster ? "Sort of" : "Yes! I'm literally laughing as fast as possible."
+
+    puts "Captain Stubing: Are you laughing?"
+    puts "Dr. Bricker: " << answer
+  end
+
+  global_usage "USAGE: #{File.basename($0)} [global options] command [command options]"
+  global :s, :seconds, "Display values in seconds"
+  global :v, :verbose, "Verbosity level (i.e. -vvv is greater than -v)" do |v|
+  # Use instance variables to maintain values between option blocks. 
+  # This will increment for every -v found (i.e. -vvv)
+    @val ||= 0
+    @val += 1
+  end
+
+  before do |obj|
+  # You can execute a block before the requests command is executed. Instance
+  # variables defined here will be available to all commands. 
+  # +obj+ is a reference to the command object, just like in command blocks. 
+  end
+
+  after do |obj|
+  # And this will be called after the command. 
+  end
+
+  usage "#{$0} [-s] [-vv] date"
+  about "Display the current date"
+  command :date do |obj| 
+    require 'time'
+    now = Time.now
+    puts "(Not verbose enough. Try adding a -v.)" if (obj.global.verbose || 0) == 1
+    puts "More verbosely, the date is now: " if (obj.global.verbose || 0) >= 2
+    puts (obj.global.seconds) ? now.to_i : now.to_s
+  end
+
+
+  ignore :options
+  about "This command ignores options"
+  command :rogue do |obj|
+  # You can use ignore :options to tell Drydock to not process the 
+  # command-specific options. 
+  # Unnamed arguments are available from obj.argv
+    if obj.argv.empty?
+      puts "Had you supplied some arguments, I would have ignored them."
+    else
+      puts "Hi! You supplied some arguments but I ignored them."
+      puts "They're all still here in this array: %s" % obj.argv.join(', ')
+    end
+  end
+
+  class JohnWestSmokedOysters < Drydock::Command 
+    # You can write your own command classes by inheriting from Drydock::Command
+    # and referencing it in the command definition.
+    def ahoy!; p "matey"; end
+  end
+
+  about "Do something with John West's Smoked Oysters"
+  command :oysters => JohnWestSmokedOysters do |obj|
+    p obj  # => #<JohnWestSmokedOysters:0x42179c ... >
+  end
+
+  about "My way of saying hello!"
+  command [:ahoy!, :hello!] => JohnWestSmokedOysters
+  # If you don't provide a block, Drydock will call JohnWestSmokedOysters#ahoy!
+
+
+  require 'yaml'
+
+  usage 'ruby bin/example uri -c -d " " -t 15 http://solutious.com/'
+  usage 'echo "http://solutious.com/" | ruby bin/example uri -c -d " " -t 15'
+  about "Check for broken URIs"
+  option :c, :check, "Check response codes for each URI"
+  option :d, :delim, String, "Output delimiter"
+  option :t, :timeout, Float, "Timeout value for HTTP request" do |v|
+    # You can provide an block to process the option value. 
+    # This block must return the final value. 
+    v = 10 if (v > 10)
+    v
+  end
+  argv :uris
+  
+  command :uri do |obj|
+  # This command processes the output of the stdin block (below this definition).
+  # The output of that block is available as obj.stdin. If there is no stdin block
+  # obj.stdin will be STDIN's IO object.
+
+    require 'net/http'
+    require 'uri'
+    require 'timeout'
+  
+    uris = []
+    uris += obj.stdin if obj.stdin
+    uris += obj.argv.uris if obj.argv.uris
+  
+    delim = obj.option.delim || ','
+    timeout = obj.option.timeout || 5
+    code = :notchecked                      # The default code when :check is false
+  
+    if uris.empty?
+      puts "Frylock: You didn't provide any URIs. "
+      puts "Master Shake: Ya, see #{$0} #{obj.alias} -h"
+      exit 0
+    end
+  
+    uris.each_with_index do |uri, index|
+      code = response_code(uri, timeout) if (obj.option.check)
+      puts [index+1, uri, code].join(delim)
+    end
+    
+  end
+
+  about "Prints the alias used to access the command"
+  # We can define command aliases by providing a list of command 
+  # names. The first name is still consider to be the main name.
+  command :printalias, :reveal do |obj|
+    puts "This is printalias!"
+      if (obj.alias == obj.cmd)
+    puts "You did not use an alias"
+      else 
+    puts "You used the alias " << obj.alias
+      end
+  end
+  
+  stdin do |stdin, output|
+  # Pre-process STDIN for all commands. This example returns an array of lines. 
+  # The command processuris uses this array.
+  
+    # We only want piped data. If this is not included  
+    # execution will wait for input from the user.
+    unless stdin.tty?   
+    
+      while !stdin.eof? do
+        line = stdin.readline
+        line.chomp!
+        (output ||= []) << line
+      end
+    
+    end
+    output
+  end
+
+  
+  # And one final feature for the intrepid swabbies like myself.
+  # Drydock can handle unknown commands by catching them with a 
+  # trawler. It's like the captain of all aliases. Just specify
+  # the command name to direct all unknown commands to. Simple!
+  trawler :printalias
+  
+  
+  # Return the HTTP response code for the given URI. Used by 
+  # uri command.
+  #
+  # +uri+ A valid HTTP URI
+  # +duration+ The timeout threshold (in seconds) for the request. 
+  def response_code(uri_str, duration=5) #:nodoc:
+    response = :unavailable
+    begin 
+      uri = (uri_str.kind_of? URI::HTTP) ? uri_str : URI.parse(uri_str) 
+      timeout(duration) do
+        response = Net::HTTP.get_response(uri).code
+      end 
+    rescue Exception => ex
+    end
+    response
+  end
+end
+
+Drydock.run!

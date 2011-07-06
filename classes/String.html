@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: String [stella 2.0.1.002]</title>
+    <title>: String [stella 2.0.3.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -51,59 +51,59 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000217">encode_fix</a></li>
-              <li><a href="#M000216">in_seconds</a></li>
-              <li><a href="#M000222">linkify</a></li>
-              <li><a href="#M000221">linkify!</a></li>
-              <li><a href="#M000218">plural</a></li>
-              <li><a href="#M000219">shorten</a></li>
-              <li><a href="#M000220">to_file</a></li>
+              <li><a href="#M000231">encode_fix</a></li>
+              <li><a href="#M000230">in_seconds</a></li>
+              <li><a href="#M000236">linkify</a></li>
+              <li><a href="#M000235">linkify!</a></li>
+              <li><a href="#M000232">plural</a></li>
+              <li><a href="#M000233">shorten</a></li>
+              <li><a href="#M000234">to_file</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000217'>
-                <a name='M000217'>      </a>
+              <div class='method public-instance' id='method-M000231'>
+                <a name='M000231'>      </a>
                 <div class='synopsis'>
                   <span class='name'>encode_fix</span>
                   <span class='arguments'>(enc=&quot;UTF-8&quot;)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000217-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000231-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000217-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 111</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encode_fix</span>(<span class="ruby-identifier">enc</span>=<span class="ruby-value str">&quot;UTF-8&quot;</span>)&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value str">&quot;1.9&quot;</span>&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">encode!</span>(<span class="ruby-identifier">enc</span>, <span class="ruby-identifier">:undef</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:invalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:replace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'?'</span>)&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Encoding</span><span class="ruby-operator">::</span><span class="ruby-constant">CompatibilityError</span>&#x000A;        <span class="ruby-constant">BS</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;String#encode_fix: resorting to US-ASCII&quot;</span>&#x000A;        <span class="ruby-identifier">encode!</span>(<span class="ruby-value str">&quot;US-ASCII&quot;</span>, <span class="ruby-identifier">:undef</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:invalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:replace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'?'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000231-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 111</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encode_fix</span>(<span class="ruby-identifier">enc</span>=<span class="ruby-value str">&quot;UTF-8&quot;</span>)&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value str">&quot;1.9&quot;</span>&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">encode!</span>(<span class="ruby-identifier">enc</span>, <span class="ruby-identifier">:undef</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:invalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:replace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'?'</span>)&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Encoding</span><span class="ruby-operator">::</span><span class="ruby-constant">CompatibilityError</span>&#x000A;        <span class="ruby-constant">BS</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;String#encode_fix: resorting to US-ASCII&quot;</span>&#x000A;        <span class="ruby-identifier">encode!</span>(<span class="ruby-value str">&quot;US-ASCII&quot;</span>, <span class="ruby-identifier">:undef</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:invalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:replace</span>, <span class="ruby-identifier">:replace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'?'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000216'>
-                <a name='M000216'>      </a>
+              <div class='method public-instance' id='method-M000230'>
+                <a name='M000230'>      </a>
                 <div class='synopsis'>
                   <span class='name'>in_seconds</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000216-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000230-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000216-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 101</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">in_seconds</span>&#x000A;    <span class="ruby-comment cmt"># &quot;60m&quot; =&gt; [&quot;60&quot;, &quot;m&quot;]</span>&#x000A;    <span class="ruby-identifier">q</span>,<span class="ruby-identifier">u</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/([\d\.]+)([s,m,h])?/</span>).<span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">u</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'s'</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">in_seconds</span>(<span class="ruby-identifier">u</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000230-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 101</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">in_seconds</span>&#x000A;    <span class="ruby-comment cmt"># &quot;60m&quot; =&gt; [&quot;60&quot;, &quot;m&quot;]</span>&#x000A;    <span class="ruby-identifier">q</span>,<span class="ruby-identifier">u</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/([\d\.]+)([s,m,h])?/</span>).<span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">u</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'s'</span>&#x000A;    <span class="ruby-identifier">q</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">in_seconds</span>(<span class="ruby-identifier">u</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000222'>
-                <a name='M000222'>      </a>
+              <div class='method public-instance' id='method-M000236'>
+                <a name='M000236'>      </a>
                 <div class='synopsis'>
                   <span class='name'>linkify</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000222-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000236-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000222-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 152</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">linkify</span>&#x000A;     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">linkify!</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000236-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 152</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">linkify</span>&#x000A;     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">linkify!</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000221'>
-                <a name='M000221'>      </a>
+              <div class='method public-instance' id='method-M000235'>
+                <a name='M000235'>      </a>
                 <div class='synopsis'>
                   <span class='name'>linkify!</span>
                   <span class='arguments'>()</span>
@@ -115,49 +115,49 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000221-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000235-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000221-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 139</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">linkify!</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\b((https?:\/\/|ftps?:\/\/|mailto:|www\.|status\.)([A-Za-z0-9\-_=%&amp;amp;@\?\.\/]+(\/\s)?))\b/</span>) {&#x000A;      <span class="ruby-identifier">match</span> = <span class="ruby-identifier">$1</span>&#x000A;      <span class="ruby-identifier">tail</span>  = <span class="ruby-identifier">$3</span>&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">match</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^(www|status)/</span>     <span class="ruby-keyword kw">then</span>  <span class="ruby-node">&quot;&lt;a href=\&quot;http://#{match.strip}\&quot;&gt;#{match}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^mailto/</span>  <span class="ruby-keyword kw">then</span>  <span class="ruby-node">&quot;&lt;a href=\&quot;#{match.strip}\&quot;&gt;#{tail}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">else</span>                  <span class="ruby-node">&quot;&lt;a href=\&quot;#{match.strip}\&quot;&gt;#{match}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    }&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000235-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 139</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">linkify!</span>&#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\b((https?:\/\/|ftps?:\/\/|mailto:|www\.|status\.)([A-Za-z0-9\-_=%&amp;amp;@\?\.\/]+(\/\s)?))\b/</span>) {&#x000A;      <span class="ruby-identifier">match</span> = <span class="ruby-identifier">$1</span>&#x000A;      <span class="ruby-identifier">tail</span>  = <span class="ruby-identifier">$3</span>&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">match</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^(www|status)/</span>     <span class="ruby-keyword kw">then</span>  <span class="ruby-node">&quot;&lt;a href=\&quot;http://#{match.strip}\&quot;&gt;#{match}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^mailto/</span>  <span class="ruby-keyword kw">then</span>  <span class="ruby-node">&quot;&lt;a href=\&quot;#{match.strip}\&quot;&gt;#{tail}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">else</span>                  <span class="ruby-node">&quot;&lt;a href=\&quot;#{match.strip}\&quot;&gt;#{match}&lt;/a&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    }&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000218'>
-                <a name='M000218'>      </a>
+              <div class='method public-instance' id='method-M000232'>
+                <a name='M000232'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plural</span>
                   <span class='arguments'>(int=1)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000218-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000232-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000218-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 122</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plural</span>(<span class="ruby-identifier">int</span>=<span class="ruby-value">1</span>)&#x000A;    <span class="ruby-identifier">int</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">int</span>.<span class="ruby-identifier">zero?</span> <span class="ruby-value">? </span><span class="ruby-node">&quot;#{self}s&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000232-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 122</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plural</span>(<span class="ruby-identifier">int</span>=<span class="ruby-value">1</span>)&#x000A;    <span class="ruby-identifier">int</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">int</span>.<span class="ruby-identifier">zero?</span> <span class="ruby-value">? </span><span class="ruby-node">&quot;#{self}s&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000219'>
-                <a name='M000219'>      </a>
+              <div class='method public-instance' id='method-M000233'>
+                <a name='M000233'>      </a>
                 <div class='synopsis'>
                   <span class='name'>shorten</span>
                   <span class='arguments'>(len=50)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000219-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000233-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000219-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 125</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shorten</span>(<span class="ruby-identifier">len</span>=<span class="ruby-value">50</span>)&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">len</span>&#x000A;    <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">len</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;...&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000233-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 125</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shorten</span>(<span class="ruby-identifier">len</span>=<span class="ruby-value">50</span>)&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">len</span>&#x000A;    <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">len</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;...&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000220'>
-                <a name='M000220'>      </a>
+              <div class='method public-instance' id='method-M000234'>
+                <a name='M000234'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_file</span>
                   <span class='arguments'>(filename, mode, chmod=0744)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000220-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000234-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000220-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 129</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">mode</span>, <span class="ruby-identifier">chmod</span>=<span class="ruby-value">0744</span>)&#x000A;    <span class="ruby-identifier">mode</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:append</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">'a'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'w'</span>&#x000A;    <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">mode</span>)&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Provided chmod is not a Fixnum (#{chmod})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">chmod</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>)&#x000A;    <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">chmod</span>, <span class="ruby-identifier">filename</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000234-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 129</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">mode</span>, <span class="ruby-identifier">chmod</span>=<span class="ruby-value">0744</span>)&#x000A;    <span class="ruby-identifier">mode</span> = (<span class="ruby-identifier">mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:append</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">'a'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'w'</span>&#x000A;    <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">mode</span>)&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Provided chmod is not a Fixnum (#{chmod})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">chmod</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fixnum</span>)&#x000A;    <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">chmod</span>, <span class="ruby-identifier">filename</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

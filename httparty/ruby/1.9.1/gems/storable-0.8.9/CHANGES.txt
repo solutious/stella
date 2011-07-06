@@ -1,0 +1,168 @@
+STORABLE, CHANGES
+
+* TODO: https://github.com/delano/storable/pull/2
+* TODO: Handle nested hashes and arrays.
+
+#### 0.8.9 (GREAT RAPTURE) ##########################
+
+* FIXED: Removed bad default value setting.
+
+#### 0.8.8 (2011-05-20) #############################
+
+* ADDED: Storable.field can now take and store Hash options (:default, :meth)
+
+#### 0.8.7 (2011-??-??) #############################
+
+* ?
+
+#### 0.8.6 (2010-12-31) #############################
+
+* ADDED: Re-added a default initialize that defers to the default init
+
+#### 0.8.5 (2010-12-29) #############################
+
+* FIXED: Added calls to preprocess in the to_FORMAT methods.
+* FIXED: Added calls to postprocess in from_delimited
+* CHANGE: Remove initialize completely
+* ADDED: Storable#from_array (instance method)
+* ADDED: Storable#init (a default for Familia objects)
+
+
+#### 0.8.4 (2010-12-23) #############################
+
+* CHANGE: Moved initialize logic to Storable.from_array. 
+ 
+  NOTE: Classes that rely on this logic when creating
+  new instances will need to call from_array instead!
+
+
+#### 0.8.3 (2010-11-02) #############################
+
+* FIXED: Handling of Boolean fields when the value is null. 
+* CHANGE: from_hash explicitly checks field names as Symbols and Strings
+
+
+#### 0.8.2 (2010-09-05) #############################
+
+* FIXED: undefined method `each_pair' for nil:NilClass for hash_proc_processor
+
+#### 0.8.1 (2010-07-31) #############################
+
+* CHANGE: to_delimited and from_delimited are sensitive. This means you need to keep 
+  track of data that is sensitive. 
+
+#### 0.8.0 (2010-07-28) #############################
+
+* FIXED: from_delimited now gracefully handles String input by splitting it by $/
+* CHANGE: Removed field name magic from from_delimited 
+* CHANGE: Converted to Tryouts 2 
+* ADDED: Support for sensitive fields
+* ADDED: Supports inheritance
+* ADDED: Storable#to_array
+
+
+#### 0.7.4 (2010-05-01) #############################
+
+* FIXED: Check separately if getter and setter methods are already defined
+* ADDED: Call Storable#preprocessor after an object is initialized
+
+
+#### 0.7.3 (2010-04-10) #############################
+
+* ADDED: Allow anonymous objects via Storable.from_json etc.
+* ADDED: Enabled support for marshalling Proc objects in IRB sessions.
+* ADDED: Storable#call for calling Proc fields via instance_eval
+* ADDED: Support for Range field type (parse from a String when necessary) 
+
+
+#### 0.7.2 (2010-04-06) #############################
+
+* FIXED: Handle empty symbols like in Storable 0.6.4. Fixes "interning empty string" error. [Diego Elio 'Flameeyes' Pettenò]
+
+#### 0.7.1 (2010-04-04) #############################
+
+* FIXED: Missing proc_source.rb in gemspec.
+
+#### 0.7.0 (2010-04-03) #############################
+
+* FIXED: Default initialize method missed the last argument
+* FIXED: Possible error in from_hash when a value is nil
+* CHANGE: Remove unused "require 'fileutils'"
+* CHANGE: field_types is now a Hash
+* CHANGE: Set the instance variable if a setter method doesn't exist. 
+* CHANGE: Will grab the first element of an Array if there is only one
+  and a field type is defined that is not an Array. 
+* ADDED: Storable.debug
+* ADDED: Boolean class (candy for TrueClass fields)
+* ADDED: Automatically convert a Proc to a string of its source in to_hash
+* ADDED: Support for Symbol field type
+
+
+#### 0.6.5 (2010-03-23) #############################
+
+* ADDED: Use Yajl if it's available.
+
+#### 0.6.4 (2010-03-10) #############################
+
+* FIXED: Don't pull the first value out of an array if there is only one element.
+* FIXED: Stored Arrays were nested in another Array in some cases
+
+#### 0.6.2 (2010-02-12) #############################
+
+* CHANGE: Removed hanna dependency [Diego Elio 'Flameeyes' Pettenò]
+
+#### 0.6.1 (2010-01-15) #############################
+
+* ADDED: Default initialize for Storable objects which can set field values. 
+
+#### 0.6.0 (2009-11-27) #############################
+
+* FIXED: Undefined @@field_names error when no fields specified
+* ADDED: Support for field output processors
+* ADDED: Storable::DefaultProcessors
+
+
+#### 0.5.8 (2009-10-06) #############################
+
+* FIXED: "wrong argument type false (expected Hash)". I think
+  that's the last of it. 
+* CHANGE: Removed with_titles argument for Storable#dump.
+
+
+#### 0.5.7 (2009-09-15) #############################
+
+* FIXED: "wrong argument type String (expected Data)" in to_yaml (finally!)
+
+#### 0.5.6 (2009-07-19) #############################
+
+* ADDED: has_field?
+
+#### 0.5.5 (2009-07-17) #############################
+
+* FIXED: require 'time' for Time.parse. 
+
+#### 0.5.4 (2009-05-25) #############################
+
+* CHANGE: Removed RedCloth dependency from gemspec.
+
+#### 0.5.3 (2009-05-12) #############################
+
+* FIXED: Corrected error handling when json not available (ignore and continue)
+
+#### 0.5.2 (2009-05-12) #############################
+
+* CHANGE: Put OrderedHash into Storable namespace and imported merge fix from Caesars
+* FIXED: Circular dependency with Sysinfo
+
+
+#### 0.5.1 (2009-05-07) #############################
+
+* FIXED: Bug in from_hash which was incorrectly parsing some data types (incl. Integer)
+* ADDED: bin/example
+* ADDED: OrderedHash for Ruby 1.8.x (still unordered in JRuby. Need to investigate.)
+
+#### 0.5 (2009-05-07) ###############################
+
+* First public release. See commit history for solutious-stella, solutious-rudy, 
+and delano-delanotes for complete history of SysInfo (was SystemInfo).
+

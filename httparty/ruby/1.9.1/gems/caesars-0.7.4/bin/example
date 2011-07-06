@@ -1,0 +1,163 @@
+#!/usr/bin/ruby
+
+# Caesars -- A working example
+#
+# If your reading this via the rdocs you won't be able to see the code
+# See: http://github.com/delano/caesar/blob/master/bin/example
+#
+# Usage: bin/example
+#
+
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
+
+require 'caesars'
+
+# ------------------------------------------------------------------
+#   EXAMPLE 1 -- Flavour
+# 
+
+class Flavour < Caesars  #:nodoc: all
+end
+
+extend Flavour::DSL     # Bring the DSL into the current namespace. 
+                        # This module is created dynamically based
+                        # on the name of the subclass.
+                             
+flavour do              # Start drinking! I mean, start writing your
+  spicy true            # domain specific language! 
+  clamy true            # Use any attribute name you want.
+  salty true
+  vodka :very_true      # And any value you want. 
+end
+
+p @flavour              # => #<Flavour:0x3f56b0 ...>
+p @flavour.spicy        # => true
+
+
+
+# ------------------------------------------------------------------
+# EXAMPLE 2 -- Staff
+#
+
+class Staff < Caesars   #:nodoc: all
+  
+  chill :calculate      # Delay execution of the blocks for the calculate
+                        # attribute. They will be stored as Procs.                      
+end
+
+extend Staff::DSL
+
+# The top level method is the lower case name of the class. For deeper
+# names like Class::SecondLevel it will use the final name 
+# (i.e. secondlevel). You can supply an optional modifier name which 
+# will be included in the instance variable (@staff_fte).
+staff :fte do
+  desc 'Our hard-working, "full-time" staff'
+
+  location :splashdown do
+    town :tsawwassen
+
+    person :steve, :sheila do
+      role :manager
+    end
+
+    person :steve do
+      role :cook
+      anger :high
+      hours 25
+      catchphrase "Rah! [strokes goatee]"
+    end
+
+    person :sheila do
+      catchphrase "This gravy tastes like food I ate in a Mexican prison."
+      hours rand(20)
+      rate "9.35/h"
+      calculate :salary do |gumption|
+        ("%.2f" % [gumption * self.splashdown.sheila.rate.to_f]).to_f
+      end
+    end
+
+    person :delano do
+      role :cook
+      rate "8.35/h"
+      hours 57
+      satisfaction :low
+      calculate :salary do 
+        self.splashdown.delano.rate.to_f * self.splashdown.delano.hours        
+      end
+    end
+
+  end
+end
+
+p @staff_fte                    # => #<Staff: ...>
+p @staff_fte.desc               # => Our hard-working, "full-time" staff
+
+# Deeper attributes are also available via instance methods
+p @staff_fte.splashdown.delano  # => {:role=>:cook, :rate=>"$8.35/h", :satisfaction=>:low}
+p @staff_fte.splashdown.sheila  # => {:role=>:manager, :catchphrase=>"This gravy tastes like food I ate in a Mexican prison."}
+p @staff_fte.splashdown.steve   # => {:role=>[:manager, :cook], :anger=>:high, :catchphrase=>"Rah! [strokes goatee]"}
+p @staff_fte.splashdown.delano.satisfaction   # => :low
+
+# You can also access them using hash syntax
+p @staff_fte.splashdown[:steve][:role]  # => [:manager, :cook]
+
+# The "chilled" attributes store their blocks as Procs and are not executed automatically. 
+# You can call them manually and send arguments like you normally would. 
+p @staff_fte.splashdown.delano.salary.call             # => 475.95
+p @staff_fte.splashdown.sheila.salary.call(rand(100))  # => 549.77
+
+
+# ------------------------------------------------------------------
+# EXAMPLE 3 -- External Config file
+#
+
+class Food < Caesars
+  chill :order
+end
+class Drink < Caesars
+end
+
+class PartyConfig < Caesars::Config
+  dsl Food::DSL
+  dsl Drink::DSL
+end
+
+conffile = File.join(File.dirname(__FILE__), 'party.conf')
+@config = PartyConfig.new(conffile)
+
+p @config.food.order.call   # => 10kg
+p @config[:drink][:wine]    # => 12L
+p @config                   # => <PartyConfig:0x3f780c ...>
+p @config.keys              # => [:food, :drink]
+
+# [... make changes to party.conf ...]
+
+@config.refresh
+
+
+# ------------------------------------------------------------------
+# EXAMPLE 4 -- Forced Array
+#
+class Shift < Caesars
+  forced_array :peoples
+end
+
+include Shift::DSL
+
+shift do
+  peoples :tom, :jeff, :al
+  compare :tom, :jeff, :al
+  peoples :ada, :gary, :bo
+end
+
+p @shift.peoples[0]          # => [:tom, :jeff, :al]
+p @shift.compare[0]          # => :tom
+p @shift.compare             # => [:tom, :jeff, :al]
+p @shift.peoples[1]          # => [:ada, :gary, :bo]
+p @shift.compare[1]          # => :jeff
+
+
+
+
+

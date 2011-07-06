@@ -1,0 +1,87 @@
+= SysInfo - v0.6
+
+All your system-independent infoz in one handy class. 
+
+SysInfo does a takes a very quick glance at the system it's running on and exposes the results as YAML, JSON, CSV, or TSV. It also determines a platform identifier for the system that takes the form: VM-OS-IMPLEMENTATION-ARCHITECTURE.
+
+=== Platform Identifier Examples
+
+    ruby-unix-osx-i386
+    ruby-unix-osx-powerpc
+    ruby-unix-linux-x86_64
+    java-win32-windows-i386
+    java-win32-mingw-i386
+    
+For the complete list of operating systems, implementations and architectures that SysInfo is aware of, see:
+
+* <tt>$ sysinfo os</tt> 
+* <tt>$ sysinfo impl</tt> 
+* <tt>$ sysinfo arch</tt>
+
+== Usage -- Library
+
+    sysinfo = SysInfo.new
+    p sysinfo.vm                    # => ruby
+    p sysinfo.os                    # => unix
+    p sysinfo.impl                  # => osx
+    p sysinfo.arch                  # => i386
+    p sysinfo.platform              # => ruby-unix
+    p sysinfo.to_s                  # => ruby-unix-osx-i386
+    
+    p sysinfo.user                  # => delano
+    p sysinfo.home                  # => /Users/delano
+    p sysinfo.uptime                # => 290.429              (hours)
+    p sysinfo.shell                 # => /bin/bash
+    p sysinfo.paths                 # => [/sbin, /bin, /usr/bin, ...]
+                  
+    p sysinfo.hostname              # => walter
+    p sysinfo.ipaddress_internal    # => 10.0.1.2
+    p sysinfo.uptime                # => 290.573655656974
+    p sysinfo.ruby                  # => [1,9,1]
+    
+== Usage -- Executable
+
+    $ sysinfo 
+    ruby-unix-osx-i386
+    
+    $ /usr/jruby/bin/sysinfo
+    java-unix-osx-x86_64
+    
+    $ sysinfo -f yaml
+    :vm: :ruby
+    :os: :unix
+    :impl: :osx
+    ...
+    :shell: :"/bin/bash"
+    :user: delano
+    
+    $ sysinfo -f json
+    {"vm":"ruby","os":"unix","impl":"osx", ..., "shell":"\/bin\/bash","user":"delano"}
+    
+    $ sysinfo -f csv
+    ruby,unix,osx, ... /bin/bash,delano
+    
+== Installation
+
+Via Rubygems, one of:
+
+    $ sudo gem install sysinfo
+    $ sudo gem install delano-sysinfo --source http://gems.github.com/
+
+or via download:
+* sysinfo-latest.tar.gz[http://github.com/delano/sysinfo/tarball/latest]
+* sysinfo-latest.zip[http://github.com/delano/sysinfo/zipball/latest]
+
+== Prerequisites
+
+* Ruby 1.8, Ruby 1.9, or JRuby 1.2
+* Storable[http://github.com/delano/storable]
+
+== Credits
+
+* Delano Mandelbaum (delano@solutious.com)
+* Portions of this code were originally from Amazon's EC2 AMI tools, specifically lib/platform.rb.
+
+== License
+
+See: LICENSE.txt

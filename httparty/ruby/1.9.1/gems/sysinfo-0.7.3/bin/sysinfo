@@ -1,0 +1,76 @@
+#!/usr/bin/ruby
+
+# SysInfo -- A Command Line Interface
+#
+# If your reading this via the rdocs you won't be able to see the code
+# See: http://github.com/delano/sysinfo/blob/master/bin/sysinfo
+#
+# Usage: bin/sysinfo
+#
+
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib')) # Make sure our local lib is first in line
+
+require 'drydock'
+require 'sysinfo'
+
+module SysInfoCLI #:nodoc:
+  extend Drydock
+  
+  debug :on
+  default :info
+  
+  global :f, :format, String, "Output format. One of: yaml, json, csv, tsv, string (default)"
+  global :v, :verbose, "Output everything I know"
+  global :V, :version, "Display version number" do
+    puts "SysInfo version: #{SysInfo::VERSION}"
+    exit 0
+  end
+  
+  about "Display system information"
+  command :info do |obj|
+    format = obj.global.format || :string
+    format = :yaml if obj.global.verbose == true
+    si = SysInfo.new
+    puts si.dump(format)
+  end
+  
+  about "Display list of known architectures"
+  command :arch do |obj|
+    arch = SysInfo::ARCHITECTURES.collect { |arch| 
+      next if arch[0].nil?
+      obj.global.verbose == true ? "%-15s -> %s" % [arch[1], arch[0].source] : arch[1] 
+    }
+    puts arch.compact
+  end
+  command_alias :arch, :architectures
+  
+  about "Display list of known OS implementations"
+  command :impl do |obj|
+    reorg = {}
+    SysInfo::IMPLEMENTATIONS.each do |arch| 
+      next if arch[0].nil?
+      reorg.store(arch[2].to_s, arch[0])
+    end
+    impl = reorg.keys.sort.collect do |key|
+      obj.global.verbose == true ? "%-15s -> %s" % [key, reorg[key].source] : key
+    end
+    puts impl.compact.uniq
+  end
+  command_alias :impl, :implementations
+  
+  about "Display list of known operating systems (OS)"
+  command :os do |obj|
+    reorg = {}
+    SysInfo::IMPLEMENTATIONS.each do |arch| 
+      next if arch[0].nil?
+      reorg.store(arch[1].to_s, arch[0])
+    end
+    impl = reorg.keys.sort.collect do |key|
+      obj.global.verbose == true ? "%-15s -> %s" % [key, reorg[key].source] : key
+    end
+    puts impl.compact.uniq
+  end
+  
+end
+
+Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?

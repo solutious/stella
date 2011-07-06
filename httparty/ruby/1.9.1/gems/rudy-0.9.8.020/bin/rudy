@@ -1,0 +1,331 @@
+#!/usr/bin/ruby
+
+
+# = Rudy
+# 
+# === Not your granparent's deployment tool
+#
+#   See rudy -h for usage
+# 
+
+BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
+lib_dir = File.join(BASE_PATH, 'lib')
+$:.unshift lib_dir
+
+$:.unshift File.join(File.dirname(__FILE__), '..', '..', 'drydock', 'lib') 
+
+#$SAFE = 1   # require is unsafe in Ruby 1.9??
+
+begin
+  require 'drydock'
+  require 'rudy'
+  require 'rudy/cli'
+rescue Interrupt
+  exit
+end
+
+# Command-line interface for /bin/rudy
+class RudyCLI < Rudy::CLI::Base
+  
+  debug :off
+  
+  default :machines       # when no command is provided
+  trawler :passthrough    # unknown command names will forward here.
+  
+  # ------------------------------------------  RUDY GLOBALS  --------
+  # ------------------------------------------------------------------
+  
+  global :e, :environment, String, "Connect to the specified environment (e.g. #{Rudy::DEFAULT_ENVIRONMENT})"
+  global :r, :role, String, "Connect to a machine with the specified role (e.g. #{Rudy::DEFAULT_ROLE})"
+  global :p, :position, String, "Position of the machine in its group"
+  global :b, :bucket, String, "An S3 bucket name (used when creating images)"
+  global :t, :testrun, "Test run. Don't execute action (PARTIALLY SUPPORTED)."
+  global :P, :parallel, "Execute remote commands in parallel (PARTIALLY SUPPORTED)."
+  global :F, :force, "Force an action despite warnings"
+
+  global :positions, Integer, "Override positions number for the current role"
+  
+  
+  # ------------------------------------------  RUDY OBJECTS  --------
+  # ------------------------------------------------------------------
+  
+  about "View Machines"
+  usage "rudy"
+  usage "rudy machines"
+  usage "rudy machines -l"
+  usage "rudy machines -U"
+  usage "rudy machines -A [static ip address]"
+  usage "rudy machines -N"
+  usage "rudy machines -T"
+  usage "rudy machines -P"
+  usage "rudy machines -O"
+  action :W, :wash, "Wash machine metadata"
+  action :T, :available, "Test availablity"
+  action :U, :update, "Update machines based on configuration"
+  action :A, :associate, "Associate static IP addresses or display existing ones"
+  action :N, :disassociate, "Disassociate static IP addresses"
+  action :P, :password, "Display admin password (Windows only)"
+  action :O, :console, "Display console output"
+  option :l, :all, "Display machines for all environments and roles"
+  command :machines => Rudy::CLI::Machines
+  command_alias :machines, :m
+  
+  about "View Keypairs"
+  usage "rudy keypairs"
+  #usage "rudy keypairs -A"
+  usage "rudy keypairs -S"
+  action :A, :add, "Add a keypair"
+  action :S, :show, "Show a private key"
+  command :keypairs => Rudy::CLI::Keypairs
+  command_alias :keypairs, :k
+  
+  about "View Disks"
+  usage "rudy disks"
+  usage "rudy disks -l"
+  usage "rudy disks -C -s 1 /path/2/mount"
+  option :s, :size, Integer, "Volume size (GB)"
+  option :d, :device, String, "Device ID"
+  option :f, :fstype, String, "Filesystem type"
+  option :b, :backups, "Display backups"
+  option :l, :all, "Display all disks"
+  action :C, :create, "Create disk"
+  action :D, :destroy, "Destroy disk"
+  action :W, :wash, "Wash disk metadata"
+  command :disks => Rudy::CLI::Disks
+  command_alias :disks, :d
+
+  about "View Backups"
+  usage "rudy backups"
+  usage "rudy backups -l"
+  usage "rudy backups -C /disk/mount/point"
+  option :l, :all, "Display all backups"
+  action :W, :wash, "Wash backup metadata"
+  action :C, :create, "Create backup"
+  command :backups => Rudy::CLI::Backups
+  command_alias :backups, :b
+
+  about "View raw metadata"
+  usage "rudy metadata"
+  usage "rudy metadata -l -r [disk|back|m]"
+  usage "rudy metadata -D object-id"
+  option :r, :rtype, String, "Record type. One of: disk, back, m (default)"
+  option :l, :all, "Display metadata for all environments and roles"
+  action :D, :delete, "Delete an object"
+  argv :oid
+  command :metadata => Rudy::CLI::Metadata
+  
+  about "View Network configuration"
+  usage "rudy networks"
+  usage "rudy networks -C"
+  usage "rudy networks -D"
+  usage "rudy networks -L"
+  usage "rudy networks -L -i"
+  usage "rudy networks -L -e"
+  usage "rudy networks -U"
+  usage "rudy networks -A [-p ports] [-a addresses] [-r protocols] "
+  usage "rudy networks -A -p 81,8000-9000 -a 127.0.0.1,127.0.0.2"
+  usage "rudy networks -A -g default -o 123456789012"
+  usage "rudy networks -R -g default"
+  option :e, :external, "Display only external IP address"
+  option :i, :internal, "Display only internal IP address"
+  option :r, :protocols, Array, "List of protocols. One of: tcp (default), udp, icmp"
+  option :p, :ports, Array, "List of port ranges (default: 22,80,443)"
+  option :a, :addresses, Array, "List of IP addresses (default: your current external IP)"
+  option :g, :group, String, "Other group to authorize or revoke. Use with -o!"
+  option :o, :owner, String, "Other group owner ID (account number). Use with -g!"
+  action :U, :update, "Update networks based on configuration"
+  action :L, :local, "Show local network configuration"
+  action :C, :create, "Create the network security group"
+  action :D, :destroy, "Create the network security group"
+  action :A, :authorize, "Authorize a rule for a network security group"
+  action :R, :revoke, "Revoke a rule for a network security group"
+  command :networks => Rudy::CLI::Networks
+  command_alias :networks, :n
+  
+    
+  # -----------------------------------------  RUDY ROUTINES  --------
+  # ------------------------------------------------------------------
+  
+  about "View Routines"
+  usage "rudy routines"
+  usage "rudy routines -l"
+  option :l, :all, "Display routines for all environments and roles"
+  command :routines => Rudy::CLI::Routines
+  command_alias :routines, :r
+  
+  # A "do nothing" routine. Passthrough simply executes a routine
+  # config block. Drydock's trawler uses this for unknown commands.
+  about "A passthrough for custom routines"
+  usage "rudy [custom-routine]"
+  option :m, :message, String, "A message"
+  command :passthrough => Rudy::CLI::Routines
+
+  about "Startup a machine group"
+  usage "rudy startup"
+  option :m, :message, String, "A message"
+  command :startup => Rudy::CLI::Routines
+
+  about "Shutdown a machine group"
+  usage "rudy shutdown"
+  option :m, :message, String, "A message"
+  command :shutdown => Rudy::CLI::Routines
+  
+  about "Reboot a machine group"
+  usage "rudy reboot"
+  option :m, :message, String, "A message"
+  command :reboot => Rudy::CLI::Routines
+  
+
+  # ------------------------------------  RUDY MISCELLANEOUS  --------
+  # ------------------------------------------------------------------
+  
+  about "Display existing environment objects"  
+  option :l, :all, "Include all regions"
+  command :info => Rudy::CLI::Info
+  
+  about "Log in to a machine"
+  command :ssh => Rudy::CLI::Machines
+  
+  #about "Open the machine in your default browser (OSX only)"
+  #option :s, :https, "Use HTTPS"
+  #option :p, :port, Integer, "Port"
+  #command :open => Rudy::CLI::Candy
+  
+  about "Check Rudy configuration."
+  usage "rudy [-f config-file] config [param-name]"
+  option :l, :all, "Display all configs for all machines"
+  option :commands, "Display commands configuration"
+  option :defaults, "Display defaults configuration"
+  option :machines, "Display machines configuration"
+  option :accounts, "Display accounts configuration"
+  option :routines, "Display routines configuration"
+  option :script, "Output configuration identical to what is provided to scripts called in routines"
+  option :project, "Output a skeleton Rudyfile"
+  #option :d, :defaults, "Display the default value for the supplied parameter"
+  #option :g, :group, String, "Display configuration for a specific group"
+  argv :name
+  command :config => Rudy::CLI::Config
+  command_alias :config, :configs
+  
+  command :print_global => Rudy::CLI::Config
+  command_alias :print_global, :globals
+  command_alias :print_global, :global
+  
+  about "Create a machine image from a running instance (Windows only)"
+  usage "rudy -b BUCKET-NAME bundle IMAGE-NAME"
+  argv :name
+  command :bundle => Rudy::CLI::Images
+  
+  about "Check status of bundling process (Windows only)"
+  usage "rudy -b BUCKET-NAME bundle-status IMAGE-NAME"
+  argv :name
+  command :bundle_status => Rudy::CLI::Images
+  
+  about "Display machine images"
+  usage "rudy images"
+  usage "rudy images -o amazon"
+  usage "rudy -b BUCKET-NAME images -R IMAGE-NAME"
+  usage "rudy images -D AMI"
+  option :o, :owner, String, "Owner ID (default: self)"
+  action :R, :register, "Register a machine image"
+  action :D, :deregister, "De-register a machine image (does not delete from S3)"
+  argv :name
+  command :images => Rudy::CLI::Images
+  command_alias :images, :im
+  
+  about "Initialize Rudy configuration"
+  command :init do |obj|
+    
+    Rudy::Huxtable.update_config
+    
+    unless File.exists? Rudy::CONFIG_FILE
+      Rudy::Config.init_config_dir
+    end
+  
+    begin
+
+      if Rudy::Huxtable.domain_exists?
+        puts "SimpleDB domain #{Rudy::Huxtable.domain} already exists"
+      else
+        puts "Creating SimpleDB domain #{Rudy::Huxtable.domain}"
+        Rudy::Huxtable.create_domain
+      end
+      
+      user, host = Rudy.sysinfo.user, Rudy::Huxtable.global.localhost
+      
+      
+    rescue Rudy::AWS::SDB::NoSecretKey, 
+           Rudy::AWS::SDB::NoAccessKey, 
+           Rudy::NoConfig => ex
+      puts "AWS credentials must be configured to continue."
+      puts "You can modify these in #{Rudy::CONFIG_FILE}"
+      exit 0
+    end
+  
+    obj.global.quiet = true  # don't print elapsed time
+  end
+
+  about "Display time (in UTC)"
+  option :l, :local, "Display local time"
+  command :time do |obj|
+    t = obj.option.local ? Time.now : Time.now.utc
+    puts '%s' % t.strftime("%Y-%m-%d %T %Z (%z)")
+  end
+  
+  usage "rudy [global options] annoy [-h -m -l] [-e]"
+  about "Play around with Rudy's annoying challenges"
+  option :s, :string, "A numeric challenge"
+  option :n, :numeric, "A numeric challenge"
+  option :i, :insane, "Insane annoyance factor"
+  option :h, :high, "High annoyance factor"
+  option :m, :medium, "Medium annoyance factor"
+  option :l, :low, "Low annoyance factor"
+  option :r, :rand, "Random challenge type"
+  command :annoy do |obj|
+    srand(Time.now.to_f)
+    flavor = [:numeric, :string, :rand].detect { |v| obj.option.send(v) } || :string
+    factor = [:insane, :high, :medium, :low].detect { |v| obj.option.send(v) } || :medium
+    success = Annoy.challenge?("Is this annoying?", factor, flavor)
+    puts (success ? "Correct!" : "WRONG!").bright
+    obj.global.quiet = true  # don't print elapsed time
+  end
+
+  about "Display the current Rudy slogan"
+  command :slogan do |obj|
+    puts "Rudy: Not your grandparent's deployment tool!"
+    obj.global.quiet = true  # don't print elapsed time
+  end
+
+  about "Generates a configuration template to #{Rudy::CONFIG_FILE}"
+  command :generate_config do |obj|
+    unless File.exists?(Rudy::CONFIG_FILE)
+      Rudy::Config.init_config_dir
+      puts "Add your AWS credentials to #{Rudy::CONFIG_FILE}"
+    else
+      puts "#{Rudy::CONFIG_FILE} already exists"
+    end
+  end
+  
+  about "Display basic system information"
+  command :sysinfo do
+    puts Rudy.sysinfo.to_yaml
+  end
+end
+
+begin
+  Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Drydock::ArgError, Drydock::OptError => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.usage
+rescue Drydock::InvalidArgument => ex
+  STDERR.puts ex.message  
+rescue Rudy::Error => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.backtrace if Drydock.debug?
+rescue Interrupt
+  puts "#{$/}Exiting... "
+  exit 1
+rescue => ex
+  STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
+  STDERR.puts ex.backtrace if Drydock.debug?
+end
