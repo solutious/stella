@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::API [stella 2.0.3.001]</title>
+    <title>: Stella::API [stella 2.1.0.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -62,6 +62,10 @@
             </div>
           </div>
           <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Class <a href="API/Unauthorized.html" class="link">Stella::API::Unauthorized</a><br />
+            </div>
             <div id='attribute-list'>
               <h2 class='section-bar'>Attributes</h2>
               <div class='name-list'>
@@ -85,13 +89,13 @@
                 <a name='M000068'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(user=nil, key=nil, httparty_opts={})</span>
+                  <span class='arguments'>(account=nil, key=nil, httparty_opts={})</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000068-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000068-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">user</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">key</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">httparty_opts</span>={}&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_HOST'</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'https://www.blamestella.com/api/v2'</span>&#x000A;      <span class="ruby-ivar">@httparty_opts</span> = <span class="ruby-identifier">httparty_opts</span>.<span class="ruby-identifier">merge</span>({&#x000A;        <span class="ruby-identifier">:basic_auth</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-identifier">:username</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_USER'</span>], <span class="ruby-identifier">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_KEY'</span>] }&#x000A;      })&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000068-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">account</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">key</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">httparty_opts</span>={}&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_HOST'</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'https://www.blamestella.com/api/v2'</span>&#x000A;      <span class="ruby-ivar">@httparty_opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">account</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_ACCOUNT'</span>]&#x000A;      <span class="ruby-identifier">key</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'STELLA_KEY'</span>]&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">account</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-ivar">@httparty_opts</span>[<span class="ruby-identifier">:basic_auth</span>] <span class="ruby-operator">||=</span> { <span class="ruby-identifier">:username</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">account</span>, <span class="ruby-identifier">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">key</span> }&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
@@ -105,7 +109,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000069-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000069-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 17</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:query</span>] = <span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> {}&#x000A;      <span class="ruby-identifier">execute_request</span> <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">opts</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000069-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 19</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:query</span>] = <span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> {}&#x000A;      <span class="ruby-identifier">execute_request</span> <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">opts</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000070'>
@@ -118,7 +122,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000070-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000070-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 22</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:body</span>] = <span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> {}&#x000A;      <span class="ruby-identifier">execute_request</span> <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">opts</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000070-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 24</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:body</span>] = <span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> {}&#x000A;      <span class="ruby-identifier">execute_request</span> <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">opts</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
