@@ -21,7 +21,7 @@ class Stella::CLI < Drydock::Command
       :wait => @option.wait || 1
     }
     Stella.noise = 0 if @global.format
-    if @option.remote
+    if @global.remote
       @api = Stella::API.new
       ret = @api.post :checkup, :uri => base_uri
       if @api.response.code >= 400
