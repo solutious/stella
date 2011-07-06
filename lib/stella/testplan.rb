@@ -416,7 +416,10 @@ class Stella
       @id &&= Gibbler::Digest.new(@id)
       # Calling plan calls Redis. 
       #@privacy = plan.privacy if Stella::Testplan === plan
-      @report = Stella::Report.from_hash @report if Hash === @report
+      if Hash === @report
+        @report = Stella::Report.from_hash @report
+        @report.runid = runid
+      end
       @planid &&= Gibbler::Digest.new(@planid)
     end
     def hostid

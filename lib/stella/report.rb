@@ -362,8 +362,9 @@ class Stella
     end
     
     field :processed => Boolean
+    field :runid
     
-    attr_reader :runid, :timeline, :filter
+    attr_reader :timeline, :filter
     def initialize(timeline=nil, runid=nil)
       @timeline, @runid = timeline, runid
       @processed = false
