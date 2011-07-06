@@ -1,6 +1,12 @@
 STELLA, CHANGES
 
-#### 2.0.2 (2011-06-??) ###############################
+#### 2.0.3 (2011-07-06) ###############################
+
+* ADDED: Stella::API
+* ADDED: --remote global for running checkups via www.blamestella.com (beta)
+
+
+#### 2.0.2 (2011-06-09) ###############################
 
 * FIXED: Gibbler ID fixes
 * ADDED: --wait option for checkup command

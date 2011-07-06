@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "2.0.2.001"
+  s.version = "2.0.3.001"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2011-06-09}
+  s.date = %q{2011-07-06}
   s.default_executable = %q{stella}
   s.description = %q{Define realistic testplans and run them against your webapps}
   s.email = %q{delano@solutious.com}
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
      "certs/startssl-sub.class1.server.ca.pem",
      "certs/stella-master.crt",
      "lib/stella.rb",
+     "lib/stella/api.rb",
      "lib/stella/cli.rb",
      "lib/stella/client.rb",
      "lib/stella/core_ext.rb",
