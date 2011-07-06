@@ -1,5 +1,9 @@
 STELLA, CHANGES
 
+#### 2.1.1 (2011-07-06) ###############################
+
+* ADDED: Append more info URI to CLI output for remote checkups
+
 #### 2.1.0 (2011-07-06) ###############################
 
 * FIXED: Different CLI output when a testplan is specified

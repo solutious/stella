@@ -32,6 +32,10 @@ class Stella::CLI < Drydock::Command
       raise "Running a testplan remotely isn't supported yet (soon!)" if @global.testplan
       @api = Stella::API.new @global.account, @global.key
       ret = @api.post :checkup, :uri => base_uri
+      if ret && ret[:runid]
+        shortid = ret[:runid].slice  0, 11
+        @more_info = @api.site_uri "/checkup/#{shortid}"
+      end
       pp @api.response if Stella.debug
       if @api.response.code >= 400
         raise Stella::API::Unauthorized if @api.response.code == 401
@@ -41,10 +45,8 @@ class Stella::CLI < Drydock::Command
       begin
         run_hash = @api.get "/checkup/#{ret[:runid]}"
         @run = Stella::Testrun.from_hash run_hash if run_hash
-        STDERR.print '.' unless Stella.quiet?
         sleep 1 if @run && !@run.done?
       end while @run && !@run.done?
-      STDERR.puts unless Stella.quiet?
     else
       if @global.testplan
         unless File.owned?(@global.testplan)
@@ -87,8 +89,9 @@ class Stella::CLI < Drydock::Command
           metrics.response_time.mean*1000,
           metrics.socket_connect.mean*1000,
           metrics.first_byte.mean*1000,
-          metrics.last_byte.mean*1000]
-        Stella.li "[%3s] %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
+          metrics.last_byte.mean*1000,
+          @more_info]
+        Stella.li "[%3s] %6.2fms  (%5.2fms + %5.2fms + %5.2fms) %s" % args
         if @global.verbose > 0 || @report.errors?
           Stella.li ''
           Stella.li ' Headers:'

@@ -26,6 +26,11 @@ class Stella
       opts[:body] = params || {}
       execute_request :post, path, opts
     end
+    def site_uri path
+      uri = Addressable::URI.parse self.class.base_uri
+      uri.path = uri_path(path)
+      uri.to_s
+    end
     private
     def uri_path *args
       args.unshift ''  # force leading slash
