@@ -20,6 +20,7 @@ class Stella::CLI < Drydock::Command
       :concurrency => @option.concurrency || 1,
       :wait => @option.wait || 1
     }
+    Stella.noise = 0 if @global.format
     if @option.remote
       @api = Stella::API.new
       ret = @api.post :checkup, :uri => base_uri
@@ -73,15 +74,15 @@ class Stella::CLI < Drydock::Command
       else
         metrics = @report.metrics
         if @global.verbose > 0
-          args = ['', '[rt]', '[net]', '[app]', '[d/l]']
-          puts "%25s      %6s      %5s     %5s     %5s" % args
+          puts
         end
-        args = [@run.planid.shorten(12), @run.runid.shorten(12),
+        # @run.planid.shorten(12), @run.runid.shorten(12),
+        args = ['[rt]',
           metrics.response_time.mean*1000,
           metrics.socket_connect.mean*1000,
           metrics.first_byte.mean*1000,
           metrics.last_byte.mean*1000]
-        puts "%s/%s      %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
+        puts "%-8s %6.2fms  (%5.2fms + %5.2fms + %5.2fms)" % args
         #puts @report.metrics_pack.dump(:json)
       end
     end

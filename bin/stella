@@ -96,9 +96,9 @@ class Stella::CLI::Definition
 
   after do |obj|  
     @elapsed = Time.now - @start
-    if @elapsed > 0.1 && Stella.noise > 1
-      Stella.li "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
-    end
+    #if @elapsed > 0.1 && Stella.noise > 3
+    #  Stella.li "#{$/}Elapsed: %.2f seconds" % @elapsed.to_f
+    #end
     code = obj.exit_code if obj.respond_to? :exit_code
     exit code ||= 0
   end
