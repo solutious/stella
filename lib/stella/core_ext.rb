@@ -2,6 +2,20 @@
 
 $KCODE = "u" if RUBY_VERSION =~ /^1.8/
 
+class MatchData
+  include Gibbler::String
+end
+
+module Addressable
+  class URI
+    include Gibbler::String
+  end
+end
+
+class OpenStruct
+  include Gibbler::Object
+end
+
 
 # A hash with indifferent access and magic predicates.
 #

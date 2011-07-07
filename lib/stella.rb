@@ -14,7 +14,6 @@ $:.unshift STELLA_LIB_HOME
 end
 
 require 'yajl'
-require 'erb'
 require 'httparty'
 require 'storable'
 require 'benelux'
@@ -39,20 +38,6 @@ class Stella
       @version ||= YAML.load_file(File.join(STELLA_LIB_HOME, '..', 'VERSION.yml'))
     end
   end
-end
-
-class MatchData
-  include Gibbler::String
-end
-
-module Addressable
-  class URI
-    include Gibbler::String
-  end
-end
-
-class OpenStruct
-  include Gibbler::Object
 end
 
 #
@@ -217,23 +202,6 @@ class Stella
     
   end
 end
-
-class Stella::Template
-  include Gibbler::String
-  attr_reader :src
-  def initialize(src)
-    src = src.to_s
-    @src, @template = src, ERB.new(src)
-  end
-  def result(binding)
-    @template.result(binding)
-  end
-  def self.from_file(path)
-    new File.read(path)
-  end
-  def to_s() src end
-end
-
 
 class Stella  
   class API
