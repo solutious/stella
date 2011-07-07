@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "2.1.2.002"
+  s.version = "2.1.2.003"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2011-07-06}
+  s.date = %q{2011-07-07}
   s.default_executable = %q{stella}
   s.description = %q{Define realistic testplans and run them against your webapps}
   s.email = %q{delano@solutious.com}
@@ -99,6 +99,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_runtime_dependency(%q<public_suffix_service>, [">= 0.8.1"])
       s.add_runtime_dependency(%q<whois>, [">= 1.6.6"])
+      s.add_runtime_dependency(%q<yajl>, [">= 0.7.9"])
     else
       s.add_dependency(%q<familia>, [">= 0.7.1"])
       s.add_dependency(%q<gibbler>, [">= 0.8.9"])
@@ -109,6 +110,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_dependency(%q<public_suffix_service>, [">= 0.8.1"])
       s.add_dependency(%q<whois>, [">= 1.6.6"])
+      s.add_dependency(%q<yajl>, [">= 0.7.9"])
     end
   else
     s.add_dependency(%q<familia>, [">= 0.7.1"])
@@ -120,6 +122,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
     s.add_dependency(%q<public_suffix_service>, [">= 0.8.1"])
     s.add_dependency(%q<whois>, [">= 1.6.6"])
+    s.add_dependency(%q<yajl>, [">= 0.7.9"])
   end
 end
 
