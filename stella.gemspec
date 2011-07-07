@@ -99,7 +99,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_runtime_dependency(%q<public_suffix_service>, [">= 0.8.1"])
       s.add_runtime_dependency(%q<whois>, [">= 1.6.6"])
-      s.add_runtime_dependency(%q<yajl>, [">= 0.7.9"])
+      s.add_runtime_dependency(%q<yajl-ruby>, [">= 0.7.9"])
     else
       s.add_dependency(%q<familia>, [">= 0.7.1"])
       s.add_dependency(%q<gibbler>, [">= 0.8.9"])
@@ -110,7 +110,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_dependency(%q<public_suffix_service>, [">= 0.8.1"])
       s.add_dependency(%q<whois>, [">= 1.6.6"])
-      s.add_dependency(%q<yajl>, [">= 0.7.9"])
+      s.add_dependency(%q<yajl-ruby>, [">= 0.7.9"])
     end
   else
     s.add_dependency(%q<familia>, [">= 0.7.1"])
@@ -122,7 +122,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
     s.add_dependency(%q<public_suffix_service>, [">= 0.8.1"])
     s.add_dependency(%q<whois>, [">= 1.6.6"])
-    s.add_dependency(%q<yajl>, [">= 0.7.9"])
+    s.add_dependency(%q<yajl-ruby>, [">= 0.7.9"])
   end
 end
 

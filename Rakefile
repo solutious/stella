@@ -31,10 +31,10 @@ begin
     gem.add_dependency('benelux',    '>= 0.6.1')
     gem.add_dependency('sysinfo',    '>= 0.7.3')
     gem.add_dependency('storable',   '>= 0.8.8')
-    gem.add_dependency('nokogiri',      '>= 1.4.4')
+    gem.add_dependency('nokogiri',   '>= 1.4.4')
     gem.add_dependency('public_suffix_service',      '>= 0.8.1')
     gem.add_dependency('whois',      '>= 1.6.6')
-    gem.add_dependency('yajl',       '>= 0.7.9')
+    gem.add_dependency('yajl-ruby',  '>= 0.7.9')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
