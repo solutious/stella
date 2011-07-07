@@ -6,14 +6,14 @@ class Stella
     include HTTParty
     ssl_ca_file Stella::Client::SSL_CERT_PATH
     format :json
-    attr_reader :httparty_opts, :response
+    attr_reader :httparty_opts, :response, :account, :key
     def initialize account=nil, key=nil, httparty_opts={}
       self.class.base_uri ENV['STELLA_HOST'] || 'https://www.blamestella.com/api/v2'
       @httparty_opts = httparty_opts
-      account ||= ENV['STELLA_ACCOUNT']
-      key ||= ENV['STELLA_KEY']
-      unless account.to_s.empty? || key.to_s.empty?
-        @httparty_opts[:basic_auth] ||= { :username => account, :password => key }
+      @account = account || ENV['STELLA_ACCOUNT']
+      @key = key || ENV['STELLA_KEY']
+      unless @account.to_s.empty? || @key.to_s.empty?
+        httparty_opts[:basic_auth] ||= { :username => @account, :password => @key }
       end
     end
     def get path, params=nil
