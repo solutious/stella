@@ -24,7 +24,6 @@ $:.unshift lib_dir
 require 'stella'
 require 'drydock'
 require 'stella/cli'
-require 'stella/api'
 
 # Command-line interface for bin/stella
 class Stella::CLI::Definition

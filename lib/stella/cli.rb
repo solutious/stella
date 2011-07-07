@@ -13,7 +13,6 @@ class Stella::CLI < Drydock::Command
   
   
   def checkup
-    require 'stella/api'
     base_uri = Stella.canonical_uri(@argv.first)
     run_opts = { 
       :repetitions => @option.repetitions || 1,
