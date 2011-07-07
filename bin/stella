@@ -82,6 +82,7 @@ class Stella::CLI::Definition
   option :c, :concurrency, Integer, "Maximum number of virtual clients"
   #option :a, :arrival, Float, "Arrival rate (new clients per second)"
   option :r, :repetitions, Integer, "Number of times to repeat the testplan (per vclient)"
+  option :timeout, Integer, "Timeout requests after the given number of seconds"
   option :W, :nowait, "Ignore wait times"
   option :w, :wait, Float, "Wait time (in seconds) between requests"
   command :checkup => Stella::CLI

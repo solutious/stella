@@ -17,6 +17,7 @@ class Stella::CLI < Drydock::Command
     run_opts = { 
       :repetitions => @option.repetitions || 1,
       :concurrency => @option.concurrency || 1,
+      :timeout => @option.timeout || 30,
       :wait => @option.wait || 1
     }
     # NOTE ABOUT CLI OUTPUT:
@@ -89,14 +90,17 @@ class Stella::CLI < Drydock::Command
         if @global.verbose > 0 || @report.errors?
           test_uri = @report.log.first ? @report.log.first.uri : '[unknown]'
           Stella.li 'Checkup for %s' % [test_uri]
-          Stella.li
-          Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
-          Stella.li
-          Stella.li '  %s' % [@report.headers.response_headers.split(/\n/).join("\n  ")]
-          Stella.li ''
+          if !@report.timeouts?
+            Stella.li
+            Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
+            Stella.li
+            Stella.li '  %s' % [@report.headers.response_headers.split(/\n/).join("\n  ")]
+            Stella.li ''
+          end
         end
         metrics = @report.metrics
-        args = [@report.statuses.values.first,
+        args = [
+          @report.timeouts? ? 'timeout' : @report.statuses.values.first,
           metrics.response_time.mean*1000,
           metrics.socket_connect.mean*1000,
           metrics.first_byte.mean*1000,
