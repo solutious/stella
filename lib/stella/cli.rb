@@ -45,8 +45,10 @@ class Stella::CLI < Drydock::Command
       begin
         run_hash = @api.get "/checkup/#{ret[:runid]}"
         @run = Stella::Testrun.from_hash run_hash if run_hash
+        STDERR.print '.' if @global.verbose > 0
         sleep 1 if @run && !@run.done?
       end while @run && !@run.done?
+      STDERR.puts if @global.verbose > 0
     else
       if @global.testplan
         unless File.owned?(@global.testplan)
@@ -83,8 +85,16 @@ class Stella::CLI < Drydock::Command
       when 'json', 'yaml'
         puts @run.dump(@global.format)
       else
+        if @global.verbose > 0 || @report.errors?
+          test_uri = @report.log.first ? @report.log.first.uri : '[unknown]'
+          Stella.li 'Checkup for %s' % [test_uri]
+          Stella.li
+          Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
+          Stella.li
+          Stella.li '  %s' % [@report.headers.response_headers.split(/\n/).join("\n  ")]
+          Stella.li ''
+        end
         metrics = @report.metrics
-        # @run.planid.shorten(12), @run.runid.shorten(12),
         args = [@report.statuses.values.first,
           metrics.response_time.mean*1000,
           metrics.socket_connect.mean*1000,
@@ -92,23 +102,19 @@ class Stella::CLI < Drydock::Command
           metrics.last_byte.mean*1000,
           @more_info]
         Stella.li "[%3s] %7.2fms (%5.2fms + %6.2fms + %6.2fms)  %s" % args
-        if @global.verbose > 0 || @report.errors?
-          Stella.li ''
-          Stella.li ' Headers:'
-          Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
-          Stella.li
-          Stella.li '  %s' % [@report.headers.response_headers.split(/\n/).join("\n  ")]
-        end
-        #puts @report.metrics_pack.dump(:json)
       end
     end
   rescue Stella::API::Unauthorized => ex
-    STDERR.puts "Create an account, at no charge! https://www.blamestella.com/signup/free"
-    STDERR.puts "Then specify your credentials:"
-    STDERR.puts "      export STELLA_ACCOUNT=youraccount"
-    STDERR.puts "      export STELLA_KEY=yourapikey"
+    accnt = @api.account || 'youraccount'
+    key = @api.key || 'yourapikey'
+    STDERR.puts "Specify your credentials"
+    STDERR.puts "  export STELLA_ACCOUNT=#{accnt}"
+    STDERR.puts "  export STELLA_KEY=#{key}"
     STDERR.puts " OR "
-    STDERR.puts "      stella -A youraccount -K yourapikey checkup #{@argv.first}"
+    STDERR.puts "  stella -A #{accnt} -K #{key} checkup #{@argv.first}"
+    STDERR.puts 
+    STDERR.puts "Create an account, at no charge!"
+    STDERR.puts "https://www.blamestella.com/signup/free"
   end
 
   def example

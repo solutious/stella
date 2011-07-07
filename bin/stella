@@ -24,6 +24,7 @@ $:.unshift lib_dir
 require 'stella'
 require 'drydock'
 require 'stella/cli'
+require 'stella/api'
 
 # Command-line interface for bin/stella
 class Stella::CLI::Definition
@@ -39,6 +40,7 @@ class Stella::CLI::Definition
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
     Stella.debug = true
+    Stella::API.debug_output $stdout
   end
   global :P, :pause, Integer, "Seconds to wait before starting test"
   #global :H, :withheader, "Include X-Stella-ID request header" 

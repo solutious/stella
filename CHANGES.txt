@@ -1,5 +1,11 @@
 STELLA, CHANGES
 
+#### 2.1.3 (2011-07-06) ###############################
+
+* FIXED: Stella::Report#postprocess loads log from a hash.
+* CHANGE: CLI output
+
+
 #### 2.1.1 (2011-07-06) ###############################
 
 * ADDED: Append more info URI to CLI output for remote checkups
