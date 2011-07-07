@@ -42,12 +42,15 @@ class Stella::CLI < Drydock::Command
         STDERR.puts ret[:msg]
         @exit_code = 1 and return
       end
+      count = 0
       begin
         run_hash = @api.get "/checkup/#{ret[:runid]}"
         @run = Stella::Testrun.from_hash run_hash if run_hash
         STDERR.print '.' if @global.verbose > 0
         sleep 1 if @run && !@run.done?
-      end while @run && !@run.done?
+        count += 1
+      end while @run && !@run.done? && count < 35
+      raise "Sorry, that took too long" if count >= 35
     else
       if @global.testplan
         unless File.owned?(@global.testplan)
