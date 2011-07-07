@@ -33,7 +33,7 @@ class Stella::CLI < Drydock::Command
       @api = Stella::API.new @global.account, @global.key
       ret = @api.post :checkup, :uri => base_uri
       if ret && ret[:runid]
-        shortid = ret[:runid].slice  0, 11
+        shortid = ret[:runid].slice  0, 19
         @more_info = @api.site_uri "/checkup/#{shortid}"
       end
       pp @api.response if Stella.debug
@@ -103,12 +103,12 @@ class Stella::CLI < Drydock::Command
       end
     end
   rescue Stella::API::Unauthorized => ex
-    STDERR.puts "Please check your credentials!"
-    STDERR.puts " e.g."
-    STDERR.puts "  export STELLA_ACCOUNT=youraccount"
-    STDERR.puts "  export STELLA_KEY=yourapikey"
+    STDERR.puts "Create an account, at no charge! https://www.blamestella.com/signup/free"
+    STDERR.puts "Then specify your credentials:"
+    STDERR.puts "      export STELLA_ACCOUNT=youraccount"
+    STDERR.puts "      export STELLA_KEY=yourapikey"
     STDERR.puts " OR "
-    STDERR.puts "  stella -A youraccount -K yourapikey checkup #{@argv.first}"
+    STDERR.puts "      stella -A youraccount -K yourapikey checkup #{@argv.first}"
   end
 
   def example
