@@ -48,7 +48,6 @@ class Stella::CLI < Drydock::Command
         STDERR.print '.' if @global.verbose > 0
         sleep 1 if @run && !@run.done?
       end while @run && !@run.done?
-      STDERR.puts if @global.verbose > 0
     else
       if @global.testplan
         unless File.owned?(@global.testplan)
