@@ -374,6 +374,9 @@ class Stella
         val = klass.from_hash(self.send(name))
         self.send("#{name}=", val)
       end
+      # When we load a report from a hash, some plugin
+      # attributes need to be recontituted from a hash as well. 
+      (self.content.log || []).collect! { |v| Stella::Log::HTTP.from_hash(v) }
     end
     def process
       self.class.plugin_order.each do |name|
