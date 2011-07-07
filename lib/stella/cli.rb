@@ -90,7 +90,7 @@ class Stella::CLI < Drydock::Command
         if @global.verbose > 0 || @report.errors?
           test_uri = @report.log.first ? @report.log.first.uri : '[unknown]'
           Stella.li 'Checkup for %s' % [test_uri]
-          if !@report.timeouts?
+          if !@report.timeouts? && !@report.fubars?
             Stella.li
             Stella.li '  %s' % [@report.headers.request_headers.split(/\n/).join("\n  ")]
             Stella.li
@@ -99,14 +99,19 @@ class Stella::CLI < Drydock::Command
           end
         end
         metrics = @report.metrics
-        args = [
-          @report.timeouts? ? 'timeout' : @report.statuses.values.first,
-          metrics.response_time.mean*1000,
-          metrics.socket_connect.mean*1000,
-          metrics.first_byte.mean*1000,
-          metrics.last_byte.mean*1000,
-          @more_info]
-        Stella.li "[%3s] %7.2fms (%5.2fms + %6.2fms + %6.2fms)  %s" % args
+        if @report.fubars?
+          Stella.li "You found a Stella bug!"
+          Stella.li "Let Tucker know: https://www.blamestella.com/feedback"
+        else
+          args = [
+            @report.timeouts? ? 'timeout' : @report.statuses.values.first,
+            metrics.response_time.mean*1000,
+            metrics.socket_connect.mean*1000,
+            metrics.first_byte.mean*1000,
+            metrics.last_byte.mean*1000,
+            @more_info]
+          Stella.li "[%3s] %7.2fms (%5.2fms + %6.2fms + %6.2fms)  %s" % args
+        end
       end
     end
   rescue Stella::API::Unauthorized => ex
