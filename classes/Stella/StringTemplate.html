@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::StringTemplate [stella 2.1.1.001]</title>
+    <title>: Stella::StringTemplate [stella 2.1.2.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,12 +45,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000198">new</a></li>
+              <li><a href="#M000190">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000199">result</a></li>
-              <li><a href="#M000200">to_s</a></li>
+              <li><a href="#M000191">result</a></li>
+              <li><a href="#M000192">to_s</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -76,44 +76,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000198'>
-                <a name='M000198'>      </a>
+              <div class='method public-class' id='method-M000190'>
+                <a name='M000190'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(src)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000198-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000190-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000198-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 294</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">src</span>)&#x000A;      <span class="ruby-identifier">src</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-ivar">@src</span>, <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">src</span>, <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">src</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000190-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 294</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">src</span>)&#x000A;      <span class="ruby-identifier">src</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-ivar">@src</span>, <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">src</span>, <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">src</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000199'>
-                <a name='M000199'>      </a>
+              <div class='method public-instance' id='method-M000191'>
+                <a name='M000191'>      </a>
                 <div class='synopsis'>
                   <span class='name'>result</span>
                   <span class='arguments'>(binding)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000199-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000191-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000199-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 298</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;      <span class="ruby-ivar">@template</span>.<span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000191-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 298</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;      <span class="ruby-ivar">@template</span>.<span class="ruby-identifier">result</span>(<span class="ruby-identifier">binding</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000200'>
-                <a name='M000200'>      </a>
+              <div class='method public-instance' id='method-M000192'>
+                <a name='M000192'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000200-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000192-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000200-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 301</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>() <span class="ruby-identifier">src</span> <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000192-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 301</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>() <span class="ruby-identifier">src</span> <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
