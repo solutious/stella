@@ -88,7 +88,7 @@ class Stella
           
           tt.add_count :requests, 1, :kind => :http
           
-          run_sleeper @opts[:wait]
+          run_sleeper @opts[:wait] unless usecase.requests.size == idx+1
           
           if @session.response_handler?
             @session.handle_response
