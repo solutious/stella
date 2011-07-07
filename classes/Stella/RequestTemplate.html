@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::RequestTemplate [stella 2.1.0.001]</title>
+    <title>: Stella::RequestTemplate [stella 2.1.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,12 +45,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000200">new</a></li>
+              <li><a href="#M000201">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000202">freeze</a></li>
-              <li><a href="#M000201">postprocess</a></li>
+              <li><a href="#M000203">freeze</a></li>
+              <li><a href="#M000202">postprocess</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -85,44 +85,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000200'>
-                <a name='M000200'>      </a>
+              <div class='method public-class' id='method-M000201'>
+                <a name='M000201'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(meth=nil, uri=nil, opts={}, &amp;definition)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000200-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000201-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000200-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 321</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">meth</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">uri</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>)&#x000A;      <span class="ruby-ivar">@protocol</span> = <span class="ruby-identifier">:http</span>&#x000A;      <span class="ruby-ivar">@http_method</span>, <span class="ruby-ivar">@uri</span> = <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>&#x000A;      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{n}=&quot;</span>, <span class="ruby-identifier">v</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">has_field?</span>(<span class="ruby-identifier">n</span>) }&#x000A;      <span class="ruby-ivar">@params</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@headers</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@follow</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-ivar">@callback</span> = <span class="ruby-identifier">definition</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000201-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 321</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">meth</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">uri</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">definition</span>)&#x000A;      <span class="ruby-ivar">@protocol</span> = <span class="ruby-identifier">:http</span>&#x000A;      <span class="ruby-ivar">@http_method</span>, <span class="ruby-ivar">@uri</span> = <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">uri</span>&#x000A;      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{n}=&quot;</span>, <span class="ruby-identifier">v</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">has_field?</span>(<span class="ruby-identifier">n</span>) }&#x000A;      <span class="ruby-ivar">@params</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@headers</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@follow</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-ivar">@callback</span> = <span class="ruby-identifier">definition</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000203'>
+                <a name='M000203'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>freeze</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000203-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000203-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 339</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">digest</span>)&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-M000202'>
                 <a name='M000202'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>freeze</span>
+                  <span class='name'>postprocess</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000202-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000202-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 339</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeze</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">digest</span>)&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-M000201'>
-                <a name='M000201'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>postprocess</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000201-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000201-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 330</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span>)&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">range</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">proc</span> = <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>]&#x000A;          <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>] = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">from_string</span>(<span class="ruby-identifier">proc</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">ProcString</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000202-source'><span class="ruby-comment cmt"># File lib/stella/testplan.rb, line 330</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">postprocess</span>&#x000A;      <span class="ruby-ivar">@id</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-constant">Gibbler</span><span class="ruby-operator">::</span><span class="ruby-constant">Digest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@id</span>)&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-identifier">response_handler</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">range</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">proc</span> = <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>]&#x000A;          <span class="ruby-identifier">response_handler</span>[<span class="ruby-identifier">range</span>] = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">from_string</span>(<span class="ruby-identifier">proc</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">ProcString</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

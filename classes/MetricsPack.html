@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: MetricsPack [stella 2.1.0.001]</title>
+    <title>: MetricsPack [stella 2.1.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -47,8 +47,8 @@
             storing the serialized data directly to a redis sorted set so it&#8217;s
             important that each chunk of data in unique. Also, it&#8217;s possible to
             grab the stamp from the zrange using :with_scores. NOTE2: We bypass
-            Storable&#8217;s <a href="MetricsPack.html#M000273">to_csv</a> and <a
-            href="MetricsPack.html#M000274">from_csv</a> for speed. TODO: test speed
+            Storable&#8217;s <a href="MetricsPack.html#M000274">to_csv</a> and <a
+            href="MetricsPack.html#M000275">from_csv</a> for speed. TODO: test speed
             difference.
             </p>
           </div>
@@ -56,21 +56,21 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000274">from_csv</a></li>
-              <li><a href="#M000276">from_json</a></li>
-              <li><a href="#M000277">metric?</a></li>
-              <li><a href="#M000266">new</a></li>
-              <li><a href="#M000275">unpack</a></li>
+              <li><a href="#M000275">from_csv</a></li>
+              <li><a href="#M000277">from_json</a></li>
+              <li><a href="#M000278">metric?</a></li>
+              <li><a href="#M000267">new</a></li>
+              <li><a href="#M000276">unpack</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000267">kind</a></li>
-              <li><a href="#M000269">pack</a></li>
-              <li><a href="#M000270">quantize_stamp</a></li>
-              <li><a href="#M000271">to_a</a></li>
-              <li><a href="#M000273">to_csv</a></li>
-              <li><a href="#M000272">to_s</a></li>
-              <li><a href="#M000268">update</a></li>
+              <li><a href="#M000268">kind</a></li>
+              <li><a href="#M000270">pack</a></li>
+              <li><a href="#M000271">quantize_stamp</a></li>
+              <li><a href="#M000272">to_a</a></li>
+              <li><a href="#M000274">to_csv</a></li>
+              <li><a href="#M000273">to_s</a></li>
+              <li><a href="#M000269">update</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -93,100 +93,100 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000274'>
-                <a name='M000274'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>from_csv</span>
-                  <span class='arguments'>(str)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000274-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000274-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 346</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_csv</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-identifier">unpack</span> <span class="ruby-identifier">str</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-class' id='method-M000276'>
-                <a name='M000276'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>from_json</span>
-                  <span class='arguments'>(str)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000276-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000276-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 355</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_json</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">str</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-class' id='method-M000277'>
-                <a name='M000277'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>metric?</span>
-                  <span class='arguments'>(guess)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000277-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000277-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 358</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">metric?</span>(<span class="ruby-identifier">guess</span>)&#x000A;    <span class="ruby-constant">METRICS</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-identifier">guess</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-class' id='method-M000266'>
-                <a name='M000266'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>new</span>
-                  <span class='arguments'>(stamp=nil, uid=nil, n=nil)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000266-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000266-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 289</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">stamp</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">uid</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-ivar">@stamp</span>, <span class="ruby-ivar">@uid</span>, <span class="ruby-ivar">@n</span> = <span class="ruby-identifier">stamp</span>, <span class="ruby-identifier">uid</span>, <span class="ruby-identifier">n</span>&#x000A;    <span class="ruby-ivar">@stamp</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-ivar">@stamp</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Time</span> <span class="ruby-operator">===</span> <span class="ruby-ivar">@stamp</span>      &#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fname</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{fname}=&quot;</span>, <span class="ruby-value">0</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">fname</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">fname</span>)&#x000A;    <span class="ruby-keyword kw">end</span>                                                &#x000A;    <span class="ruby-ivar">@score</span> <span class="ruby-operator">||=</span> <span class="ruby-value">1.0</span>&#x000A;    <span class="ruby-ivar">@errors</span> <span class="ruby-operator">||=</span> <span class="ruby-value">0</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
               <div class='method public-class' id='method-M000275'>
                 <a name='M000275'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>unpack</span>
+                  <span class='name'>from_csv</span>
                   <span class='arguments'>(str)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000275-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000275-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 349</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Cannot unpack nil&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-identifier">a</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">','</span>)&#x000A;    <span class="ruby-identifier">me</span> = <span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-identifier">me</span>.<span class="ruby-identifier">update</span> <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000275-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 346</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_csv</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-identifier">unpack</span> <span class="ruby-identifier">str</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000267'>
+              <div class='method public-class' id='method-M000277'>
+                <a name='M000277'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>from_json</span>
+                  <span class='arguments'>(str)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000277-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000277-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 355</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_json</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">str</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000278'>
+                <a name='M000278'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>metric?</span>
+                  <span class='arguments'>(guess)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000278-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000278-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 358</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">metric?</span>(<span class="ruby-identifier">guess</span>)&#x000A;    <span class="ruby-constant">METRICS</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-identifier">guess</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000267'>
                 <a name='M000267'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>kind</span>
-                  <span class='arguments'>()</span>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(stamp=nil, uid=nil, n=nil)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000267-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000267-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 298</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">kind</span>&#x000A;    <span class="ruby-identifier">:metric</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000267-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 289</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">stamp</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">uid</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-ivar">@stamp</span>, <span class="ruby-ivar">@uid</span>, <span class="ruby-ivar">@n</span> = <span class="ruby-identifier">stamp</span>, <span class="ruby-identifier">uid</span>, <span class="ruby-identifier">n</span>&#x000A;    <span class="ruby-ivar">@stamp</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-ivar">@stamp</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Time</span> <span class="ruby-operator">===</span> <span class="ruby-ivar">@stamp</span>      &#x000A;    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fname</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{fname}=&quot;</span>, <span class="ruby-value">0</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">fname</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:id</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">fname</span>)&#x000A;    <span class="ruby-keyword kw">end</span>                                                &#x000A;    <span class="ruby-ivar">@score</span> <span class="ruby-operator">||=</span> <span class="ruby-value">1.0</span>&#x000A;    <span class="ruby-ivar">@errors</span> <span class="ruby-operator">||=</span> <span class="ruby-value">0</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000269'>
-                <a name='M000269'>      </a>
+              <div class='method public-class' id='method-M000276'>
+                <a name='M000276'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>unpack</span>
+                  <span class='arguments'>(str)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000276-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000276-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 349</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Cannot unpack nil&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-identifier">a</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">','</span>)&#x000A;    <span class="ruby-identifier">me</span> = <span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-identifier">me</span>.<span class="ruby-identifier">update</span> <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000268'>
+                <a name='M000268'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>kind</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000268-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000268-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 298</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">kind</span>&#x000A;    <span class="ruby-identifier">:metric</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000270'>
+                <a name='M000270'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pack</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000269-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000270-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000269-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 319</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pack</span>&#x000A;    <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000270-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 319</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pack</span>&#x000A;    <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000270'>
-                <a name='M000270'>      </a>
+              <div class='method public-instance' id='method-M000271'>
+                <a name='M000271'>      </a>
                 <div class='synopsis'>
                   <span class='name'>quantize_stamp</span>
                   <span class='arguments'>(quantum)</span>
@@ -194,61 +194,61 @@
                 <div class='description'>
                   <p>
                   @stamp => 1281355304 (2010-08-09-12-01-44) <a
-                  href="MetricsPack.html#M000270">quantize_stamp</a>(1.day) => 1281312000
-                  (2010-08-09) <a href="MetricsPack.html#M000270">quantize_stamp</a>(1.hour)
+                  href="MetricsPack.html#M000271">quantize_stamp</a>(1.day) => 1281312000
+                  (2010-08-09) <a href="MetricsPack.html#M000271">quantize_stamp</a>(1.hour)
                   => 1281355200 (2010-08-09-12) <a
-                  href="MetricsPack.html#M000270">quantize_stamp</a>(1.minute) => 1281355260
+                  href="MetricsPack.html#M000271">quantize_stamp</a>(1.minute) => 1281355260
                   (2010-08-09-12-01)
                   </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000270-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000270-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 327</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quantize_stamp</span>(<span class="ruby-identifier">quantum</span>)&#x000A;    <span class="ruby-ivar">@stamp</span> <span class="ruby-operator">-</span> (<span class="ruby-ivar">@stamp</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">quantum</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-M000271'>
-                <a name='M000271'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>to_a</span>
-                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000271-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000271-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 330</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_a</span>&#x000A;    <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-identifier">v</span> = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">field</span>) &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">String</span> <span class="ruby-value">? </span><span class="ruby-value str">'unknown'</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">Float</span> <span class="ruby-value">? </span><span class="ruby-identifier">v</span>.<span class="ruby-identifier">fineround</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    }&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-M000273'>
-                <a name='M000273'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>to_csv</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000273-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000273-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 343</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_csv</span>&#x000A;    <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000271-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 327</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quantize_stamp</span>(<span class="ruby-identifier">quantum</span>)&#x000A;    <span class="ruby-ivar">@stamp</span> <span class="ruby-operator">-</span> (<span class="ruby-ivar">@stamp</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">quantum</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000272'>
                 <a name='M000272'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>to_s</span>
+                  <span class='name'>to_a</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000272-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000272-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 340</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">','</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000272-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 330</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_a</span>&#x000A;    <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-identifier">v</span> = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">field</span>) &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">String</span> <span class="ruby-value">? </span><span class="ruby-value str">'unknown'</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">Float</span> <span class="ruby-value">? </span><span class="ruby-identifier">v</span>.<span class="ruby-identifier">fineround</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    }&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000268'>
-                <a name='M000268'>      </a>
+              <div class='method public-instance' id='method-M000274'>
+                <a name='M000274'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_csv</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000274-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000274-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 343</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_csv</span>&#x000A;    <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000273'>
+                <a name='M000273'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000273-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000273-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 340</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">','</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000269'>
+                <a name='M000269'>      </a>
                 <div class='synopsis'>
                   <span class='name'>update</span>
                   <span class='arguments'>(*args)</span>
@@ -260,10 +260,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000268-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000269-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000268-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 303</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>,<span class="ruby-identifier">idx</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-identifier">val</span> = <span class="ruby-identifier">args</span>[<span class="ruby-identifier">idx</span>]&#x000A;      <span class="ruby-identifier">val</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Float'</span> &#x000A;        <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_f</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Integer'</span>&#x000A;        <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">val</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{field}=&quot;</span>, <span class="ruby-identifier">val</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000269-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 303</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>,<span class="ruby-identifier">idx</span><span class="ruby-operator">|</span> &#x000A;      <span class="ruby-identifier">val</span> = <span class="ruby-identifier">args</span>[<span class="ruby-identifier">idx</span>]&#x000A;      <span class="ruby-identifier">val</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">field_types</span>[<span class="ruby-identifier">field</span>].<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Float'</span> &#x000A;        <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_f</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Integer'</span>&#x000A;        <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">val</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{field}=&quot;</span>, <span class="ruby-identifier">val</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

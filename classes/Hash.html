@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Hash [stella 2.1.0.001]</title>
+    <title>: Hash [stella 2.1.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -45,48 +45,48 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000302">from_array</a></li>
+              <li><a href="#M000303">from_array</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000300">dump</a></li>
-              <li><a href="#M000299">flatten</a></li>
-              <li><a href="#M000301">to_http_params</a></li>
-              <li><a href="#M000298">to_json</a></li>
+              <li><a href="#M000301">dump</a></li>
+              <li><a href="#M000300">flatten</a></li>
+              <li><a href="#M000302">to_http_params</a></li>
+              <li><a href="#M000299">to_json</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='method public-class' id='method-M000302'>
-                <a name='M000302'>      </a>
+              <div class='method public-class' id='method-M000303'>
+                <a name='M000303'>      </a>
                 <div class='synopsis'>
                   <span class='name'>from_array</span>
                   <span class='arguments'>(array = [])</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000302-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000303-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000302-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 519</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">array</span> = [])&#x000A;    <span class="ruby-identifier">h</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-identifier">array</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">h</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-identifier">array</span>[<span class="ruby-identifier">t</span>]&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">h</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000303-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 519</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">array</span> = [])&#x000A;    <span class="ruby-identifier">h</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-identifier">array</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">h</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-identifier">array</span>[<span class="ruby-identifier">t</span>]&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">h</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000300'>
-                <a name='M000300'>      </a>
+              <div class='method public-instance' id='method-M000301'>
+                <a name='M000301'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dump</span>
                   <span class='arguments'>(format)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000300-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000301-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000300-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 485</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">format</span>)&#x000A;    <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:&quot;to_#{format}&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">:&quot;to_#{format}&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">raise</span>(<span class="ruby-value str">&quot;Unknown format&quot;</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000301-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 485</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">format</span>)&#x000A;    <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:&quot;to_#{format}&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">:&quot;to_#{format}&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">raise</span>(<span class="ruby-value str">&quot;Unknown format&quot;</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000299'>
-                <a name='M000299'>      </a>
+              <div class='method public-instance' id='method-M000300'>
+                <a name='M000300'>      </a>
                 <div class='synopsis'>
                   <span class='name'>flatten</span>
                   <span class='arguments'>()</span>
@@ -97,14 +97,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000299-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000300-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000299-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 458</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">params</span> = {}&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;&#x000A;    <span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]&#x000A;      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">v</span>)]&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>] =  <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span>, <span class="ruby-identifier">hash</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;          <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>, <span class="ruby-identifier">v</span>]&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>] = <span class="ruby-identifier">v</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">params</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000300-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 458</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flatten</span>&#x000A;    <span class="ruby-identifier">params</span> = {}&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;&#x000A;    <span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]&#x000A;      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">v</span>)]&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>] =  <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span>, <span class="ruby-identifier">hash</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;          <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>, <span class="ruby-identifier">v</span>]&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>] = <span class="ruby-identifier">v</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">params</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000301'>
-                <a name='M000301'>      </a>
+              <div class='method public-instance' id='method-M000302'>
+                <a name='M000302'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_http_params</span>
                   <span class='arguments'>()</span>
@@ -117,23 +117,23 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000301-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000302-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000301-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 492</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_http_params</span>&#x000A;    <span class="ruby-identifier">params</span> = <span class="ruby-value str">''</span>&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;&#x000A;    <span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]&#x000A;      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">v</span>)]&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{k}=#{v}&amp;&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span>, <span class="ruby-identifier">hash</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;          <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>, <span class="ruby-constant">URI</span><span class="ruby-operator">::</span><span class="ruby-constant">Escape</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">v</span>)]&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{parent}[#{k}]=#{URI::Escape.escape(v)}&amp;&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">params</span>.<span class="ruby-identifier">chop!</span> &#x000A;    <span class="ruby-identifier">params</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000302-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 492</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_http_params</span>&#x000A;    <span class="ruby-identifier">params</span> = <span class="ruby-value str">''</span>&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;&#x000A;    <span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>]&#x000A;      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;        <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-constant">Hash</span>.<span class="ruby-identifier">from_array</span>(<span class="ruby-identifier">v</span>)]&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{k}=#{v}&amp;&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span>, <span class="ruby-identifier">hash</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;          <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-node">&quot;#{parent}[#{k}]&quot;</span>, <span class="ruby-constant">URI</span><span class="ruby-operator">::</span><span class="ruby-constant">Escape</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">v</span>)]&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{parent}[#{k}]=#{URI::Escape.escape(v)}&amp;&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">params</span>.<span class="ruby-identifier">chop!</span> &#x000A;    <span class="ruby-identifier">params</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000298'>
-                <a name='M000298'>      </a>
+              <div class='method public-instance' id='method-M000299'>
+                <a name='M000299'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_json</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000298-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000299-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000298-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 452</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-constant">Yajl</span><span class="ruby-operator">::</span><span class="ruby-constant">Encoder</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-keyword kw">self</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000299-source'><span class="ruby-comment cmt"># File lib/stella/core_ext.rb, line 452</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-constant">Yajl</span><span class="ruby-operator">::</span><span class="ruby-constant">Encoder</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-keyword kw">self</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Stella::API [stella 2.1.0.001]</title>
+    <title>: Stella::API [stella 2.1.1.001]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -51,6 +51,7 @@
             <ol>
               <li><a href="#M000069">get</a></li>
               <li><a href="#M000070">post</a></li>
+              <li><a href="#M000071">site_uri</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -123,6 +124,19 @@
                     [show source]
                   </a>
                   <pre id='M000070-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 24</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>=<span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">httparty_opts</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:body</span>] = <span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> {}&#x000A;      <span class="ruby-identifier">execute_request</span> <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">opts</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000071'>
+                <a name='M000071'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>site_uri</span>
+                  <span class='arguments'>(path)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000071-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000071-source'><span class="ruby-comment cmt"># File lib/stella/api.rb, line 29</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">site_uri</span> <span class="ruby-identifier">path</span>&#x000A;      <span class="ruby-identifier">uri</span> = <span class="ruby-constant">Addressable</span><span class="ruby-operator">::</span><span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">base_uri</span>&#x000A;      <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">path</span> = <span class="ruby-identifier">uri_path</span>(<span class="ruby-identifier">path</span>)&#x000A;      <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
