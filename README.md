@@ -1,4 +1,4 @@
-# Stella - 2.0-RC1
+# Stella - 2.1-RC1
 
 **Define realistic testplans and run them against your webapps**
 

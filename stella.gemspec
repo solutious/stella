@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{stella}
-  s.version = "2.1.2.003"
+  s.version = "2.1.2.004"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2011-07-07}
+  s.date = %q{2011-07-08}
   s.default_executable = %q{stella}
   s.description = %q{Define realistic testplans and run them against your webapps}
   s.email = %q{delano@solutious.com}
@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
      ".gitmodules",
      "CHANGES.txt",
      "Gemfile",
-     "Gemfile.lock",
      "LICENSE.txt",
      "README.md",
      "Rakefile",
