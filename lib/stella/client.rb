@@ -198,7 +198,7 @@ class Stella
         :from        => nil
       )
       #http_client.set_proxy_auth(@proxy.user, @proxy.pass) if @proxy.user
-      #http_client.debug_dev = STDOUT if Stella.debug?
+      #http_client.debug_dev = STDOUT #if Stella.debug?
       http_client.protocol_version = "HTTP/1.1"
       if @opts[:ssl_verify_mode]
         http_client.ssl_config.verify_mode = @opts[:ssl_verify_mode]
@@ -243,6 +243,7 @@ class Stella
     end
     alias_method :param, :params
     alias_method :header, :headers
+    
     def prepare_request uc, rt
       clear_previous_request
       @rt = rt
@@ -273,9 +274,11 @@ class Stella
         build_uri @rt.uri
       end
       if !http_auth.nil? && !http_auth.empty?
+        http_auth_uri = @base_uri || Addressable::URI.parse(@uri)
+        http_auth_uri.port ||= http_auth_uri.scheme ==  'https' ? 443 : 80
         Stella.ld " HTTP AUTH: #{http_auth.inspect}"
-        http_auth[:domain] ||= '%s://%s:%d%s' % [base_uri.scheme, base_uri.host, base_uri.port, '/'] 
-        http_client.set_auth http_auth[:domain], http_auth[:user], http_auth[:pass]
+        http_auth[:domain] ||= '%s://%s:%d%s' % [http_auth_uri.scheme, http_auth_uri.host, http_auth_uri.port, '/'] 
+        http_client.set_auth http_auth[:domain] || http_auth['domain'], http_auth[:user] || http_auth['user'], http_auth[:pass] || http_auth['pass']
         Stella.ld "   #{http_client.www_auth.inspect}"
       end
       @redirect_uri = nil  # one time deal
