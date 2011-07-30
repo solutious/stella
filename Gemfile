@@ -1,5 +1,7 @@
 source "http://production.s3.rubygems.org.s3.amazonaws.com"
 
+gemspec
+
 gem 'SystemTimer', :platforms => :mri_18
 
 gem 'familia', '0.7.1'

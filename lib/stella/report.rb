@@ -212,6 +212,9 @@ class Stella
       def redirect?
         @values.size == redirected.size
       end
+      def auth_required?
+        @values.uniq == [401]
+      end
       module ReportMethods
         def redirect?
           statuses.redirect?
