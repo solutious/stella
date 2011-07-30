@@ -216,6 +216,9 @@ class Stella
         @values.uniq == [401]
       end
       module ReportMethods
+        def auth_required?
+          statuses.auth_required?
+        end
         def redirect?
           statuses.redirect?
         end
